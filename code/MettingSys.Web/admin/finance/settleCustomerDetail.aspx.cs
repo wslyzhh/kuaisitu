@@ -1,0 +1,362 @@
+﻿using MettingSys.Common;
+using NPOI.HSSF.UserModel;
+using NPOI.HSSF.Util;
+using NPOI.SS.UserModel;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using BorderStyle = NPOI.SS.UserModel.BorderStyle;
+
+namespace MettingSys.Web.admin.finance
+{
+    public partial class settleCustomerDetail : Web.UI.ManagePage
+    {
+        protected int totalCount; //数据总记录数
+        protected int page; //当前页码
+        protected int pageSize; //每页大小
+
+        protected string _cusName = "", _cid = "", _type = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _sdate2 = "", _edate2 = "", _status = "", _sign = "", _money1 = "", _tag = "", _self = "";
+        private Model.manager manager = null;
+        decimal money1 = 0, money2 = 0, money3 = 0, money4 = 0, money5 = 0, money6 = 0;
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            this.pageSize = GetPageSize(10); //每页数量
+            _cusName = DTRequest.GetString("txtCusName");
+            _cid = DTRequest.GetString("hCusId");
+            _type = DTRequest.GetString("ddltype");
+            _sdate = DTRequest.GetString("txtsDate");
+            _edate = DTRequest.GetString("txteDate");
+            _sdate1 = DTRequest.GetString("txtsDate1");
+            _edate1 = DTRequest.GetString("txteDate1");
+            _sdate2 = DTRequest.GetString("txtsDate2");
+            _edate2 = DTRequest.GetString("txteDate2");
+            _status = DTRequest.GetString("ddlstatus");
+            _sign = DTRequest.GetString("ddlsign");
+            _money1 = DTRequest.GetString("txtMoney1");
+            _tag = DTRequest.GetString("tag");
+            _self = DTRequest.GetString("self");
+
+            if (_tag == "1")
+            {
+                _type = "True";
+                ddltype.Enabled = false;
+                _sign = ">";
+                _money1 = "0";
+            }
+            else if (_tag == "0")
+            {
+                _type = "False";
+                ddltype.Enabled = false;
+                _sign = "<";
+                _money1 = "0";
+            }
+            manager = GetAdminInfo();
+            if (!Page.IsPostBack)
+            {
+                InitData();
+                if (_self != "1")
+                {
+                    ChkAdminLevel("sys_settlementCustomer", DTEnums.ActionEnum.View.ToString()); //检查权限
+                }
+                RptBind("1=1 " + CombSqlTxt(), "isnull(fin_type,rp_type) desc,c_name asc");
+            }
+
+            ddltype.SelectedValue = _type;
+            txtCusName.Text = _cusName;
+            hCusId.Value = _cid;
+            txtsDate.Text = _sdate;
+            txteDate.Text = _edate;
+            txtsDate1.Text = _sdate1;
+            txteDate1.Text = _edate1;
+            txtsDate2.Text = _sdate2;
+            txteDate2.Text = _edate2;
+            ddlstatus.SelectedValue = _status;
+            ddlsign.SelectedValue = _sign;
+            txtMoney1.Text = _money1;
+        }
+        #region 初始化数据=================================
+        private void InitData()
+        {
+            ddltype.DataSource = Common.BusinessDict.financeType();
+            ddltype.DataTextField = "value";
+            ddltype.DataValueField = "key";
+            ddltype.DataBind();
+            ddltype.Items.Insert(0, new ListItem("不限", ""));
+
+            ddlstatus.DataSource = Common.BusinessDict.fStatus(1);
+            ddlstatus.DataTextField = "value";
+            ddlstatus.DataValueField = "key";
+            ddlstatus.DataBind();
+            ddlstatus.Items.Insert(0, new ListItem("不限", ""));
+        }
+        #endregion
+        #region 数据绑定=================================
+        private void RptBind(string _strWhere, string _orderby)
+        {
+            this.page = DTRequest.GetQueryInt("page", 1);
+            BLL.finance bll = new BLL.finance();
+            DataTable dt= bll.getSettleCustomerDetailList(this.pageSize, this.page, _type, _cid, _cusName, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, _self == "1" ? manager.user_name : "", _orderby, out this.totalCount, out  money1, out money2, out money3, out money4, out money5, out money6).Tables[0];
+            this.rptList.DataSource = dt;
+            this.rptList.DataBind();
+
+            //绑定页码
+            txtPageNum.Text = this.pageSize.ToString();
+            string pageUrl = Utils.CombUrlTxt("settleCustomerDetail.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddltype={3}&txtsDate={4}&txteDate={5}&txtsDate1={6}&txteDate1={7}&txtsDate2={8}&txteDate2={9}&ddlstatus={10}&ddlsign={11}&txtMoney1={12}&tag={13}&self={14}", "__id__", _cusName, _cid, _type, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, _tag, _self);
+            PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
+
+            pCount.Text = dt.Rows.Count.ToString();
+            decimal _pmoney1 = 0, _pmoney2 = 0, _pmoney3 = 0, _pmoney4 = 0, _pmoney5 = 0, _pmoney6 = 0;
+            if (dt != null)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    _pmoney1 += Utils.ObjToDecimal(dr["orderFinMoney"], 0);
+                    _pmoney2 += Utils.ObjToDecimal(dr["orderRpdMoney"], 0);
+                    _pmoney3 += Utils.ObjToDecimal(dr["orderUnMoney"], 0);
+                    _pmoney4 += Utils.ObjToDecimal(dr["rpmoney"], 0);
+                    _pmoney5 += Utils.ObjToDecimal(dr["rpdmoney"], 0);
+                    _pmoney6 += Utils.ObjToDecimal(dr["unmoney"], 0);
+                }
+            }
+            tCount.Text = totalCount.ToString();
+            pMoney1.Text = _pmoney1.ToString();
+            pMoney2.Text = _pmoney2.ToString();
+            pMoney3.Text = _pmoney3.ToString();
+            pMoney4.Text = _pmoney4.ToString();
+            pMoney5.Text = _pmoney5.ToString();
+            pMoney6.Text = _pmoney6.ToString();
+
+            tMoney1.Text = money1.ToString();
+            tMoney2.Text = money2.ToString();
+            tMoney3.Text = money3.ToString();
+            tMoney4.Text = money4.ToString();
+            tMoney5.Text = money5.ToString();
+            tMoney6.Text = money6.ToString();
+        }
+        #endregion
+
+        #region 组合SQL查询语句==========================
+        protected string CombSqlTxt()
+        {
+            StringBuilder strTemp = new StringBuilder();
+            if (!string.IsNullOrEmpty(_type))
+            {
+                strTemp.Append(" and fin_type='" + _type + "'");
+            }
+            return strTemp.ToString();
+        }
+        #endregion
+
+        #region 返回每页数量=============================
+        private int GetPageSize(int _default_size)
+        {
+            int _pagesize;
+            if (int.TryParse(Utils.GetCookie("settleCustomerDetail_page_size", "DTcmsPage"), out _pagesize))
+            {
+                if (_pagesize > 0)
+                {
+                    return _pagesize;
+                }
+            }
+            return _default_size;
+        }
+        #endregion
+
+        //关健字查询
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            _cusName = DTRequest.GetFormString("txtCusName");
+            _cid = DTRequest.GetFormString("hCusId");
+            _type = DTRequest.GetFormString("ddltype");
+            _sdate = DTRequest.GetFormString("txtsDate");
+            _edate = DTRequest.GetFormString("txteDate");
+            _sdate1 = DTRequest.GetFormString("txtsDate1");
+            _edate1 = DTRequest.GetFormString("txteDate1");
+            _sdate2 = DTRequest.GetFormString("txtsDate2");
+            _edate2 = DTRequest.GetFormString("txteDate2");
+            _status = DTRequest.GetFormString("ddlstatus");
+            _sign = DTRequest.GetFormString("ddlsign");
+            _money1 = DTRequest.GetFormString("txtMoney1");
+            _tag = DTRequest.GetFormString("tag");
+            _self = DTRequest.GetFormString("self");
+            if (_tag == "1")
+            {
+                _type = "True";
+                ddltype.Enabled = false;
+            }
+            else if (_tag == "0")
+            {
+                _type = "False";
+                ddltype.Enabled = false;
+            }
+            RptBind("1=1 " + CombSqlTxt(), "isnull(fin_type,rp_type) desc,c_name asc");
+            ddltype.SelectedValue = _type;
+            txtCusName.Text = _cusName;
+            hCusId.Value = _cid;
+            txtsDate.Text = _sdate;
+            txteDate.Text = _edate;
+            txtsDate1.Text = _sdate1;
+            txteDate1.Text = _edate1;
+            txtsDate2.Text = _sdate2;
+            txteDate2.Text = _edate2;
+            ddlstatus.SelectedValue = _status;
+            ddlsign.SelectedValue = _sign;
+            txtMoney1.Text = _money1;
+        }
+        protected void btnExcel_Click(object sender, EventArgs e)
+        {
+            _cusName = DTRequest.GetFormString("txtCusName");
+            _cid = DTRequest.GetFormString("hCusId");
+            _type = DTRequest.GetFormString("ddltype");
+            _sdate = DTRequest.GetFormString("txtsDate");
+            _edate = DTRequest.GetFormString("txteDate");
+            _sdate1 = DTRequest.GetFormString("txtsDate1");
+            _edate1 = DTRequest.GetFormString("txteDate1");
+            _sdate2 = DTRequest.GetFormString("txtsDate2");
+            _edate2 = DTRequest.GetFormString("txteDate2");
+            _status = DTRequest.GetFormString("ddlstatus");
+            _sign = DTRequest.GetFormString("ddlsign");
+            _money1 = DTRequest.GetFormString("txtMoney1");
+            _tag = DTRequest.GetFormString("tag");
+            _self = DTRequest.GetFormString("self");
+            BLL.finance bll = new BLL.finance();
+            DataTable dt = bll.getSettleCustomerDetailList(this.pageSize, this.page, _type, _cid, _cusName, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, _self == "1" ? manager.user_name : "", "isnull(fin_type,rp_type) desc,c_name asc", out this.totalCount, out money1, out money2, out money3, out money4, out money5, out money6, false).Tables[0];
+
+            string filename = "往来客户明细列表.xlsx";
+            if (_tag == "1")
+            {
+                filename = "未收款列表.xlsx";
+            }
+            if (_tag == "2")
+            {
+                filename = "多付款列表.xlsx";
+            }
+
+            HttpContext.Current.Response.Clear();
+            HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename="+ filename + ""); //HttpUtility.UrlEncode(fileName));
+            HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
+
+            HSSFWorkbook hssfworkbook = new HSSFWorkbook();
+            ISheet sheet = hssfworkbook.CreateSheet("明细");
+            IFont font = hssfworkbook.CreateFont();
+            font.Boldweight = short.MaxValue;
+            font.FontHeightInPoints = 11;
+
+            #region 表格样式
+            //设置单元格的样式：水平垂直对齐居中
+            ICellStyle cellStyle = hssfworkbook.CreateCellStyle();
+            cellStyle.Alignment = HorizontalAlignment.Center;
+            cellStyle.VerticalAlignment = VerticalAlignment.Center;
+            cellStyle.BorderBottom = BorderStyle.Thin;
+            cellStyle.BorderLeft = BorderStyle.Thin;
+            cellStyle.BorderRight = BorderStyle.Thin;
+            cellStyle.BorderTop = BorderStyle.Thin;
+            cellStyle.BottomBorderColor = HSSFColor.Black.Index;
+            cellStyle.LeftBorderColor = HSSFColor.Black.Index;
+            cellStyle.RightBorderColor = HSSFColor.Black.Index;
+            cellStyle.TopBorderColor = HSSFColor.Black.Index;
+            cellStyle.WrapText = true;//自动换行
+
+            //设置表头的样式：水平垂直对齐居中，加粗
+            ICellStyle titleCellStyle = hssfworkbook.CreateCellStyle();
+            titleCellStyle.Alignment = HorizontalAlignment.Center;
+            titleCellStyle.VerticalAlignment = VerticalAlignment.Center;
+            titleCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index; //图案颜色
+            titleCellStyle.FillPattern = FillPattern.SparseDots; //图案样式
+            titleCellStyle.FillBackgroundColor = HSSFColor.Grey25Percent.Index; //背景颜色
+            //设置边框
+            titleCellStyle.BorderBottom = BorderStyle.Thin;
+            titleCellStyle.BorderLeft = BorderStyle.Thin;
+            titleCellStyle.BorderRight = BorderStyle.Thin;
+            titleCellStyle.BorderTop = BorderStyle.Thin;
+            titleCellStyle.BottomBorderColor = HSSFColor.Black.Index;
+            titleCellStyle.LeftBorderColor = HSSFColor.Black.Index;
+            titleCellStyle.RightBorderColor = HSSFColor.Black.Index;
+            titleCellStyle.TopBorderColor = HSSFColor.Black.Index;
+            //设置字体
+            titleCellStyle.SetFont(font);
+            #endregion
+            //表头
+            IRow headRow = sheet.CreateRow(0);
+            headRow.HeightInPoints = 25;
+
+            headRow.CreateCell(0).SetCellValue("应收付对象");
+            headRow.CreateCell(1).SetCellValue("收付类别");
+            headRow.CreateCell(2).SetCellValue("应收付款");
+            headRow.CreateCell(3).SetCellValue("订单已收付款");
+            headRow.CreateCell(4).SetCellValue("未收付款");
+            headRow.CreateCell(5).SetCellValue("已收付款");
+            headRow.CreateCell(6).SetCellValue("已分配款");
+            headRow.CreateCell(7).SetCellValue("未分配款");
+
+            headRow.GetCell(0).CellStyle = titleCellStyle;
+            headRow.GetCell(1).CellStyle = titleCellStyle;
+            headRow.GetCell(2).CellStyle = titleCellStyle;
+            headRow.GetCell(3).CellStyle = titleCellStyle;
+            headRow.GetCell(4).CellStyle = titleCellStyle;
+            headRow.GetCell(5).CellStyle = titleCellStyle;
+            headRow.GetCell(6).CellStyle = titleCellStyle;
+            headRow.GetCell(7).CellStyle = titleCellStyle;
+
+            sheet.SetColumnWidth(0, 15 * 256);
+            sheet.SetColumnWidth(1, 20 * 256);
+            sheet.SetColumnWidth(2, 20 * 256);
+            sheet.SetColumnWidth(3, 20 * 256);
+            sheet.SetColumnWidth(4, 20 * 256);
+            sheet.SetColumnWidth(5, 15 * 256);
+            sheet.SetColumnWidth(6, 20 * 256);
+            sheet.SetColumnWidth(7, 20 * 256);
+
+            if (dt != null)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    IRow row = sheet.CreateRow(i + 1);
+                    row.HeightInPoints = 22;
+                    row.CreateCell(0).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_name"]));
+                    row.CreateCell(1).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fin_type"])=="True"?"收":"付");
+                    row.CreateCell(2).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["orderFinMoney"]));
+                    row.CreateCell(3).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["orderRpdMoney"]));
+                    row.CreateCell(4).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["orderUnMoney"]));
+                    row.CreateCell(5).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["rpmoney"]));
+                    row.CreateCell(6).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["rpdmoney"]));
+                    row.CreateCell(7).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["unmoney"]));
+
+                    row.GetCell(0).CellStyle = cellStyle;
+                    row.GetCell(1).CellStyle = cellStyle;
+                    row.GetCell(2).CellStyle = cellStyle;
+                    row.GetCell(3).CellStyle = cellStyle;
+                    row.GetCell(4).CellStyle = cellStyle;
+                    row.GetCell(5).CellStyle = cellStyle;
+                    row.GetCell(6).CellStyle = cellStyle;
+                    row.GetCell(7).CellStyle = cellStyle;
+                }
+            }
+
+            MemoryStream file = new MemoryStream();
+            hssfworkbook.Write(file);
+
+            HttpContext.Current.Response.BinaryWrite(file.GetBuffer());
+            HttpContext.Current.Response.End();
+        }
+        //设置分页数量
+        protected void txtPageNum_TextChanged(object sender, EventArgs e)
+        {
+            int _pagesize;
+            if (int.TryParse(txtPageNum.Text.Trim(), out _pagesize))
+            {
+                if (_pagesize > 0)
+                {
+                    Utils.WriteCookie("settleCustomerDetail_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
+                }
+            }
+            Response.Redirect(Utils.CombUrlTxt("settleCustomerDetail.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddltype={3}&txtsDate={4}&txteDate={5}&txtsDate1={6}&txteDate1={7}&txtsDate2={8}&txteDate2={9}&ddlstatus={10}&ddlsign={11}&txtMoney1={12}&tag={13}&self={14}", "__id__", _cusName, _cid, _type, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, _tag, _self));
+        }
+    }
+}
