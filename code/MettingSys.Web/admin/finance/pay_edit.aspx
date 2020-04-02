@@ -31,7 +31,7 @@
                     minChars: 1,
                     onSelect: function (suggestion) {
                         $('#hCusId').val(suggestion.id);
-                        
+                        showBank(suggestion.id);
                     },
                     showNoSuggestionNotice: true,
                     noSuggestionNotice: '抱歉，没有匹配的选项',
@@ -42,7 +42,7 @@
                 $("#hCusId").val("");
             });
             bingCertificate();
-            
+
             $("#btnAudit").click(function () {
                 layer.open({
                     type: 1,
@@ -53,6 +53,13 @@
                     shadeClose: true,
                     content: $('#divflag')
                 });
+            });
+
+            $("#txtBank").change(function () {
+                var cid = parseInt($('#hCusId').val());
+                if (cid > 0) {
+                    showBank(cid);
+                }
             });
         });
         //绑定凭证
@@ -100,21 +107,24 @@
             });
         }
         function showBank(cid) {
-            var postData = { "cid": cid };
+            var postData = { "cid": cid, "field": "1" };
             //发送AJAX请求
             $.ajax({
                 type: "post",
                 url: "../../tools/Business_ajax.ashx?action=getCusBank",
                 data: postData,
                 dataType: "json",
-                success: function (data) {
-                    var jlist = eval(data);                    
-                    if (jlist.length > 0) {
-                        for (var i = 0; i < jlist.length; i++) {
-                            var json = eval(jlist[i]);
-                            
-                        }
-                    }
+                success: function (json) {
+                    console.log(json);
+                    $('#txtBank').devbridgeAutocomplete({
+                        lookup: json,
+                        minChars: 0,
+                        onSelect: function (suggestion) {
+                            $(this).next().val(suggestion.id);
+                        },
+                        showNoSuggestionNotice: true,
+                        noSuggestionNotice: '抱歉，没有匹配的选项'
+                    });
                 }
             });
         }
@@ -150,7 +160,7 @@
             <dl>
                 <dt>付款对象</dt>
                 <dd>
-                    <asp:TextBox ID="txtCusName" runat="server" CssClass="input normal" datatype="*2-100" sucmsg=" " ></asp:TextBox>
+                    <asp:TextBox ID="txtCusName" runat="server" CssClass="input normal" datatype="*2-100" sucmsg=" "></asp:TextBox>
                     <asp:HiddenField ID="hCusId" runat="server" />
                     <span class="Validform_checktip">*</span>
                 </dd>
@@ -158,7 +168,7 @@
             <dl>
                 <dt>付款金额</dt>
                 <dd>
-                    <asp:TextBox ID="txtMoney" runat="server" CssClass="input small"  datatype="/^-?[1-9]+(\.\d+)?$|^-?0(\.\d+)?$|^-?[1-9]+[0-9]*(\.\d+)?$/" sucmsg=" "/>
+                    <asp:TextBox ID="txtMoney" runat="server" CssClass="input small" datatype="/^-?[1-9]+(\.\d+)?$|^-?0(\.\d+)?$|^-?[1-9]+[0-9]*(\.\d+)?$/" sucmsg=" " />
                     <span class="Validform_checktip">*请输入有效金额</span>
                 </dd>
             </dl>
@@ -168,7 +178,7 @@
                     <asp:TextBox ID="txtforedate" runat="server" CssClass="input rule-date-input" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd'});" datatype="*2-100" sucmsg=" "></asp:TextBox>
                     <span class="Validform_checktip">*</span>
                 </dd>
-            </dl>            
+            </dl>
             <dl>
                 <dt>付款方式</dt>
                 <dd>
@@ -180,11 +190,8 @@
             <dl>
                 <dt>客户银行账号</dt>
                 <dd>
-                    <div class="rule-single-select">
-                        <asp:DropDownList ID="ddlbank" runat="server">
-                        </asp:DropDownList>
-                    </div>
-                    <span class="Validform_checktip">*</span>
+                    <asp:TextBox ID="txtBank" runat="server" CssClass="input normal" datatype="*2-100" sucmsg=" "></asp:TextBox>
+                    <asp:HiddenField ID="hBankId" runat="server" />
                 </dd>
             </dl>
             <dl>
@@ -220,16 +227,16 @@
         </div>
         <!--/工具栏-->
         <div class="table-container" id="divflag" style="display: none;">
-            <div class="tab-content" style="border: none;">                
+            <div class="tab-content" style="border: none;">
                 <dl>
                     <dt style="width: 100px;">审批类型</dt>
                     <dd>
                         <div class="rule-single-select">
-                                    <asp:DropDownList ID="ddlchecktype" runat="server">
-                                        <asp:ListItem Value="1">财务审批</asp:ListItem>
-                                        <asp:ListItem Value="2">总经理审批</asp:ListItem>
-                                    </asp:DropDownList>
-                                </div>
+                            <asp:DropDownList ID="ddlchecktype" runat="server">
+                                <asp:ListItem Value="1">财务审批</asp:ListItem>
+                                <asp:ListItem Value="2">总经理审批</asp:ListItem>
+                            </asp:DropDownList>
+                        </div>
                     </dd>
                 </dl>
                 <dl>

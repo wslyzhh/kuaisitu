@@ -98,6 +98,13 @@ namespace MettingSys.BLL
                         }
                         model.rp_ceid = ceid;
                     }
+                    else
+                    {
+                        if (model.rp_cbid == 0)
+                        {
+                            return "请选择客户银行账号";
+                        }
+                    }
                 }
             }
             model.rp_isConfirm = false;
@@ -109,7 +116,7 @@ namespace MettingSys.BLL
                 model.rp_checkTime = DateTime.Now;
                 model.rp_flag1 = 2;
                 model.rp_checkTime1 = DateTime.Now;
-                isChongzhang = new BLL.payMethod().GetModel(model.rp_method.Value).pm_type.Value;
+                isChongzhang = model.rp_method.Value >0 && new BLL.payMethod().GetModel(model.rp_method.Value).pm_type.Value;
                 if (model.rp_method > 0 && isChongzhang)
                 {
                     model.rp_isConfirm = true;
@@ -123,7 +130,7 @@ namespace MettingSys.BLL
                 model.rp_isExpect = true;
                 model.rp_flag = 0;
                 model.rp_flag1 = 0;
-                isChongzhang = new BLL.payMethod().GetModel(model.rp_method.Value).pm_type.Value;
+                isChongzhang = model.rp_method.Value > 0 && new BLL.payMethod().GetModel(model.rp_method.Value).pm_type.Value;
                 if ((model.rp_method > 0 && isChongzhang) || model.rp_money <0)
                 {
                     model.rp_flag = 2;
@@ -152,6 +159,7 @@ namespace MettingSys.BLL
                 content.Append("" + (model.rp_type.Value ? "预收" : "预付") + "日期：" + model.rp_foredate.Value.ToString("yyyy-MM-dd") + "<br/>");
                 content.Append("收款方式ID：" + model.rp_method + "<br/>");
                 content.Append("收款内容：" + model.rp_content + "<br/>");
+                content.Append("客户银行账号：" + model.rp_cbid + "<br/>");
 
                 Model.business_log logmodel = new Model.business_log();
                 logmodel.ol_relateID = rpid;
@@ -316,6 +324,10 @@ namespace MettingSys.BLL
                     else
                     {
                         model.rp_ceid = 0;
+                        if (model.rp_cbid == 0)
+                        {
+                            return "请选择客户银行账号";
+                        }
                     }
                 }
             }

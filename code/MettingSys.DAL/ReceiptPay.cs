@@ -327,7 +327,7 @@ namespace MettingSys.DAL
                 strSql.Append(" top " + Top.ToString());
             }
             strSql.Append(" * ");
-            strSql.Append(" FROM  MS_ReceiptPay r left join MS_ReceiptPayDetail on rp_id = rpd_rpid left join MS_customer c on r.rp_cid=c.c_id left join MS_payMethod p on rp_method=pm_id left join MS_certificates on rp_ceid=ce_id");
+            strSql.Append(" FROM  MS_ReceiptPay r left join MS_ReceiptPayDetail on rp_id = rpd_rpid left join MS_customer c on r.rp_cid=c.c_id left join MS_payMethod p on rp_method=pm_id left join MS_certificates on rp_ceid=ce_id left join MS_customerBank on rp_cbid=cb_id");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);

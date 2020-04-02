@@ -1532,6 +1532,7 @@ namespace MettingSys.Web.tools
             Model.manager adminModel = new ManagePage().GetAdminInfo();//获得当前登录管理员信息
             int rpid = DTRequest.GetFormInt("rpid", 0);
             int cid = DTRequest.GetFormInt("cid", 0);
+            int cbid = DTRequest.GetFormInt("cbid", 0);
             string oid = DTRequest.GetFormString("oid");
             bool type = DTRequest.GetFormString("type") == "True" ? true : false;
             decimal disMoney = DTRequest.GetFormDecimal("disMoney", 0);
@@ -1544,6 +1545,7 @@ namespace MettingSys.Web.tools
             model.rpd_rpid = rpid;
             model.rpd_oid = oid;
             model.rpd_cid = cid;
+            model.rpd_cbid = cbid;
             model.rpd_num = chk;
             model.rpd_money = disMoney;
             model.rpd_foredate = foredate;
@@ -1575,8 +1577,9 @@ namespace MettingSys.Web.tools
         private void get_customerBank(HttpContext context)
         {
             int cid = DTRequest.GetFormInt("cid", 0);
+            bool selectField = DTRequest.GetFormString("field") == "1" ? true : false;
             BLL.customerBank bll = new BLL.customerBank();
-            DataSet ds = bll.GetList(0, "cb_cid=" + cid + " and cb_flag=1", "cb_id asc");
+            DataSet ds = bll.GetList(0, "cb_cid=" + cid + " and cb_flag=1", "cb_id asc", selectField);
             if (ds != null && ds.Tables.Count > 0)
             {
                 context.Response.Write(JArray.FromObject(ds.Tables[0]));

@@ -155,7 +155,7 @@ namespace MettingSys.DAL
         /// <summary>
         /// 获得前几行数据
         /// </summary>
-        public DataSet GetList(int Top, string strWhere, string filedOrder)
+        public DataSet GetList(int Top, string strWhere, string filedOrder,bool selectField=false)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("select ");
@@ -163,7 +163,15 @@ namespace MettingSys.DAL
             {
                 strSql.Append(" top " + Top.ToString());
             }
-            strSql.Append(" * ");
+
+            if (selectField)
+            {
+                strSql.Append(" cb_id as id, cb_bank+'('+cb_bankNum+')' as name ");
+            }
+            else
+            {
+                strSql.Append(" * ");
+            }
             strSql.Append(" FROM  MS_customerBank  cb left join MS_customer c on cb.cb_cid=c.c_id");
             if (strWhere.Trim() != "")
             {

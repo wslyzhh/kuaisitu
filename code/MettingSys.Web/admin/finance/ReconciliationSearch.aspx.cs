@@ -1,12 +1,17 @@
 ﻿using MettingSys.Common;
+using NPOI.HSSF.UserModel;
+using NPOI.HSSF.Util;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using BorderStyle = NPOI.SS.UserModel.BorderStyle;
 
 namespace MettingSys.Web.admin.finance
 {
@@ -135,11 +140,135 @@ namespace MettingSys.Web.admin.finance
 
         protected void btnExcel_Click(object sender, EventArgs e)
         {
-            var fileName = "对账查询";
-            string[] strFieldsName = { "订单号", "应收付对象","客户", "活动日期", "活动地点", "活动名称",  "收付性质", "业务性质", "业务明细", "对账标识", "对账金额" };
-            string[] strFields = { "o_id","c_name","cname", "o_sdate/o_edate", "o_address", "o_content",  "fin_type", "na_name", "fin_detail", "fc_num", "fc_money" };
-            DataTable dt = new BLL.finance_chk().GetList(0,0, "1=1" + CombSqlTxt(), "fc_addDate desc,fin_adddate desc", out totalCount, out _tMoney, false).Tables[0];
-            ExcelHelper.Write(HttpContext.Current, dt, fileName, fileName, strFields, strFieldsName, string.Format("{0}.xlsx", fileName));
+            //var fileName = "对账查询";
+            //string[] strFieldsName = { "订单号", "应收付对象","客户", "活动日期", "活动地点", "活动名称",  "收付性质", "业务性质", "业务明细", "对账标识", "对账金额" };
+            //string[] strFields = { "o_id","c_name","cname", "o_sdate/o_edate", "o_address", "o_content",  "fin_type", "na_name", "fin_detail", "fc_num", "fc_money" };
+            //DataTable dt = new BLL.finance_chk().GetList(0,0, "1=1" + CombSqlTxt(), "fc_addDate desc,fin_adddate desc", out totalCount, out _tMoney, false).Tables[0];
+            //ExcelHelper.Write(HttpContext.Current, dt, fileName, fileName, strFields, strFieldsName, string.Format("{0}.xlsx", fileName));
+
+            DataTable dt = new BLL.finance_chk().GetList(0, 0, "1=1" + CombSqlTxt(), "fc_addDate desc,fin_adddate desc", out totalCount, out _tMoney, false).Tables[0];
+
+            HttpContext.Current.Response.Clear();
+            HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=对账查询列表.xlsx"); //HttpUtility.UrlEncode(fileName));
+            HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
+
+            HSSFWorkbook hssfworkbook = new HSSFWorkbook();
+            ISheet sheet = hssfworkbook.CreateSheet("明细");
+            IFont font = hssfworkbook.CreateFont();
+            font.Boldweight = short.MaxValue;
+            font.FontHeightInPoints = 11;
+
+            #region 表格样式
+            //设置单元格的样式：水平垂直对齐居中
+            ICellStyle cellStyle = hssfworkbook.CreateCellStyle();
+            cellStyle.Alignment = HorizontalAlignment.Center;
+            cellStyle.VerticalAlignment = VerticalAlignment.Center;
+            cellStyle.BorderBottom = BorderStyle.Thin;
+            cellStyle.BorderLeft = BorderStyle.Thin;
+            cellStyle.BorderRight = BorderStyle.Thin;
+            cellStyle.BorderTop = BorderStyle.Thin;
+            cellStyle.BottomBorderColor = HSSFColor.Black.Index;
+            cellStyle.LeftBorderColor = HSSFColor.Black.Index;
+            cellStyle.RightBorderColor = HSSFColor.Black.Index;
+            cellStyle.TopBorderColor = HSSFColor.Black.Index;
+            cellStyle.WrapText = true;//自动换行
+
+            //设置表头的样式：水平垂直对齐居中，加粗
+            ICellStyle titleCellStyle = hssfworkbook.CreateCellStyle();
+            titleCellStyle.Alignment = HorizontalAlignment.Center;
+            titleCellStyle.VerticalAlignment = VerticalAlignment.Center;
+            titleCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index; //图案颜色
+            titleCellStyle.FillPattern = FillPattern.SparseDots; //图案样式
+            titleCellStyle.FillBackgroundColor = HSSFColor.Grey25Percent.Index; //背景颜色
+            //设置边框
+            titleCellStyle.BorderBottom = BorderStyle.Thin;
+            titleCellStyle.BorderLeft = BorderStyle.Thin;
+            titleCellStyle.BorderRight = BorderStyle.Thin;
+            titleCellStyle.BorderTop = BorderStyle.Thin;
+            titleCellStyle.BottomBorderColor = HSSFColor.Black.Index;
+            titleCellStyle.LeftBorderColor = HSSFColor.Black.Index;
+            titleCellStyle.RightBorderColor = HSSFColor.Black.Index;
+            titleCellStyle.TopBorderColor = HSSFColor.Black.Index;
+            //设置字体
+            titleCellStyle.SetFont(font);
+            #endregion
+            //表头
+            IRow headRow = sheet.CreateRow(0);
+            headRow.HeightInPoints = 25;
+
+            headRow.CreateCell(0).SetCellValue("订单号");
+            headRow.CreateCell(1).SetCellValue("应收付对象");
+            headRow.CreateCell(2).SetCellValue("客户");
+            headRow.CreateCell(3).SetCellValue("活动日期");
+            headRow.CreateCell(4).SetCellValue("活动地点");
+            headRow.CreateCell(5).SetCellValue("活动名称");
+            headRow.CreateCell(6).SetCellValue("收付性质");
+            headRow.CreateCell(7).SetCellValue("业务性质");
+            headRow.CreateCell(8).SetCellValue("业务明细");
+            headRow.CreateCell(9).SetCellValue("对账标识");
+            headRow.CreateCell(10).SetCellValue("对账金额");
+
+            headRow.GetCell(0).CellStyle = titleCellStyle;
+            headRow.GetCell(1).CellStyle = titleCellStyle;
+            headRow.GetCell(2).CellStyle = titleCellStyle;
+            headRow.GetCell(3).CellStyle = titleCellStyle;
+            headRow.GetCell(4).CellStyle = titleCellStyle;
+            headRow.GetCell(5).CellStyle = titleCellStyle;
+            headRow.GetCell(6).CellStyle = titleCellStyle;
+            headRow.GetCell(7).CellStyle = titleCellStyle;
+            headRow.GetCell(8).CellStyle = titleCellStyle;
+            headRow.GetCell(9).CellStyle = titleCellStyle;
+            headRow.GetCell(10).CellStyle = titleCellStyle;
+
+            sheet.SetColumnWidth(0, 15 * 256);
+            sheet.SetColumnWidth(1, 20 * 256);
+            sheet.SetColumnWidth(2, 20 * 256);
+            sheet.SetColumnWidth(3, 20 * 256);
+            sheet.SetColumnWidth(4, 20 * 256);
+            sheet.SetColumnWidth(5, 15 * 256);
+            sheet.SetColumnWidth(6, 20 * 256);
+            sheet.SetColumnWidth(7, 20 * 256);
+            sheet.SetColumnWidth(8, 20 * 256);
+            sheet.SetColumnWidth(9, 20 * 256);
+            sheet.SetColumnWidth(10, 20 * 256);
+
+            if (dt != null)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    IRow row = sheet.CreateRow(i + 1);
+                    row.HeightInPoints = 22;
+                    row.CreateCell(0).SetCellValue(dt.Rows[i]["o_id"].ToString());
+                    row.CreateCell(1).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_name"]));
+                    row.CreateCell(2).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["cname"]));
+                    row.CreateCell(3).SetCellValue(ConvertHelper.toDate(dt.Rows[i]["o_sdate"]).Value.ToString("yyyy-MM-dd") + "/" + ConvertHelper.toDate(dt.Rows[i]["o_edate"]).Value.ToString("yyyy-MM-dd"));
+                    row.CreateCell(4).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["o_address"]));
+                    row.CreateCell(5).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["o_content"]));
+                    row.CreateCell(6).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fin_type"]));
+                    row.CreateCell(7).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["na_name"]));
+                    row.CreateCell(8).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fin_detail"]));
+                    row.CreateCell(9).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fc_num"]));
+                    row.CreateCell(10).SetCellValue(dt.Rows[i]["fc_money"].ToString());
+
+                    row.GetCell(0).CellStyle = cellStyle;
+                    row.GetCell(1).CellStyle = cellStyle;
+                    row.GetCell(2).CellStyle = cellStyle;
+                    row.GetCell(3).CellStyle = cellStyle;
+                    row.GetCell(4).CellStyle = cellStyle;
+                    row.GetCell(5).CellStyle = cellStyle;
+                    row.GetCell(6).CellStyle = cellStyle;
+                    row.GetCell(7).CellStyle = cellStyle;
+                    row.GetCell(8).CellStyle = cellStyle;
+                    row.GetCell(9).CellStyle = cellStyle;
+                    row.GetCell(10).CellStyle = cellStyle;
+                }
+            }
+
+            MemoryStream file = new MemoryStream();
+            hssfworkbook.Write(file);
+
+            HttpContext.Current.Response.BinaryWrite(file.GetBuffer());
+            HttpContext.Current.Response.End();
         }
         //设置分页数量 
         protected void txtPageNum_TextChanged(object sender, EventArgs e)

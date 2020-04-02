@@ -148,9 +148,9 @@ namespace MettingSys.BLL
         /// <summary>
         /// 获得前几行数据
         /// </summary>
-        public DataSet GetList(int Top, string strWhere, string filedOrder)
+        public DataSet GetList(int Top, string strWhere, string filedOrder, bool selectField = false)
         {
-            return dal.GetList(Top, strWhere, filedOrder);
+            return dal.GetList(Top, strWhere, filedOrder,selectField);
         }
         /// <summary>
         /// 根据客户id获得前几行数据

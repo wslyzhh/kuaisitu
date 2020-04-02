@@ -84,16 +84,10 @@ namespace MettingSys.Web.admin.finance
                 DataRow dr = ds.Tables[0].Rows[0];
                 txtCusName.Text = dr["c_name"].ToString();
                 hCusId.Value = dr["rp_cid"].ToString();
-                if (Utils.StrToInt(hCusId.Value, 0) > 0)
-                {
-                    //绑定客户银行账号
-                    ddlbank.DataSource = new BLL.customerBank().GetList(Utils.StrToInt(hCusId.Value, 0));
-                    ddlbank.DataTextField = "cbname";
-                    ddlbank.DataValueField = "cb_id";
-                    ddlbank.DataBind();
-                    ddlbank.Items.Insert(0, new ListItem("请选择", ""));
-                    ddlbank.SelectedValue = dr["rp_cbid"].ToString();
-                }
+
+                txtBank.Text = Utils.ObjectToStr(dr["cb_bank"]) + "("+ Utils.ObjectToStr(dr["cb_bankNum"]) + ")";
+                hBankId.Value = Utils.ObjectToStr(dr["rp_cbid"]);
+
                 txtMoney.Text = dr["rp_money"].ToString();
                 if (dr["rp_foredate"] != null)
                 {
@@ -148,7 +142,8 @@ namespace MettingSys.Web.admin.finance
             model.rp_money = Utils.StrToDecimal(txtMoney.Text.Trim(), 0);
             model.rp_foredate = ConvertHelper.toDate(txtforedate.Text.Trim());
             model.rp_method = Utils.StrToInt(ddlmethod.SelectedValue, 0);
-            model.rp_content = txtContent.Text.Trim();            
+            model.rp_content = txtContent.Text.Trim();
+            model.rp_cbid = Utils.StrToInt(hBankId.Value, 0);
             return bll.Add(model, manager, txtCenum.Text.Trim(), txtCedate.Text.Trim(),out rpid);
         }
         #endregion
@@ -191,6 +186,11 @@ namespace MettingSys.Web.admin.finance
                 _content += "付款内容：" + model.rp_content + "→<font color='red'>" + txtContent.Text.Trim() + "</font><br/>";
             }
             model.rp_content = txtContent.Text.Trim();
+            if (model.rp_cbid != Utils.StrToInt(hBankId.Value, 0))
+            {
+                _content += "客户银行账号：" + model.rp_cbid + "→<font color='red'>" + hBankId.Value + "</font><br/>";
+            }
+            model.rp_cbid = Utils.StrToInt(hBankId.Value, 0);
             return bll.Update(model, _content, manager, txtCenum.Text.Trim(), txtCedate.Text.Trim(), updateMoney);
         }
         #endregion
@@ -269,6 +269,6 @@ namespace MettingSys.Web.admin.finance
                 JscriptMsg("添加付款通知成功！", "rpDistribution.aspx?id="+ rpid);
             }
         }
-
+        
     }
 }
