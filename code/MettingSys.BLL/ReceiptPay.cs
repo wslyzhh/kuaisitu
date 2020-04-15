@@ -69,6 +69,7 @@ namespace MettingSys.BLL
                     Model.payMethod method = new BLL.payMethod().GetModel(model.rp_method.Value);
                     if (method.pm_type.Value)
                     {
+                        model.rp_cbid = 0;
                         if (string.IsNullOrEmpty(num))
                         {
                             return "请填写凭证号";
@@ -104,6 +105,13 @@ namespace MettingSys.BLL
                         {
                             return "请选择客户银行账号";
                         }
+                    }
+                }
+                else
+                {
+                    if (model.rp_cbid == 0)
+                    {
+                        return "请选择客户银行账号";
                     }
                 }
             }
@@ -292,6 +300,7 @@ namespace MettingSys.BLL
                     Model.payMethod method = new BLL.payMethod().GetModel(model.rp_method.Value);
                     if (method.pm_type.Value)
                     {
+                        model.rp_cbid = 0;
                         if (string.IsNullOrEmpty(num))
                         {
                             return "请填写凭证号";
@@ -328,6 +337,13 @@ namespace MettingSys.BLL
                         {
                             return "请选择客户银行账号";
                         }
+                    }
+                }
+                else
+                {
+                    if (model.rp_cbid == 0)
+                    {
+                        return "请选择客户银行账号";
                     }
                 }
             }

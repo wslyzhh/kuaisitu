@@ -598,7 +598,7 @@ namespace MettingSys.DAL
                         #region 修改收款明细中的rpd_rpid==========================
                         if (rpid > 0)
                         {
-                            string sql = "update MS_ReceiptPayDetail set rpd_rpid=@rpid,rpd_method=@newmethod where rpd_type=0 and rpd_flag3=2 and rpd_flag2=2 and rpd_flag1=2 and isnull(rpd_rpid,0)=0 and rpd_cid=@cid and isnull(rpd_method,0)=@method";
+                            string sql = "update MS_ReceiptPayDetail set rpd_rpid=@rpid,rpd_method=@newmethod where rpd_type=0 and rpd_flag3=2 and rpd_flag2=2 and rpd_flag1=2 and isnull(rpd_rpid,0)=0 and rpd_cid=@cid and isnull(rpd_method,0)=@method and isnull(rpd_cbid,0)=@cbid";
                             if (!string.IsNullOrEmpty(sdate))
                             {
                                 sql += " and datediff(d,rpd_foreDate,'" + sdate + "')<=0";
@@ -612,6 +612,7 @@ namespace MettingSys.DAL
                             paras1.Add(new SqlParameter("@cid", model.rp_cid));
                             paras1.Add(new SqlParameter("@method", method));
                             paras1.Add(new SqlParameter("@newmethod", model.rp_method));
+                            paras1.Add(new SqlParameter("@cbid", model.rp_cbid));
                             DbHelperSQL.ExecuteSql(conn, trans, sql, paras1.ToArray());
 
                             trans.Commit();                            
@@ -672,7 +673,7 @@ namespace MettingSys.DAL
                 strSql.Append(" top " + Top.ToString());
             }
             strSql.Append(" * ");
-            strSql.Append(" FROM  MS_ReceiptPayDetail left join MS_ReceiptPay on rpd_rpid=rp_id left join MS_customer on rpd_cid=c_id left join MS_payMethod on rpd_method=pm_id left join MS_certificates on rp_ceid = ce_id");
+            strSql.Append(" FROM  MS_ReceiptPayDetail left join MS_ReceiptPay on rpd_rpid=rp_id left join MS_customer on rpd_cid=c_id left join MS_payMethod on rpd_method=pm_id left join MS_certificates on rp_ceid = ce_id left join MS_customerBank on rpd_cbid=cb_id");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
@@ -744,13 +745,13 @@ namespace MettingSys.DAL
         public DataSet getCollectList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount,out decimal tmoney)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select t.* from (select rpd_cid,c_name,isnull(rpd_cbid,0)rpd_cbid,isnull(cb_bank+'('+ cb_bankNum +')','') cbname,isnull(rpd_method,0) rpd_method,isnull(pm_name,'') pm_name,count(*) c,sum(rpd_money) as total from MS_ReceiptPayDetail left join MS_payMethod on rpd_method=pm_id left join MS_customer on rpd_cid=c_id left join MS_customerBank on rpd_cbid=cb_id where rpd_type=0 and rpd_flag3=2 and rpd_flag2=2 and rpd_flag1=2 and isnull(rpd_rpid,0)=0 ");
+            strSql.Append("select t.* from (select rpd_cid,c_name,isnull(rpd_cbid,0)rpd_cbid,isnull(cb_bank+'('+cb_bankName+'/'+ cb_bankNum +')','') cbname,isnull(rpd_method,0) rpd_method,isnull(pm_name,'') pm_name,count(*) c,sum(rpd_money) as total from MS_ReceiptPayDetail left join MS_payMethod on rpd_method=pm_id left join MS_customer on rpd_cid=c_id left join MS_customerBank on rpd_cbid=cb_id where rpd_type=0 and rpd_flag3=2 and rpd_flag2=2 and rpd_flag1=2 and isnull(rpd_rpid,0)=0 ");
             if (!string.IsNullOrEmpty(strWhere))
             {
                 strSql.Append(" and " + strWhere);
             }
             recordCount = 0;tmoney = 0;
-            strSql.Append(" group by rpd_cid,c_name,rpd_cbid,cb_bank,cb_bankNum,isnull(rpd_method,0),isnull(pm_name,'')) as t");
+            strSql.Append(" group by rpd_cid,c_name,rpd_cbid,cb_bank,cb_bankName,cb_bankNum,isnull(rpd_method,0),isnull(pm_name,'')) as t");
             //recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
             DataTable dt = DbHelperSQL.Query("select count(*) c,sum(total) t from (" + strSql.ToString() + ") v").Tables[0];
             if (dt!=null)

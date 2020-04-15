@@ -72,16 +72,7 @@ namespace MettingSys.Web.admin.finance
                 {
                     hCusId.Value = cid.ToString();
                     txtCusName.Text = cname;
-                    txtContent.Text = contentText;
-                    if (cid > 0)
-                    {
-                        //绑定客户银行账号
-                        ddlbank.DataSource = new BLL.customerBank().GetList(cid);
-                        ddlbank.DataTextField = "cbname";
-                        ddlbank.DataValueField = "cb_id";
-                        ddlbank.DataBind();
-                        ddlbank.Items.Insert(0, new ListItem("请选择", ""));
-                    }
+                    txtContent.Text = contentText;                    
                 }
                 if (action == DTEnums.ActionEnum.Edit.ToString() || action == DTEnums.ActionEnum.View.ToString()) //修改或查看
                 {
@@ -101,16 +92,8 @@ namespace MettingSys.Web.admin.finance
                 oID = dr["rpd_oid"].ToString();
                 txtCusName.Text = dr["c_name"].ToString();
                 hCusId.Value = dr["rpd_cid"].ToString();
-                if (Utils.StrToInt(hCusId.Value,0) > 0)
-                {
-                    //绑定客户银行账号
-                    ddlbank.DataSource = new BLL.customerBank().GetList(Utils.StrToInt(hCusId.Value, 0));
-                    ddlbank.DataTextField = "cbname";
-                    ddlbank.DataValueField = "cb_id";
-                    ddlbank.DataBind();
-                    ddlbank.Items.Insert(0, new ListItem("请选择", ""));
-                    ddlbank.SelectedValue = dr["rpd_cbid"].ToString();
-                }
+                txtBank.Text = dr["cb_bank"].ToString() + "(" + dr["cb_bankNum"].ToString() + ")";
+                hBankId.Value = dr["rpd_cbid"].ToString();
                 txtMoney.Text = dr["rpd_money"].ToString();
                 if (dr["rpd_foredate"] != null)
                 {
@@ -170,7 +153,7 @@ namespace MettingSys.Web.admin.finance
             model.rpd_personNum = manager.user_name;
             model.rpd_personName = manager.real_name;
             model.rpd_adddate = DateTime.Now;
-            model.rpd_cbid = Utils.StrToInt(ddlbank.SelectedValue, 0);
+            model.rpd_cbid = Utils.StrToInt(hBankId.Value, 0);
             model.rpd_flag1 = 0;
             model.rpd_flag2 = 0;
             model.rpd_flag3 = 0;
@@ -305,6 +288,11 @@ namespace MettingSys.Web.admin.finance
                 _content += "付款内容：" + model.rpd_content + "→<font color='red'>" + txtContent.Text.Trim() + "</font><br/>";
             }
             model.rpd_content = txtContent.Text.Trim();
+            if (model.rpd_cbid != Utils.StrToInt(hBankId.Value,0))
+            {
+                _content += "客户银行账号：" + model.rpd_cbid + "→<font color='red'>" + hBankId.Value + "</font><br/>";
+            }
+            model.rpd_cbid = Utils.StrToInt(hBankId.Value, 0);
             return bll.Update(model, _content, manager, updateMoney);
         }
         #endregion

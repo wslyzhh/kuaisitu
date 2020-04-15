@@ -545,6 +545,7 @@
                             <th align="left" width="10%">付款对象</th>
                             <th align="left" width="6%">凭证号</th>
                             <th align="left">付款内容</th>
+                            <th align="left" width="10%">客户银行账号</th>
                             <th align="left" width="6%">付款金额</th>
                             <th align="left" width="8%">未分配金额</th>
                             <th align="left" width="8%">汇总日期</th>
@@ -565,6 +566,7 @@
                         <td><span class="cusTip" data-cid="<%#Eval("rp_cid")%>"><%# Eval("c_name") %></span><%# bool.Parse(Eval("rp_isExpect").ToString())?"<font color='green'>[预]</font>":"" %></td>
                         <td class="numTd"><span onmouseover="tip_index=layer.tips('凭证日期：<%#Eval("ce_date").ToString()==""?"":Convert.ToDateTime(Eval("ce_date")).ToString("yyyy-MM-dd")%><br/>备注：<%# Eval("ce_remark") %>', this, { time: 0 });" onmouseout="layer.close(tip_index);"><%# Eval("ce_num") %></span></td>
                         <td><%# Eval("rp_content") %></td>
+                        <td><%#Eval("cb_bankName")%><br /><%#Eval("cb_bankNum")%><br /><%#Eval("cb_bank")%></td>
                         <td class="moneyTd"><%# Eval("rp_money") %></td>
                         <td class="umoneyTd"><a href="javascript:;" onclick="showDetail(<%#Eval("rp_id")%>)"><%# Eval("undistribute") %></a></td>
                         <td><%# ConvertHelper.toDate(Eval("rp_foredate"))==null?"":ConvertHelper.toDate(Eval("rp_foredate")).Value.ToString("yyyy-MM-dd") %></td>
@@ -588,7 +590,7 @@
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"13\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"14\">暂无记录</td></tr>" : ""%>
   </table>
                 </FooterTemplate>
             </asp:Repeater>

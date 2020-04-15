@@ -99,6 +99,7 @@ namespace MettingSys.Web.admin.finance
                 {
                     dlceDate.Visible = true;
                     dlceNum.Visible = true;
+                    dlBank.Visible = false;
 
                     txtCenum.Text = Utils.ObjectToStr(dr["ce_num"]);
                     txtCedate.Text = ConvertHelper.toDate(dr["ce_date"]).Value.ToString("yyyy-MM-dd");
@@ -233,12 +234,20 @@ namespace MettingSys.Web.admin.finance
                 {
                     dlceDate.Visible = true;
                     dlceNum.Visible = true;
+                    dlBank.Visible = false;
                 }
                 else
                 {
                     dlceDate.Visible = false;
                     dlceNum.Visible = false;
+                    dlBank.Visible = true;
                 }
+            }
+            else
+            {
+                dlceDate.Visible = false;
+                dlceNum.Visible = false;
+                dlBank.Visible = true;
             }
         }
 

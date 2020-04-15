@@ -95,8 +95,8 @@
             });
             $("#sMoney").text(_smoney.toFixed(2));
         }
-        function collectDetail(cid,method) {
-            $.getJSON("../../tools/business_ajax.ashx?action=collectDetail&cid=" + cid + "&method="+method, function (data) {
+        function collectDetail(cid, method, cbid) {
+            $.getJSON("../../tools/business_ajax.ashx?action=collectDetail&cid=" + cid + "&method=" + method + "&cbid=" + cbid, function (data) {
                 if (data.status == 0) {
                     var d = top.dialog({ content: data.info }).show();
                     setTimeout(function () {
@@ -156,7 +156,8 @@
                 var cid = $(this).parent().next().val();
                 var methodid = $(this).parent().next().next().val();
                 var method = $(this).parent().next().next().next().val();
-                var postData = { "cid": cid, "ctype": $("#ddlCollectType").val(), "methodid": methodid, "method": method, "sdate": $("#txtsforedate").val(), "edate": $("#txteforedate").val(), "newmethodid": $("#ddlmethod").val(), "newmethod": $("#ddlmethod option:selected").text(), "date": $("#txtdate").val() };
+                var cbid = $(this).parent().next().next().next().next().val();
+                var postData = { "cid": cid, "ctype": $("#ddlCollectType").val(), "methodid": methodid, "method": method,"cbid":cbid, "sdate": $("#txtsforedate").val(), "edate": $("#txteforedate").val(), "newmethodid": $("#ddlmethod").val(), "newmethod": $("#ddlmethod option:selected").text(), "date": $("#txtdate").val() };
                 //发送AJAX请求
                 $.ajax({
                     type: "post",
@@ -165,9 +166,9 @@
                     dataType: "json",
                     success: function (data) {
                         if (data.status == 0) {
-                            $("#span_" + cid + "_" + methodid).html("<font color='green'>成功</font>");
+                            $("#span_" + cid + "_" + methodid + "_" + cbid).html("<font color='green'>成功</font>");
                         } else {
-                            $("#span_" + cid + "_" + methodid).html("<font color='red'>" + data.msg + "</font>");
+                            $("#span_" + cid + "_" + methodid + "_" + cbid).html("<font color='red'>" + data.msg + "</font>");
                         }
                     }
                 });
@@ -316,6 +317,7 @@
                             <tr>
                                 <th width="3%">选择</th>
                                 <th align="left" width="15%">付款对象</th>
+                                <th align="left" width="15%">客户银行账号</th>
                                 <th align="left" width="8%">付款方式</th>
                                 <th align="left" width="6%">总金额</th>
                                 <th align="left" width="6%">明细数量</th>
@@ -329,19 +331,21 @@
                                 <asp:HiddenField ID="hidId" Value='<%# Eval("rpd_cid")%>' runat="server" />
                                 <asp:HiddenField ID="hipPmId" Value='<%# Eval("rpd_method")%>' runat="server" />
                                 <asp:HiddenField ID="hidPmName" Value='<%# Eval("pm_name")%>' runat="server" />
+                                <asp:HiddenField ID="hidCbid" Value='<%# Eval("rpd_cbid")%>' runat="server" />
                             </td>
                             <td><span class="cusTip" data-cid="<%#Eval("rpd_cid")%>"><%# Eval("c_name") %></span></td>
+                            <td><%# Eval("cbname") %></td>
                             <td class="paymethodTd"><%# Eval("pm_name") %></td>
                             <td class="moneyTd"><%# Eval("total") %></td>
                             <td><a href="paydetail_list.aspx?txtCusName=<%# Eval("c_name") %>&hCusId=<%# Eval("rpd_cid") %>&ddlcheck3=2"><%# Eval("c") %></a></td>
                             <td align="center">
-                                <a href="javascript:;" onclick="collectDetail(<%# Eval("rpd_cid") %>,<%#Eval("rpd_method") %>)">汇总</a>
-                                <span id="span_<%# Eval("rpd_cid")%>_<%# Eval("rpd_method")%>"></span>
+                                <a href="javascript:;" onclick="collectDetail(<%# Eval("rpd_cid") %>,<%#Eval("rpd_method") %>,<%#Eval("rpd_cbid") %>)">汇总</a>
+                                <span id="span_<%# Eval("rpd_cid")%>_<%# Eval("rpd_method")%>_<%# Eval("rpd_cbid")%>"></span>
                             </td>
                         </tr>
                     </ItemTemplate>
                     <FooterTemplate>
-                        <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"6\">暂无记录</td></tr>" : ""%>
+                        <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"7\">暂无记录</td></tr>" : ""%>
                 </table>
                     </FooterTemplate>
                 </asp:Repeater>

@@ -166,7 +166,7 @@ namespace MettingSys.DAL
 
             if (selectField)
             {
-                strSql.Append(" cb_id as id, cb_bank+'('+cb_bankNum+')' as name ");
+                strSql.Append(" cb_id as id, cb_bank+'('+cb_bankName+'/'+cb_bankNum+')' as name ");
             }
             else
             {

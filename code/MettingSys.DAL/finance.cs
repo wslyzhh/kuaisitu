@@ -485,14 +485,22 @@ namespace MettingSys.DAL
                 }
                 if (dict.ContainsKey("money1"))
                 {
-                    if (!dict.ContainsKey("chk"))
-                    {
-                        strWhere3.Append(" and isnull(t1.fin_money,0)-isnull(rpd_money,0) " + dict["sign"] + " " + dict["money1"] + "");
-                    }
-                    else
-                    {
-                        strWhere3.Append(" and isnull(fcMoney,0)-isnull(chkMoney,0) " + dict["sign"] + " " + dict["money1"] + "");
-                    }
+                    strWhere3.Append(" and isnull(t1.fin_money,0)-isnull(rpd_money,0) " + dict["sign"] + " " + dict["money1"] + "");
+                    //if (!dict.ContainsKey("chk"))
+                    //{
+                    //    strWhere3.Append(" and isnull(t1.fin_money,0)-isnull(rpd_money,0) " + dict["sign"] + " " + dict["money1"] + "");
+                    //}
+                    //else
+                    //{
+                    //    if (dict["chk"] == "空")
+                    //    {
+                    //        strWhere3.Append(" and isnull(t1.fin_money,0)-isnull(rpd_money,0) " + dict["sign"] + " " + dict["money1"] + "");
+                    //    }
+                    //    else
+                    //    {
+                    //        strWhere3.Append(" and isnull(fcMoney,0)-isnull(chkMoney,0) " + dict["sign"] + " " + dict["money1"] + "");
+                    //    }
+                    //}
                 }
                 if (dict.ContainsKey("nature"))
                 {
@@ -604,7 +612,7 @@ namespace MettingSys.DAL
                         chkFiled3 = " and fc_num='" + dict["chk"] + "'";
                         chkFiled4 = ",0 as fcMoney";
                         chkGroup = ",rpd_num";
-                        //strWhere3.Append(" and exists(select * from MS_finance_chk where fc_oid=o_id and isnull(fc_num,'')='')");
+                        strWhere3.Append(" and exists(select * from MS_finance left join MS_finance_chk  on fc_finid=fin_id where fin_oid=o_id and fin_cid=" + dict["cid"] + " and isnull(fc_id,0)=0)");
                     }
                     else
                     {
@@ -615,7 +623,7 @@ namespace MettingSys.DAL
                         chkFiled3 = " and fc_num='" + dict["chk"] + "'";
                         chkFiled4 = ",sum(case when fc_num='" + dict["chk"] + "' then isnull(fc_money,0) else 0 end) fcMoney";
                         chkGroup = ",rpd_num";
-                        strWhere3.Append(" and exists(select * from MS_finance_chk where fc_oid=o_id and fc_num='" + dict["chk"] + "')");
+                        strWhere3.Append(" and exists(select * from MS_finance_chk left join MS_finance on fc_finid=fin_id where fc_oid=o_id and fin_cid=" + dict["cid"] + " and fc_num='" + dict["chk"] + "')");
                     }
                 }
             }

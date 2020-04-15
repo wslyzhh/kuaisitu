@@ -358,7 +358,8 @@
                             <tr>
                                 <th width="3%">选择</th>
                                 <th align="left" width="8%">订单号</th>
-                                <th align="left" width="15%">付款对象</th>
+                                <th align="left" width="8%">付款对象</th>
+                                <th align="left" width="10%">客户银行账号</th>
                                 <th align="left">付款内容</th>
                                 <th align="left" width="6%">付款金额</th>
                                 <th align="left" width="8%">预付日期</th>
@@ -379,6 +380,7 @@
                             </td>
                             <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("rpd_oid")%>"><%#Eval("rpd_oid")%></a></td>
                             <td><%#Eval("c_name")%></td>
+                            <td><%#Eval("cb_bankName")%><br /><%#Eval("cb_bankNum")%><br /><%#Eval("cb_bank")%></td>
                             <td><%#Eval("rpd_content")%></td>
                             <td class="moneyTd"><%#Eval("rpd_money")%></td>
                             <td><%# Convert.ToDateTime(Eval("rpd_foredate")).ToString("yyyy-MM-dd") %></td>
@@ -402,7 +404,7 @@
                         </tr>
                     </ItemTemplate>
                     <FooterTemplate>
-                        <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"13\">暂无记录</td></tr>" : ""%>
+                        <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"14\">暂无记录</td></tr>" : ""%>
                 </table>
                     </FooterTemplate>
                 </asp:Repeater>

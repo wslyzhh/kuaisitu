@@ -358,7 +358,7 @@
                             <tr>
                                 <th width="3%">选择</th>
                                 <th align="left" width="8%">订单号</th>
-                                <th align="left" width="15%">付款对象</th>
+                                <th align="left" width="8%">付款对象</th>
                                 <th align="left" width="10%">客户银行账号</th>
                                 <th align="left">付款内容</th>
                                 <th align="left" width="6%">付款金额</th>

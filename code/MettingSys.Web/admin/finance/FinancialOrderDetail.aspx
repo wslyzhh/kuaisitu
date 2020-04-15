@@ -101,7 +101,7 @@
                                 <th width="6%">区域</th>
                                 <th width="10%">活动日期</th>
                                 <th width="10%">活动地点</th>
-                                <th width="10%">业务日期</th>
+                                <%--<th width="10%">业务日期</th>--%>
                                 <th width="15%">业务性质/明细</th>
                                 <th width="10%">业务说明</th>
                                 <th width="5%">收付类别</th>
@@ -116,7 +116,7 @@
                             <td><%#Eval("fin_area")%></td>
                             <td><%#ConvertHelper.toDate(Eval("o_sdate")).Value.ToString("yyyy-MM-dd") %>/<%#ConvertHelper.toDate(Eval("o_edate")).Value.ToString("yyyy-MM-dd") %></td>
                             <td><%#Eval("o_address")%></td>
-                            <td><%#ConvertHelper.toDate(Eval("fin_sdate")).Value.ToString("yyyy-MM-dd") %>/<%#ConvertHelper.toDate(Eval("fin_edate")).Value.ToString("yyyy-MM-dd") %></td>
+                            <%--<td><%#ConvertHelper.toDate(Eval("fin_sdate")).Value.ToString("yyyy-MM-dd") %>/<%#ConvertHelper.toDate(Eval("fin_edate")).Value.ToString("yyyy-MM-dd") %></td>--%>
                             <td><%#Eval("na_name")%>/<%#Eval("fin_detail")%></td>
                             <td><%#Eval("fin_illustration")%></td>
                             <td><%#Eval("fin_type").ToString()=="True"?"<font color='blue'>收</font>":"<font color='red'>付</font>"%></td>
@@ -125,7 +125,7 @@
                         </tr>
                     </ItemTemplate>
                     <FooterTemplate>
-                        <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"11\">暂无记录</td></tr>" : ""%>
+                        <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"10\">暂无记录</td></tr>" : ""%>
   </table>
                     </FooterTemplate>
                 </asp:Repeater>

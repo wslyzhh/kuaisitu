@@ -40,6 +40,7 @@
                     minChars: 1,
                     onSelect: function (suggestion) {
                         $('#hCusId').val(suggestion.id);
+                        showBank(suggestion.id);
                     },
                     showNoSuggestionNotice: true,
                     noSuggestionNotice: '抱歉，没有匹配的选项',
@@ -61,7 +62,7 @@
                     content: $('#divflag')
                 });
             });
-
+            showBank($('#hCusId').val());
         });
         function showPic(url) {
             parent.layer.open({
@@ -101,6 +102,48 @@
                     }
                 }
             });
+        }
+        function showBank(cid) {
+            var postData = { "cid": cid, "field": "1" };
+            //发送AJAX请求
+            $.ajax({
+                type: "post",
+                url: "../../tools/Business_ajax.ashx?action=getCusBank",
+                data: postData,
+                dataType: "json",
+                success: function (json) {
+                    console.log(json);
+                    $('#txtBank').devbridgeAutocomplete({
+                        lookup: json,
+                        minChars: 0,
+                        onSelect: function (suggestion) {
+                            $(this).next().val(suggestion.id);
+                        },
+                        showNoSuggestionNotice: true,
+                        noSuggestionNotice: '抱歉，没有匹配的选项'
+                    });
+                }
+            });
+        }
+        function addBank() {
+            var cid = parseInt($('#hCusId').val());
+            if (cid > 0) {
+                layer.open({
+                type: 2,
+                title: '添加银行账号',
+                shadeClose: true,
+                shade: false,
+                maxmin: false, //开启最大化最小化按钮
+                area: ['600px', '400px'],
+                content: '../customer/bank_edit.aspx?action=Add&fromPay=true&cid=' + cid+'&tag=1',
+                end: function () {
+                    //location.reload();
+                }
+            });
+            }
+            else {
+                jsprint("请选择付款对象");
+            }
         }
     </script>
     <style type="text/css">
@@ -177,6 +220,14 @@
                 <dd>
                     <asp:TextBox ID="txtforedate" runat="server" CssClass="input rule-date-input" AutoCompleteType="None" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd'});" datatype="*2-100" sucmsg=" "></asp:TextBox>
                     <span class="Validform_checktip">*</span>
+                </dd>
+            </dl>
+            <dl>
+                <dt>客户银行账号</dt>
+                <dd>
+                    <asp:TextBox ID="txtBank" runat="server" CssClass="input normal" Width="380px"></asp:TextBox>
+                    <asp:HiddenField ID="hBankId" runat="server" />
+                    <a href="javascript:void(0);" onclick="addBank()">新增银行账号</a>
                 </dd>
             </dl>
             <dl>

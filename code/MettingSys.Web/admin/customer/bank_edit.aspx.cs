@@ -12,8 +12,10 @@ namespace MettingSys.Web.admin.customer
     public partial class bank_edit : Web.UI.ManagePage
     {
         protected string action = DTEnums.ActionEnum.Add.ToString();//操作类型
-        private int id = 0, cid = 0;
+        protected int id = 0, cid = 0;
         protected DataRow dr = null;
+        protected string fromPay = "";//true时表示从付款通知页面添加
+
 
         protected Model.business_log logmodel = null;
         protected Model.manager manager = null;
@@ -21,6 +23,7 @@ namespace MettingSys.Web.admin.customer
         {
             string _action = DTRequest.GetQueryString("action");
             cid= DTRequest.GetQueryInt("cid");
+            fromPay = DTRequest.GetQueryString("fromPay");
             if (!string.IsNullOrEmpty(_action) && _action == DTEnums.ActionEnum.Edit.ToString())
             {
                 this.action = DTEnums.ActionEnum.Edit.ToString();//修改类型
@@ -123,35 +126,50 @@ namespace MettingSys.Web.admin.customer
         #endregion
 
         //保存
-        protected void btnSubmit_Click(object sender, EventArgs e)
-        {
-            string result = "", msbox = "";
-            manager = GetAdminInfo();
-            if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
-            {
-                //ChkAdminLevel("sys_customerBank", DTEnums.ActionEnum.Edit.ToString()); //检查权限
-                result = DoEdit(this.id);
-                if (result != "")
-                {
-                    msbox = "parent.parent.jsdialog(\"提示\",\"" + result + "\", \"\");";
-                    ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsDialog", msbox, true);
-                }
-                msbox = "parent.parent.jsprint(\"修改客户银行账号成功！\", \"customer_edit.aspx?action=Edit&id=" + this.cid + "\");";
-                ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsPrint", msbox, true);
-            }
-            else //添加
-            {
-                //ChkAdminLevel("sys_customerBank", DTEnums.ActionEnum.Add.ToString()); //检查权限
-                result = DoAdd();
-                if (result != "")
-                {
-                    msbox = "parent.parent.jsdialog(\"提示\",\"" + result + "\", \"\");";
-                    ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsDialog", msbox, true);
-                    return;
-                }
-                msbox = "parent.parent.jsprint(\"添加客户银行账号成功！\", \"customer_edit.aspx?action=Edit&id=" + this.cid + "\");";
-                ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsPrint", msbox, true);
-            }
-        }
+        //protected void btnSubmit_Click(object sender, EventArgs e)
+        //{
+        //    string result = "", msbox = "";
+        //    manager = GetAdminInfo();
+        //    if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
+        //    {
+        //        //ChkAdminLevel("sys_customerBank", DTEnums.ActionEnum.Edit.ToString()); //检查权限
+        //        result = DoEdit(this.id);
+        //        if (result != "")
+        //        {
+        //            msbox = "parent.parent.jsdialog(\"提示\",\"" + result + "\", \"\");";
+        //            ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsDialog", msbox, true);                    
+        //        }
+        //        msbox = "parent.parent.jsprint(\"修改客户银行账号成功！\", \"customer_edit.aspx?action=Edit&id=" + this.cid + "\");";
+        //        ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsPrint", msbox, true);
+                
+        //    }
+        //    else //添加
+        //    {
+        //        //ChkAdminLevel("sys_customerBank", DTEnums.ActionEnum.Add.ToString()); //检查权限
+        //        result = DoAdd();
+        //        if (result != "")
+        //        {
+        //            if (_tag == 1)
+        //            {
+        //                PrintMsg(result);
+        //            }
+        //            else
+        //            {
+        //                msbox = "parent.parent.jsdialog(\"提示\",\"" + result + "\", \"\");";
+        //                ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsDialog", msbox, true);
+        //                return;
+        //            }
+        //        }
+        //        if (_tag == 1)
+        //        {
+        //            PrintMsg("添加银行账号成功！");
+        //        }
+        //        else
+        //        {
+        //            msbox = "parent.parent.jsprint(\"添加客户银行账号成功！\", \"customer_edit.aspx?action=Edit&id=" + this.cid + "\");";
+        //            ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsPrint", msbox, true);
+        //        }
+        //    }
+        //}
     }
 }

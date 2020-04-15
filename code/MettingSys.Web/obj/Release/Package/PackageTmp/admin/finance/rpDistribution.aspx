@@ -47,7 +47,7 @@
                 var _oid = $(obj).attr("data-oid");
                 var _money = $(obj).val();
                 if (_money != "") {
-                    var postData = { rpid:<%=rpID %>,cid:<%=model.rp_cid %>,oid: _oid, type: '<%=model.rp_type %>', disMoney: _money,foredate:<%=model.rp_foredate.Value.ToString("yyyy-MM-dd")%>,method:<%=model.rp_method %>,area:'<%=model.rp_area %>', chk: $("#txtChk").val()};
+                    var postData = { rpid:<%=rpID %>,cid:<%=model.rp_cid %>,cbid:<%=model.rp_cbid %>,oid: _oid, type: '<%=model.rp_type %>', disMoney: _money,foredate:<%=model.rp_foredate.Value.ToString("yyyy-MM-dd")%>,method:<%=model.rp_method %>,area:'<%=model.rp_area %>', chk: $("#txtChk").val()};
                     //发送AJAX请求
                     $.ajax({
                         type: "post",

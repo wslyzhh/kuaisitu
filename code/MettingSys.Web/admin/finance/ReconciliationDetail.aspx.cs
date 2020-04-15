@@ -545,7 +545,7 @@ namespace MettingSys.Web.admin.finance
             headRow.CreateCell(0).SetCellValue("订单号");
             headRow.CreateCell(1).SetCellValue("客源");
             headRow.CreateCell(2).SetCellValue("活动日期");
-            headRow.CreateCell(3).SetCellValue("活动名称/活动地点");
+            headRow.CreateCell(3).SetCellValue("活动地点/活动名称");
             headRow.CreateCell(4).SetCellValue("对账标识");
             headRow.CreateCell(5).SetCellValue("对账金额");
             headRow.CreateCell(6).SetCellValue("业务性质/明细");
@@ -603,7 +603,7 @@ namespace MettingSys.Web.admin.finance
                                 row.CreateCell(0).SetCellValue(dt.Rows[i]["o_id"].ToString());
                                 row.CreateCell(1).SetCellValue(dt.Rows[i]["c_name"].ToString());
                                 row.CreateCell(2).SetCellValue(ConvertHelper.toDate(dt.Rows[i]["o_sdate"]).Value.ToString("yyyy-MM-dd") + "/" + ConvertHelper.toDate(dt.Rows[i]["o_edate"]).Value.ToString("yyyy-MM-dd"));
-                                row.CreateCell(3).SetCellValue(dt.Rows[i]["o_content"].ToString() + "/" + dt.Rows[i]["o_address"].ToString());
+                                row.CreateCell(3).SetCellValue(dt.Rows[i]["o_address"].ToString() + "/" + dt.Rows[i]["o_content"].ToString());
                                 row.CreateCell(4).SetCellValue(finDt.Rows[j]["chk"].ToString());
                                 row.CreateCell(5).SetCellValue(finDt.Rows[j]["chkMoney"].ToString());
                                 row.CreateCell(6).SetCellValue(finDt.Rows[j]["na_name"] + "/" + finDt.Rows[j]["fin_detail"]);

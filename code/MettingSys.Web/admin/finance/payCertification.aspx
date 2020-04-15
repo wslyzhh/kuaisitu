@@ -99,6 +99,10 @@
                             <td width="12%" style="font-weight: bolder;">付款总额：</td>
                             <td style="text-align: left; padding-left: 5px;"><%=dr["rp_money"] %></td>
                         </tr>
+                        <tr>
+                            <td style="font-weight: bolder;text-align: right;">银行账号：</td>
+                            <td colspan="5" style="text-align: left; padding-left: 5px;"><%=Utils.ObjectToStr(dr["cb_bank"]) %>(<%=Utils.ObjectToStr(dr["cb_bankName"]) %>/<%=Utils.ObjectToStr(dr["cb_bankNum"]) %>)</td>
+                        </tr>
                         <%if (Utils.StrToBool(Utils.ObjectToStr(dr["rp_isExpect"]), false))
                             { %>
                         <tr style="text-align: right;">

@@ -178,6 +178,9 @@ namespace MettingSys.Web.tools
                 case "getCusBank":
                     get_customerBank(context);
                     break;
+                case "saveBank":
+                    save_Bank(context);
+                    break;
                 default:
                     break;
             }
@@ -1589,6 +1592,71 @@ namespace MettingSys.Web.tools
             context.Response.End();
         }
         #endregion
+        private void save_Bank(HttpContext context)
+        {
+            string actionType = DTRequest.GetFormString("actionType");
+            int id = DTRequest.GetFormInt("bID", 0);
+            int cid = DTRequest.GetFormInt("cID", 0);
+            string bankName = DTRequest.GetFormString("txtBankName");
+            string bankNum = DTRequest.GetFormString("txtBankNum");
+            string bank = DTRequest.GetFormString("txtBank");
+            string bankAddress = DTRequest.GetFormString("txtBankAddress");
+            bool isUse = DTRequest.GetFormString("cbIsUse") == "on" ? true : false;
+            string fromPay = DTRequest.GetFormString("fromPay");
+            Model.manager manager = new ManagePage().GetAdminInfo();//获得当前登录管理员信息
+            Model.customerBank model = new Model.customerBank();
+            BLL.customerBank bll = new BLL.customerBank();
+            string result = string.Empty;
+            if (actionType == DTEnums.ActionEnum.Add.ToString())
+            {
+                model.cb_cid = cid;
+                model.cb_bankName = bankName.Trim();
+                model.cb_bankNum = bankNum.Trim();
+                model.cb_bank = bank.Trim();
+                model.cb_bankAddress = bankAddress.Trim();
+                model.cb_flag = isUse;
+                result = bll.Add(model, manager);
+            }
+            else
+            {
+                model = bll.GetModel(id);
+                string _content = string.Empty;
+
+                if (model.cb_bankName != bankName.Trim())
+                {
+                    _content += "银行账户名称:" + model.cb_bankName + "→<font color='red'>" + bankName.Trim() + "</font><br/>";
+                }
+                model.cb_bankName = bankName.Trim();
+                if (model.cb_bankNum != bankNum.Trim())
+                {
+                    _content += "客户银行账号:" + model.cb_bankNum + "→<font color='red'>" + bankNum.Trim() + "</font><br/>";
+                }
+                model.cb_bankNum = bankNum.Trim();
+                if (model.cb_bank != bank.Trim())
+                {
+                    _content += "开户行:" + model.cb_bank + "→<font color='red'>" + bank.Trim() + "</font><br/>";
+                }
+                model.cb_bank = bank.Trim();
+                if (model.cb_bankAddress != bankAddress.Trim())
+                {
+                    _content += "开户地址:" + model.cb_bankAddress + "→<font color='red'>" + bankAddress.Trim() + "</font><br/>";
+                }
+                model.cb_bankAddress = bankAddress.Trim();
+                if (model.cb_flag != isUse)
+                {
+                    _content += "状态:" + (model.cb_flag.Value ? "启用" : "禁用") + "→<font color='red'>" + (isUse ? "启用" : "禁用") + "</font><br/>";
+                }
+                model.cb_flag = isUse;
+                result = bll.Update(model, _content, manager);
+            }
+            if (string.IsNullOrEmpty(result))
+            {
+                context.Response.Write("{ \"msg\":\"保存成功\", \"status\":0, \"fromPay\":\"" + fromPay + "\",\"cid\":" + cid + "}");
+                context.Response.End();
+            }
+            context.Response.Write("{ \"msg\":\"" + result + "\", \"status\":1, \"fromPay\":\"" + fromPay + "\",\"cid\":" + cid + "}");
+            context.Response.End();
+        }
         public bool IsReusable
         {
             get

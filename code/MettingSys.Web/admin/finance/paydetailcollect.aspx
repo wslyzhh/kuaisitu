@@ -166,9 +166,9 @@
                     dataType: "json",
                     success: function (data) {
                         if (data.status == 0) {
-                            $("#span_" + cid + "_" + methodid).html("<font color='green'>成功</font>");
+                            $("#span_" + cid + "_" + methodid + "_" + cbid).html("<font color='green'>成功</font>");
                         } else {
-                            $("#span_" + cid + "_" + methodid).html("<font color='red'>" + data.msg + "</font>");
+                            $("#span_" + cid + "_" + methodid + "_" + cbid).html("<font color='red'>" + data.msg + "</font>");
                         }
                     }
                 });
@@ -340,7 +340,7 @@
                             <td><a href="paydetail_list.aspx?txtCusName=<%# Eval("c_name") %>&hCusId=<%# Eval("rpd_cid") %>&ddlcheck3=2"><%# Eval("c") %></a></td>
                             <td align="center">
                                 <a href="javascript:;" onclick="collectDetail(<%# Eval("rpd_cid") %>,<%#Eval("rpd_method") %>,<%#Eval("rpd_cbid") %>)">汇总</a>
-                                <span id="span_<%# Eval("rpd_cid")%>_<%# Eval("rpd_method")%>"></span>
+                                <span id="span_<%# Eval("rpd_cid")%>_<%# Eval("rpd_method")%>_<%# Eval("rpd_cbid")%>"></span>
                             </td>
                         </tr>
                     </ItemTemplate>

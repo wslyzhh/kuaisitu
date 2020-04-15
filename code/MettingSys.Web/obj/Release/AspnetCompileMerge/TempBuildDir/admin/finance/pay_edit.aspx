@@ -31,6 +31,7 @@
                     minChars: 1,
                     onSelect: function (suggestion) {
                         $('#hCusId').val(suggestion.id);
+                        showBank(suggestion.id);
                     },
                     showNoSuggestionNotice: true,
                     noSuggestionNotice: '抱歉，没有匹配的选项',
@@ -41,7 +42,7 @@
                 $("#hCusId").val("");
             });
             bingCertificate();
-            
+
             $("#btnAudit").click(function () {
                 layer.open({
                     type: 1,
@@ -52,6 +53,14 @@
                     shadeClose: true,
                     content: $('#divflag')
                 });
+            });
+
+            $("#txtBank").change(function () {
+                $('#hBankId').val("");
+                var cid = parseInt($('#hCusId').val());
+                if (cid > 0) {
+                    showBank(cid);
+                }
             });
         });
         //绑定凭证
@@ -98,6 +107,47 @@
                 }
             });
         }
+        function showBank(cid) {
+            var postData = { "cid": cid, "field": "1" };
+            //发送AJAX请求
+            $.ajax({
+                type: "post",
+                url: "../../tools/Business_ajax.ashx?action=getCusBank",
+                data: postData,
+                dataType: "json",
+                success: function (json) {
+                    $('#txtBank').devbridgeAutocomplete({
+                        lookup: json,
+                        minChars: 0,
+                        onSelect: function (suggestion) {
+                            $(this).next().val(suggestion.id);
+                        },
+                        showNoSuggestionNotice: true,
+                        noSuggestionNotice: '抱歉，没有匹配的选项'
+                    });
+                }
+            });
+        }
+        function addBank() {
+            var cid = parseInt($('#hCusId').val());
+            if (cid > 0) {
+                layer.open({
+                type: 2,
+                title: '添加银行账号',
+                shadeClose: true,
+                shade: false,
+                maxmin: false, //开启最大化最小化按钮
+                area: ['600px', '400px'],
+                content: '../customer/bank_edit.aspx?action=Add&fromPay=true&cid=' + cid+'&tag=1',
+                end: function () {
+                    //location.reload();
+                }
+            });
+            }
+            else {
+                jsprint("请选择付款对象");
+            }
+        }
     </script>
 </head>
 
@@ -138,7 +188,7 @@
             <dl>
                 <dt>付款金额</dt>
                 <dd>
-                    <asp:TextBox ID="txtMoney" runat="server" CssClass="input small"  datatype="/^-?[1-9]+(\.\d+)?$|^-?0(\.\d+)?$|^-?[1-9]+[0-9]*(\.\d+)?$/" sucmsg=" "/>
+                    <asp:TextBox ID="txtMoney" runat="server" CssClass="input small" datatype="/^-?[1-9]+(\.\d+)?$|^-?0(\.\d+)?$|^-?[1-9]+[0-9]*(\.\d+)?$/" sucmsg=" " />
                     <span class="Validform_checktip">*请输入有效金额</span>
                 </dd>
             </dl>
@@ -148,13 +198,21 @@
                     <asp:TextBox ID="txtforedate" runat="server" CssClass="input rule-date-input" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd'});" datatype="*2-100" sucmsg=" "></asp:TextBox>
                     <span class="Validform_checktip">*</span>
                 </dd>
-            </dl>            
+            </dl>
             <dl>
                 <dt>付款方式</dt>
                 <dd>
                     <div class="rule-single-select">
                         <asp:DropDownList ID="ddlmethod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlmethod_SelectedIndexChanged"></asp:DropDownList>
                     </div>
+                </dd>
+            </dl>
+            <dl id="dlBank" runat="server">
+                <dt>客户银行账号</dt>
+                <dd>
+                    <asp:TextBox ID="txtBank" runat="server" CssClass="input normal" Width="380px"></asp:TextBox>
+                    <asp:HiddenField ID="hBankId" runat="server" />
+                    <a href="javascript:void(0);" onclick="addBank()">新增银行账号</a>
                 </dd>
             </dl>
             <dl>
@@ -190,16 +248,16 @@
         </div>
         <!--/工具栏-->
         <div class="table-container" id="divflag" style="display: none;">
-            <div class="tab-content" style="border: none;">                
+            <div class="tab-content" style="border: none;">
                 <dl>
                     <dt style="width: 100px;">审批类型</dt>
                     <dd>
                         <div class="rule-single-select">
-                                    <asp:DropDownList ID="ddlchecktype" runat="server">
-                                        <asp:ListItem Value="1">财务审批</asp:ListItem>
-                                        <asp:ListItem Value="2">总经理审批</asp:ListItem>
-                                    </asp:DropDownList>
-                                </div>
+                            <asp:DropDownList ID="ddlchecktype" runat="server">
+                                <asp:ListItem Value="1">财务审批</asp:ListItem>
+                                <asp:ListItem Value="2">总经理审批</asp:ListItem>
+                            </asp:DropDownList>
+                        </div>
                     </dd>
                 </dl>
                 <dl>
