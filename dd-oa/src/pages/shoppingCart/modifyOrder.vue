@@ -38,7 +38,7 @@
                 <input type="text" :value="date_range" readonly placeholder="请选择活动日期">
                 <div class="icon_right time"></div>
             </li>
-            <li class="flex flex_a_c flex_s_b" @click="cahgeArea">
+            <li class="flex flex_a_c flex_s_b" @click="changeArea">
                 <label class="title"><span>归属地</span></label>
                 <input type="text" :value="placeText" readonly>
                 <div class="icon_right arrows_right"></div>
@@ -426,7 +426,7 @@ export default {
                 _this.showChoose = true
             })
         },
-        cahgeArea(){    //归属地
+        changeArea(){    //归属地
             let _this = this
             _this.getArea().then(res => {
     			_this.chooseType = 2;
@@ -587,6 +587,7 @@ export default {
     			return
     		}
     		_this.getContactsbycid({c_id:_this.clientId}).then(res => {
+				console.log(res)
     			_this.chooseType = 1;
     			_this.chooseEl = 'link_man';
     			let source = []

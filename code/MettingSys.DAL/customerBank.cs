@@ -190,7 +190,7 @@ namespace MettingSys.DAL
         public DataSet GetList(int cusid)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select cb_id,cb_bank+'('+cb_bankNum+')' cbname from MS_customerBank where cb_cid=@cid");
+            strSql.Append("select cb_id,cb_bank+'('+cb_bankName+'/'+cb_bankNum+')' cbname from MS_customerBank where cb_cid=@cid");
             SqlParameter[] parameters = {
                     new SqlParameter("@cid", SqlDbType.Int,4)};
             parameters[0].Value = cusid;

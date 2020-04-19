@@ -6,8 +6,8 @@
                 <li :class="{active:item.isChecked}" @click="activeItem(item)" v-for="(item,index) in list" :key="index">{{item.name}}</li>
             </ul>
             <div class="choose_btn">
-                <button @click="chageReset">重置</button>
-                <button class="affirm" @click="chageAffirm">确认</button>
+                <button @click="changeReset">重置</button>
+                <button class="affirm" @click="changeAffirm">确认</button>
             </div>
         </div>
     </div>
@@ -44,19 +44,19 @@ export default {
         activeItem(item){
             if(!item.isChecked){
 				if(1 == this.type){
-					this.chageReset();
+					this.changeReset();
 				}
 				this.$set(item,'isChecked',true)
             }else{
                 this.$set(item,'isChecked',!item.isChecked)
             }
         },
-        chageReset(){
+        changeReset(){
             this.list.map((item,index) => {
                 this.$set(item,'isChecked',false)
             })
         },
-        chageAffirm(){
+        changeAffirm(){
             let activeList = []
             this.list.map((item,index) => {
                 if(item.isChecked){

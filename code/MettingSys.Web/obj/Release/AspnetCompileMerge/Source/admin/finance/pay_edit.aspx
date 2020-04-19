@@ -20,7 +20,7 @@
     <script type="text/javascript" src="../../scripts/datepicker/WdatePicker.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../scripts/artdialog/dialog-plus-min.js"></script>
     <script type="text/javascript" charset="utf-8" src="../js/common.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../js/laymain.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../js/laymain.js"></script>,
     <script type="text/javascript">
         $(function () {
             //初始化表单验证
@@ -119,6 +119,7 @@
                     $('#txtBank').devbridgeAutocomplete({
                         lookup: json,
                         minChars: 0,
+                        width:'500px',
                         onSelect: function (suggestion) {
                             $(this).next().val(suggestion.id);
                         },

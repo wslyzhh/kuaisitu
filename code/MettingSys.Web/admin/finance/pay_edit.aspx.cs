@@ -85,7 +85,7 @@ namespace MettingSys.Web.admin.finance
                 txtCusName.Text = dr["c_name"].ToString();
                 hCusId.Value = dr["rp_cid"].ToString();
 
-                txtBank.Text = Utils.ObjectToStr(dr["cb_bank"]) + "("+ Utils.ObjectToStr(dr["cb_bankNum"]) + ")";
+                txtBank.Text = Utils.ObjectToStr(dr["cb_bank"]) + "(" + Utils.ObjectToStr(dr["cb_bankName"]) + "/" + Utils.ObjectToStr(dr["cb_bankNum"]) + ")";
                 hBankId.Value = Utils.ObjectToStr(dr["rp_cbid"]);
 
                 txtMoney.Text = dr["rp_money"].ToString();

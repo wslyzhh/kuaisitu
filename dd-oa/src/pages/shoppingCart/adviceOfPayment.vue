@@ -20,10 +20,16 @@
                 <input type="text" v-model="addData.rpd_foredate" readonly placeholder="请选择预付日期">
                 <div class="icon_right time"></div>
             </li>
+            <li class="li_auto flex" @click="selectBank">
+                <label class="title"><span class="must">银行账号</span></label>
+                <textarea class="bankContent" readonly :value="bankName" placeholder="请选择客户"></textarea>
+            	<div class="icon_right arrows_right"></div>
+            </li>
             <li class="li_auto flex">
                 <label class="title"><span>付款内容</span></label>
                 <textarea class="rpContent" v-model="addData.rpd_content" placeholder="请输入付款内容"></textarea>
-            </li><li class="flex flex_a_c flex_s_b">
+            </li>
+            <li class="flex flex_a_c flex_s_b">
                 <label class="title"><span>附件</span></label>
 				<div class="icon_right accessory">
 					<input type="file" multiple="multiple" ref="FileUp" @change="upFile()">
@@ -36,11 +42,13 @@
 				@click="delOrderFile(f.f_id,f.f_fileName)"></div>
 			</li>
         </ul>
+        <choose :show.sync="showChoose" :type="chooseType" :list="chooseList" @on-affirm="activeChoose"></choose>
         <top-nav :title='type == "add" ? "添加付款明细":"查看付款明细"' :text='"保存"' @rightClick="submit"  ></top-nav>
     </div>
 </template>
 <script>
 import {mapActions,mapState} from 'vuex'
+import choose from '@/components/choose.vue'
 export default {
     name:"",
     data() {
@@ -51,10 +59,15 @@ export default {
            clientId:0,
            type:'',
            files:[],
-           fileData:''
+           fileData:'',
+           bankID:0,
+           bankName:'',
+           chooseList:[],
+           chooseType:1,
+           showChoose:false
        };
     },
-    components: {},
+    components: {choose},
     computed: {
         ...mapState(            
             {
@@ -75,7 +88,8 @@ export default {
             'getAllCustomer',
             'getAddReceiptPayDetail',
             'getUpLoadFile',
-            'delFile'
+            'delFile',
+            'getBankList'
         ]),
         submit(item){ //提交
             // console.log('2:'+this.fileData)           
@@ -176,6 +190,39 @@ export default {
                     this.$set(this.addData,'rpd_foredate',res.value)
                 })
         },
+        activeChoose(items){
+    		let _this = this
+    		if(items.length < 1){
+				this.ddSet.setToast({text:'请正确选择'})
+    			return;
+            }
+            console.log(items)
+    		_this.$set(_this.addData,'bankID',items[0].cb_id)
+            _this.$set(_this.addData,'bankName',items[0].cbname)
+            _this.bankName =items[0].cbname
+        },
+        selectBank(){
+            let _this = this
+            //_this.clientId=38
+    		if(_this.clientId < 1){
+				this.ddSet.setToast({text:'请先选择客户'})
+    			return
+            }
+            _this.getBankList({cid:_this.clientId,managerid:_this.userInfo.id}).then(res => {
+    			let source = []
+    		    res.data.map((item,index) => {
+    				if(item.cbname){
+    				    _this.$set(item,'name',item.cbname)
+    				}
+    				if(this.addData.bankID == item.cb_id ){
+    					_this.$set(item,'isChecked',true)
+    				}
+    				source.push(item)
+                })
+    			_this.chooseList = source
+    		    _this.showChoose = true
+    		})
+        },
         upFile(e){
             let _this = this
             _this.fileData = _this.$refs.FileUp.files
@@ -243,5 +290,8 @@ export default {
 
     .rpContent{
         height: 1.75rem;
+    }
+    .bankContent{
+        height: 0.85rem;
     }
 </style>

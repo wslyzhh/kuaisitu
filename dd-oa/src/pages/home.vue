@@ -81,6 +81,7 @@ export default {
         //     console.log(res.code);
         //     _this.userid(res.code)
         // })
+        console.log('用户ID：'+ _this.userInfo.id)
         _this.getAduitCount({managerid:_this.userInfo.id}).then(res => {
             if(res.data.status==1){
                 _this.aduitCount1 = res.data.count1
@@ -101,7 +102,7 @@ export default {
                 this.activeIndex = 0;
             }
         }, 5000);
-        console.log('用户ID：'+ this.userInfo.id)
+        //console.log('用户ID：'+ this.userInfo.id)
         this.powers = this.powerList.map(item => item.urp_code)
     },
     methods: {

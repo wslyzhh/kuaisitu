@@ -248,6 +248,9 @@ namespace MettingSys.Web.tools
                 case "add_receiptpayDetail"://添加收付款明细
                     add_receiptpayDetail(context);
                     break;
+                case "getBank"://获取客户银行账号
+                    get_bank(context);
+                    break;
                 #endregion
 
                 #region 财务管理
@@ -2911,6 +2914,7 @@ namespace MettingSys.Web.tools
                 string rpd_type = Utils.ObjectToStr(jObject["rpd_type"]);
                 string rpd_oid = Utils.ObjectToStr(jObject["rpd_oid"]);
                 int rpd_cid = Utils.ObjToInt(jObject["rpd_cid"],0);
+                int bankID = Utils.ObjToInt(jObject["bankID"], 0);
                 string rpd_content = Utils.ObjectToStr(jObject["rpd_content"]);
                 decimal rpd_money = Utils.ObjToDecimal(jObject["rpd_money"], 0);
                 string rpd_foredate = Utils.ObjectToStr(jObject["rpd_foredate"]);
@@ -2929,6 +2933,7 @@ namespace MettingSys.Web.tools
                 model.rpd_personNum = managerModel.user_name;
                 model.rpd_personName = managerModel.real_name;
                 model.rpd_adddate = DateTime.Now;
+                model.rpd_cbid = bankID;
                 if (model.rpd_type.Value)
                 {
                     model.rpd_flag1 = 2;
@@ -2951,6 +2956,45 @@ namespace MettingSys.Web.tools
                     return;
                 }
                 context.Response.Write("{ \"msg\":\"" + result + "\", \"status\":0 }");
+                return;
+            }
+            catch (Exception ex)
+            {
+                context.Response.Write("{\"status\": 0, \"msg\": \"" + ex.Message + "\"}");
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 查询客户银行账号
+        /// </summary>
+        /// <param name="context"></param>
+        private void get_bank(HttpContext context)
+        {
+            try
+            {
+                get_params(context, out jObject);
+                if (jObject["managerid"] == null || string.IsNullOrWhiteSpace(jObject["managerid"].ToString()) || !int.TryParse(jObject["managerid"].ToString(), out int managerid))
+                {
+                    context.Response.Write("{\"status\": 0, \"msg\": \"KeyIsNullOrError\"}");
+                    return;
+                }
+                Model.manager managerModel = new BLL.manager().GetModel(managerid);
+                if (managerModel == null)
+                {
+                    context.Response.Write("{\"status\": 0, \"msg\": \"ManageridIsNullOrError\"}");
+                    return;
+                }
+                int cid = Utils.ObjToInt(jObject["cid"], 0);
+                DataSet ds = new BLL.customerBank().GetList(cid);
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    //context.Response.Write("{\"status\": 1,\"list\":");
+                    //context.Response.Write(JArray.FromObject(ds.Tables[0]) + "}");
+                    context.Response.Write(JArray.FromObject(ds.Tables[0]));
+                    return;
+                }
+                context.Response.Write("{\"status\": 0,\"list\":[]}");
                 return;
             }
             catch (Exception ex)

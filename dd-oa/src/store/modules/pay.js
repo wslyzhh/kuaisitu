@@ -13,6 +13,9 @@ const actions = {
     },
     getAddReceiptPayDetail({commit},params){   //添加收付款明细
         return ajax.post(api.addReceiptPayDetail ,params)
+    },
+    getBankList({commit},params){//获取客户银行账号
+        return ajax.post(api.bankList ,params)
     }
 }
 

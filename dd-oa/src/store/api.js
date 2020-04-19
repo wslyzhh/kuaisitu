@@ -219,6 +219,9 @@ const api = {
     get addReceiptPayDetail(){ //添加收付款明细
         return baseUrl+'/tools/dingtalk_ajax.ashx?action=add_receiptpayDetail'
     },
+    get bankList(){//获取客户银行账号
+        return baseUrl+'/tools/dingtalk_ajax.ashx?action=getBank'
+    },
     ///订单管理模块 end--------------------------------------------------------
 
     ///财务管理模块 start------------------------------------------------------
