@@ -14,6 +14,10 @@
                 <label class="title"><span>预付日期</span></label>
                 <input type="text" v-model="addData.rpforedate" readonly >
             </li>
+            <li class="li_auto flex">
+                <label class="title"><span>银行账号</span></label>
+                <textarea class="bankContent" v-model="addData.bankName"></textarea>
+            </li>
 			<li class="flex flex_a_c flex_s_b">
 			    <label class="title"><span>付款方式</span></label>
 			    <input type="text" readonly v-model="addData.rp_method_text">
@@ -164,6 +168,9 @@ export default {
             border-radius: 4px;
             margin-bottom: .2rem;
         }
+    }    
+    .bankContent{
+        height: 0.85rem;
     }
 </style>
 

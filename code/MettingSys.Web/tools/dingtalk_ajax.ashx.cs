@@ -2763,6 +2763,8 @@ namespace MettingSys.Web.tools
                 _object.Add("rp_method", dr["rp_method"].ToString());//收付款方式
                 _object.Add("rp_date", dr["rp_date"].ToString()==""?"": ConvertHelper.toDate(dr["rp_date"]).Value.ToString("yyyy-MM-dd"));//实际收付款日期
                 _object.Add("rp_isConfirm", Convert.ToBoolean(dr["rp_isConfirm"]).ToString());//实际收付款日期
+                _object.Add("rp_cbid", Utils.ObjectToStr(dr["rp_cbid"]));
+                _object.Add("bankName", Utils.ObjToInt(dr["rp_cbid"]) == 0 ? "" : Utils.ObjectToStr(dr["cb_bank"]) + "(" + Utils.ObjectToStr(dr["cb_bankName"]) + "/" + Utils.ObjectToStr(dr["cb_bankNum"]) + ")");
                 string type = jObject["type"] == null ? "" : jObject["type"].ToString();
                 if (type == "check")
                 {
@@ -3142,6 +3144,8 @@ namespace MettingSys.Web.tools
                 _object.Add("rpd_money", dr["rpd_money"].ToString());
                 _object.Add("rpd_foredate", Convert.ToDateTime(dr["rpd_foredate"]).ToString("yyyy-MM-dd"));
                 _object.Add("rpd_content", dr["rpd_content"].ToString());
+                _object.Add("rpd_cbid", Utils.ObjectToStr(dr["rpd_cbid"]));
+                _object.Add("bankName", Utils.ObjToInt(dr["rpd_cbid"])==0?"": Utils.ObjectToStr(dr["cb_bank"]) + "(" + Utils.ObjectToStr(dr["cb_bankName"]) + "/" + Utils.ObjectToStr(dr["cb_bankNum"]) + ")");
                 DataTable dt = new BLL.payPic().GetList(1, "pp_type=1 and pp_rid=" + id + "", "pp_addDate desc").Tables[0];
                 if (dt != null && dt.Rows.Count > 0)
                 {

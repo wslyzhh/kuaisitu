@@ -19,6 +19,10 @@
                 <input type="text" v-model="addData.rpdforedate" readonly>
             </li>
             <li class="li_auto flex">
+                <label class="title"><span>银行账号</span></label>
+                <textarea class="bankContent" v-model="addData.bankName"></textarea>
+            </li>
+            <li class="li_auto flex">
                 <label class="title"><span>收款内容</span></label>
                 <textarea class="rpContent" v-model="addData.rpdcontent"></textarea>
             </li>
@@ -119,6 +123,7 @@ export default {
                 _this.addData.type_text = _this.typeList[_this.addData.type-1].key
                 _this.status_text = _this.flagList[_this.addData.flag].key
                 _this.files = _this.addData.albumlist
+                _this.addData.bankName = _this.addData.bankName
             })
         }
     },
@@ -180,6 +185,9 @@ export default {
     }
     .rpContent{
         height: 1.75rem;
+    }
+    .bankContent{
+        height: 0.85rem;
     }
 </style>
 

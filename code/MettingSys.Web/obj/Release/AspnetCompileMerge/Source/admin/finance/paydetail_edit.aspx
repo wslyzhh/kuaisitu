@@ -116,6 +116,7 @@
                     $('#txtBank').devbridgeAutocomplete({
                         lookup: json,
                         minChars: 0,
+                        width:'500px',
                         onSelect: function (suggestion) {
                             $(this).next().val(suggestion.id);
                         },
@@ -164,6 +165,12 @@
             color: red;
             text-align: center;
             overflow: hidden;
+        }
+        .tab-content dl dt {
+            width: 100px;
+        }
+        .tab-content dl dd {
+            margin-left: 120px;
         }
     </style>
 </head>
