@@ -35,7 +35,7 @@
 				    </div>
 				    <div class="message flex flex_a_c flex_s_b">
 				        <div class="message_list flex">
-				            <span>{{item.o_id}}</span>
+				            <span v-bind:class="item.o_status==0?'orderstatus_0':(item.o_status==1?'orderstatus_1':'orderstatus_2')">{{item.o_id}}</span>
 				            <span>{{item.op_name}}{{item.op_number}}</span>
 				            <span>{{item.o_contractPrice}}</span>
 				            <span>{{getListDate(item.o_sdate)}}/{{getListDate(item.o_edate)}}</span>
@@ -159,7 +159,7 @@ export default {
 		orderList(){
 			let _this = this
             _this.searchData.pageIndex++
-			_this.searchData.managerid=this.userInfo.id
+			_this.searchData.managerid=_this.userInfo.id
             _this.ddSet.showLoad()
 			this.getOrderList(this.searchData).then(function(res){
                 _this.ddSet.hideLoad()

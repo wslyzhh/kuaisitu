@@ -267,7 +267,7 @@ namespace MettingSys.DAL
         {
             StringBuilder strWhere1 = new StringBuilder();
             StringBuilder strWhere2 = new StringBuilder();
-            string selectFiled = "o_id,c_name,o_content,o_address,o_edate,isnull(o_financeCust,0) o_financeCust,na_name,op_area,op_name,op_number,person2,person3,person4,sum(case when fin_type=1 then fin_money else 0 end) shou,sum(case when fin_type=0 then fin_money else 0 end) fu,sum(case when fin_type=1 then fin_money else 0-fin_money end) profit";
+            string selectFiled = "o_id,c_name,o_content,o_status,o_address,o_edate,isnull(o_financeCust,0) o_financeCust,na_name,op_area,op_name,op_number,person2,person3,person4,sum(case when fin_type=1 then fin_money else 0 end) shou,sum(case when fin_type=0 then fin_money else 0 end) fu,sum(case when fin_type=1 then fin_money else 0-fin_money end) profit";
             if (dict != null)
             {
                 if (dict.ContainsKey("smonth"))
@@ -358,7 +358,7 @@ namespace MettingSys.DAL
                 }
                 if (dict.ContainsKey("isCust") && dict["isCust"]!="on")
                 {
-                    selectFiled = "o_id,c_name,o_content,o_address,o_edate,0 as o_financeCust,na_name,op_area,op_name,op_number,person2,person3,person4,sum(case when fin_type=1 then fin_money else 0 end) shou,sum(case when fin_type=0 then fin_money else 0 end) fu,sum(case when fin_type=1 then fin_money else 0-fin_money end) profit";
+                    selectFiled = "o_id,c_name,o_content,o_status,o_address,o_edate,0 as o_financeCust,na_name,op_area,op_name,op_number,person2,person3,person4,sum(case when fin_type=1 then fin_money else 0 end) shou,sum(case when fin_type=0 then fin_money else 0 end) fu,sum(case when fin_type=1 then fin_money else 0-fin_money end) profit";
                 }
             }
             StringBuilder strSql = new StringBuilder();
@@ -366,7 +366,7 @@ namespace MettingSys.DAL
             strSql.Append(" select *,person2 = isnull(STUFF((SELECT ',' + op_name+'('+(case when op_dstatus=0 then '待定' else case when op_dstatus=1 then '处理中' else '已完成' end end)+')' FROM MS_OrderPerson WHERE  op_oid=o_id and op_type=3 FOR XML PATH('')), 1, 1, ''),'无'),person3 = isnull(STUFF((SELECT ',' + op_name+'('+(case when op_dstatus=0 then '待定' else case when op_dstatus=1 then '处理中' else '已完成' end end)+')' FROM MS_OrderPerson WHERE  op_oid=o_id and op_type=5 FOR XML PATH('')), 1, 1, ''),'无')");
             strSql.Append(" ,person4 = (STUFF((SELECT ',' + op_number + '(' + op_name + ')' FROM MS_OrderPerson WHERE  op_oid = fin_oid and op_type = 4 FOR XML PATH('')), 1, 1, ''))");
             strSql.Append(" from MS_finance left join MS_Order on fin_oid = o_id left join MS_Nature on fin_nature = na_id left join MS_OrderPerson on o_id = op_oid and op_type = 1 left join MS_Customer on o_cid = c_id where (o_status = 1 or o_status = 2) "+ strWhere1 + "");
-            strSql.Append(" ) t group by o_id, c_name, o_content, o_address, o_edate,o_financeCust, na_name, op_area, op_name,op_number,person2, person3, person4");
+            strSql.Append(" ) t group by o_id, c_name, o_content,o_status, o_address, o_edate,o_financeCust, na_name, op_area, op_name,op_number,person2, person3, person4");
             
 
             SqlParameter[] param = { };
@@ -872,10 +872,10 @@ namespace MettingSys.DAL
                 }
             }
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select o_id,c_name,o_content,o_address,o_edate,na_name,fin_detail,op_area,op_name,op_number,fin_personNum,fin_personName,sum(fin_money) fu ");
+            strSql.Append("select o_id,c_name,o_content,o_status,o_address,o_edate,na_name,fin_detail,op_area,op_name,op_number,fin_personNum,fin_personName,sum(fin_money) fu ");
             strSql.Append(" from MS_finance left join MS_Order on fin_oid=o_id left join MS_Nature on fin_nature=na_id left join MS_OrderPerson on o_id=op_oid and op_type=1 left join MS_Customer on fin_cid=c_id ");
             strSql.Append(" where (o_status=1 or o_status =2) and fin_type=0 and fin_flag=2 and na_flag=0 "+ strWhere1 + "");
-            strSql.Append(" group by o_id,c_name,o_content,o_address,o_edate,na_name,fin_detail,op_area,op_name,op_number,fin_personNum,fin_personName");
+            strSql.Append(" group by o_id,c_name,o_content,o_status,o_address,o_edate,na_name,fin_detail,op_area,op_name,op_number,fin_personNum,fin_personName");
 
 
             SqlParameter[] param = { };

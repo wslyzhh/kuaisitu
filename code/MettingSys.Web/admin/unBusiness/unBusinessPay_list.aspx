@@ -379,7 +379,7 @@
                             </td>
                             <td><%# BusinessDict.unBusinessNature()[Convert.ToByte(Eval("uba_type"))]%></td>
                             <td><%#Eval("uba_function") %></td>
-                            <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("uba_oid")%>"><%#Eval("uba_oid") %></a></td>
+                            <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("uba_oid")%>"><span class="orderstatus_<%#Eval("o_status")%>"><%#Eval("uba_oid") %></span></a></td>
                             <td style="padding-right:10px;"><%#Eval("uba_instruction") %></td>
                             <td><%#Eval("uba_receiveBankName") %></td>
                             <td><%#Eval("uba_receiveBankNum") %></td>

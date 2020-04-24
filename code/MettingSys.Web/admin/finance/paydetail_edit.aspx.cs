@@ -92,7 +92,7 @@ namespace MettingSys.Web.admin.finance
                 oID = dr["rpd_oid"].ToString();
                 txtCusName.Text = dr["c_name"].ToString();
                 hCusId.Value = dr["rpd_cid"].ToString();
-                txtBank.Text = dr["cb_bank"].ToString() + "(" + dr["cb_bankNum"].ToString() + ")";
+                txtBank.Text = dr["cb_bank"].ToString() + "("+ dr["cb_bankName"].ToString() + "/" + dr["cb_bankNum"].ToString() + ")";
                 hBankId.Value = dr["rpd_cbid"].ToString();
                 txtMoney.Text = dr["rpd_money"].ToString();
                 if (dr["rpd_foredate"] != null)

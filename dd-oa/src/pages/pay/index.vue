@@ -25,7 +25,7 @@
                     </div>
                     <div class="message flex flex_a_c flex_s_b">
                         <div class="message_list flex">
-                            <span>{{item.rpd_oid}}</span>
+                            <span v-bind:class="item.o_status==0?'orderstatus_0':(item.o_status==1?'orderstatus_1':'orderstatus_2')">{{item.rpd_oid}}</span>
                             <span>{{item.rpd_money}}</span>
                             <span>{{item.rpd_foredate | formatDate}}</span>
                         </div>
@@ -93,7 +93,7 @@ export default {
         payDetailList(){            
             let _this = this
             _this.searchData.pageIndex++
-            _this.searchData.managerid = this.userInfo.id
+            _this.searchData.managerid = _this.userInfo.id
             this.getPayDetailList(_this.searchData).then(res => {
                 if(res.data.msg){
 					_this.ddSet.setToast({text:res.data.msg})
@@ -118,9 +118,8 @@ export default {
             this.newpayDetailList()
         },
         changeTab(index){
-            console.log()
             if(index==0) {
-                this.newreceiptList()
+                this.newpayDetailList()
             }
             else{
                 this.$router.push('/expectPay')

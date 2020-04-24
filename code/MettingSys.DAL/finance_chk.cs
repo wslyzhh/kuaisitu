@@ -198,7 +198,7 @@ namespace MettingSys.DAL
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount,out decimal tMoney,bool isPage=true)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select o_ID,c1.c_name,c2.c_name as cname,o_content,o_sdate,o_edate,o_address,fin_type,na_name,fin_detail,fc_num,fc_money from MS_finance_chk left join MS_finance on fc_finid=fin_id left join MS_Order on fin_oid=o_id left join MS_Nature on fin_nature=na_id left join MS_customer c1 on fin_cid=c1.c_id left join MS_customer c2 on o_cid = c2.c_id");
+            strSql.Append("select o_ID,c1.c_name,c2.c_name as cname,o_content,o_status,o_sdate,o_edate,o_address,fin_type,na_name,fin_detail,fc_num,fc_money from MS_finance_chk left join MS_finance on fc_finid=fin_id left join MS_Order on fin_oid=o_id left join MS_Nature on fin_nature=na_id left join MS_customer c1 on fin_cid=c1.c_id left join MS_customer c2 on o_cid = c2.c_id");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);

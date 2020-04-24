@@ -160,7 +160,7 @@
                     </HeaderTemplate>
                     <ItemTemplate>
                         <tr>
-                            <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("o_id")%>"><%#Eval("o_id")%></a></td>
+                            <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("o_id")%>"><span class="orderstatus_<%#Eval("o_status")%>"><%#Eval("o_id")%></span></a></td>
                             <td><%#Eval("c_name")%></td>
                             <td><%#Eval("o_content")%></td>
                             <td><%#Eval("o_contractPrice")%></td>

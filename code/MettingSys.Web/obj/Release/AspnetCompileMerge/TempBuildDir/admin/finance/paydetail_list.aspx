@@ -378,7 +378,7 @@
                                 <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Style="vertical-align: middle;" />
                                 <asp:HiddenField ID="hidId" Value='<%#Eval("rpd_id")%>' runat="server" />
                             </td>
-                            <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("rpd_oid")%>"><%#Eval("rpd_oid")%></a></td>
+                            <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("rpd_oid")%>"><span class="orderstatus_<%#Eval("o_status")%>"><%#Eval("rpd_oid")%></span></a></td>
                             <td><%#Eval("c_name")%></td>
                             <td><%#Eval("cb_bankName")%><br /><%#Eval("cb_bankNum")%><br /><%#Eval("cb_bank")%></td>
                             <td><%#Eval("rpd_content")%></td>

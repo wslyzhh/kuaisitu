@@ -19,7 +19,7 @@
                     </div>
                     <div class="message flex flex_a_c flex_s_b">
                         <div class="message_list flex">
-                            <span v-show="item.inv_oid">订单号：{{item.inv_oid}}</span>
+                            <span v-bind:class="item.o_status==0?'orderstatus_0':(item.o_status==1?'orderstatus_1':'orderstatus_2')" v-show="item.inv_oid">{{item.inv_oid}}</span>
                             <span>开票金额：{{item.inv_money}}</span>
                         </div>
                     </div>
@@ -67,7 +67,7 @@ export default {
                 pageSize:999,
                 keywords:this.searchText,
                 inv_isConfirm,
-                managerid:this.userInfo.id
+                managerid:14//this.userInfo.id
             }
             this.getBillList(params).then(res => {
                 this.list = res.data.list

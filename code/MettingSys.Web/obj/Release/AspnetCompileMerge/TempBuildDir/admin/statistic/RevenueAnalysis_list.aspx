@@ -296,7 +296,7 @@
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
-                        <td><%#Eval("o_id") %></td>
+                        <td><span class="orderstatus_<%#Eval("o_status")%>"><%#Eval("o_id") %></span></td>
                         <td><%#Eval("c_name") %></td>
                         <td><%#Eval("o_content") %></td>
                         <td><%#Eval("o_address") %></td>

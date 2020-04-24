@@ -111,7 +111,7 @@
                     </HeaderTemplate>
                     <ItemTemplate>
                         <tr>
-                            <td><%#Eval("o_id")%></td>
+                            <td><span class="orderstatus_<%#Eval("o_status")%>"><%#Eval("o_id")%></span></td>
                             <td><%#Eval("o_content")%></td>
                             <td><%#Eval("fin_area")%></td>
                             <td><%#ConvertHelper.toDate(Eval("o_sdate")).Value.ToString("yyyy-MM-dd") %>/<%#ConvertHelper.toDate(Eval("o_edate")).Value.ToString("yyyy-MM-dd") %></td>

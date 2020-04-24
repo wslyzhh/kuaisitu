@@ -260,7 +260,7 @@ namespace MettingSys.Web.admin.finance
                     _colspan = finDt.Rows.Count == 0 ? 1 : finDt.Rows.Count;
                     trHtml += "<tr style=\"text-align: center;\">";
                     trHtml += "<td rowspan=\"" + _colspan + "\"><input type=\"checkbox\" class=\"checkall\" data-id=\"" + dr["o_id"] + "\" data-finmoney=\"" + dr["fin_money"] + "\" data-rpdmoney=\"" + dr["rpd_money"] + "\" data-unMoney=\"" + dr["unReceiptPay"] + "\" data-unchkmoney=\"" + (string.IsNullOrEmpty(_chk) ? "--" : "" + dr["unChkMoney"] + "") + "\"  data-unrpmoney=\"" + (string.IsNullOrEmpty(_chk) ? "" + dr["unReceiptPay"] + "" : "" + dr["unChkMoney"] + "") + "\"/></td>";
-                    trHtml += "<td rowspan=\"" + _colspan + "\"><a href=\"../order/order_edit.aspx?action=" + DTEnums.ActionEnum.Edit.ToString() + "&oID=" + dr["o_id"] + "\">" + dr["o_id"] + "</a></td>";
+                    trHtml += "<td rowspan=\"" + _colspan + "\"><a href=\"../order/order_edit.aspx?action=" + DTEnums.ActionEnum.Edit.ToString() + "&oID=" + dr["o_id"] + "\"><span class=\"orderstatus_" + dr["o_status"] + "\">" + dr["o_id"] + "</span></a></td>";
                     trHtml += "<td style=\"text-align: left;\" rowspan=\"" + _colspan + "\">" + dr["c_name"] + "</td>";
                     trHtml += "<td rowspan=\"" + _colspan + "\">" + ConvertHelper.toDate(dr["o_sdate"]).Value.ToString("yyyy-MM-dd") + "<br/>" + ConvertHelper.toDate(dr["o_edate"]).Value.ToString("yyyy-MM-dd") + "</td>";
                     trHtml += "<td style=\"text-align: left;\" rowspan=\"" + _colspan + "\">" + dr["o_address"] + "/" + dr["o_content"] + "</td>";

@@ -226,7 +226,7 @@
                     </HeaderTemplate>
                     <ItemTemplate>
                         <tr>
-                            <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("o_id")%>"><%#Eval("o_id")%></a></td>
+                            <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("o_id")%>"><span class="orderstatus_<%#Eval("o_status")%>"><%#Eval("o_id")%></span></a></td>
                             <td>名称：<%#Eval("o_content")%><br />
                                 地点：<%#Eval("o_address")%>
                             </td>

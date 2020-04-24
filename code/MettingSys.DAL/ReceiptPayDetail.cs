@@ -673,7 +673,7 @@ namespace MettingSys.DAL
                 strSql.Append(" top " + Top.ToString());
             }
             strSql.Append(" * ");
-            strSql.Append(" FROM  MS_ReceiptPayDetail left join MS_ReceiptPay on rpd_rpid=rp_id left join MS_customer on rpd_cid=c_id left join MS_payMethod on rpd_method=pm_id left join MS_certificates on rp_ceid = ce_id left join MS_customerBank on rpd_cbid=cb_id");
+            strSql.Append(" FROM  MS_ReceiptPayDetail left join MS_ReceiptPay on rpd_rpid=rp_id left join MS_customer on rpd_cid=c_id left join MS_payMethod on rpd_method=pm_id left join MS_certificates on rp_ceid = ce_id left join MS_customerBank on rpd_cbid=cb_id  left join ms_order on rpd_oid=o_id");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
@@ -697,7 +697,7 @@ namespace MettingSys.DAL
                 strSql.Append(" left join MS_ReceiptPay on rpd_rpid=rp_id left join MS_order on rpd_oid=o_id left join MS_payMethod on rpd_method=pm_id left join MS_customerBank on rpd_cbid=cb_id");
             }
             else {
-                strSql.Append(" left join MS_ReceiptPay on rpd_rpid=rp_id left join MS_payMethod on rpd_method=pm_id");
+                strSql.Append(" left join MS_ReceiptPay on rpd_rpid=rp_id left join MS_payMethod on rpd_method=pm_id left join MS_order on rpd_oid=o_id");
             }
             if (strWhere.Trim() != "")
             {

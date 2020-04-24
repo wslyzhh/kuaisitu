@@ -70,7 +70,7 @@
                     if (json.length > 0) {
                         var _trhtml = "<tr class='Detail" + rpid + "'><td></td><td>订单号</td><td>付款对象</td><td>付款内容</td><td>付款金额</td><td>预付日期</td><td>付款方式</td><td>申请人</td><td>区域</td><td colspan=\"2\">状态</td></tr>";
                         $.each(json, function (index, item) {
-                            _trhtml += "<tr class='Detail" + rpid + "'><td></td><td><a href=\"../order/order_edit.aspx?action=Edit&oID=" + item.rpd_oid + "\">" + item.rpd_oid + "</a></td>"
+                            _trhtml += "<tr class='Detail" + rpid + "'><td></td><td><a href=\"../order/order_edit.aspx?action=Edit&oID=" + item.rpd_oid + "\"><span class='orderstatus_"+item.o_status+"'>" + item.rpd_oid + "</span></a></td>"
                                 + "<td>" + item.c_name + "</td>"
                                 + "<td>" + item.rpd_content + "</td>"
                                 + "<td>" + item.rpd_money + "</td>"

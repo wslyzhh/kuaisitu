@@ -36,7 +36,7 @@
 				    </div>
 				    <div class="message flex flex_a_c flex_s_b" style="display:block;height: 1.45rem">
 				        <div class="message_list" style="display:block;float:left;">							
-				            <span>{{item.o_id}}</span>
+				            <span v-bind:class="item.o_status==0?'orderstatus_0':(item.o_status==1?'orderstatus_1':'orderstatus_2')">{{item.o_id}}</span>
 				            <span>{{item.o_content}}</span>
 				            <span>{{getListDate(item.o_sdate)}}/{{getListDate(item.o_edate)}}</span>
 				            <span>{{item.o_address}}</span>
@@ -325,8 +325,8 @@ export default {
 			.message{
 				.message_list{
 					span:nth-child(1){
-						background-color: $blue_1;
-						color: #FFF;
+						//background-color: $blue_1;
+						color: #ffffff;
 					}
 					span:nth-child(2){
 						background-color: #fff4e9;

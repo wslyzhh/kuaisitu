@@ -335,7 +335,7 @@
                         </td>
                         <td><%#Eval("inv_id")%></td>
                         <td><%#Eval("c_name")%></td>
-                        <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("inv_oid")%>"><%#Eval("inv_oid")%></a></td>
+                        <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("inv_oid")%>"><span class="orderstatus_<%#Eval("o_status")%>"><%#Eval("inv_oid")%></span></a></td>
                         <td><%#Eval("inv_serviceType")%>/<%#Eval("inv_serviceName")%></td>
                         <td><%# string.IsNullOrEmpty(Utils.ObjectToStr(Eval("inv_type")))?"":BusinessDict.invType()[Utils.StrToBool(Utils.ObjectToStr(Eval("inv_type")),false)] %></td>
                         <td class="moneyTd"><%#Eval("inv_money")%></td>

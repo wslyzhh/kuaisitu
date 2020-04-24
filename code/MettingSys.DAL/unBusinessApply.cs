@@ -185,7 +185,7 @@ namespace MettingSys.DAL
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount,out decimal tmoney,bool isPage=true)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select b.*,m.pm_name FROM MS_unBusinessApply b left join MS_payMethod m on b.uba_payMethod=m.pm_id and m.pm_isUse=1");
+            strSql.Append("select b.*,m.pm_name,o_status FROM MS_unBusinessApply b left join MS_payMethod m on b.uba_payMethod=m.pm_id and m.pm_isUse=1 left join MS_Order on uba_oid = o_id");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);

@@ -96,7 +96,7 @@ export default {
         payList(){
             let _this = this
             _this.searchData.pageIndex++
-            _this.searchData.managerid = this.userInfo.id
+            _this.searchData.managerid = _this.userInfo.id
             this.getPaytList(_this.searchData).then(res => {
                 if(res.data.msg){
 					_this.ddSet.setToast({text:res.data.msg})

@@ -29,7 +29,7 @@
 				    </div>
 				    <div class="message flex flex_a_c flex_s_b">
 				        <div class="message_list flex">
-				            <span v-show="item.uba_oid">{{item.uba_oid}}</span>
+				            <span v-bind:class="item.o_status==0?'orderstatus_0':(item.o_status==1?'orderstatus_1':'orderstatus_2')" v-show="item.uba_oid">{{item.uba_oid}}</span>
 				            <span>{{item.uba_money}}</span>
 				            <span>{{item.uba_PersonNum}}({{item.uba_personName}})</span>
 				        </div>

@@ -30,7 +30,7 @@
                     </div>
                     <div class="message flex flex_a_c flex_s_b">
                         <div class="message_list flex">
-                            <span>{{item.rpd_oid}}</span>
+                            <span v-bind:class="item.o_status==0?'orderstatus_0':(item.o_status==1?'orderstatus_1':'orderstatus_2')">{{item.rpd_oid}}</span>
                             <span>{{item.rpd_money}}</span>
                             <span>{{item.rpd_foredate | formatDate}}</span>
                             <span>{{item.rpd_personNum}}({{item.rpd_personName}})</span>
@@ -244,7 +244,7 @@ export default {
                         margin-right: .2rem;
                     }
                     span:nth-child(1){
-                        background-color: $blue_1;
+                        //background-color: $blue_1;
                         color: #FFF;
                         padding: 0 .2rem;
                     }

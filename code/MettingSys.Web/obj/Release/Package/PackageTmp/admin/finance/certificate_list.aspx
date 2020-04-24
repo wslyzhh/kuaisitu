@@ -166,8 +166,8 @@
                         </td>
                         <td><%#Eval("ce_num")%></td>
                         <td><%#ConvertHelper.toDate(Eval("ce_date")).Value.ToString("yyyy-MM-dd")%></td>
-                        <td><a href="receipt_list.aspx?txtNum=<%#Eval("ce_num")%>&ddlisConfirm=True"><%#Eval("receipt")%></a></td>
-                        <td><a href="pay_list.aspx?txtNum=<%#Eval("ce_num")%>&ddlisConfirm=True"><%#Eval("pay")%></a></td>
+                        <td><a href="receipt_list.aspx?txtNum=<%#Eval("ce_num")%>&fromOtherPage=1"><%#Eval("receipt")%></a></td>
+                        <td><a href="pay_list.aspx?txtNum=<%#Eval("ce_num")%>&fromOtherPage=1"><%#Eval("pay")%></a></td>
                         <td><%#Eval("ce_remark")%></td>
                         <td>
                             <span onmouseover="tip_index=layer.tips('审批人：<%#Eval("ce_checkNum")%>-<%#Eval("ce_checkName")%><br/>审批备注：<%#Eval("ce_checkRemark").ToString().Replace("\r\n","").Replace("\r","").Replace("\n","")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Eval("ce_flag")%>"></span>

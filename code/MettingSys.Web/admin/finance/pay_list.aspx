@@ -115,7 +115,7 @@
                     if (json.length > 0) {
                         var _trhtml = "<tr class='Detail" + rpid + "' style='background-color: gainsboro;'><td></td><td>订单号</td><td>付款对象</td><td>付款金额</td><td>预付日期</td><td>申请人</td><td>区域</td><td>状态</td><td colspan=\"5\">付款内容</td></tr>";
                         $.each(json, function (index, item) {
-                            _trhtml += "<tr class='Detail" + rpid + "'><td></td><td><a href=\"../order/order_edit.aspx?action=Edit&oID=" + item.rpd_oid + "\">" + item.rpd_oid + "</a></td>"
+                            _trhtml += "<tr class='Detail" + rpid + "'><td></td><td><a href=\"../order/order_edit.aspx?action=Edit&oID=" + item.rpd_oid + "\"><span class='orderstatus_"+item.o_status+"'>" + item.rpd_oid + "</span></a></td>"
                                 + "<td>" + item.c_name + "</td>"
                                 + "<td>" + item.rpd_money + "</td>"
                                 + "<td>" + item.rpd_foredate.substring(0, 10) + "</td>"
@@ -542,16 +542,16 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
                             <th width="6%">选择</th>
-                            <th align="left" width="10%">付款对象</th>
+                            <th align="left" width="12%">付款对象</th>
                             <th align="left" width="6%">凭证号</th>
                             <th align="left">付款内容</th>
                             <th align="left" width="10%">客户银行账号</th>
                             <th align="left" width="6%">付款金额</th>
-                            <th align="left" width="8%">未分配金额</th>
-                            <th align="left" width="8%">汇总日期</th>
-                            <th align="left" width="8%">付款方式</th>
-                            <th align="left" width="8%">实付日期</th>
-                            <th align="left" width="8%">申请人</th>
+                            <th align="left" width="6%">未分配金额</th>
+                            <th align="left" width="6%">汇总日期</th>
+                            <th align="left" width="6%">付款方式</th>
+                            <th align="left" width="6%">实付日期</th>
+                            <th align="left" width="6%">申请人</th>
                             <th align="left" width="4%">审批</th>
                             <th align="left" width="4%">确认付款</th>
                             <th width="8%">操作</th>

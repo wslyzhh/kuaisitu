@@ -25,6 +25,7 @@ namespace MettingSys.Web.admin.finance
         protected Model.business_log logmodel = null;
         protected Model.manager manager = null;
         decimal _tmoney = 0, _tunmoney = 0;
+        protected string _fromOtherPage = "0";//是否从其他页面链接过来的:0否，1是
         protected void Page_Load(object sender, EventArgs e)
         {
             _cusName = DTRequest.GetString("txtCusName");
@@ -43,13 +44,21 @@ namespace MettingSys.Web.admin.finance
             _sign = DTRequest.GetString("ddlsign");
             _money = DTRequest.GetString("txtMoney");
             _type = DTRequest.GetString("ddlType");
+            _fromOtherPage = DTRequest.GetString("fromOtherPage");
+            if (string.IsNullOrEmpty(_fromOtherPage))
+            {
+                _fromOtherPage = "0";
+            }
             manager = GetAdminInfo();
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
             {
                 if (string.IsNullOrEmpty(DTRequest.GetString("page")) && string.IsNullOrEmpty(_isconfirm))
                 {
-                    _isconfirm = "False";
+                    if (_fromOtherPage == "0")
+                    {
+                        _isconfirm = "False";
+                    }
                 }
                 initData();
                 if (_self != "1")

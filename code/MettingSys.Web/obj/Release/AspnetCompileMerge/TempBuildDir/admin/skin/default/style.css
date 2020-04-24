@@ -548,3 +548,17 @@ textarea.input{ width:300px; height:65px; }
 .check_1 {color: #71b83d;padding-left: 20px;background: url(checkstatus.png) no-repeat -30px -32px;}
 .check_2 {color: #71b83d;padding-left: 20px;background: url(checkstatus.png) no-repeat -50px -12px;}
 /*========================以上部分是审核状态样式========================*/
+
+/*========================以下部分是订单状态样式========================*/
+.orderstatus_0 {
+    color: red;
+}
+
+.orderstatus_1 {
+    color: gray;
+}
+
+.orderstatus_2 {
+    color: blue;
+}
+/*========================以上部分是订单状态样式========================*/

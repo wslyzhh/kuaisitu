@@ -223,7 +223,7 @@ namespace MettingSys.DAL
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount,bool isPage=true)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select f.*,c.c_name,na.na_name,o.o_sdate,o.o_edate,chk = (STUFF((SELECT ',' + fc_num FROM MS_finance_chk WHERE  fc_finid=f.fin_id FOR XML PATH('')), 1, 1, '')) FROM MS_finance f left join MS_customer c on fin_cid=c_id left join MS_Nature na on fin_nature=na_id left join MS_Order o on fin_oid = o_id left join MS_OrderPerson on o_id=op_oid and op_type=1");
+            strSql.Append("select f.*,c.c_name,na.na_name,o.o_status,o.o_sdate,o.o_edate,chk = (STUFF((SELECT ',' + fc_num FROM MS_finance_chk WHERE  fc_finid=f.fin_id FOR XML PATH('')), 1, 1, '')) FROM MS_finance f left join MS_customer c on fin_cid=c_id left join MS_Nature na on fin_nature=na_id left join MS_Order o on fin_oid = o_id left join MS_OrderPerson on o_id=op_oid and op_type=1");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
@@ -245,7 +245,7 @@ namespace MettingSys.DAL
         public DataSet GetList1(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount, bool isPage = true)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select f.*,c.c_name,na.na_name,chk = (STUFF((SELECT ',' + fc_num FROM MS_finance_chk WHERE  fc_finid=f.fin_id FOR XML PATH('')), 1, 1, '')) FROM MS_finance f left join MS_customer c on fin_cid=c_id left join MS_Nature na on fin_nature=na_id left join MS_Order on fin_oid=o_id left join MS_OrderPerson on fin_oid=op_oid and op_type=1");
+            strSql.Append("select f.*,c.c_name,na.na_name,o_status,chk = (STUFF((SELECT ',' + fc_num FROM MS_finance_chk WHERE  fc_finid=f.fin_id FOR XML PATH('')), 1, 1, '')) FROM MS_finance f left join MS_customer c on fin_cid=c_id left join MS_Nature na on fin_nature=na_id left join MS_Order on fin_oid=o_id left join MS_OrderPerson on fin_oid=op_oid and op_type=1");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where 1=1" + strWhere);
@@ -469,7 +469,7 @@ namespace MettingSys.DAL
             StringBuilder strWhere1 = new StringBuilder();
             StringBuilder strWhere2 = new StringBuilder();
             StringBuilder strWhere3 = new StringBuilder();
-            string selectFiled = "o_id,o_content,o_sdate,o_edate,o_address,c_name,co_name,isnull(t1.fin_money,0) fin_money,isnull(rpd_money,0) rpd_money,(isnull(t1.fin_money,0)-isnull(rpd_money,0)) unReceiptPay,isnull(tfcMoney,0) tfcMoney";
+            string selectFiled = "o_id,o_status,o_content,o_sdate,o_edate,o_address,c_name,co_name,isnull(t1.fin_money,0) fin_money,isnull(rpd_money,0) rpd_money,(isnull(t1.fin_money,0)-isnull(rpd_money,0)) unReceiptPay,isnull(tfcMoney,0) tfcMoney";
             string addTable = "", chkFiled1 = "", chkFiled2 = "", chkFiled3 = "", chkFiled4 = "", chkGroup = "";
             if (dict!=null)
             {
@@ -605,7 +605,7 @@ namespace MettingSys.DAL
                 {
                     if (dict["chk"] == "空")
                     {
-                        selectFiled = "o_id,o_content,o_sdate,o_edate,o_address,c_name,co_name,isnull(t1.fin_money,0) fin_money,isnull(rpd_money,0) rpd_money,isnull(chkMoney,0) chkMoney,(isnull(t1.fin_money,0)-isnull(rpd_money,0)) unReceiptPay,isnull(fcMoney,0) fcMoney,isnull(tfcMoney,0) tfcMoney,(isnull(fcMoney,0)-isnull(chkMoney,0)) unChkMoney";
+                        selectFiled = "o_id,o_status,o_content,o_sdate,o_edate,o_address,c_name,co_name,isnull(t1.fin_money,0) fin_money,isnull(rpd_money,0) rpd_money,isnull(chkMoney,0) chkMoney,(isnull(t1.fin_money,0)-isnull(rpd_money,0)) unReceiptPay,isnull(fcMoney,0) fcMoney,isnull(tfcMoney,0) tfcMoney,(isnull(fcMoney,0)-isnull(chkMoney,0)) unChkMoney";
                         addTable = " left join (select fin_oid,sum(isnull(fc_money,0)) fcMoney from MS_finance left join MS_finance_chk on fin_id = fc_finid where fin_flag<>1 and fin_cid=" + dict["cid"] + " and fin_type='" + dict["type"] + "' and fc_num='" + dict["chk"] + "' group by fin_oid) t3 on t1.fin_oid=t3.fin_oid ";
                         chkFiled1 = ",sum(chkMoney) chkMoney";
                         chkFiled2 = ",0 as chkMoney";
@@ -616,7 +616,7 @@ namespace MettingSys.DAL
                     }
                     else
                     {
-                        selectFiled = "o_id,o_content,o_sdate,o_edate,o_address,c_name,co_name,isnull(t1.fin_money,0) fin_money,isnull(rpd_money,0) rpd_money,isnull(chkMoney,0) chkMoney,(isnull(t1.fin_money,0)-isnull(rpd_money,0)) unReceiptPay,isnull(fcMoney,0) fcMoney,isnull(tfcMoney,0) tfcMoney,(isnull(fcMoney,0)-isnull(chkMoney,0)) unChkMoney";
+                        selectFiled = "o_id,o_status,o_content,o_sdate,o_edate,o_address,c_name,co_name,isnull(t1.fin_money,0) fin_money,isnull(rpd_money,0) rpd_money,isnull(chkMoney,0) chkMoney,(isnull(t1.fin_money,0)-isnull(rpd_money,0)) unReceiptPay,isnull(fcMoney,0) fcMoney,isnull(tfcMoney,0) tfcMoney,(isnull(fcMoney,0)-isnull(chkMoney,0)) unChkMoney";
                         addTable = " left join (select fin_oid,sum(isnull(fc_money,0)) fcMoney from MS_finance left join MS_finance_chk on fin_id = fc_finid where fin_flag<>1 and fin_cid=" + dict["cid"] + " and fin_type='" + dict["type"] + "' and fc_num='" + dict["chk"] + "' group by fin_oid) t3 on t1.fin_oid=t3.fin_oid ";
                         chkFiled1 = ",sum(chkMoney) chkMoney";
                         chkFiled2 = ",(case when rpd_num='" + dict["chk"] + "' and rp_isConfirm=1 then sum(isnull(rpd_money,0)) else 0 end) chkMoney";
