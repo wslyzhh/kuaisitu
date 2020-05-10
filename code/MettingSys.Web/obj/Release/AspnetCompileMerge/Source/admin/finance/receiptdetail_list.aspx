@@ -54,7 +54,7 @@
     </script>
     <style type="text/css">
         .date-input {
-            width: 100px;
+            width: 110px;
         }
     </style>
 </head>
@@ -94,9 +94,9 @@
             订单号：
                             <asp:TextBox ID="txtorderid" runat="server" CssClass="input" Width="100" />
             预收日期：
-                            <asp:TextBox ID="txtsforedate" runat="server" CssClass="input rule-date-input" Width="120" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+                            <asp:TextBox ID="txtsforedate" runat="server" CssClass="input rule-date-input" Width="110" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
             -
-                            <asp:TextBox ID="txteforedate" runat="server" CssClass="input rule-date-input" Width="120" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'txtsforedate\')}'})" />
+                            <asp:TextBox ID="txteforedate" runat="server" CssClass="input rule-date-input" Width="110" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'txtsforedate\')}'})" />
             收款方式：
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlmethod" runat="server"></asp:DropDownList>
@@ -112,9 +112,9 @@
             收款人：
                         <asp:TextBox ID="txtPerson1" runat="server" CssClass="input small"></asp:TextBox> 
             实收日期：
-                        <asp:TextBox ID="txtsdate" runat="server" CssClass="input rule-date-input" Width="100" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+                        <asp:TextBox ID="txtsdate" runat="server" CssClass="input rule-date-input" Width="110" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
             -
-                        <asp:TextBox ID="txtedate" runat="server" CssClass="input rule-date-input" Width="100" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'txtsdate\')}'})" />
+                        <asp:TextBox ID="txtedate" runat="server" CssClass="input rule-date-input" Width="110" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'txtsdate\')}'})" />
         </div>
 
         <!--列表-->

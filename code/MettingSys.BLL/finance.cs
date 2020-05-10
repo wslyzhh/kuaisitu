@@ -385,17 +385,17 @@ namespace MettingSys.BLL
         /// 往来客户总体统计列表
         /// </summary>
         /// <returns></returns>
-        public DataSet getSettleCustomerList(string _sdate, string _edate, string _sdate1, string _edate1, string _sdate2, string _edate2, string _status)
+        public DataSet getSettleCustomerList(string _sdate, string _edate, string _sdate1, string _edate1, string _sdate2, string _edate2, string _status, string _lockstatus, string _area, string _person1)
         {
-            return dal.getSettleCustomerList(_sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status);
+            return dal.getSettleCustomerList(_sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _lockstatus, _area, _person1);
         }
         /// <summary>
         /// 往来客户明细列表
         /// </summary>
         /// <returns></returns>
-        public DataSet getSettleCustomerDetailList(int pageSize, int pageIndex, string _type, string _cid, string _cname, string _sdate, string _edate, string _sdate1, string _edate1, string _sdate2, string _edate2, string _status, string _sign, string _money1,string username, string filedOrder, out int recordCount, out decimal money1, out decimal money2, out decimal money3, out decimal money4, out decimal money5, out decimal money6, bool isPage = true)
+        public DataSet getSettleCustomerDetailList(int pageSize, int pageIndex, string _type, string _cid, string _cname, string _sdate, string _edate, string _sdate1, string _edate1, string _sdate2, string _edate2, string _status, string _sign, string _money1,string username, string _lockstatus, string _area, string _person1, string filedOrder, out int recordCount, out decimal money1, out decimal money2, out decimal money3, out decimal money4, out decimal money5, out decimal money6, bool isPage = true)
         {
-            return dal.getSettleCustomerDetailList(pageSize, pageIndex, _type, _cid, _cname, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status,_sign, _money1, username, filedOrder, out recordCount, out money1, out money2, out money3, out money4, out money5, out money6, isPage);
+            return dal.getSettleCustomerDetailList(pageSize, pageIndex, _type, _cid, _cname, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status,_sign, _money1, username, _lockstatus, _area, _person1, filedOrder, out recordCount, out money1, out money2, out money3, out money4, out money5, out money6, isPage);
         }
 
         /// <summary>

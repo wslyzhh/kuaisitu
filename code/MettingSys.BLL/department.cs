@@ -240,9 +240,9 @@ namespace MettingSys.BLL
         /// 公司区域字典
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, string> getAreaDict()
+        public Dictionary<string, string> getAreaDict(string area="")
         {
-            Dictionary<string, string> dic = null;// CacheHelper.Get<Dictionary<string, string>>(DTKeys.COMPANY_AREA);//从缓存取出
+            Dictionary<string, string> dic = CacheHelper.Get<Dictionary<string, string>>(DTKeys.COMPANY_AREA);//从缓存取出
             //如果缓存已过期则从数据库里面取出
             if (dic == null)
             {
@@ -257,7 +257,22 @@ namespace MettingSys.BLL
                     CacheHelper.Insert(DTKeys.COMPANY_AREA, dic, 10);//重新写入缓存
                 }
             }
-            return dic;
+            Dictionary<string, string> newDict = new Dictionary<string, string>();
+            if (!string.IsNullOrEmpty(area))
+            {
+                foreach (var item in dic.Keys)
+                {
+                    if (item == area)
+                    {
+                        newDict.Add(item, dic[item]);
+                    }
+                }
+            }
+            else
+            {
+                newDict = dic;
+            }
+            return newDict;
         }
 
         /// <summary>

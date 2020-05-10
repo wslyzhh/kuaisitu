@@ -90,6 +90,12 @@
                                 <div class="rule-single-select">
                                     <asp:DropDownList ID="ddlstatus" runat="server"></asp:DropDownList>
                                 </div>
+                
+
+            </div>
+        </div>
+        <div class="searchbar">
+            <div class="menu-list" style="margin-bottom: 10px;">
                 未收付金额：
                         <div class="rule-single-select myRuleSelect">
                             <asp:DropDownList ID="ddlsign" runat="server" Width="50">
@@ -102,14 +108,22 @@
                             </asp:DropDownList>
                         </div>
                 <asp:TextBox ID="txtMoney1" runat="server" CssClass="input small"></asp:TextBox>
+                锁单状态：
+                        <div class="rule-single-select">
+                            <asp:DropDownList ID="ddllock" runat="server"></asp:DropDownList>
+                        </div>
+                区域：
+                        <div class="rule-single-select">
+                            <asp:DropDownList ID="ddlarea" runat="server"></asp:DropDownList>
+                        </div>
+                业务员：
+                    <asp:TextBox ID="txtPerson1" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>
                 <input type="hidden" name="tag" value="<%=_tag %>" />
                 <input type="hidden" name="self" value="<%=_self %>" />
                 <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
                 <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
-
             </div>
         </div>
-
         <!--列表-->
         <div class="table-container">
             <asp:Repeater ID="rptList" runat="server">
@@ -137,7 +151,7 @@
                         <td><%# Eval("rpmoney")%></td>
                         <td><%# Eval("rpdmoney") %></td>
                         <td><%# Eval("unmoney")%></td>
-                        <td><a href="ReconciliationDetail.aspx?hCusId=<%#Eval("fin_cid")%>&txtCusName=<%# Eval("c_name") %>&ddltype=<%#Eval("fin_type")%>&txtsDate=<%=_sdate %>&txteDate=<%=_edate %>&txtsDate1=<%=_sdate1 %>&txteDate1=<%=_edate1 %>&ddlstatus=<%=_status %>&ddlsign=<%=_sign %>&txtMoney1=<%=_money1 %>&self=<%=_self %>">明细</a></td>
+                        <td><a href="ReconciliationDetail.aspx?hCusId=<%#Eval("fin_cid")%>&txtCusName=<%# Eval("c_name") %>&ddltype=<%#Eval("fin_type")%>&txtsDate=<%=_sdate %>&txteDate=<%=_edate %>&txtsDate1=<%=_sdate1 %>&txteDate1=<%=_edate1 %>&ddlstatus=<%=_status %>&ddlsign=<%=_sign %>&txtMoney1=<%=_money1 %>&self=<%=_self %>&ddllock=<%=_lockstatus %>&ddlarea=<%=_area %>&txtPerson1=<%=_person1 %>">明细</a></td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>

@@ -21,7 +21,7 @@ namespace MettingSys.Web.admin.finance
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _cusName = "", _cid = "", _method = string.Empty, _check = string.Empty, _check2 = string.Empty, _isconfirm = string.Empty, _sforedate = string.Empty, _eforedate = string.Empty, _sdate = string.Empty, _edate = string.Empty, _num = "", _chk = "", _numdate = "", _moneyType = "1", _sign = "", _money = "", _type = "";
+        protected string _cusName = "", _cid = "", _method = string.Empty, _check = string.Empty, _check2 = string.Empty, _isconfirm = string.Empty, _sforedate = string.Empty, _eforedate = string.Empty, _sdate = string.Empty, _edate = string.Empty, _num = "", _chk = "", _numdate = "", _moneyType = "1", _sign = "", _money = "", _type = "", _flag = "";
         protected Model.business_log logmodel = null;
         protected Model.manager manager = null;
         decimal _tmoney = 0, _tunmoney = 0;
@@ -45,6 +45,33 @@ namespace MettingSys.Web.admin.finance
             _sign = DTRequest.GetString("ddlsign");
             _money = DTRequest.GetString("txtMoney");
             _type = DTRequest.GetString("ddlType");
+            _flag = DTRequest.GetString("flag");
+            if (string.IsNullOrEmpty(this._flag))
+            {
+                this._flag = "0";
+            }
+            switch (this._flag)
+            {
+                case "1":
+                    this._check = "0";
+                    break;
+                case "2":
+                    this._check = "2";
+                    this._check2 = "0";
+                    break;
+                case "3":
+                    this._check = "2";
+                    this._check2 = "2";
+                    _isconfirm = "False";
+                    break;
+                case "4":
+                    this._check = "2";
+                    this._check2 = "2";
+                    _isconfirm = "True";
+                    break;
+                default:
+                    break;
+            }
             _fromOtherPage = DTRequest.GetString("fromOtherPage");
             if (string.IsNullOrEmpty(_fromOtherPage))
             {
@@ -168,6 +195,8 @@ namespace MettingSys.Web.admin.finance
             ddlsign.SelectedValue = _sign;
             txtMoney.Text = _money;
             ddlmoneyType.SelectedValue = _moneyType;
+
+            ddlchecktype.SelectedValue = _flag;
         }
         #endregion
 

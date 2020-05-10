@@ -192,6 +192,7 @@
                         <li><a <%=_check=="2"?"class=\"selected\"":"" %> href="invoice_list.aspx?check=2">开票区域未审批</a></li>
                         <li><a <%=_check=="3"?"class=\"selected\"":"" %> href="invoice_list.aspx?check=3">财务未审批</a></li>
                         <li><a <%=_check=="4"?"class=\"selected\"":"" %> href="invoice_list.aspx?check=4">已审批未开票</a></li>
+                        <li><a <%=_check=="5"?"class=\"selected\"":"" %> href="invoice_list.aspx?check=5">已开票</a></li>
                     </ul>
                 </div>
             </div>

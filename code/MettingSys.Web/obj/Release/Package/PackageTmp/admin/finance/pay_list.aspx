@@ -409,7 +409,19 @@
             <span>付款通知列表</span>
         </div>
         <!--/导航栏-->
-
+        <div class="content-tab-wrap" id="titleDiv" runat="server">
+            <div class="content-tab">
+                <div class="content-tab-ul-wrap">
+                    <ul>
+                        <li><a <%=_flag=="0"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=0">全部列表</a></li>
+                        <li><a <%=_flag=="1"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=1">财务未审批</a></li>
+                        <li><a <%=_flag=="2"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=2">总经理未审批</a></li>
+                        <li><a <%=_flag=="3"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=3">已审未支付</a></li>
+                        <li><a <%=_flag=="4"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=4">已支付</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <!--工具栏-->
         <div id="floatHead" class="toolbar-wrap">
             <div class="toolbar">

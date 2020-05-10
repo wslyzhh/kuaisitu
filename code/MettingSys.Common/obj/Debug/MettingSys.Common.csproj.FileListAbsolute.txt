@@ -40,4 +40,3 @@ D:\外包项目\MettingSys\kuaisitu\code\MettingSys.Common\obj\Debug\MettingSys.
 D:\外包项目\MettingSys\kuaisitu\code\MettingSys.Common\obj\Debug\MettingSys.Common.csproj.CopyComplete
 D:\外包项目\MettingSys\kuaisitu\code\MettingSys.Common\obj\Debug\MettingSys.Common.dll
 D:\外包项目\MettingSys\kuaisitu\code\MettingSys.Common\obj\Debug\MettingSys.Common.pdb
-D:\外包项目\MettingSys\kuaisitu\code\MettingSys.Common\obj\Debug\MettingSys.Common.csprojAssemblyReference.cache

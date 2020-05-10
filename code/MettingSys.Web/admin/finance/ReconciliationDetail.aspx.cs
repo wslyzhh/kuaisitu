@@ -58,9 +58,9 @@ namespace MettingSys.Web.admin.finance
             _edate2 = DTRequest.GetString("txteDate2");
             _check = DTRequest.GetString("ddlcheck");
             _self = DTRequest.GetString("self");
+            manager = GetAdminInfo();
             if (_self == "1")
             {
-                manager = GetAdminInfo();
                 _person1 = manager.user_name;
                 txtPerson1.Enabled = false;
             }
@@ -116,11 +116,19 @@ namespace MettingSys.Web.admin.finance
             ddllock.DataBind();
             ddllock.Items.Insert(0, new ListItem("不限", ""));
 
-            ddlarea.DataSource = new BLL.department().getAreaDict();
+            string mArea = manager.area == "HQ" ? "" : manager.area;
+            ddlarea.DataSource = new BLL.department().getAreaDict(mArea);
             ddlarea.DataTextField = "value";
             ddlarea.DataValueField = "key";
             ddlarea.DataBind();
-            ddlarea.Items.Insert(0, new ListItem("不限", ""));
+            if (manager.area == "HQ")
+            {
+                ddlarea.Items.Insert(0, new ListItem("不限", ""));
+            }
+            else
+            {
+                _area = manager.area;
+            }
         }
         #endregion
 

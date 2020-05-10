@@ -68,6 +68,12 @@ namespace MettingSys.Web.admin.finance
                     this._check3 = "2";
                     _isconfirm = "False";
                     break;
+                case "5":
+                    this._check1 = "2";
+                    this._check2 = "2";
+                    this._check3 = "2";
+                    _isconfirm = "True";
+                    break;
                 default:
                     break;
             }

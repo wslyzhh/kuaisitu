@@ -75,9 +75,19 @@
                 -
                         <asp:TextBox ID="txteDate2" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({minDate:'#F{$dp.$D(\'txtsDate2\')}'})"></asp:TextBox>
                 订单状态：
-                                <div class="rule-single-select">
-                                    <asp:DropDownList ID="ddlstatus" runat="server"></asp:DropDownList>
-                                </div>
+                        <div class="rule-single-select">
+                            <asp:DropDownList ID="ddlstatus" runat="server"></asp:DropDownList>
+                        </div>
+                锁单状态：
+                        <div class="rule-single-select">
+                            <asp:DropDownList ID="ddllock" runat="server"></asp:DropDownList>
+                        </div>
+                区域：
+                        <div class="rule-single-select">
+                            <asp:DropDownList ID="ddlarea" runat="server"></asp:DropDownList>
+                        </div>
+                业务员：
+                    <asp:TextBox ID="txtPerson1" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>
                 <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
 
             </div>
@@ -107,7 +117,7 @@
                         <td><%# Eval("rpmoney") %></td>
                         <td><%# Eval("rpdmoney") %></td>
                         <td><%# Eval("unmoney")%></td>
-                        <td><a href="settleCustomerDetail.aspx?ddltype=<%# Eval("fin_type")%>&txtsDate=<%=_sdate %>&txteDate=<%=_edate %>&txtsDate1=<%=_sdate1 %>&txteDate1=<%=_edate1 %>&txtsDate2=<%=_sdate2 %>&txteDate2=<%=_edate2 %>&ddlstatus=<%=_status %>">明细</a></td>
+                        <td><a href="settleCustomerDetail.aspx?ddltype=<%# Eval("fin_type")%>&txtsDate=<%=_sdate %>&txteDate=<%=_edate %>&txtsDate1=<%=_sdate1 %>&txteDate1=<%=_edate1 %>&txtsDate2=<%=_sdate2 %>&txteDate2=<%=_edate2 %>&ddlstatus=<%=_status %>&ddllock=<%=_lockstatus %>&ddlarea=<%=_area %>&txtPerson1=<%=_person1 %>">明细</a></td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>

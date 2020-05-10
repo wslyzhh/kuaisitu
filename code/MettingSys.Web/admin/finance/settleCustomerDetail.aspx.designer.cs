@@ -130,6 +130,33 @@ namespace MettingSys.Web.admin.finance {
         protected global::System.Web.UI.WebControls.TextBox txtMoney1;
         
         /// <summary>
+        /// ddllock 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddllock;
+        
+        /// <summary>
+        /// ddlarea 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlarea;
+        
+        /// <summary>
+        /// txtPerson1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPerson1;
+        
+        /// <summary>
         /// btnSearch 控件。
         /// </summary>
         /// <remarks>

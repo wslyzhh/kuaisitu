@@ -288,7 +288,7 @@ namespace MettingSys.DAL
         /// 往来客户总体统计列表
         /// </summary>
         /// <returns></returns>
-        public DataSet getSettleCustomerList(string _sdate,string _edate,string _sdate1,string _edate1,string _sdate2,string _edate2,string _status)
+        public DataSet getSettleCustomerList(string _sdate,string _edate,string _sdate1,string _edate1,string _sdate2,string _edate2,string _status,string _lockstatus,string _area,string _person1)
         {
             StringBuilder strTemp = new StringBuilder();
             StringBuilder strTemp1 = new StringBuilder();
@@ -320,7 +320,18 @@ namespace MettingSys.DAL
                         break;
                 }
             }
-
+            if (!string.IsNullOrEmpty(_lockstatus))
+            {
+                strTemp.Append(" and o_lockStatus=" + _lockstatus + "");
+            }
+            if (!string.IsNullOrEmpty(_area))
+            {
+                strTemp.Append(" and op_area='" + _area + "'");
+            }
+            if (!string.IsNullOrEmpty(_person1))
+            {
+                strTemp.Append(" and (op_number like '%" + _person1 + "%' or op_name like '%" + _person1 + "%')");
+            }
             if (!string.IsNullOrEmpty(_sdate2))
             {
                 strTemp1.Append(" and datediff(day,rp_date,'" + _sdate2 + "')<=0");
@@ -335,7 +346,7 @@ namespace MettingSys.DAL
             strSql.Append(" select isnull(fin_oid, rpd_oid) fin_oid, isnull(fin_type, rpd_type) fin_type, isnull(finMoney, 0) finMoney, isnull(rpdMoney, 0) rpdMoney from");
             strSql.Append(" (select fin_oid, fin_type, sum(isnull(fin_money, 0)) finMoney from MS_finance where fin_flag <> 1 group by fin_oid, fin_type) t1");
             strSql.Append(" full join(select rpd_oid, rpd_type, sum(isnull(rpd_money, 0)) rpdMoney from MS_ReceiptPayDetail left join MS_ReceiptPay on rp_id = rpd_rpid where rp_isConfirm = 1 group by rpd_oid, rpd_type) t3 on t1.fin_oid = t3.rpd_oid and t1.fin_type = t3.rpd_type");
-            strSql.Append(" left join MS_Order on isnull(fin_oid, rpd_oid) = o_id where 1=1 "+ strTemp + "");
+            strSql.Append(" left join MS_Order on isnull(fin_oid, rpd_oid) = o_id left join MS_OrderPerson on o_id=op_oid and op_type=1 where 1=1 " + strTemp + "");
             strSql.Append(" ) t group by fin_type) t2 full join(");
             strSql.Append(" select rp_type, sum(rp_money) rpmoney, sum(isnull(rpd_money, 0)) rpdmoney, (sum(rp_money) - sum(isnull(rpd_money, 0))) unmoney  from(");
             strSql.Append(" select * from MS_ReceiptPay left join (select rpd_rpid, sum(rpd_money) rpd_money  from MS_ReceiptPayDetail group by rpd_rpid) r1 on rp_id = r1.rpd_rpid where rp_isConfirm = 1 "+ strTemp1 + "");
@@ -350,7 +361,7 @@ namespace MettingSys.DAL
         /// 往来客户明细列表
         /// </summary>
         /// <returns></returns>
-        public DataSet getSettleCustomerDetailList(int pageSize, int pageIndex, string _type, string _cid,string _cname, string _sdate, string _edate, string _sdate1, string _edate1, string _sdate2, string _edate2, string _status, string _sign, string _money1, string username, string filedOrder, out int recordCount,out decimal money1, out decimal money2, out decimal money3, out decimal money4, out decimal money5, out decimal money6, bool isPage = true)
+        public DataSet getSettleCustomerDetailList(int pageSize, int pageIndex, string _type, string _cid,string _cname, string _sdate, string _edate, string _sdate1, string _edate1, string _sdate2, string _edate2, string _status, string _sign, string _money1, string username, string _lockstatus, string _area, string _person1, string filedOrder, out int recordCount,out decimal money1, out decimal money2, out decimal money3, out decimal money4, out decimal money5, out decimal money6, bool isPage = true)
         {
             StringBuilder strTemp = new StringBuilder();
             StringBuilder strTemp1 = new StringBuilder();
@@ -400,6 +411,18 @@ namespace MettingSys.DAL
                         strTemp1.Append(" and o_status=" + _status + "");
                         break;
                 }
+            }
+            if (!string.IsNullOrEmpty(_lockstatus))
+            {
+                strTemp1.Append(" and o_lockStatus=" + _lockstatus + "");
+            }
+            if (!string.IsNullOrEmpty(_area))
+            {
+                strTemp1.Append(" and op_area='" + _area + "'");
+            }
+            if (!string.IsNullOrEmpty(_person1))
+            {
+                strTemp1.Append(" and (op_number like '%" + _person1 + "%' or op_name like '%" + _person1 + "%')");
             }
             if (!string.IsNullOrEmpty(_sdate2))
             {

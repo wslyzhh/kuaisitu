@@ -21,7 +21,7 @@ namespace MettingSys.Web.admin.finance
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _cusName = "", _cid = "", _type = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _sdate2 = "", _edate2 = "", _status = "", _sign = "", _money1 = "", _tag = "", _self = "";
+        protected string _cusName = "", _cid = "", _type = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _sdate2 = "", _edate2 = "", _status = "", _sign = "", _money1 = "", _tag = "", _self = "", _lockstatus = "", _area = "", _person1 = "";
         private Model.manager manager = null;
         decimal money1 = 0, money2 = 0, money3 = 0, money4 = 0, money5 = 0, money6 = 0;
         protected void Page_Load(object sender, EventArgs e)
@@ -41,6 +41,9 @@ namespace MettingSys.Web.admin.finance
             _money1 = DTRequest.GetString("txtMoney1");
             _tag = DTRequest.GetString("tag");
             _self = DTRequest.GetString("self");
+            _lockstatus = DTRequest.GetString("ddllock");
+            _area = DTRequest.GetString("ddlarea");
+            _person1 = DTRequest.GetString("txtPerson1").ToUpper();
 
             if (_tag == "1")
             {
@@ -67,18 +70,6 @@ namespace MettingSys.Web.admin.finance
                 RptBind("1=1 " + CombSqlTxt(), "isnull(fin_type,rp_type) desc,c_name asc");
             }
 
-            ddltype.SelectedValue = _type;
-            txtCusName.Text = _cusName;
-            hCusId.Value = _cid;
-            txtsDate.Text = _sdate;
-            txteDate.Text = _edate;
-            txtsDate1.Text = _sdate1;
-            txteDate1.Text = _edate1;
-            txtsDate2.Text = _sdate2;
-            txteDate2.Text = _edate2;
-            ddlstatus.SelectedValue = _status;
-            ddlsign.SelectedValue = _sign;
-            txtMoney1.Text = _money1;
         }
         #region 初始化数据=================================
         private void InitData()
@@ -94,6 +85,26 @@ namespace MettingSys.Web.admin.finance
             ddlstatus.DataValueField = "key";
             ddlstatus.DataBind();
             ddlstatus.Items.Insert(0, new ListItem("不限", ""));
+
+            ddllock.DataSource = Common.BusinessDict.lockStatus();
+            ddllock.DataTextField = "value";
+            ddllock.DataValueField = "key";
+            ddllock.DataBind();
+            ddllock.Items.Insert(0, new ListItem("不限", ""));
+            
+            string mArea = manager.area == "HQ" ? "" : manager.area;
+            ddlarea.DataSource = new BLL.department().getAreaDict(mArea);
+            ddlarea.DataTextField = "value";
+            ddlarea.DataValueField = "key";
+            ddlarea.DataBind();
+            if (manager.area == "HQ")
+            {
+                ddlarea.Items.Insert(0, new ListItem("不限", ""));
+            }
+            else
+            {
+                _area = manager.area;
+            }
         }
         #endregion
         #region 数据绑定=================================
@@ -101,7 +112,7 @@ namespace MettingSys.Web.admin.finance
         {
             this.page = DTRequest.GetQueryInt("page", 1);
             BLL.finance bll = new BLL.finance();
-            DataTable dt= bll.getSettleCustomerDetailList(this.pageSize, this.page, _type, _cid, _cusName, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, _self == "1" ? manager.user_name : "", _orderby, out this.totalCount, out  money1, out money2, out money3, out money4, out money5, out money6).Tables[0];
+            DataTable dt= bll.getSettleCustomerDetailList(this.pageSize, this.page, _type, _cid, _cusName, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, _self == "1" ? manager.user_name : "", _lockstatus, _area, _person1, _orderby, out this.totalCount, out  money1, out money2, out money3, out money4, out money5, out money6).Tables[0];
             this.rptList.DataSource = dt;
             this.rptList.DataBind();
 
@@ -138,6 +149,22 @@ namespace MettingSys.Web.admin.finance
             tMoney4.Text = money4.ToString();
             tMoney5.Text = money5.ToString();
             tMoney6.Text = money6.ToString();
+
+            ddltype.SelectedValue = _type;
+            txtCusName.Text = _cusName;
+            hCusId.Value = _cid;
+            txtsDate.Text = _sdate;
+            txteDate.Text = _edate;
+            txtsDate1.Text = _sdate1;
+            txteDate1.Text = _edate1;
+            txtsDate2.Text = _sdate2;
+            txteDate2.Text = _edate2;
+            ddlstatus.SelectedValue = _status;
+            ddlsign.SelectedValue = _sign;
+            txtMoney1.Text = _money1;
+            ddllock.SelectedValue = _lockstatus;
+            ddlarea.SelectedValue = _area;
+            txtPerson1.Text = _person1;
         }
         #endregion
 
@@ -185,6 +212,9 @@ namespace MettingSys.Web.admin.finance
             _money1 = DTRequest.GetFormString("txtMoney1");
             _tag = DTRequest.GetFormString("tag");
             _self = DTRequest.GetFormString("self");
+            _lockstatus = DTRequest.GetFormString("ddllock");
+            _area = DTRequest.GetFormString("ddlarea");
+            _person1 = DTRequest.GetFormString("txtPerson1").ToUpper();
             if (_tag == "1")
             {
                 _type = "True";
@@ -196,18 +226,6 @@ namespace MettingSys.Web.admin.finance
                 ddltype.Enabled = false;
             }
             RptBind("1=1 " + CombSqlTxt(), "isnull(fin_type,rp_type) desc,c_name asc");
-            ddltype.SelectedValue = _type;
-            txtCusName.Text = _cusName;
-            hCusId.Value = _cid;
-            txtsDate.Text = _sdate;
-            txteDate.Text = _edate;
-            txtsDate1.Text = _sdate1;
-            txteDate1.Text = _edate1;
-            txtsDate2.Text = _sdate2;
-            txteDate2.Text = _edate2;
-            ddlstatus.SelectedValue = _status;
-            ddlsign.SelectedValue = _sign;
-            txtMoney1.Text = _money1;
         }
         protected void btnExcel_Click(object sender, EventArgs e)
         {
@@ -225,8 +243,11 @@ namespace MettingSys.Web.admin.finance
             _money1 = DTRequest.GetFormString("txtMoney1");
             _tag = DTRequest.GetFormString("tag");
             _self = DTRequest.GetFormString("self");
+            _lockstatus = DTRequest.GetFormString("ddllock");
+            _area = DTRequest.GetFormString("ddlarea");
+            _person1 = DTRequest.GetFormString("txtPerson1").ToUpper();
             BLL.finance bll = new BLL.finance();
-            DataTable dt = bll.getSettleCustomerDetailList(this.pageSize, this.page, _type, _cid, _cusName, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, _self == "1" ? manager.user_name : "", "isnull(fin_type,rp_type) desc,c_name asc", out this.totalCount, out money1, out money2, out money3, out money4, out money5, out money6, false).Tables[0];
+            DataTable dt = bll.getSettleCustomerDetailList(this.pageSize, this.page, _type, _cid, _cusName, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, _self == "1" ? manager.user_name : "",_lockstatus,_area,_person1, "isnull(fin_type,rp_type) desc,c_name asc", out this.totalCount, out money1, out money2, out money3, out money4, out money5, out money6, false).Tables[0];
 
             string filename = "往来客户明细列表.xlsx";
             if (_tag == "1")

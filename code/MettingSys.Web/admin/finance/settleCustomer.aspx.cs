@@ -12,7 +12,7 @@ namespace MettingSys.Web.admin.finance
 {
     public partial class settleCustomer : Web.UI.ManagePage
     {
-        protected string _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _sdate2 = "", _edate2 = "", _status = "";
+        protected string _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _sdate2 = "", _edate2 = "", _status = "",_lockstatus="",_area="", _person1 = "";
         Model.manager manager = null;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -22,7 +22,10 @@ namespace MettingSys.Web.admin.finance
             _edate1 = DTRequest.GetString("txteDate1"); 
             _sdate2 = DTRequest.GetString("txtsDate2"); 
             _edate2 = DTRequest.GetString("txteDate2"); 
-            _status = DTRequest.GetString("ddlstatus"); 
+            _status = DTRequest.GetString("ddlstatus");
+            _lockstatus = DTRequest.GetString("ddllock");
+            _area = DTRequest.GetString("ddlarea");
+            _person1 = DTRequest.GetString("txtPerson1").ToUpper();
 
             manager = GetAdminInfo();
             if (!Page.IsPostBack)
@@ -41,6 +44,25 @@ namespace MettingSys.Web.admin.finance
             ddlstatus.DataValueField = "key";
             ddlstatus.DataBind();
             ddlstatus.Items.Insert(0, new ListItem("不限", ""));
+
+            ddllock.DataSource = Common.BusinessDict.lockStatus();
+            ddllock.DataTextField = "value";
+            ddllock.DataValueField = "key";
+            ddllock.DataBind();
+            ddllock.Items.Insert(0, new ListItem("不限", ""));
+
+            string mArea = manager.area=="HQ"?"": manager.area;
+            ddlarea.DataSource = new BLL.department().getAreaDict(mArea);
+            ddlarea.DataTextField = "value";
+            ddlarea.DataValueField = "key";
+            ddlarea.DataBind();
+            if (manager.area == "HQ")
+            {
+                ddlarea.Items.Insert(0, new ListItem("不限", ""));
+            }
+            else {
+                _area = manager.area;
+            }
         }
         #endregion
 
@@ -49,7 +71,7 @@ namespace MettingSys.Web.admin.finance
         {
             //decimal _tFinMoney = 0, _tRpMoney = 0, _tUnRpMoney = 0, _tRpdMoney = 0, _tUnRpdMoney = 0;
             BLL.finance bll = new BLL.finance();
-            DataTable dt = bll.getSettleCustomerList(_sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status).Tables[0];
+            DataTable dt = bll.getSettleCustomerList(_sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status,_lockstatus,_area,_person1).Tables[0];
             this.rptList.DataSource = dt;
             this.rptList.DataBind();
 
@@ -74,39 +96,39 @@ namespace MettingSys.Web.admin.finance
         #endregion
 
         #region 组合SQL查询语句==========================
-        protected string CombSqlTxt()
-        {
-            StringBuilder strTemp = new StringBuilder();
-            if (!string.IsNullOrEmpty(_sdate))
-            {
-                strTemp.Append(" and datediff(day,o_sdate,'" + _sdate + "')<=0");
-            }
-            if (!string.IsNullOrEmpty(_edate))
-            {
-                strTemp.Append(" and datediff(day,o_sdate,'" + _edate + "')>=0");
-            }
-            if (!string.IsNullOrEmpty(_sdate1))
-            {
-                strTemp.Append(" and datediff(day,o_edate,'" + _sdate1 + "')<=0");
-            }
-            if (!string.IsNullOrEmpty(_edate1))
-            {
-                strTemp.Append(" and datediff(day,o_edate,'" + _edate1 + "')>=0");
-            }
-            if (!string.IsNullOrEmpty(_status))
-            {
-                switch (_status)
-                {
-                    case "3":
-                        strTemp.Append(" and (o_status=1 or o_status=2)");
-                        break;
-                    default:
-                        strTemp.Append(" and o_status=" + _status + "");
-                        break;
-                }
-            }
-            return strTemp.ToString();
-        }
+        //protected string CombSqlTxt()
+        //{
+        //    StringBuilder strTemp = new StringBuilder();
+        //    if (!string.IsNullOrEmpty(_sdate))
+        //    {
+        //        strTemp.Append(" and datediff(day,o_sdate,'" + _sdate + "')<=0");
+        //    }
+        //    if (!string.IsNullOrEmpty(_edate))
+        //    {
+        //        strTemp.Append(" and datediff(day,o_sdate,'" + _edate + "')>=0");
+        //    }
+        //    if (!string.IsNullOrEmpty(_sdate1))
+        //    {
+        //        strTemp.Append(" and datediff(day,o_edate,'" + _sdate1 + "')<=0");
+        //    }
+        //    if (!string.IsNullOrEmpty(_edate1))
+        //    {
+        //        strTemp.Append(" and datediff(day,o_edate,'" + _edate1 + "')>=0");
+        //    }
+        //    if (!string.IsNullOrEmpty(_status))
+        //    {
+        //        switch (_status)
+        //        {
+        //            case "3":
+        //                strTemp.Append(" and (o_status=1 or o_status=2)");
+        //                break;
+        //            default:
+        //                strTemp.Append(" and o_status=" + _status + "");
+        //                break;
+        //        }
+        //    }
+        //    return strTemp.ToString();
+        //}
         #endregion
 
 

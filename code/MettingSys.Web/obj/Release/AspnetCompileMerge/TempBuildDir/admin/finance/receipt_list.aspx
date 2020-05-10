@@ -263,7 +263,17 @@
             <span>收款通知列表</span>
         </div>
         <!--/导航栏-->
-
+        <div class="content-tab-wrap" id="titleDiv" runat="server">
+            <div class="content-tab">
+                <div class="content-tab-ul-wrap">
+                    <ul>
+                        <li><a <%=_flag=="0"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=0">全部列表</a></li>
+                        <li><a <%=_flag=="1"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=1">未到账列表</a></li>
+                        <li><a <%=_flag=="2"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=2">已到账列表</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <!--工具栏-->
         <div id="floatHead" class="toolbar-wrap">
             <div class="toolbar">
