@@ -507,10 +507,25 @@ namespace MettingSys.Web.tools
         private void get_DepartText(HttpContext context)
         {
             int id = DTRequest.GetQueryInt("departid");
-            string textTree = "", idTree = "";
+            int oldid = DTRequest.GetQueryInt("olddepartid", 0);
+            string textTree = "", idTree = "", username = "";
             new BLL.department().getDepartText(id, out textTree, out idTree, out string area);
-            string username = new BLL.department().getNewUserName(area);
-            context.Response.Write("{ \"textTree\":\""+ textTree + "\", \"idTree\":\""+ idTree + "\", \"username\":\"" + username + "\" }");
+            if (oldid == 0)
+            {
+                //新增时要生成新的工号
+                username = new BLL.department().getNewUserName(area);
+            }
+            else
+            {
+                //编辑时当原来的区域和新的区域不一致时，要生成新的工号
+                new BLL.department().getDepartText(oldid, out string oldtextTree, out string oldidTree, out string oldarea);
+                if (area != oldarea)
+                {
+                    username = new BLL.department().getNewUserName(area);
+                }
+            }
+            context.Response.Write("{ \"textTree\":\"" + textTree + "\", \"idTree\":\"" + idTree + "\", \"username\":\"" + username + "\" }");
+            context.Response.End();
             return;
         }
         #endregion

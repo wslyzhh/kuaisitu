@@ -10,6 +10,7 @@ namespace MettingSys.Web.UI
     public class ManagePage : System.Web.UI.Page
     {
         protected internal Model.sysconfig sysConfig;
+        protected bool isSearch = false;//是否是查询操作
 
         public ManagePage()
         {

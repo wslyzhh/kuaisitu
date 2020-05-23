@@ -12,7 +12,7 @@ namespace MettingSys.Web.admin.manage
     public partial class manager_edit : Web.UI.ManagePage
     {
         string defaultpassword = "0|0|0|0"; //默认显示密码
-        private string action = DTEnums.ActionEnum.Add.ToString(); //操作类型
+        protected string action = DTEnums.ActionEnum.Add.ToString(); //操作类型
         private int id = 0;
         protected Model.manager manager = null;
 
@@ -134,6 +134,7 @@ namespace MettingSys.Web.admin.manage
             ddlParentId.SelectedValue = model.departID.ToString();
             hIDTree.Value = model.departTreeID;
             txtDetailDepart.Text = model.detaildepart;
+            hOldDepartID.Value = model.departID.ToString();
             //管理权限
             //if (model.UserPemissionList != null)
             //{

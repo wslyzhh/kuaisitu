@@ -73,7 +73,14 @@ namespace MettingSys.Web.admin.finance
         #region 数据绑定=================================
         private void RptBind()
         {
-            this.page = DTRequest.GetQueryInt("page", 1);
+            if (!this.isSearch)
+            {
+                this.page = DTRequest.GetQueryInt("page", 1);
+            }
+            else
+            {
+                this.page = 1;
+            }
             BLL.ReceiptPay bll = new BLL.ReceiptPay();
             Dictionary<string, string> dict = getDict();
             this.rptList.DataSource = bll.GetDistributionList(dict, pageSize, page, out totalCount);
@@ -137,6 +144,7 @@ namespace MettingSys.Web.admin.finance
         #endregion
         protected void btnSearch_Click(object sender, EventArgs e)
         {
+            this.isSearch = true;
             _orderId = DTRequest.GetFormString("txtOrderId");
             _moneyType = DTRequest.GetFormString("ddlMoneyType");
             _sign = DTRequest.GetFormString("ddlsign");

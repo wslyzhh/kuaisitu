@@ -55,7 +55,14 @@ namespace MettingSys.Web.admin.finance
         #region 数据绑定=================================
         private void RptBind(string _strWhere, string _orderby)
         {
-            this.page = DTRequest.GetQueryInt("page", 1);
+            if (!this.isSearch)
+            {
+                this.page = DTRequest.GetQueryInt("page", 1);
+            }
+            else
+            {
+                this.page = 1;
+            }
             BLL.finance_chk bll = new BLL.finance_chk();
             DataTable dt= bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount, out _tMoney).Tables[0];
             this.rptList.DataSource = dt;
@@ -130,6 +137,7 @@ namespace MettingSys.Web.admin.finance
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
+            this.isSearch = true;
             _orderid = DTRequest.GetFormString("txtOrderID");
             _cusName = DTRequest.GetFormString("txtCusName");
             _cid = DTRequest.GetFormString("hCusId");
@@ -244,7 +252,7 @@ namespace MettingSys.Web.admin.finance
                     row.CreateCell(3).SetCellValue(ConvertHelper.toDate(dt.Rows[i]["o_sdate"]).Value.ToString("yyyy-MM-dd") + "/" + ConvertHelper.toDate(dt.Rows[i]["o_edate"]).Value.ToString("yyyy-MM-dd"));
                     row.CreateCell(4).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["o_address"]));
                     row.CreateCell(5).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["o_content"]));
-                    row.CreateCell(6).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fin_type"]));
+                    row.CreateCell(6).SetCellValue( Utils.StrToBool(Utils.ObjectToStr(dt.Rows[i]["fin_type"]),false)?"应收":"应付");
                     row.CreateCell(7).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["na_name"]));
                     row.CreateCell(8).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fin_detail"]));
                     row.CreateCell(9).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fc_num"]));

@@ -76,6 +76,24 @@ namespace MettingSys.Web.admin.statistic {
         protected global::System.Web.UI.WebControls.DropDownList ddllock;
         
         /// <summary>
+        /// ddlispush 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlispush;
+        
+        /// <summary>
+        /// ddlflag 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlflag;
+        
+        /// <summary>
         /// txtPerson1 控件。
         /// </summary>
         /// <remarks>
@@ -281,6 +299,15 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txteDate1;
+        
+        /// <summary>
+        /// ddlmethod 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlmethod;
         
         /// <summary>
         /// btnSearch 控件。

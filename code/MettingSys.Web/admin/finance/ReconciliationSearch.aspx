@@ -107,7 +107,7 @@
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
-                        <td><span class="orderstatus_<%#Eval("o_status")%>"><%#Eval("o_ID") %></span></td>
+                        <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("o_id")%>"><span class="orderstatus_<%#Eval("o_status")%>"><%#Eval("o_ID") %></span></a></td>
                         <td><%#Eval("c_name") %></td>
                         <td><%#Eval("cname") %></td>
                         <td><%#ConvertHelper.toDate(Eval("o_sdate")).Value.ToString("yyyy-MM-dd")%>/<%#ConvertHelper.toDate(Eval("o_edate")).Value.ToString("yyyy-MM-dd")%></td>

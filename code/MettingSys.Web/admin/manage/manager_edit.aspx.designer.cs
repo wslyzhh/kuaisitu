@@ -76,6 +76,15 @@ namespace MettingSys.Web.admin.manage {
         protected global::System.Web.UI.WebControls.HiddenField hUsername;
         
         /// <summary>
+        /// hOldDepartID 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hOldDepartID;
+        
+        /// <summary>
         /// txtUserName 控件。
         /// </summary>
         /// <remarks>

@@ -343,7 +343,7 @@
                         <td><%#Utils.StrToDecimal(Eval("inv_overmoney").ToString(),0)==0?"0":"<font color='red'>"+Eval("inv_overmoney")+"</font>"%></td>
                         <td><%#Eval("inv_sentWay")%></td>
                         <td><%#Eval("de_subname")%></td>
-                        <td title="<%#Eval("inv_personNum")%>"><%#Eval("inv_personName")%></td>
+                        <td title="申请工号：<%#Eval("inv_personNum")%>&#10;申请时间：<%#Eval("inv_addDate")%>"><%#Eval("inv_personName")%></td>
                         <td class="checkTd">
                             <span onmouseover="tip_index=layer.tips('申请区域审批<br/>审批人：<%#Eval("inv_checkNum1")%>-<%#Eval("inv_checkName1")%><br/>审批备注：<%#Eval("inv_checkRemark1").ToString().Replace("\r\n","").Replace("\r","").Replace("\n","")%><br/>审批时间：<%#Eval("inv_checkTime1")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Eval("inv_flag1")%>"></span>
                             <span onmouseover="tip_index=layer.tips('开票区域审批<br/>审批人：<%#Eval("inv_checkNum2")%>-<%#Eval("inv_checkName2")%><br/>审批备注：<%#Eval("inv_checkRemark2").ToString().Replace("\r\n","").Replace("\r","").Replace("\n","")%><br/>审批时间：<%#Eval("inv_checkTime2")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Eval("inv_flag2")%>"></span>

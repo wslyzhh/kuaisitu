@@ -23,6 +23,7 @@ namespace MettingSys.Web.admin.unBusiness
 
         protected string keywords = string.Empty, _check1 = string.Empty, _check2 = string.Empty, _check3 = string.Empty, _payStatus = string.Empty, _sforedate = string.Empty, _eforedate = string.Empty, _sdate = "", _edate = "", _area = "", _method = "", _sign = "", _money = "", _bankName = "";
         protected string _check = string.Empty, _self = string.Empty, _type = string.Empty, _function = string.Empty,_owner=string.Empty;
+        protected string orderby = "isnull(uba_date,'3000-01-01') desc,isnull(pm_sort,-1) asc,uba_id desc";
 
         decimal _tmoney = 0;
         protected Model.manager manager = null;
@@ -58,11 +59,13 @@ namespace MettingSys.Web.admin.unBusiness
                 case "2":
                     this._check1 = "2";
                     this._check2 = "0";
+                    orderby = "uba_checkTime1 asc,uba_id desc";//财务未审批页签按“部门审批”的时间降序排列
                     break;
                 case "3":
                     this._check1 = "2";
                     this._check2 = "2";
                     this._check3 = "0";
+                    orderby = "uba_checkTime2 asc,uba_id desc";//总经理未审批页签按“财务审批”的时间降序排列
                     break;
                 case "4":
                     this._check1 = "2";
@@ -91,7 +94,7 @@ namespace MettingSys.Web.admin.unBusiness
             {
                 InitData();
                 ChkAdminLevel("sys_unBusiness_list", DTEnums.ActionEnum.View.ToString()); //检查权限
-                RptBind("uba_id>0" + CombSqlTxt(), "isnull(uba_date,'3000-01-01') desc,isnull(pm_sort,-1) asc,uba_id desc");
+                RptBind("uba_id>0" + CombSqlTxt(), orderby);
             }
         }
         #region 初始化数据=================================
@@ -169,7 +172,14 @@ namespace MettingSys.Web.admin.unBusiness
         #region 数据绑定=================================
         private void RptBind(string _strWhere, string _orderby)
         {
-            this.page = DTRequest.GetQueryInt("page", 1);
+            if (!this.isSearch)
+            {
+                this.page = DTRequest.GetQueryInt("page", 1);
+            }
+            else
+            {
+                this.page = 1;
+            }
             BLL.unBusinessApply bll = new BLL.unBusinessApply();
             DataTable dt = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, manager, out this.totalCount,out _tmoney).Tables[0];
             this.rptList.DataSource = dt;
@@ -309,6 +319,7 @@ namespace MettingSys.Web.admin.unBusiness
         //查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
+            this.isSearch = true;
             _check = DTRequest.GetFormString("check");
             _check1 = DTRequest.GetFormString("ddlcheck1");
             _check2 = DTRequest.GetFormString("ddlcheck2");
@@ -327,7 +338,7 @@ namespace MettingSys.Web.admin.unBusiness
             _sign = DTRequest.GetFormString("ddlsign");
             _money = DTRequest.GetFormString("txtMoney");
             _bankName = DTRequest.GetFormString("txtBankName");
-            RptBind("uba_id>0" + CombSqlTxt(), "uba_addDate desc,uba_id desc");
+            RptBind("uba_id>0" + CombSqlTxt(), orderby);
         }
         
         //设置分页数量

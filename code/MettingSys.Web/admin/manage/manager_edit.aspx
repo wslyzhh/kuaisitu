@@ -27,13 +27,15 @@
             //初始化上传控件
             $(".upload-img").InitUploader({ sendurl: "../../tools/upload_ajax.ashx", swf: "../../scripts/webuploader/uploader.swf" });
 
-            $("#ddlParentId").change(function () {
-                $.getJSON("../../tools/admin_ajax.ashx?action=getDepartText&departid=" + $(this).val(), function (json) {
+            $("#ddlParentId").change(function () {                
+                $.getJSON("../../tools/admin_ajax.ashx?action=getDepartText&olddepartid="+$("#hOldDepartID").val()+"&departid=" + $(this).val(), function (json) {
                     $("#labdepartStr").text(json.textTree);
                     $("#hIDTree").val(json.idTree);
                     $("#hTextTree").val(json.textTree);
-                    $("#hUsername").val(json.username);
-                    $("#txtUserName").val(json.username);
+                    if (json.username != "") {
+                        $("#hUsername").val(json.username);
+                        $("#txtUserName").val(json.username);
+                    }
                 });
             });
             //绑定角色权限
@@ -137,6 +139,7 @@
                     <asp:HiddenField ID="hIDTree" runat="server" />
                     <asp:HiddenField ID="hTextTree" runat="server" />
                     <asp:HiddenField ID="hUsername" runat="server" />
+                    <asp:HiddenField ID="hOldDepartID" runat="server" />
                 </dd>
             </dl>
             <dl>

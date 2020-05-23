@@ -84,7 +84,14 @@ namespace MettingSys.Web.admin.self
         #region 数据绑定=================================
         private void RptBind(string _strWhere, string _orderby)
         {
-            this.page = DTRequest.GetQueryInt("page", 1);
+            if (!this.isSearch)
+            {
+                this.page = DTRequest.GetQueryInt("page", 1);
+            }
+            else
+            {
+                this.page = 1;
+            }
             BLL.ReceiptPay bll = new BLL.ReceiptPay();
             DataTable dt = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount, out _tmoney, out _tunmoney).Tables[0];
             this.rptList.DataSource = dt;
@@ -192,6 +199,7 @@ namespace MettingSys.Web.admin.self
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
+            this.isSearch = true;
             _cusName = DTRequest.GetString("txtCusName");
             _cid = DTRequest.GetString("hCusId");
             _method = DTRequest.GetFormString("ddlmethod");

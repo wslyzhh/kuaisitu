@@ -124,7 +124,14 @@ namespace MettingSys.Web.admin.finance
         #region 数据绑定=================================
         private void RptBind(string _strWhere, string _orderby)
         {
-            this.page = DTRequest.GetQueryInt("page", 1);
+            if (!this.isSearch)
+            {
+                this.page = DTRequest.GetQueryInt("page", 1);
+            }
+            else
+            {
+                this.page = 1;
+            }
             BLL.finance bll = new BLL.finance();
             this.rptList.DataSource = bll.GetApprovalList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
             this.rptList.DataBind();
@@ -288,6 +295,7 @@ namespace MettingSys.Web.admin.finance
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
+            this.isSearch = true;
             flag = DTRequest.GetFormString("flag");
             _cusName = DTRequest.GetFormString("txtCusName");
             _cid = DTRequest.GetFormString("hCusId");

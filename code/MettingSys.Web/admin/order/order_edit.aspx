@@ -270,6 +270,37 @@
                     $(this).parents(".ltable").children().find(".checkall input[type=checkbox]").prop("checked", false);
                 }
             });
+
+            //弹出对账明细
+            $(".cusTip").on({                
+                mouseover: function () {
+                    var finid = $(this).attr("data-finid");
+                    var that = this;
+                    var postData = { "finid": finid };
+                    var _table = $("<table width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"0\"><tr><th style=\"width:50%;\">对账标识</th><th>对账金额</th></tr></table>");
+                    //发送AJAX请求
+                    $.ajax({
+                        type: "post",
+                        url: "../../tools/Business_ajax.ashx?action=getChkDetail",
+                        data: postData,
+                        dataType: "json",
+                        success: function (data) {
+                            var jlist = eval(data);
+                            var trlist = "";
+                            if (jlist.length > 0) {
+                                for (var i = 0; i < jlist.length; i++) {
+                                    var json = eval(jlist[i]);
+                                    var _tr = "<tr style=\"text-align:center;\"><td>" + json.fc_num + "</td><td>" + json.fc_money + "</td></tr>";
+                                    trlist += _tr;
+                                }
+                            }
+                            _table.append(trlist);
+                            showTip(that,_table,200)
+                        }
+                    });
+                }
+            });
+
         });
         //获取联系人的联系号码
         function getContactPhone(obj) {
@@ -1163,7 +1194,7 @@
                                         <%#Eval("fin_personName") %>
                                     </td>
                                     <td>
-                                        <%#Eval("chk")%>
+                                        <span class="cusTip" data-finid="<%#Eval("fin_id")%>"><%#Eval("chk")%></span>
                                     </td>
                                     <td><%#Eval("fin_month")%></td>
                                     <td>

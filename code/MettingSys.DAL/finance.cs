@@ -188,7 +188,18 @@ namespace MettingSys.DAL
             string sqlwhere = "";
             if (!string.IsNullOrEmpty(chk))
             {
-                sqlwhere += " and fc_num='" + chk + "'";
+                if (chk == "0")
+                {
+                    sqlwhere += " and isnull(fc_num,'')=''";
+                }
+                else if (chk == "1")
+                {
+                    sqlwhere += " and isnull(fc_num,'')<>''";
+                }
+                else
+                {
+                    sqlwhere += " and fc_num='" + chk + "'";
+                }
             }
             strSql.Append(" *,chk = isnull(STUFF((SELECT ',' + fc_num FROM MS_finance_chk WHERE  fc_finid=fin_id "+ sqlwhere + " FOR XML PATH('')), 1, 1, ''),'无'),chkMoney=(select isnull(sum(isnull(fc_money,0)),0) fc_money from MS_finance_chk where fc_finid=fin_id " + sqlwhere + ")");
             strSql.Append(" FROM  MS_finance f left join MS_Order on fin_oid=o_id left join MS_customer c on fin_cid=c_id left join MS_Nature na on fin_nature=na_id");
@@ -606,7 +617,7 @@ namespace MettingSys.DAL
                 }
                 if (!dict.ContainsKey("sdate2") && dict.ContainsKey("edate2"))
                 {
-                    strWhere3.Append(" and exists(select * from MS_ReceiptPay left join MS_ReceiptPayDetail on rp_id=rpd_rpid where rpd_oid=o_id and rp_type=1 and rp_isConfirm=1 and datediff(day,rp_date,'" + dict["sdate2"] + "')>=0)");
+                    strWhere3.Append(" and exists(select * from MS_ReceiptPay left join MS_ReceiptPayDetail on rp_id=rpd_rpid where rpd_oid=o_id and rp_type=1 and rp_isConfirm=1 and datediff(day,rp_date,'" + dict["edate2"] + "')>=0)");
                 }
                 if (dict.ContainsKey("sdate2") && dict.ContainsKey("edate2"))
                 {
@@ -626,16 +637,27 @@ namespace MettingSys.DAL
                 }
                 if (dict.ContainsKey("chk"))
                 {
-                    if (dict["chk"] == "空")
+                    if (dict["chk"] == "0")
                     {
                         selectFiled = "o_id,o_status,o_content,o_sdate,o_edate,o_address,c_name,co_name,isnull(t1.fin_money,0) fin_money,isnull(rpd_money,0) rpd_money,isnull(chkMoney,0) chkMoney,(isnull(t1.fin_money,0)-isnull(rpd_money,0)) unReceiptPay,isnull(fcMoney,0) fcMoney,isnull(tfcMoney,0) tfcMoney,(isnull(fcMoney,0)-isnull(chkMoney,0)) unChkMoney";
-                        addTable = " left join (select fin_oid,sum(isnull(fc_money,0)) fcMoney from MS_finance left join MS_finance_chk on fin_id = fc_finid where fin_flag<>1 and fin_cid=" + dict["cid"] + " and fin_type='" + dict["type"] + "' and fc_num='" + dict["chk"] + "' group by fin_oid) t3 on t1.fin_oid=t3.fin_oid ";
+                        addTable = " left join (select fin_oid,sum(isnull(fc_money,0)) fcMoney from MS_finance left join MS_finance_chk on fin_id = fc_finid where fin_flag<>1 and fin_cid=" + dict["cid"] + " and fin_type='" + dict["type"] + "' and isnull(fc_num,'')='' group by fin_oid) t3 on t1.fin_oid=t3.fin_oid ";
                         chkFiled1 = ",sum(chkMoney) chkMoney";
                         chkFiled2 = ",0 as chkMoney";
-                        chkFiled3 = " and fc_num='" + dict["chk"] + "'";
+                        chkFiled3 = " and isnull(fc_num,'')=''";
                         chkFiled4 = ",0 as fcMoney";
                         chkGroup = ",rpd_num";
                         strWhere3.Append(" and exists(select * from MS_finance left join MS_finance_chk  on fc_finid=fin_id where fin_oid=o_id and fin_cid=" + dict["cid"] + " and isnull(fc_id,0)=0)");
+                    }
+                    else if (dict["chk"] == "1")
+                    {
+                        selectFiled = "o_id,o_status,o_content,o_sdate,o_edate,o_address,c_name,co_name,isnull(t1.fin_money,0) fin_money,isnull(rpd_money,0) rpd_money,isnull(chkMoney,0) chkMoney,(isnull(t1.fin_money,0)-isnull(rpd_money,0)) unReceiptPay,isnull(fcMoney,0) fcMoney,isnull(tfcMoney,0) tfcMoney,(isnull(fcMoney,0)-isnull(chkMoney,0)) unChkMoney";
+                        addTable = " left join (select fin_oid,sum(isnull(fc_money,0)) fcMoney from MS_finance left join MS_finance_chk on fin_id = fc_finid where fin_flag<>1 and fin_cid=" + dict["cid"] + " and fin_type='" + dict["type"] + "' and isnull(fc_num,'')<>'' group by fin_oid) t3 on t1.fin_oid=t3.fin_oid ";
+                        chkFiled1 = ",sum(chkMoney) chkMoney";
+                        chkFiled2 = ",(case when isnull(rpd_num,'')<>'' and rp_isConfirm=1 then sum(isnull(rpd_money,0)) else 0 end) chkMoney";
+                        chkFiled3 = " and isnull(fc_num,'')<>''";
+                        chkFiled4 = ",sum(case when isnull(fc_num,'')<>'' then isnull(fc_money,0) else 0 end) fcMoney";
+                        chkGroup = ",rpd_num";
+                        strWhere3.Append(" and exists(select * from MS_finance_chk left join MS_finance on fc_finid=fin_id where fc_oid=o_id and fin_cid=" + dict["cid"] + " and isnull(fc_id,0)<>0)");
                     }
                     else
                     {

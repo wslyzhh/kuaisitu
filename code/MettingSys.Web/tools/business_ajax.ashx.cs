@@ -181,6 +181,9 @@ namespace MettingSys.Web.tools
                 case "saveBank":
                     save_Bank(context);
                     break;
+                case "getChkDetail":
+                    get_ChkDetail(context);
+                    break;
                 default:
                     break;
             }
@@ -1592,6 +1595,7 @@ namespace MettingSys.Web.tools
             context.Response.End();
         }
         #endregion
+        #region 保存银行账号
         private void save_Bank(HttpContext context)
         {
             string actionType = DTRequest.GetFormString("actionType");
@@ -1657,6 +1661,21 @@ namespace MettingSys.Web.tools
             context.Response.Write("{ \"msg\":\"" + result + "\", \"status\":1, \"fromPay\":\"" + fromPay + "\",\"cid\":" + cid + "}");
             context.Response.End();
         }
+        #endregion
+        #region 获取对账明细数据
+        private void get_ChkDetail(HttpContext context)
+        {
+            int finid = DTRequest.GetFormInt("finid", 0);
+            DataSet ds = new BLL.finance_chk().GetList(0, "fc_finid=" + finid + "", "fc_addDate desc");
+            if (ds != null && ds.Tables.Count > 0)
+            {
+                context.Response.Write(JArray.FromObject(ds.Tables[0]));
+                context.Response.End();
+            }
+            context.Response.Write("[]");
+            context.Response.End();
+        }
+        #endregion
         public bool IsReusable
         {
             get

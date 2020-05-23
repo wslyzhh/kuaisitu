@@ -26,6 +26,7 @@ namespace MettingSys.Web.admin.finance
         protected Model.manager manager = null;
         decimal _tmoney = 0, _tunmoney = 0;
         protected string _fromOtherPage = "0";//是否从其他页面链接过来的:0否，1是
+        protected string orderby = "isnull(rp_date,'3000-01-01') desc,isnull(pm_sort,-1) asc,rp_id desc";
         protected void Page_Load(object sender, EventArgs e)
         {
             _cusName = DTRequest.GetString("txtCusName");
@@ -81,7 +82,7 @@ namespace MettingSys.Web.admin.finance
                 {
                     ChkAdminLevel("sys_payment_list1", DTEnums.ActionEnum.View.ToString()); //检查权限
                 }
-                RptBind("rp_type=1 " + CombSqlTxt(), "isnull(rp_date,'3000-01-01') desc,isnull(pm_sort,-1) asc,rp_id desc");
+                RptBind("rp_type=1 " + CombSqlTxt(), orderby);
             }
         }
         #region 初始化=================================
@@ -119,7 +120,14 @@ namespace MettingSys.Web.admin.finance
         #region 数据绑定=================================
         private void RptBind(string _strWhere, string _orderby)
         {
-            this.page = DTRequest.GetQueryInt("page", 1);
+            if (!this.isSearch)
+            {
+                this.page = DTRequest.GetQueryInt("page", 1);
+            }
+            else
+            {
+                this.page = 1;
+            }
             BLL.ReceiptPay bll = new BLL.ReceiptPay();
             DataTable dt = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount, out _tmoney, out _tunmoney).Tables[0];
             this.rptList.DataSource = dt;
@@ -185,6 +193,10 @@ namespace MettingSys.Web.admin.finance
                 if (_num == "0")
                 {
                     strTemp.Append(" and isnull(ce_num,'')=''");
+                }
+                else if (_num == "1")
+                {
+                    strTemp.Append(" and isnull(ce_num,'')<>''");
                 }
                 else
                 {
@@ -264,6 +276,7 @@ namespace MettingSys.Web.admin.finance
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
+            this.isSearch = true;
             _cusName = DTRequest.GetString("txtCusName");
             _cid = DTRequest.GetString("hCusId");
             _method = DTRequest.GetFormString("ddlmethod");
@@ -280,7 +293,7 @@ namespace MettingSys.Web.admin.finance
             _money = DTRequest.GetFormString("txtMoney");
             _moneyType = DTRequest.GetFormString("ddlmoneyType");
             _type = DTRequest.GetFormString("ddlType");
-            RptBind("rp_type=1 " + CombSqlTxt(), "isnull(rp_date,'3000-01-01') desc,isnull(pm_sort,-1) asc,rp_id desc");            
+            RptBind("rp_type=1 " + CombSqlTxt(), orderby);            
         }
 
         //设置分页数量

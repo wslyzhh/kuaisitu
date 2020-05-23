@@ -95,12 +95,22 @@
                                 <div class="rule-single-select">
                                     <asp:DropDownList ID="ddllock" runat="server"></asp:DropDownList>
                                 </div>
+                是否推送：
+                                <div class="rule-single-select">
+                                    <asp:DropDownList ID="ddlispush" runat="server"></asp:DropDownList>
+                                </div>
+                审批状态：
+                                <div class="rule-single-select">
+                                    <asp:DropDownList ID="ddlflag" runat="server"></asp:DropDownList>
+                                </div>
                 业务员：
                     <asp:TextBox ID="txtPerson1" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>                
                 策划人员：
-                    <asp:TextBox ID="txtPerson3" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>
+                    <asp:TextBox ID="txtPerson3" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>     
+            </div>
+            <div class="searchbar">
                 设计人员：
-                    <asp:TextBox ID="txtPerson5" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>                
+                    <asp:TextBox ID="txtPerson5" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>
                 归属地：
                     <div class="rule-single-select">
                         <asp:DropDownList ID="ddlarea" runat="server"></asp:DropDownList>
@@ -109,8 +119,6 @@
                     <div class="rule-single-select">
                         <asp:DropDownList ID="ddlorderarea" runat="server"></asp:DropDownList>
                     </div>
-            </div>
-            <div class="searchbar">
                 活动名称：
                         <asp:TextBox ID="txtContent" runat="server" CssClass="input"></asp:TextBox>
                 活动地点：
@@ -151,6 +159,8 @@
                             </asp:DropDownList>
                         </div>
                 <asp:TextBox ID="txtMoney2" runat="server" CssClass="input small"></asp:TextBox>
+            </div>
+            <div class="searchbar">
                 未付款：
                         <div class="rule-single-select myRuleSelect">
                             <asp:DropDownList ID="ddlsign3" runat="server" Width="50">
@@ -187,8 +197,6 @@
                             </asp:DropDownList>
                         </div>
                 <asp:TextBox ID="txtMoney5" runat="server" CssClass="input small"></asp:TextBox>
-            </div>
-            <div class="searchbar">
                 活动开始日期：
                         <asp:TextBox ID="txtsDate" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate\')}'})"></asp:TextBox>
                 -
@@ -197,7 +205,10 @@
                         <asp:TextBox ID="txtsDate1" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate1\')}'})"></asp:TextBox>
                 -
                         <asp:TextBox ID="txteDate1" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({minDate:'#F{$dp.$D(\'txtsDate1\')}'})"></asp:TextBox>
-
+                收款方式：
+                            <div class="rule-single-select">
+                                <asp:DropDownList ID="ddlmethod" runat="server"></asp:DropDownList>
+                            </div>
                <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
             <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
             </div>

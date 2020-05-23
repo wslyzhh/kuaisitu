@@ -22,7 +22,7 @@ namespace MettingSys.Web.admin.finance
         protected int pageSize; //每页大小
 
         protected string _cusName = "", _cid = "", _check1 = string.Empty, _check2 = string.Empty, _check3 = string.Empty, _foresdate = string.Empty, _foreedate = string.Empty, _collect="", _self = "", _person = "", _sign = "", _money = "", _oID = string.Empty, _area = string.Empty, _person1 = "",_sdate="",_edate="";
-        protected string _check = "";
+        protected string _check = "", orderby = "rpd_adddate desc,rpd_id desc";
         protected Model.manager manager = null;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -58,11 +58,13 @@ namespace MettingSys.Web.admin.finance
                 case "2":
                     this._check1 = "2";
                     this._check2 = "0";
+                    orderby = "rpd_checkTime1 asc,rpd_id desc";//财务未审批页签按“部门审批”的时间降序排列
                     break;
                 case "3":
                     this._check1 = "2";
                     this._check2 = "2";
                     this._check3 = "0";
+                    orderby = "rpd_checkTime2 asc,rpd_id desc";//总经理未审批页签按“财务审批”的时间降序排列
                     break;
                 default:
                     break;
@@ -84,7 +86,7 @@ namespace MettingSys.Web.admin.finance
                 {
                     ChkAdminLevel("sys_payment_detail0", DTEnums.ActionEnum.View.ToString()); //检查权限
                 }
-                RptBind("rpd_type=0" + CombSqlTxt(), "rpd_adddate desc,rpd_id desc");
+                RptBind("rpd_type=0" + CombSqlTxt(), orderby);
             }
             
         }
@@ -139,7 +141,14 @@ namespace MettingSys.Web.admin.finance
         #region 数据绑定=================================
         private void RptBind(string _strWhere, string _orderby)
         {
-            this.page = DTRequest.GetQueryInt("page", 1);
+            if (!this.isSearch)
+            {
+                this.page = DTRequest.GetQueryInt("page", 1);
+            }
+            else
+            {
+                this.page = 1;
+            }
             BLL.ReceiptPayDetail bll = new BLL.ReceiptPayDetail();
             DataTable dt = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, manager, out this.totalCount, out decimal _tmoney, true).Tables[0];
             this.rptList.DataSource = dt;
@@ -280,6 +289,7 @@ namespace MettingSys.Web.admin.finance
         //查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
+            this.isSearch = true;
             _cusName = DTRequest.GetString("txtCusName");
             _cid = DTRequest.GetString("hCusId");
             _check1 = DTRequest.GetFormString("ddlcheck1");
@@ -297,7 +307,7 @@ namespace MettingSys.Web.admin.finance
             _person1 = DTRequest.GetFormString("txtPerson1");
             _sdate = DTRequest.GetFormString("txtsdate");
             _edate = DTRequest.GetFormString("txtedate");
-            RptBind("rpd_type=0" + CombSqlTxt(), "rpd_adddate desc,rpd_id desc");
+            RptBind("rpd_type=0" + CombSqlTxt(), orderby);
             
         }
 

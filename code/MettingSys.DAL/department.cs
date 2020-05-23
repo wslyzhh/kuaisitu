@@ -215,7 +215,7 @@ namespace MettingSys.DAL
         public string getLastUserName(string area)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select top 1 user_name from dt_manager where area='" + area + "' and user_name like '" + area + "%' order by user_name desc");
+            strSql.Append("select user_name from dt_manager where area='" + area + "' and user_name like '" + area + "%' order by user_name desc");
 
             return Utils.ObjectToStr(DbHelperSQL.GetSingle(strSql.ToString()));
         }

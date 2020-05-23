@@ -20,7 +20,7 @@ namespace MettingSys.Web.admin.statistic
         protected int totalCount; //数据总记录数
         protected int page; //当前页码
         protected int pageSize; //每页大小
-        protected string _orderid = "", _cusName = "", _cid = "", _status = "", _dstatus = "", _lockstatus = "", _content = "", _address = "", _sign = "", _money = "", _person1 = "", _person3 = "", _person5 = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _area = "", _sign1 = "", _money1 = "", _sign2 = "", _money2 = "", _sign3 = "", _money3 = "", _sign4 = "", _money4 = "", _sign5 = "", _money5 = "",_orderarea="";
+        protected string _orderid = "", _cusName = "", _cid = "", _status = "", _dstatus = "", _lockstatus = "", _content = "", _address = "", _sign = "", _money = "", _person1 = "", _person3 = "", _person5 = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _area = "", _sign1 = "", _money1 = "", _sign2 = "", _money2 = "", _sign3 = "", _money3 = "", _sign4 = "", _money4 = "", _sign5 = "", _money5 = "", _orderarea = "", _method = "", _pushstatus = "", _flag = "";
         Model.manager manager = null;
         protected Model.business_log logmodel = null;
         decimal money1 = 0, money2 = 0, money3 = 0, money4 = 0, money5 = 0, money6 = 0;
@@ -32,6 +32,8 @@ namespace MettingSys.Web.admin.statistic
             _status = DTRequest.GetString("ddlstatus");
             _dstatus = DTRequest.GetString("ddldstatus");
             _lockstatus = DTRequest.GetString("ddllock");
+            _pushstatus = DTRequest.GetString("ddlispush");
+            _flag = DTRequest.GetString("ddlflag");
             _content = DTRequest.GetString("txtContent");
             _address = DTRequest.GetString("txtAddress");
             _sign = DTRequest.GetString("ddlsign");
@@ -55,6 +57,7 @@ namespace MettingSys.Web.admin.statistic
             _sign5 = DTRequest.GetString("ddlsign5");
             _money5 = DTRequest.GetString("txtMoney5");
             _orderarea = DTRequest.GetString("ddlorderarea");
+            _method = DTRequest.GetString("ddlmethod");
             manager = GetAdminInfo();
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
@@ -94,6 +97,18 @@ namespace MettingSys.Web.admin.statistic
         #region 初始化
         private void InitData()
         {
+            //根据权限显示付款方式
+            string sqlwhere = "";
+            if (!new BLL.permission().checkHasPermission(manager, "0401"))
+            {
+                sqlwhere = " and pm_type=0";
+            }
+            ddlmethod.DataSource = new BLL.payMethod().GetList(0, "pm_isUse=1 " + sqlwhere + "", "pm_sort asc,pm_id asc");
+            ddlmethod.DataTextField = "pm_name";
+            ddlmethod.DataValueField = "pm_id";
+            ddlmethod.DataBind();
+            ddlmethod.Items.Insert(0, new ListItem("不限", ""));
+
             ddlstatus.DataSource = Common.BusinessDict.fStatus(1);
             ddlstatus.DataTextField = "value";
             ddlstatus.DataValueField = "key";
@@ -123,6 +138,18 @@ namespace MettingSys.Web.admin.statistic
             ddlorderarea.DataValueField = "key";
             ddlorderarea.DataBind();
             ddlorderarea.Items.Insert(0, new ListItem("不限", ""));
+
+            ddlispush.DataSource = Common.BusinessDict.pushStatus();
+            ddlispush.DataTextField = "value";
+            ddlispush.DataValueField = "key";
+            ddlispush.DataBind();
+            ddlispush.Items.Insert(0, new ListItem("不限", ""));
+
+            ddlflag.DataSource = Common.BusinessDict.checkStatus();
+            ddlflag.DataTextField = "value";
+            ddlflag.DataValueField = "key";
+            ddlflag.DataBind();
+            ddlflag.Items.Insert(0, new ListItem("不限", ""));
         }
         #endregion
 
@@ -203,7 +230,7 @@ namespace MettingSys.Web.admin.statistic
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("OrderAnalyze_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlstatus={3}&ddldstatus={4}&ddllock={5}&txtContent={6}&txtAddress={7}&ddlsign={8}&txtMoney={9}&txtPerson1={10}&txtPerson3={11}&txtPerson5={12}&txtsDate={13}&txteDate={14}&txtsDate1={15}&txteDate1={16}&txtOrderID={17}&ddlarea={18}&ddlsign1={19}&txtMoney1={20}&ddlsign2={21}&txtMoney2={22}&ddlsign3={23}&txtMoney3={24}&ddlsign4={25}&txtMoney4={26}&ddlsign5={27}&txtMoney5={28}", "__id__", _cusName, _cid, _status, _dstatus, _lockstatus, _content, _address, _sign, _money, _person1, _person3, _person5, _sdate, _edate, _sdate1, _edate1, _orderid, _area, _sign1, _money1, _sign2, _money2, _sign3, _money3, _sign4, _money4, _sign5, _money5);
+            return Utils.CombUrlTxt("OrderAnalyze_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlstatus={3}&ddldstatus={4}&ddllock={5}&txtContent={6}&txtAddress={7}&ddlsign={8}&txtMoney={9}&txtPerson1={10}&txtPerson3={11}&txtPerson5={12}&txtsDate={13}&txteDate={14}&txtsDate1={15}&txteDate1={16}&txtOrderID={17}&ddlarea={18}&ddlsign1={19}&txtMoney1={20}&ddlsign2={21}&txtMoney2={22}&ddlsign3={23}&txtMoney3={24}&ddlsign4={25}&txtMoney4={26}&ddlsign5={27}&txtMoney5={28}&ddlispush={29}&ddlflag={30}", "__id__", _cusName, _cid, _status, _dstatus, _lockstatus, _content, _address, _sign, _money, _person1, _person3, _person5, _sdate, _edate, _sdate1, _edate1, _orderid, _area, _sign1, _money1, _sign2, _money2, _sign3, _money3, _sign4, _money4, _sign5, _money5,_pushstatus,_flag);
         }
 
         #region 组合SQL查询语句==========================
@@ -309,6 +336,14 @@ namespace MettingSys.Web.admin.statistic
             {
                 strTemp.Append(" and o_lockStatus='" + _lockstatus + "'");
             }
+            if (!string.IsNullOrEmpty(_pushstatus))
+            {
+                strTemp.Append(" and o_isPush='" + _pushstatus + "'");
+            }
+            if (!string.IsNullOrEmpty(_flag))
+            {
+                strTemp.Append(" and o_flag=" + _flag + "");
+            }
             if (!string.IsNullOrEmpty(_content))
             {
                 strTemp.Append(" and o_content like '%" + _content + "%'");
@@ -369,7 +404,10 @@ namespace MettingSys.Web.admin.statistic
             {
                 strTemp.Append(" and datediff(day,o_edate,'" + _edate1 + "')>=0");
             }
-            
+            if (!string.IsNullOrEmpty(_method))
+            {
+                strTemp.Append(" and exists(select * from MS_ReceiptPayDetail where rpd_oid=o_id and rpd_type=1 and rpd_method=" + _method + ")");
+            }
             return strTemp.ToString();
         }
         #endregion
@@ -446,6 +484,8 @@ namespace MettingSys.Web.admin.statistic
             _status = DTRequest.GetFormString("ddlstatus");
             _dstatus = DTRequest.GetFormString("ddldstatus");
             _lockstatus = DTRequest.GetFormString("ddllock");
+            _pushstatus = DTRequest.GetFormString("ddlispush");
+            _flag = DTRequest.GetFormString("ddlflag");
             _content = DTRequest.GetFormString("txtContent");
             _address = DTRequest.GetFormString("txtAddress");
             _sign = DTRequest.GetFormString("ddlsign");

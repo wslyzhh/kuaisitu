@@ -108,8 +108,14 @@ namespace MettingSys.Web.admin.finance
         #region 数据绑定=================================
         private void RptBind()
         {
-            
-            this.page = DTRequest.GetQueryInt("page", 1);
+            if (!this.isSearch)
+            {
+                this.page = DTRequest.GetQueryInt("page", 1);
+            }
+            else
+            {
+                this.page = 1;
+            }
             DataTable dt = bll.getFinancialOrder(this.pageSize, this.page, CombSqlTxt(), "fin_oid asc", out this.totalCount, out _tmoney1, out _tmoney2).Tables[0];
             this.rptList.DataSource = dt;
             this.rptList.DataBind();
@@ -171,6 +177,7 @@ namespace MettingSys.Web.admin.finance
         }
         protected void btnSearch_Click(object sender, EventArgs e)
         {
+            this.isSearch = true;
             _smonth = DTRequest.GetFormString("txtsDate");
             _emonth = DTRequest.GetFormString("txteDate");
             _type = DTRequest.GetFormString("ddltype");

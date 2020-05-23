@@ -22,7 +22,7 @@ namespace MettingSys.Web.admin.finance
         protected int pageSize; //每页大小
 
         protected string _cusName = "", _cid = "", _check1 = string.Empty, _check2 = string.Empty, _check3 = string.Empty, _isconfirm = string.Empty, _oid = string.Empty, _sign = "", _money = "", _sdate = "", _edate = "", _farea = "", _darea = "",_invType="";
-        protected string _self = string.Empty, _check = "", _name = "";
+        protected string _self = string.Empty, _check = "", _name = "", orderby = "inv_addDate desc,inv_id desc";
         protected Model.manager manager = null;
         decimal _tmoney = 0;
         protected void Page_Load(object sender, EventArgs e)
@@ -56,11 +56,13 @@ namespace MettingSys.Web.admin.finance
                 case "2":
                     this._check1 = "2";
                     this._check2 = "0";
+                    orderby = "inv_checkTime1 asc,inv_id desc";//“开票区域未审批页签”的记录按“申请区域审批”的时间降序排列
                     break;
                 case "3":
                     this._check1 = "2";
                     this._check2 = "2";
                     this._check3 = "0";
+                    orderby = "inv_checkTime2 asc,inv_id desc";//“财务未审批页签”的记录按“开票区域审批”的时间降序排列
                     break;
                 case "4":
                     this._check1 = "2";
@@ -92,7 +94,7 @@ namespace MettingSys.Web.admin.finance
                 {
                     ChkAdminLevel("sys_invoice", DTEnums.ActionEnum.View.ToString()); //检查权限
                 }
-                RptBind("inv_id>0" + CombSqlTxt(), "inv_addDate desc,inv_id desc");
+                RptBind("inv_id>0" + CombSqlTxt(), orderby);
             }
             txtCusName.Text = _cusName;
             hCusId.Value = _cid;
@@ -174,7 +176,14 @@ namespace MettingSys.Web.admin.finance
         #region 数据绑定=================================
         private void RptBind(string _strWhere, string _orderby)
         {
-            this.page = DTRequest.GetQueryInt("page", 1);
+            if (!this.isSearch)
+            {
+                this.page = DTRequest.GetQueryInt("page", 1);
+            }
+            else
+            {
+                this.page = 1;
+            }
             BLL.invoices bll = new BLL.invoices();
             DataTable dt= bll.GetList(this.pageSize, this.page, _strWhere, _orderby, manager, out this.totalCount,out _tmoney).Tables[0];
             this.rptList.DataSource = dt;
@@ -297,6 +306,7 @@ namespace MettingSys.Web.admin.finance
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
+            this.isSearch = true;
             _cusName = DTRequest.GetFormString("txtCusName");
             _cid = DTRequest.GetFormString("hCusId");
             _check1 = DTRequest.GetFormString("ddlcheck1");
@@ -313,7 +323,7 @@ namespace MettingSys.Web.admin.finance
             _invType = DTRequest.GetFormString("ddlinvType");
             _name = DTRequest.GetFormString("txtName");
             _self = DTRequest.GetFormString("self");//self=1表示个人页面
-            RptBind("inv_id>0" + CombSqlTxt(), "inv_addDate desc,inv_id desc");
+            RptBind("inv_id>0" + CombSqlTxt(), orderby);
             txtCusName.Text = _cusName;
             hCusId.Value = _cid;
             ddlcheck1.SelectedValue = _check1;

@@ -141,6 +141,7 @@
                         OnTextChanged="txtPageNum_TextChanged" AutoPostBack="True"></asp:TextBox><span>条/页</span>
                 </div>
                 <div id="PageContent" runat="server" class="default"></div>
+                <input id="btnReturn" type="button" value="返回上一页" class="btn yellow" style="margin-left:5px;" onclick="javascript: history.back(-1);" />
             </div>
         </div>
         <div class="tab-content" style="display: none;">

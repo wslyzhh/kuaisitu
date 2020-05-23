@@ -298,25 +298,52 @@ namespace MettingSys.BLL
         public string getNewUserName(string area)
         {
             if (string.IsNullOrEmpty(area)) return "";
-            string username = dal.getLastUserName(area);
+            string username = string.Empty;// dal.getLastUserName(area);
+            DataSet ds = new manager().GetList(0, "area='" + area + "' and user_name like '" + area + "%'", "user_name");
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count>0)
+            {
+                int n = 0, num = 0;
+                string numStr = string.Empty;
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    n = Utils.ObjToInt(Utils.ObjectToStr(ds.Tables[0].Rows[i]["user_name"]).Substring(2));
+                    if (n != i + 1)
+                    {
+                        num = i + 1;                        
+                    }
+                    else
+                    {
+                        //最后一个也没匹配，则在最后一个上加1生成新的工号
+                        if (i == ds.Tables[0].Rows.Count-1 && string.IsNullOrEmpty(username))
+                        {
+                            n = Utils.ObjToInt(Utils.ObjectToStr(ds.Tables[0].Rows[i]["user_name"]).Substring(2));
+                            num = n + 1;
+                        }
+                    }
+                    if (num != 0)
+                    {
+                        if (num.ToString().Length == 1)
+                        {
+                            numStr = "00" + num;
+                        }
+                        else if (num.ToString().Length == 2)
+                        {
+                            numStr = "0" + num;
+                        }
+                        else
+                        {
+                            numStr = num.ToString();
+                        }
+                        username = area + numStr;
+                        break;
+                    }
+                }
+            }
             if (string.IsNullOrEmpty(username)) return area + "001";
-            int num = Utils.StrToInt(username.Substring(2, 3), 0);
-            num++;
-            string numStr = string.Empty;
-            if (num.ToString().Length == 1)
-            {
-                numStr = "00" + num;
-            }
-            else if (num.ToString().Length == 2)
-            {
-                numStr = "0" + num;
-            }
-            else {
-                numStr = num.ToString();
-            }
-            return username.Substring(0, 2)+ numStr;
-        }
 
+            return username;
+        }
+        
 
         /// <summary>
         /// 根据岗位ID返回完整的岗位描述

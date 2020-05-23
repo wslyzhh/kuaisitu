@@ -207,9 +207,13 @@ namespace MettingSys.Web.admin.finance
             if (!string.IsNullOrEmpty(_chk))
             {
                 dict.Add("chk", _chk);
-                if (_chk == "空")
+                if (_chk == "0")
                 {
                     sqlWhere += " and not exists(select * from MS_finance_chk where fc_finid=fin_id and isnull(fc_num,'')<>'')";
+                }
+                else if (_chk == "1")
+                {
+                    sqlWhere += " and exists(select * from MS_finance_chk where fc_finid=fin_id and isnull(fc_num,'')<>'')";
                 }
                 else
                 {
@@ -252,7 +256,14 @@ namespace MettingSys.Web.admin.finance
         #region 数据绑定=================================
         private void RptBind()
         {
-            this.page = DTRequest.GetQueryInt("page", 1);
+            if (!this.isSearch)
+            {
+                this.page = DTRequest.GetQueryInt("page", 1);
+            }
+            else
+            {
+                this.page = 1;
+            }
             BLL.finance bll = new BLL.finance();
             string _where = "";
             Dictionary<string, string> dict = getDict(out _where);
@@ -353,10 +364,8 @@ namespace MettingSys.Web.admin.finance
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("ReconciliationDetail.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddltype={3}&ddlsign={4}&txtMoney1={5}&ddlnature={6}&txtsDate={7}&txteDate={8}&txtsDate1={9}&txteDate1={10}&txtName={11}&txtAddress={12}&ddlsign1={13}&txtMoney2={14}&txtPerson1={15}&txtPerson2={16}&txtPerson3={17}&txtPerson4={18}&txtPerson5={19}&txtOrderID={20}&txtChk={21}&ddlstatus={22}&ddllock={23}&ddlarea={24}&txtsDate2={25}&txteDate2={26}&self={27}",
-                "__id__", _cusName, _cid, _type, _sign, _money1, _nature, _sdate, _edate, _sdate1, _edate1, _name, _address, _sign1, _money2, _person1, _person2, _person3, _person4, _person5, _oid, _chk, _status, _lockstatus, _area, _sdate2, _edate2, _self);
+            string pageUrl = backUrl();
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
-
 
 
             ddltype.SelectedValue = _type;
@@ -366,8 +375,8 @@ namespace MettingSys.Web.admin.finance
             txteDate.Text = _edate;
             txtsDate1.Text = _sdate1;
             txteDate1.Text = _edate1;
-            //txtsDate2.Text = _sdate2;
-            //txteDate2.Text = _edate2;
+            txtsDate2.Text = _sdate2;
+            txteDate2.Text = _edate2;
             //txtsDate3.Text = _sdate3;
             //txteDate3.Text = _edate3;
             ddlstatus.SelectedValue = _status;
@@ -390,6 +399,12 @@ namespace MettingSys.Web.admin.finance
         }
         #endregion
 
+        private string backUrl()
+        {
+            return Utils.CombUrlTxt("ReconciliationDetail.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddltype={3}&ddlsign={4}&txtMoney1={5}&ddlnature={6}&txtsDate={7}&txteDate={8}&txtsDate1={9}&txteDate1={10}&txtName={11}&txtAddress={12}&ddlsign1={13}&txtMoney2={14}&txtPerson1={15}&txtPerson2={16}&txtPerson3={17}&txtPerson4={18}&txtPerson5={19}&txtOrderID={20}&txtChk={21}&ddlstatus={22}&ddllock={23}&ddlarea={24}&txtsDate2={25}&txteDate2={26}&self={27}",
+                "__id__", _cusName, _cid, _type, _sign, _money1, _nature, _sdate, _edate, _sdate1, _edate1, _name, _address, _sign1, _money2, _person1, _person2, _person3, _person4, _person5, _oid, _chk, _status, _lockstatus, _area, _sdate2, _edate2, _self);
+        }
+
         #region 返回每页数量=============================
         private int GetPageSize(int _default_size)
         {
@@ -408,6 +423,7 @@ namespace MettingSys.Web.admin.finance
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
+            isSearch = true;
             _cusName = DTRequest.GetFormString("txtCusName");
             _cid = DTRequest.GetFormString("hCusId");
             _type = DTRequest.GetFormString("ddltype");
@@ -464,8 +480,7 @@ namespace MettingSys.Web.admin.finance
                     Utils.WriteCookie("ReconciliationDetail_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("ReconciliationDetail.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddltype={3}&ddlsign={4}&txtMoney1={5}&ddlnature={6}&txtsDate={7}&txteDate={8}&txtsDate1={9}&txteDate1={10}&txtName={11}&txtAddress={12}&ddlsign1={13}&txtMoney2={14}&txtPerson1={15}&txtPerson2={16}&txtPerson3={17}&txtPerson4={18}&txtPerson5={19}&txtOrderID={20}&txtChk={21}&ddlstatus={22}&ddllock={23}&ddlarea={24}&txtsDate2={25}&txteDate2={26}&self={27}",
-                "__id__", _cusName, _cid, _type, _sign, _money1, _nature, _sdate, _edate, _sdate1, _edate1, _name, _address, _sign1, _money2, _person1, _person2, _person3, _person4, _person5, _oid, _chk, _status, _lockstatus, _area, _sdate2, _edate2, _self));
+            Response.Redirect(backUrl());
         }
 
         protected void btnExcel_Click(object sender, EventArgs e)

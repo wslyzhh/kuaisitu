@@ -304,13 +304,13 @@ namespace MettingSys.DAL
                 return result;
             }
 
-            strSql.Clear();
-            strSql.Append("select count(*) from MS_Customer where c_owner=@num");
-            result = DbHelperSQL.Exists(strSql.ToString(), parameters);
-            if (result)
-            {
-                return result;
-            }
+            //strSql.Clear();
+            //strSql.Append("select count(*) from MS_Customer where c_owner=@num");
+            //result = DbHelperSQL.Exists(strSql.ToString(), parameters);
+            //if (result)
+            //{
+            //    return result;
+            //}
 
             strSql.Clear();
             strSql.Append("select count(*) from MS_unBusinessApply where uba_checkNum1=@num or uba_checkNum2=@num or uba_checkNum3=@num or uba_confirmerNum=@num or uba_PersonNum=@num");

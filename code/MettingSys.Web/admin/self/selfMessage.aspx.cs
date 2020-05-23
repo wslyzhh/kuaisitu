@@ -37,7 +37,14 @@ namespace MettingSys.Web.admin.self
         #region 数据绑定=================================
         private void RptBind(string _strWhere, string _orderby)
         {
-            this.page = DTRequest.GetQueryInt("page", 1);
+            if (!this.isSearch)
+            {
+                this.page = DTRequest.GetQueryInt("page", 1);
+            }
+            else
+            {
+                this.page = 1;
+            }
             this.txtKeywords.Text = this.keywords;
             BLL.selfMessage bll = new BLL.selfMessage();
             this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
@@ -85,6 +92,7 @@ namespace MettingSys.Web.admin.self
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
+            this.isSearch = true;
             this.keywords = DTRequest.GetFormString("txtKeywords");
             this._isRead = DTRequest.GetFormString("ddlisRead");
             RptBind("me_id>0 and me_owner='" + manager.user_name + "'" + CombSqlTxt(this.keywords, this._isRead), "me_isRead asc,me_addDate desc,me_id desc");
