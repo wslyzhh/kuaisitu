@@ -71,7 +71,7 @@ export default {
     name:"",
     data() {
        return {
-           topTablist:['我的订单','全公司的'],
+           topTablist:['我的订单','我的报账订单','我的执行订单','全公司的'],
            showLabel:false,
            showSearchBox:false,
 		   labelData:[
@@ -160,6 +160,12 @@ export default {
 				tmpFlag = 1
 			}
 			if(1 == index){
+				tmpFlag = 2
+			}
+			if(2 == index){
+				tmpFlag = 4
+			}
+			if(3 == index){
 				tmpFlag = 0
 			}
 			if(tmpFlag != this.searchData.flag){
