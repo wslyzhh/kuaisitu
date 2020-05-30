@@ -388,7 +388,7 @@
                             <td><%#DateTime.Parse(Eval("uba_foreDate").ToString()).ToString("yyyy-MM-dd") %></td>
                             <td class="dateTd"><%#MettingSys.Common.ConvertHelper.toDate(Eval("uba_Date")) == null ? "" : DateTime.Parse(Eval("uba_Date").ToString()).ToString("yyyy-MM-dd") %></td>
                             <td class="methodTd"><%#Eval("pm_name") %></td>
-                            <td><span title="申请工号：<%#Eval("uba_personNum")%>&#10;申请时间：<%#Eval("uba_addDate")%>"><%#Eval("uba_personName") %></span></td>
+                            <td style="color:#2A72C5;"><span title="申请工号：<%#Eval("uba_personNum")%>&#10;申请时间：<%#Eval("uba_addDate")%>"><%#Eval("uba_personName") %></span></td>
                             <td class="checkTd">
                                 <span onmouseover="tip_index=layer.tips('部门审批<br/>审批人：<%#Eval("uba_checkNum1")%>-<%#Eval("uba_checkName1")%><br/>审批备注：<%#Eval("uba_checkRemark1").ToString().Replace("\r\n","").Replace("\r","").Replace("\n","")%><br/>审批时间：<%#Eval("uba_checkTime1")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Eval("uba_flag1")%>"></span>
                                 <span onmouseover="tip_index=layer.tips('财务审批<br/>审批人：<%#Eval("uba_checkNum2")%>-<%#Eval("uba_checkName2")%><br/>审批备注：<%#Eval("uba_checkRemark2").ToString().Replace("\r\n","").Replace("\r","").Replace("\n","")%><br/>审批时间：<%#Eval("uba_checkTime2")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Eval("uba_flag2")%>"></span>

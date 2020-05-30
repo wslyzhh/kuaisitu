@@ -21,7 +21,7 @@ namespace MettingSys.Web.admin.finance
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _cusName = "", _cid = "", _oID = string.Empty, _area = string.Empty, _sforedate = string.Empty, _eforedate = string.Empty, _method = string.Empty, _person1 = "", _sdate = "", _edate = "";
+        protected string _cusName = "", _cid = "", _oID = string.Empty, _area = string.Empty, _sforedate = string.Empty, _eforedate = string.Empty, _method = string.Empty, _person1 = "", _sdate = "", _edate = "", _addperson = "";
         protected Model.manager manager = null;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -35,7 +35,7 @@ namespace MettingSys.Web.admin.finance
             _person1 = DTRequest.GetString("txtPerson1");
             _sdate = DTRequest.GetString("txtsdate");
             _edate = DTRequest.GetString("txtedate");
-
+            _addperson = DTRequest.GetString("txtAddPerson");
             manager = GetAdminInfo();
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
@@ -85,7 +85,7 @@ namespace MettingSys.Web.admin.finance
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("Receiptdetail_list.aspx", "page={0}&txtorderid={1}&txtsforedate={2}&txteforedate={3}&ddlmethod={4}&txtCusName={5}&hCusId={6}&ddlarea={7}&txtPerson1={8}&txtsdate={9}&txtedate={10}", "__id__", _oID, _sforedate, _eforedate, _method, _cusName, _cid, _area,_person1,_sdate,_edate);
+            string pageUrl = backUrl();
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
 
             pCount.Text = dt.Rows.Count.ToString();
@@ -156,6 +156,10 @@ namespace MettingSys.Web.admin.finance
             {
                 strTemp.Append(" and datediff(day,rp_date,'" + _edate + "')>=0 ");
             }
+            if (!string.IsNullOrEmpty(_addperson))
+            {
+                strTemp.Append(" and (rpd_personNum like '%" + _addperson + "%' or rpd_personName like '%" + _addperson + "%')");
+            }
             return strTemp.ToString();
         }
         #endregion
@@ -189,7 +193,13 @@ namespace MettingSys.Web.admin.finance
             _person1 = DTRequest.GetFormString("txtPerson1");
             _sdate = DTRequest.GetFormString("txtsdate");
             _edate = DTRequest.GetFormString("txtedate");
+            _addperson = DTRequest.GetFormString("txtAddPerson");
             RptBind("rpd_type=1" + CombSqlTxt(), "rpd_adddate desc,rpd_id desc");
+        }
+
+        private string backUrl()
+        {
+            return Utils.CombUrlTxt("Receiptdetail_list.aspx", "page={0}&txtorderid={1}&txtsforedate={2}&txteforedate={3}&ddlmethod={4}&txtCusName={5}&hCusId={6}&ddlarea={7}&txtPerson1={8}&txtsdate={9}&txtedate={10}&txtAddPerson={11}", "__id__", _oID, _sforedate, _eforedate, _method, _cusName, _cid, _area, _person1, _sdate, _edate, _addperson);
         }
 
         //设置分页数量
@@ -203,7 +213,7 @@ namespace MettingSys.Web.admin.finance
                     Utils.WriteCookie("receiptdetail_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("Receiptdetail_list.aspx", "page={0}&txtorderid={1}&txtsforedate={2}&txteforedate={3}&ddlmethod={4}&txtCusName={5}&hCusId={6}&ddlarea={7}&txtPerson1={8}&txtsdate={9}&txtedate={10}", "__id__", _oID, _sforedate, _eforedate, _method, _cusName, _cid, _area,_person1,_sdate,_edate));
+            Response.Redirect(backUrl());
         }
 
         //批量删除

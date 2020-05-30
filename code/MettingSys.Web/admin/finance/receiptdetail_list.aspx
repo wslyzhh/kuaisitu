@@ -114,7 +114,9 @@
             实收日期：
                         <asp:TextBox ID="txtsdate" runat="server" CssClass="input rule-date-input" Width="110" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
             -
-                        <asp:TextBox ID="txtedate" runat="server" CssClass="input rule-date-input" Width="110" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'txtsdate\')}'})" />
+                        <asp:TextBox ID="txtedate" runat="server" CssClass="input rule-date-input" Width="110" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'txtsdate\')}'})" />            
+            申请人：
+                            <asp:TextBox ID="txtAddPerson" runat="server" Width="100px" CssClass="input" />
         </div>
 
         <!--列表-->
@@ -149,7 +151,7 @@
                         <td class="moneyTd"><%#Eval("rpd_money")%></td>
                         <td><%# Convert.ToDateTime(Eval("rpd_foredate")).ToString("yyyy-MM-dd") %></td>
                         <td><%#Eval("pm_name")%></td>
-                        <td title="申请工号：<%# Eval("rpd_personNum") %>&#10;申请时间：<%#Eval("rpd_addDate")%>"><%# Eval("rpd_personName") %></td>
+                        <td style="color:#2A72C5;" title="申请工号：<%# Eval("rpd_personNum") %>&#10;申请时间：<%#Eval("rpd_addDate")%>"><%# Eval("rpd_personName") %></td>
                         <td><span onmouseover="tip_index=layer.tips('审批人：<%#Eval("rpd_checkNum1")%>-<%#Eval("rpd_checkName1")%><br/>审批备注：<%#Eval("rpd_checkRemark1").ToString().Replace("\r\n","").Replace("\r","").Replace("\n","")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Eval("rpd_flag1")%>"></span></td>
                         <td><%#Eval("rp_confirmerName")%></td>
                         <td><%# ConvertHelper.toDate(Eval("rp_date"))==null?"":Convert.ToDateTime(Eval("rp_date")).ToString("yyyy-MM-dd") %></td>

@@ -21,7 +21,7 @@ namespace MettingSys.Web.admin.finance
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _cusName = "", _cid = "", _method = string.Empty, _isconfirm = string.Empty, _sforedate = string.Empty, _eforedate = string.Empty, _sdate = string.Empty, _edate = string.Empty, _num = "", _chk = "", _numdate = "", _self = "",_moneyType="1", _sign = "", _money = "",_type="", _flag = "";
+        protected string _cusName = "", _cid = "", _method = string.Empty, _isconfirm = string.Empty, _sforedate = string.Empty, _eforedate = string.Empty, _sdate = string.Empty, _edate = string.Empty, _num = "", _chk = "", _numdate = "", _self = "", _moneyType = "1", _sign = "", _money = "", _type = "", _flag = "", _addperson = "";
         protected Model.business_log logmodel = null;
         protected Model.manager manager = null;
         decimal _tmoney = 0, _tunmoney = 0;
@@ -46,6 +46,7 @@ namespace MettingSys.Web.admin.finance
             _money = DTRequest.GetString("txtMoney");
             _type = DTRequest.GetString("ddlType");
             _flag = DTRequest.GetString("flag");
+            _addperson = DTRequest.GetString("txtAddPerson");
             if (string.IsNullOrEmpty(this._flag))
             {
                 this._flag = "0";
@@ -168,12 +169,13 @@ namespace MettingSys.Web.admin.finance
             ddlsign.SelectedValue = _sign;
             txtMoney.Text = _money;
             ddlmoneyType.SelectedValue = _moneyType;
+            txtAddPerson.Text = _addperson;
         }
         #endregion
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("receipt_list.aspx", "page={0}&ddlmethod={1}&ddlisConfirm={2}&txtsforedate={3}&txteforedate={4}&txtsdate={5}&txtedate={6}&txtNum={7}&txtCusName={8}&hCusId={9}&txtChk={10}&txtNumDate={11}&ddlsign={12}&txtmoney={13}&ddlmoneyType={14}&ddlType={15}", "__id__", _method, _isconfirm, _sforedate, _eforedate, _sdate, _edate, _num, _cusName, _cid, _chk, _numdate, _sign, _money, _moneyType, _type);
+            return Utils.CombUrlTxt("receipt_list.aspx", "page={0}&ddlmethod={1}&ddlisConfirm={2}&txtsforedate={3}&txteforedate={4}&txtsdate={5}&txtedate={6}&txtNum={7}&txtCusName={8}&hCusId={9}&txtChk={10}&txtNumDate={11}&ddlsign={12}&txtmoney={13}&ddlmoneyType={14}&ddlType={15}&txtAddPerson={16}", "__id__", _method, _isconfirm, _sforedate, _eforedate, _sdate, _edate, _num, _cusName, _cid, _chk, _numdate, _sign, _money, _moneyType, _type, _addperson);
         }
 
         #region 组合SQL查询语句==========================
@@ -254,6 +256,10 @@ namespace MettingSys.Web.admin.finance
             {
                 strTemp.Append(" and rp_isExpect='" + _type + "'");
             }
+            if (!string.IsNullOrEmpty(_addperson))
+            {
+                strTemp.Append(" and (rp_personNum like '%"+_addperson+ "%' or rp_personName like '%" + _addperson + "%')");
+            }
             return strTemp.ToString();
         }
         #endregion
@@ -293,6 +299,7 @@ namespace MettingSys.Web.admin.finance
             _money = DTRequest.GetFormString("txtMoney");
             _moneyType = DTRequest.GetFormString("ddlmoneyType");
             _type = DTRequest.GetFormString("ddlType");
+            _addperson = DTRequest.GetFormString("txtAddPerson");
             RptBind("rp_type=1 " + CombSqlTxt(), orderby);            
         }
 

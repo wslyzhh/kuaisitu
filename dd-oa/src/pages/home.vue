@@ -102,7 +102,6 @@ export default {
                 this.activeIndex = 0;
             }
         }, 5000);
-        //console.log('用户ID：'+ this.userInfo.id)
         this.powers = this.powerList.map(item => item.urp_code)
     },
     methods: {

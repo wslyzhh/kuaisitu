@@ -6,7 +6,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>F:\workspace\海南快思图商务会展有限公司\www</_PublishTargetUrl>
+    <_PublishTargetUrl>D:\www</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="admin/article/article_edit.aspx">
@@ -88,7 +88,7 @@
       <publishTime>04/27/2019 16:33:07</publishTime>
     </File>
     <File Include="admin/customer/bank_edit.aspx">
-      <publishTime>06/29/2019 19:45:06</publishTime>
+      <publishTime>04/15/2020 22:40:38</publishTime>
     </File>
     <File Include="admin/customer/contact_edit.aspx">
       <publishTime>05/24/2019 01:37:55</publishTime>
@@ -97,7 +97,7 @@
       <publishTime>09/23/2019 21:54:00</publishTime>
     </File>
     <File Include="admin/customer/customer_list.aspx">
-      <publishTime>08/13/2019 14:46:21</publishTime>
+      <publishTime>12/28/2019 13:32:45</publishTime>
     </File>
     <File Include="admin/customer/customer_merge.aspx">
       <publishTime>05/28/2019 10:10:41</publishTime>
@@ -136,91 +136,91 @@
       <publishTime>04/15/2019 08:34:36</publishTime>
     </File>
     <File Include="admin/finance/bank_edit.aspx">
-      <publishTime>05/28/2019 10:11:01</publishTime>
+      <publishTime>12/28/2019 13:32:54</publishTime>
     </File>
     <File Include="admin/finance/bank_list.aspx">
-      <publishTime>06/25/2019 10:11:47</publishTime>
+      <publishTime>12/28/2019 13:32:59</publishTime>
     </File>
     <File Include="admin/finance/certificate_edit.aspx">
       <publishTime>05/28/2019 00:22:36</publishTime>
     </File>
     <File Include="admin/finance/certificate_list.aspx">
-      <publishTime>09/16/2019 20:40:35</publishTime>
+      <publishTime>04/22/2020 20:46:52</publishTime>
     </File>
     <File Include="admin/finance/finance_chk.aspx">
       <publishTime>06/25/2019 14:27:18</publishTime>
     </File>
     <File Include="admin/finance/finance_edit.aspx">
-      <publishTime>07/11/2019 14:56:29</publishTime>
+      <publishTime>12/28/2019 13:33:05</publishTime>
     </File>
     <File Include="admin/finance/finance_list.aspx">
-      <publishTime>10/09/2019 06:51:04</publishTime>
+      <publishTime>04/22/2020 20:15:44</publishTime>
     </File>
     <File Include="admin/finance/FinancialClosing.aspx">
       <publishTime>07/04/2019 14:44:04</publishTime>
     </File>
     <File Include="admin/finance/FinancialCustomerDetail.aspx">
-      <publishTime>07/08/2019 09:36:45</publishTime>
+      <publishTime>05/16/2020 09:38:50</publishTime>
     </File>
     <File Include="admin/finance/FinancialOrderDetail.aspx">
-      <publishTime>07/08/2019 09:49:46</publishTime>
+      <publishTime>05/16/2020 12:46:04</publishTime>
     </File>
     <File Include="admin/finance/invoice_edit.aspx">
-      <publishTime>09/27/2019 23:00:51</publishTime>
+      <publishTime>12/28/2019 13:33:30</publishTime>
     </File>
     <File Include="admin/finance/invoice_list.aspx">
-      <publishTime>10/26/2019 23:13:24</publishTime>
+      <publishTime>05/23/2020 17:00:17</publishTime>
     </File>
     <File Include="admin/finance/orderApproval_list.aspx">
-      <publishTime>06/25/2019 10:16:04</publishTime>
+      <publishTime>04/22/2020 21:08:29</publishTime>
     </File>
     <File Include="admin/finance/payCertification.aspx">
-      <publishTime>06/24/2019 00:12:58</publishTime>
+      <publishTime>04/15/2020 22:51:07</publishTime>
     </File>
     <File Include="admin/finance/paydetailcollect.aspx">
-      <publishTime>10/29/2019 20:07:41</publishTime>
+      <publishTime>04/11/2020 11:12:48</publishTime>
     </File>
     <File Include="admin/finance/paydetail_edit.aspx">
-      <publishTime>10/29/2019 21:41:57</publishTime>
+      <publishTime>04/20/2020 22:15:38</publishTime>
     </File>
     <File Include="admin/finance/paydetail_list.aspx">
-      <publishTime>10/26/2019 23:07:00</publishTime>
+      <publishTime>05/30/2020 07:41:43</publishTime>
     </File>
     <File Include="admin/finance/pay_edit.aspx">
-      <publishTime>10/29/2019 21:45:20</publishTime>
+      <publishTime>04/19/2020 16:57:16</publishTime>
     </File>
     <File Include="admin/finance/pay_list.aspx">
-      <publishTime>10/10/2019 22:48:43</publishTime>
+      <publishTime>05/17/2020 07:32:02</publishTime>
     </File>
     <File Include="admin/finance/receiptdetail_edit.aspx">
-      <publishTime>10/29/2019 21:42:10</publishTime>
+      <publishTime>12/28/2019 13:34:30</publishTime>
     </File>
     <File Include="admin/finance/receiptdetail_list.aspx">
-      <publishTime>10/26/2019 22:50:37</publishTime>
+      <publishTime>05/30/2020 07:41:12</publishTime>
     </File>
     <File Include="admin/finance/receipt_edit.aspx">
-      <publishTime>10/29/2019 21:45:28</publishTime>
+      <publishTime>12/28/2019 13:34:17</publishTime>
     </File>
     <File Include="admin/finance/receipt_list.aspx">
-      <publishTime>10/26/2019 22:50:48</publishTime>
+      <publishTime>05/27/2020 22:48:47</publishTime>
     </File>
     <File Include="admin/finance/ReconciliationBill.aspx">
-      <publishTime>07/18/2019 09:02:11</publishTime>
+      <publishTime>12/10/2019 20:52:57</publishTime>
     </File>
     <File Include="admin/finance/ReconciliationDetail.aspx">
-      <publishTime>10/23/2019 21:30:09</publishTime>
+      <publishTime>05/17/2020 07:32:23</publishTime>
     </File>
     <File Include="admin/finance/ReconciliationSearch.aspx">
-      <publishTime>06/25/2019 10:20:51</publishTime>
+      <publishTime>05/16/2020 13:21:25</publishTime>
     </File>
     <File Include="admin/finance/rpDistribution.aspx">
-      <publishTime>08/28/2019 22:41:16</publishTime>
+      <publishTime>04/24/2020 20:53:22</publishTime>
     </File>
     <File Include="admin/finance/settleCustomer.aspx">
-      <publishTime>06/25/2019 10:26:58</publishTime>
+      <publishTime>04/28/2020 22:06:45</publishTime>
     </File>
     <File Include="admin/finance/settleCustomerDetail.aspx">
-      <publishTime>07/08/2019 09:04:30</publishTime>
+      <publishTime>04/28/2020 22:09:25</publishTime>
     </File>
     <File Include="admin/finance_nature.aspx">
       <publishTime>06/10/2019 11:37:13</publishTime>
@@ -229,13 +229,13 @@
       <publishTime>04/15/2019 08:34:36</publishTime>
     </File>
     <File Include="admin/index.aspx">
-      <publishTime>04/15/2019 08:34:38</publishTime>
+      <publishTime>12/20/2019 10:26:55</publishTime>
     </File>
     <File Include="admin/js/antocomplete/autocomplete.css">
       <publishTime>04/27/2019 16:51:54</publishTime>
     </File>
     <File Include="admin/js/antocomplete/jquery.autocomplete.js">
-      <publishTime>05/28/2019 10:45:09</publishTime>
+      <publishTime>04/19/2020 16:44:13</publishTime>
     </File>
     <File Include="admin/js/common.js">
       <publishTime>07/18/2019 11:43:07</publishTime>
@@ -265,10 +265,10 @@
       <publishTime>05/21/2019 11:17:14</publishTime>
     </File>
     <File Include="admin/manage/manager_edit.aspx">
-      <publishTime>07/18/2019 15:27:58</publishTime>
+      <publishTime>05/13/2020 22:32:56</publishTime>
     </File>
     <File Include="admin/manage/manager_list.aspx">
-      <publishTime>08/24/2019 07:46:29</publishTime>
+      <publishTime>05/19/2020 23:28:18</publishTime>
     </File>
     <File Include="admin/manage/permission_edit.aspx">
       <publishTime>05/22/2019 11:12:07</publishTime>
@@ -304,19 +304,19 @@
       <publishTime>04/15/2019 08:34:38</publishTime>
     </File>
     <File Include="admin/message.xml">
-      <publishTime>10/21/2019 23:00:55</publishTime>
+      <publishTime>11/22/2019 21:46:43</publishTime>
     </File>
     <File Include="admin/order/mutliFinance.aspx">
-      <publishTime>07/18/2019 17:24:05</publishTime>
+      <publishTime>12/28/2019 13:35:02</publishTime>
     </File>
     <File Include="admin/order/mutliSharing.aspx">
       <publishTime>07/17/2019 09:06:01</publishTime>
     </File>
     <File Include="admin/order/order_edit.aspx">
-      <publishTime>10/29/2019 21:41:34</publishTime>
+      <publishTime>05/16/2020 13:58:45</publishTime>
     </File>
     <File Include="admin/order/order_list.aspx">
-      <publishTime>10/23/2019 21:18:59</publishTime>
+      <publishTime>04/22/2020 20:08:27</publishTime>
     </File>
     <File Include="admin/order/order_place.aspx">
       <publishTime>05/28/2019 00:22:13</publishTime>
@@ -325,19 +325,19 @@
       <publishTime>05/23/2019 16:47:59</publishTime>
     </File>
     <File Include="admin/selectEmployee.aspx">
-      <publishTime>07/18/2019 12:16:22</publishTime>
+      <publishTime>11/28/2019 09:14:28</publishTime>
     </File>
     <File Include="admin/self/selfFinance_list.aspx">
-      <publishTime>07/29/2019 21:23:21</publishTime>
+      <publishTime>04/22/2020 21:18:38</publishTime>
     </File>
     <File Include="admin/self/selfMessage.aspx">
-      <publishTime>07/30/2019 14:37:04</publishTime>
+      <publishTime>11/23/2019 22:15:58</publishTime>
     </File>
     <File Include="admin/self/selfMessage_edit.aspx">
       <publishTime>04/19/2019 10:42:28</publishTime>
     </File>
     <File Include="admin/self/selfReceipt_list.aspx">
-      <publishTime>07/29/2019 21:22:58</publishTime>
+      <publishTime>04/22/2020 21:22:33</publishTime>
     </File>
     <File Include="admin/settings/builder_html.aspx">
       <publishTime>04/15/2019 08:34:36</publishTime>
@@ -388,7 +388,7 @@
       <publishTime>05/13/2019 13:02:08</publishTime>
     </File>
     <File Include="admin/skin/default/style.css">
-      <publishTime>07/08/2019 07:49:04</publishTime>
+      <publishTime>04/27/2020 22:45:55</publishTime>
     </File>
     <File Include="admin/skin/default/valid_icons.png">
       <publishTime>04/15/2019 08:34:37</publishTime>
@@ -427,25 +427,28 @@
       <publishTime>04/15/2019 08:34:37</publishTime>
     </File>
     <File Include="admin/statistic/AchievementStatistic_list.aspx">
-      <publishTime>10/22/2019 22:42:47</publishTime>
+      <publishTime>03/17/2020 00:14:41</publishTime>
     </File>
     <File Include="admin/statistic/AreaAchievementStatistic_list.aspx">
-      <publishTime>09/27/2019 22:13:58</publishTime>
+      <publishTime>03/18/2020 19:39:57</publishTime>
     </File>
     <File Include="admin/statistic/ExpendAnalyze_list.aspx">
-      <publishTime>07/18/2019 08:55:40</publishTime>
+      <publishTime>04/22/2020 21:15:41</publishTime>
     </File>
     <File Include="admin/statistic/OrderAnalyze_list.aspx">
-      <publishTime>10/15/2019 23:16:16</publishTime>
+      <publishTime>05/16/2020 13:18:12</publishTime>
     </File>
     <File Include="admin/statistic/RevenueAnalysis_list.aspx">
-      <publishTime>06/27/2019 18:05:13</publishTime>
+      <publishTime>04/22/2020 21:12:53</publishTime>
+    </File>
+    <File Include="admin/unBusiness/printCertificate.aspx">
+      <publishTime>12/26/2019 09:34:25</publishTime>
     </File>
     <File Include="admin/unBusiness/unBusinessPay_edit.aspx">
       <publishTime>07/30/2019 20:17:41</publishTime>
     </File>
     <File Include="admin/unBusiness/unBusinessPay_list.aspx">
-      <publishTime>10/22/2019 22:10:17</publishTime>
+      <publishTime>05/30/2020 07:40:25</publishTime>
     </File>
     <File Include="admin/users/amount_log.aspx">
       <publishTime>04/15/2019 08:34:36</publishTime>
@@ -565,61 +568,61 @@
       <publishTime>04/15/2019 08:34:21</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>10/29/2019 23:16:33</publishTime>
+      <publishTime>05/30/2020 07:54:17</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>10/29/2019 23:16:33</publishTime>
+      <publishTime>05/30/2020 07:54:17</publishTime>
     </File>
     <File Include="bin/ICSharpCode.SharpZipLib.dll">
       <publishTime>08/15/2018 17:16:34</publishTime>
     </File>
     <File Include="bin/MettingSys.API.dll">
-      <publishTime>10/22/2019 22:46:09</publishTime>
+      <publishTime>05/30/2020 07:54:11</publishTime>
     </File>
     <File Include="bin/MettingSys.API.pdb">
-      <publishTime>10/22/2019 22:46:09</publishTime>
+      <publishTime>05/30/2020 07:54:11</publishTime>
     </File>
     <File Include="bin/MettingSys.BLL.dll">
-      <publishTime>10/22/2019 22:46:08</publishTime>
+      <publishTime>05/30/2020 07:54:10</publishTime>
     </File>
     <File Include="bin/MettingSys.BLL.pdb">
-      <publishTime>10/22/2019 22:46:08</publishTime>
+      <publishTime>05/30/2020 07:54:10</publishTime>
     </File>
     <File Include="bin/MettingSys.Common.dll">
-      <publishTime>10/08/2019 06:53:55</publishTime>
+      <publishTime>05/12/2020 07:37:17</publishTime>
     </File>
     <File Include="bin/MettingSys.Common.pdb">
-      <publishTime>10/08/2019 06:53:55</publishTime>
+      <publishTime>05/12/2020 07:37:17</publishTime>
     </File>
     <File Include="bin/MettingSys.DAL.dll">
-      <publishTime>10/22/2019 22:46:07</publishTime>
+      <publishTime>05/26/2020 12:31:24</publishTime>
     </File>
     <File Include="bin/MettingSys.DAL.pdb">
-      <publishTime>10/22/2019 22:46:07</publishTime>
+      <publishTime>05/26/2020 12:31:24</publishTime>
     </File>
     <File Include="bin/MettingSys.DBUtility.dll">
-      <publishTime>10/08/2019 06:53:56</publishTime>
+      <publishTime>05/12/2020 07:37:18</publishTime>
     </File>
     <File Include="bin/MettingSys.DBUtility.pdb">
-      <publishTime>10/08/2019 06:53:56</publishTime>
+      <publishTime>05/12/2020 07:37:18</publishTime>
     </File>
     <File Include="bin/MettingSys.Model.dll">
-      <publishTime>10/10/2019 23:50:55</publishTime>
+      <publishTime>05/12/2020 07:37:17</publishTime>
     </File>
     <File Include="bin/MettingSys.Model.pdb">
-      <publishTime>10/10/2019 23:50:55</publishTime>
+      <publishTime>05/12/2020 07:37:17</publishTime>
     </File>
     <File Include="bin/MettingSys.Web.dll">
-      <publishTime>10/29/2019 23:16:24</publishTime>
+      <publishTime>05/30/2020 07:54:12</publishTime>
     </File>
     <File Include="bin/MettingSys.Web.pdb">
-      <publishTime>10/29/2019 23:16:24</publishTime>
+      <publishTime>05/30/2020 07:54:12</publishTime>
     </File>
     <File Include="bin/MettingSys.Web.UI.dll">
-      <publishTime>10/22/2019 22:46:09</publishTime>
+      <publishTime>05/30/2020 07:54:11</publishTime>
     </File>
     <File Include="bin/MettingSys.Web.UI.pdb">
-      <publishTime>10/22/2019 22:46:09</publishTime>
+      <publishTime>05/30/2020 07:54:11</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.SignalR.Core.dll">
       <publishTime>04/03/2019 00:30:56</publishTime>
@@ -2106,8 +2109,20 @@
     <File Include="main.aspx">
       <publishTime>10/09/2019 23:51:11</publishTime>
     </File>
+    <File Include="plugins/Lodop/CLodop_Setup_for_Win32NT.zip">
+      <publishTime>12/17/2019 16:48:58</publishTime>
+    </File>
+    <File Include="plugins/Lodop/install_lodop.exe">
+      <publishTime>12/17/2019 20:25:45</publishTime>
+    </File>
+    <File Include="plugins/Lodop/LodopFuncs.js">
+      <publishTime>12/17/2019 20:59:09</publishTime>
+    </File>
+    <File Include="plugins/Lodop/npActiveX0712SFx31.xpi">
+      <publishTime>12/17/2019 20:26:18</publishTime>
+    </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>10/29/2019 23:16:29</publishTime>
+      <publishTime>05/30/2020 07:54:15</publishTime>
     </File>
     <File Include="scripts/artdialog/dialog-min.js">
       <publishTime>04/15/2019 08:34:34</publishTime>
@@ -2602,13 +2617,13 @@
       <publishTime>04/15/2019 08:34:21</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/10/2019 23:50:59</publishTime>
+      <publishTime>05/27/2020 22:01:58</publishTime>
     </File>
     <File Include="xmlconfig/order.config">
       <publishTime>04/15/2019 08:34:21</publishTime>
     </File>
     <File Include="xmlconfig/sys.config">
-      <publishTime>10/23/2019 07:04:56</publishTime>
+      <publishTime>11/12/2019 21:08:17</publishTime>
     </File>
     <File Include="xmlconfig/urls.config">
       <publishTime>04/15/2019 08:34:21</publishTime>

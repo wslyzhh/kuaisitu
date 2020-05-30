@@ -368,6 +368,8 @@
                                 <asp:ListItem Value="False">非预收款</asp:ListItem>
                             </asp:DropDownList>
                         </div>
+            申请人：
+                            <asp:TextBox ID="txtAddPerson" runat="server" Width="100px" CssClass="input" />
         </div>
         <!--列表-->
         <div class="table-container">

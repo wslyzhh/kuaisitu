@@ -404,7 +404,7 @@ namespace MettingSys.DAL
         public int getUnAduitOrder(string area)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select count(*) from MS_Order left join MS_OrderPerson on o_id = op_oid and op_type=1 where o_isPush='True' and o_flag=0 and o_lockStatus='False' and op_area=@area");
+            strSql.Append("select count(*) from MS_Order left join MS_OrderPerson on o_id = op_oid and op_type=1 where o_isPush='True' and o_flag=0 and o_lockStatus='0' and op_area=@area");
             SqlParameter[] parameters = {
                     new SqlParameter("@area", SqlDbType.VarChar,11)};
             parameters[0].Value = area;

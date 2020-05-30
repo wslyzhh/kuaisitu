@@ -300,8 +300,8 @@ namespace MettingSys.BLL
                 {
                     return "部门审批已通过，不能再编辑";
                 }
-                //编辑后清空审批内容
-                if (model.rpd_flag1 == 1 || model.rpd_flag2 == 1 || model.rpd_flag3 == 1)
+                //编辑后清空审批内容,如果只是修改付款方式则不需要情况 2020-05-30
+                if ((model.rpd_flag1 == 1 || model.rpd_flag2 == 1 || model.rpd_flag3 == 1) && !updateMethod)
                 {
                     model.rpd_flag1 = 0;
                     model.rpd_checkNum1 = "";
