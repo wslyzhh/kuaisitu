@@ -47,18 +47,18 @@ namespace MettingSys.Web.admin.finance
             {
                 if (_tag != "0")
                 {
-                    _smonth = _defaultMonth;
-                    _emonth = _defaultMonth;
+                    if (string.IsNullOrEmpty(_smonth))
+                    {
+                        _smonth = _defaultMonth;
+                    }
+                    if (string.IsNullOrEmpty(_emonth))
+                    {
+                        _emonth = _defaultMonth;
+                    }
                 }
                 InitData();
                 RptBind();
             }
-            txtsDate.Text = _smonth;
-            txteDate.Text = _emonth;
-            ddltype.SelectedValue = _type;
-            hCusId.Value = _cid;
-            txtCusName.Text = _cusName;
-            ddlarea.SelectedValue = _area;
         }
         #region 初始化数据=================================
         private void InitData()
@@ -146,6 +146,13 @@ namespace MettingSys.Web.admin.finance
             tCount.Text = totalCount.ToString();
             tMoney1.Text = _tmoney1.ToString();
             tMoney2.Text = _tmoney2.ToString();
+
+            txtsDate.Text = _smonth;
+            txteDate.Text = _emonth;
+            ddltype.SelectedValue = _type;
+            hCusId.Value = _cid;
+            txtCusName.Text = _cusName;
+            ddlarea.SelectedValue = _area;
         }
         #endregion
         #region 返回每页数量=============================
@@ -184,12 +191,6 @@ namespace MettingSys.Web.admin.finance
             _cid = DTRequest.GetFormString("hCusId");
             _area = DTRequest.GetFormString("ddlarea");
             RptBind();
-            txtsDate.Text = _smonth;
-            txteDate.Text = _emonth;
-            ddltype.SelectedValue = _type;
-            hCusId.Value = _cid;
-            txtCusName.Text = _cusName;
-            ddlarea.SelectedValue = _area;
         }
 
         protected void btnExcel_Click(object sender, EventArgs e)

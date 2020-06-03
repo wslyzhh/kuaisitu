@@ -303,47 +303,65 @@ namespace MettingSys.BLL
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count>0)
             {
                 int n = 0, num = 0;
-                string numStr = string.Empty;
+                string nextNum = string.Empty;
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     n = Utils.ObjToInt(Utils.ObjectToStr(ds.Tables[0].Rows[i]["user_name"]).Substring(2));
-                    if (n != i + 1)
+                    //下一个工号
+                    nextNum = getUsernameByNum(n + 1, area);
+
+                    if (ds.Tables[0].Select("user_name='" + nextNum + "'").Length > 0)
                     {
-                        num = i + 1;                        
+                        continue;
                     }
                     else
                     {
-                        //最后一个也没匹配，则在最后一个上加1生成新的工号
-                        if (i == ds.Tables[0].Rows.Count-1 && string.IsNullOrEmpty(username))
-                        {
-                            n = Utils.ObjToInt(Utils.ObjectToStr(ds.Tables[0].Rows[i]["user_name"]).Substring(2));
-                            num = n + 1;
-                        }
-                    }
-                    if (num != 0)
-                    {
-                        if (num.ToString().Length == 1)
-                        {
-                            numStr = "00" + num;
-                        }
-                        else if (num.ToString().Length == 2)
-                        {
-                            numStr = "0" + num;
-                        }
-                        else
-                        {
-                            numStr = num.ToString();
-                        }
-                        username = area + numStr;
+                        num = n + 1;
                         break;
                     }
+                    //if (n != i + 1)
+                    //{
+                    //    num = i + 1;                        
+                    //}
+                    //else
+                    //{
+                    //    //最后一个也没匹配，则在最后一个上加1生成新的工号
+                    //    if (i == ds.Tables[0].Rows.Count-1 && string.IsNullOrEmpty(username))
+                    //    {
+                    //        n = Utils.ObjToInt(Utils.ObjectToStr(ds.Tables[0].Rows[i]["user_name"]).Substring(2));
+                    //        num = n + 1;
+                    //    }
+                    //}
                 }
+                username = getUsernameByNum(num, area);
             }
             if (string.IsNullOrEmpty(username)) return area + "001";
 
             return username;
         }
-        
+
+        public string getUsernameByNum(int num,string area)
+        {
+            if (string.IsNullOrEmpty(area)) return "";
+            string numStr = "";
+            if (num != 0)
+            {
+                if (num.ToString().Length == 1)
+                {
+                    numStr = "00" + num;
+                }
+                else if (num.ToString().Length == 2)
+                {
+                    numStr = "0" + num;
+                }
+                else
+                {
+                    numStr = num.ToString();
+                }
+                return area + numStr;
+            }
+            return area + "001";
+        }
 
         /// <summary>
         /// 根据岗位ID返回完整的岗位描述

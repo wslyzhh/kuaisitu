@@ -1,4 +1,4 @@
-﻿using MettingSys.Common;
+﻿ using MettingSys.Common;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
@@ -46,16 +46,18 @@ namespace MettingSys.Web.admin.finance
             {
                 if (_tag != "0")
                 {
-                    _smonth = _defaultMonth;
-                    _emonth = _defaultMonth;
+                    if (string.IsNullOrEmpty(_smonth))
+                    {
+                        _smonth = _defaultMonth;
+                    }
+                    if (string.IsNullOrEmpty(_emonth))
+                    {
+                        _emonth = _defaultMonth;
+                    }
                 }
                 InitData();
                 RptBind();
             }
-            txtsDate.Text = _smonth;
-            txteDate.Text = _emonth;
-            ddltype.SelectedValue = _type;
-            ddlarea.SelectedValue = _area;
         }
         #region 初始化数据=================================
         private void InitData()
@@ -113,7 +115,7 @@ namespace MettingSys.Web.admin.finance
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("FinancialCustomerDetail.aspx", "txtsDate={0}&txteDate={1}&ddltype={2}&page={3}&ddlarea={4}", _smonth, _emonth, _type, "__id__",_area);
+            string pageUrl = backUrl();
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
 
             pCount.Text = dt.Rows.Count.ToString();
@@ -137,6 +139,12 @@ namespace MettingSys.Web.admin.finance
             tCount.Text = totalCount.ToString();
             tMoney1.Text = _tmoney1.ToString();
             tMoney2.Text = _tmoney2.ToString();
+
+
+            txtsDate.Text = _smonth;
+            txteDate.Text = _emonth;
+            ddltype.SelectedValue = _type;
+            ddlarea.SelectedValue = _area;
         }
         #endregion
         #region 返回每页数量=============================
@@ -164,8 +172,14 @@ namespace MettingSys.Web.admin.finance
                     Utils.WriteCookie("FinancialCustomerDetail_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("FinancialCustomerDetail.aspx", "txtsDate={0}&txteDate={1}&ddltype={2}&page={3}&ddlarea={4}", _smonth, _emonth, _type, "__id__", _area));
+            Response.Redirect(backUrl());
         }
+
+        private string backUrl()
+        {
+            return Utils.CombUrlTxt("FinancialCustomerDetail.aspx", "page={0}&txtsDate={1}&txteDate={2}&ddltype={3}&ddlarea={4}", "__id__", _smonth, _emonth, _type,_area);
+        }
+
         protected void btnSearch_Click(object sender, EventArgs e)
         {
             this.isSearch = true;
@@ -174,10 +188,6 @@ namespace MettingSys.Web.admin.finance
             _type = DTRequest.GetFormString("ddltype");
             _area = DTRequest.GetFormString("ddlarea");
             RptBind();
-            txtsDate.Text = _smonth;
-            txteDate.Text = _emonth;
-            ddltype.SelectedValue = _type;
-            ddlarea.SelectedValue = _area;
         }
 
         protected void btnExcel_Click(object sender, EventArgs e)
