@@ -118,6 +118,13 @@
                         </div>
                 业务员：
                     <asp:TextBox ID="txtPerson1" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>
+                分组显示：
+                    <div class="rule-single-select">
+                        <asp:DropDownList ID="ddlGroup" runat="server">
+                            <asp:ListItem Value="1">应收付对象</asp:ListItem>
+                            <asp:ListItem Value="2">业务员</asp:ListItem>
+                        </asp:DropDownList>
+                    </div>
                 <input type="hidden" name="tag" value="<%=_tag %>" />
                 <input type="hidden" name="self" value="<%=_self %>" />
                 <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
@@ -156,7 +163,34 @@
                 </ItemTemplate>
                 <FooterTemplate>
                     <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"9\">暂无记录</td></tr>" : ""%>
-  </table>
+                </table>
+                </FooterTemplate>
+            </asp:Repeater>
+            <asp:Repeater ID="rptPersonList" runat="server">
+                <HeaderTemplate>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
+                        <tr style="text-align: left;">
+                            <th width="15%">业务员</th>
+                            <th width="8%">收付类别</th>
+                            <th width="10%">应收付款</th>
+                            <th width="10%">订单已收付款</th>
+                            <th width="10%">未收付款</th>
+                            <th>操作</th>
+                        </tr>
+                </HeaderTemplate>
+                <ItemTemplate>
+                    <tr>
+                        <td><%# Eval("op_number") %>(<%# Eval("op_name") %>)</td>
+                        <td><%#Eval("fin_type").ToString()=="True"?"<font color='blue'>收</font>":"<font color='red'>付</font>"%></td>
+                        <td><%# Eval("orderFinMoney") %></td>
+                        <td><%# Eval("orderRpdMoney") %></td>
+                        <td><%# Eval("orderUnMoney")%></td>
+                        <td><a href="settleCustomerDetail.aspx?&ddltype=<%#Eval("fin_type")%>&txtsDate=<%=_sdate %>&txteDate=<%=_edate %>&txtsDate1=<%=_sdate1 %>&txteDate1=<%=_edate1 %>&ddlstatus=<%=_status %>&ddlsign=<%=_sign %>&txtMoney1=<%=_money1 %>&self=<%=_self %>&ddllock=<%=_lockstatus %>&ddlarea=<%=_area %>&txtPerson1=<%# Eval("op_number") %>&ddlGroup=1">明细</a></td>
+                    </tr>
+                </ItemTemplate>
+                <FooterTemplate>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"6\">暂无记录</td></tr>" : ""%>
+                </table>
                 </FooterTemplate>
             </asp:Repeater>
         </div>

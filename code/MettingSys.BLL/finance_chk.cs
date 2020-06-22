@@ -20,6 +20,10 @@ namespace MettingSys.BLL
         {
             return dal.GetModel(id);
         }
+        public bool Update(Model.finance_chk model)
+        {
+            return dal.Update(model);
+        }
         /// <summary>
         /// 对账
         /// </summary>
@@ -67,7 +71,7 @@ namespace MettingSys.BLL
             {
                 dal.DeleteByFinid(fin_id.Value);
             }
-            bool result = fcid > 0 ? dal.Update(model) : dal.Add(model) > 0;
+            bool result = fcid > 0 ? Update(model) : dal.Add(model) > 0;
             if (result)
             {
 
@@ -83,6 +87,52 @@ namespace MettingSys.BLL
             return "对账失败";
         }
 
+        /// <summary>
+        /// 修改对账标识
+        /// </summary>
+        /// <param name="fc_id"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public string updateChk(int fcid, string num, Model.manager manager)
+        {
+            if (!new BLL.permission().checkHasPermission(manager, "0406"))
+            {
+                return "无权限操作";
+            }
+            if (string.IsNullOrEmpty(num))
+            {
+                return "对账标识不能为空";
+            }
+            DataSet ds = GetList(0, "fc_id = " + fcid + "", "fc_id");
+            StringBuilder content = new StringBuilder();            
+            if (ds==null || ds.Tables[0].Rows.Count == 0)
+            {
+                return "找不到数据";
+            }
+            DataRow dr = ds.Tables[0].Rows[0];
+            if (Utils.ObjectToStr(dr["fc_num"]) == num)
+            {
+                return "对账标识未改变";
+            }
+            content.Append("对账标识：" + Utils.ObjectToStr(dr["fc_num"]) + "→<font color='red'>" + num + "</font><br/>");
+            if (new BLL.ReceiptPayDetail().Exists(Utils.ObjectToStr(dr["fc_oid"]), Utils.ObjectToStr(dr["fc_num"]), Utils.ObjToInt(dr["fin_cid"],0))) {
+                return "存在已分配款，不能修改对账标识";
+            }
+            Model.finance_chk model = new BLL.finance_chk().GetModel(fcid);
+            model.fc_num = num;
+            if (Update(model))
+            {
+                Model.business_log logmodel = new Model.business_log();
+                logmodel.ol_relateID = fcid;
+                logmodel.ol_oid = model.fc_oid;
+                logmodel.ol_title = "修改对账标识";
+                logmodel.ol_content = content.ToString();
+                logmodel.ol_operateDate = DateTime.Now;
+                new business_log().Add(DTEnums.ActionEnum.Add.ToString(), logmodel, manager.user_name, manager.real_name); //记录日志
+                return "";
+            }
+            return "修改失败";
+        }
         /// <summary>
         /// 删除对账
         /// </summary>

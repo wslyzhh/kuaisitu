@@ -166,7 +166,6 @@ namespace MettingSys.Web.tools
                 #endregion
 
                 #region 订单管理
-
                 case "order_list": //查看订单列表
                     order_list(context);
                     break;
@@ -206,14 +205,12 @@ namespace MettingSys.Web.tools
                 case "unbusinesspay_confirm_pay": //业务支付申请支付确认
                     unbusinesspay_confirm_pay(context);
                     break;
-
                 case "finance_add": //新增收款通知\付款通知
                     finance_add(context);
                     break;
                 case "finance_audit": //审核业务
                     finance_audit(context);
                     break;
-
                 case "invoice_list": //发票申请列表
                     invoice_list(context);
                     break;
@@ -232,7 +229,6 @@ namespace MettingSys.Web.tools
                 case "invoice_add": //新增发票申请
                     invoice_add(context);
                     break;
-
                 case "pay_list": //业务支付审核分页列表
                     pay_list(context);
                     break;
@@ -250,6 +246,18 @@ namespace MettingSys.Web.tools
                     break;
                 case "getBank"://获取客户银行账号
                     get_bank(context);
+                    break;
+                case "getSettlementlist"://获取订单结算汇总数据
+                    get_settlementlist(context);
+                    break;
+                case "getInvoiceList"://获取订单发票申请汇总
+                    get_InvoiceList(context);
+                    break;
+                case "getunBusinessList"://获取执行备用金借款明细
+                    get_unBusinessList(context);
+                    break;
+                case "getunBusinessPic"://获取执行备用金借款明细的附件
+                    get_unBusinessPic(context);
                     break;
                 #endregion
 
@@ -3006,6 +3014,219 @@ namespace MettingSys.Web.tools
             }
         }
 
+        /// <summary>
+        /// 订单结算汇总数据
+        /// </summary>
+        /// <param name="context"></param>
+        private void get_settlementlist(HttpContext context)
+        {
+            try
+            {
+                get_params(context, out jObject);
+                if (jObject["managerid"] == null || string.IsNullOrWhiteSpace(jObject["managerid"].ToString()) || !int.TryParse(jObject["managerid"].ToString(), out int managerid))
+                {
+                    context.Response.Write("{\"status\": 0, \"msg\": \"KeyIsNullOrError\"}");
+                    return;
+                }
+                Model.manager managerModel = new BLL.manager().GetModel(managerid);
+                if (managerModel == null)
+                {
+                    context.Response.Write("{\"status\": 0, \"msg\": \"ManageridIsNullOrError\"}");
+                    return;
+                }
+                string oid = Utils.ObjectToStr(jObject["oid"]);
+                DataTable dt = new BLL.Order().getOrderCollect(oid);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    decimal? finProfit = 0, fin1 = 0, fin0 = 0;
+                    foreach (DataRow inv in dt.Rows)
+                    {
+                        finProfit += Utils.StrToDecimal(inv["profit"].ToString(), 0);
+                        if (inv["fin_type"].ToString() == "True")
+                        {
+                            fin1 += Utils.StrToDecimal(inv["finMoney"].ToString(), 0);
+                        }
+                        else
+                        {
+                            fin0 += Utils.StrToDecimal(inv["finMoney"].ToString(), 0);
+                        }
+                    }
+                    context.Response.Write("{\"status\": 1,\"fin1\": "+ fin1 + ",\"fin0\": " + fin0 + ",\"finProfit\": " + finProfit + ",\"finCust\": " + Utils.StrToDecimal(dt.Rows[0]["o_financeCust"].ToString(), 0) + ",\"Profit\": " + (finProfit- Utils.StrToDecimal(dt.Rows[0]["o_financeCust"].ToString(), 0)) + ",\"list\":" + JArray.FromObject(dt) + "}");
+                    return;
+                }
+                context.Response.Write("{\"status\": 1,\"list\":[]}");
+                return;
+            }
+            catch (Exception ex)
+            {
+                context.Response.Write("{\"status\": 0, \"msg\": \"" + ex.Message + "\"}");
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 订单发票数据
+        /// </summary>
+        /// <param name="context"></param>
+        private void get_InvoiceList(HttpContext context)
+        {
+            try
+            {
+                get_params(context, out jObject);
+                if (jObject["managerid"] == null || string.IsNullOrWhiteSpace(jObject["managerid"].ToString()) || !int.TryParse(jObject["managerid"].ToString(), out int managerid))
+                {
+                    context.Response.Write("{\"status\": 0, \"msg\": \"KeyIsNullOrError\"}");
+                    return;
+                }
+                Model.manager managerModel = new BLL.manager().GetModel(managerid);
+                if (managerModel == null)
+                {
+                    context.Response.Write("{\"status\": 0, \"msg\": \"ManageridIsNullOrError\"}");
+                    return;
+                }
+                bool isExecutiver = false;//是否是执行人员
+                string oid = Utils.ObjectToStr(jObject["oid"]);
+                DataTable pdt = new BLL.Order().GetPersonList(0, "op_oid='" + oid + "'", "op_id asc").Tables[0];
+                if (pdt != null && pdt.Rows.Count > 0)
+                {
+                    DataRow[] drs4 = pdt.Select("op_type=4 and op_number='" + managerModel.user_name + "'");//业务执行人员
+                    if (drs4.Length > 0)
+                    {
+                        isExecutiver = true;
+                    }
+                }
+                string sqlwhere = "";
+                if (isExecutiver)
+                {
+                    sqlwhere = " and inv_personNum='" + managerModel.user_name + "'";
+                }
+                DataTable invoiceData = new BLL.invoices().GetList(0, "inv_oid='" + oid + "' " + sqlwhere + "", "inv_addDate desc,inv_id desc").Tables[0];
+                if (invoiceData != null && invoiceData.Rows.Count > 0)
+                {
+                    decimal? requestMoney = 0, confirmMoney = 0, leftInvMoney = 0;
+                    foreach (DataRow inv in invoiceData.Rows)
+                    {
+                        if (inv["inv_flag1"].ToString() != "1" && inv["inv_flag2"].ToString() != "1" && inv["inv_flag3"].ToString() != "1")
+                        {
+                            requestMoney += Utils.StrToDecimal(inv["inv_money"].ToString(), 0);
+                        }
+                        if (Utils.StrToBool(inv["inv_isConfirm"].ToString(), false))
+                        {
+                            confirmMoney += Utils.StrToDecimal(inv["inv_money"].ToString(), 0);
+                        }
+                    }
+                    leftInvMoney = new BLL.invoices().computeInvoiceLeftMoney(oid);
+                    context.Response.Write("{\"status\": 1,\"requestMoney\": " + requestMoney + ",\"confirmMoney\": " + confirmMoney + ",\"leftInvMoney\": " + leftInvMoney + ",\"list\":" + JArray.FromObject(invoiceData) + "}");
+                    return;
+                }
+                context.Response.Write("{\"status\": 1,\"list\":[]}");
+                return;
+            }
+            catch (Exception ex)
+            {
+                context.Response.Write("{\"status\": 0, \"msg\": \"" + ex.Message + "\"}");
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 执行备用金借款明细
+        /// </summary>
+        /// <param name="context"></param>
+        private void get_unBusinessList(HttpContext context)
+        {
+            try
+            {
+                get_params(context, out jObject);
+                if (jObject["managerid"] == null || string.IsNullOrWhiteSpace(jObject["managerid"].ToString()) || !int.TryParse(jObject["managerid"].ToString(), out int managerid))
+                {
+                    context.Response.Write("{\"status\": 0, \"msg\": \"KeyIsNullOrError\"}");
+                    return;
+                }
+                Model.manager managerModel = new BLL.manager().GetModel(managerid);
+                if (managerModel == null)
+                {
+                    context.Response.Write("{\"status\": 0, \"msg\": \"ManageridIsNullOrError\"}");
+                    return;
+                }
+                bool isExecutiver = false;//是否是执行人员
+                string oid = Utils.ObjectToStr(jObject["oid"]);
+                DataTable pdt = new BLL.Order().GetPersonList(0, "op_oid='" + oid + "'", "op_id asc").Tables[0];
+                if (pdt != null && pdt.Rows.Count > 0)
+                {
+                    DataRow[] drs4 = pdt.Select("op_type=4 and op_number='" + managerModel.user_name + "'");//业务执行人员
+                    if (drs4.Length > 0)
+                    {
+                        isExecutiver = true;
+                    }
+                }
+                string sqlwhere = "";
+                if (isExecutiver)
+                {
+                    sqlwhere = " and uba_PersonNum='" + managerModel.user_name + "'";
+                }
+                DataTable Data = new BLL.unBusinessApply().GetList(0, "uba_oid='" + oid + "' " + sqlwhere + "", "uba_addDate desc,uba_id desc").Tables[0];
+                if (Data != null && Data.Rows.Count > 0)
+                {
+                    //context.Response.Write("{\"status\": 1,\"list\":" + JArray.FromObject(Data) + "}");
+                    //return;
+                    DataTable DataPic = new DataTable();
+                    JArray list = new JArray();
+                    foreach (JObject item in JArray.FromObject(Data))
+                    {
+                        DataPic = new BLL.payPic().GetList(2, "pp_type=2 and pp_rid=" + item["uba_id"] + "", "pp_addDate desc").Tables[0];
+                        item["piclist"] = JArray.FromObject(DataPic);
+                        list.Add(item);
+                    }
+                    context.Response.Write("{\"status\": 1,\"list\":" + list + "}");
+                    return;
+                }
+                context.Response.Write("{\"status\": 1,\"list\":[]}");
+                return;
+            }
+            catch (Exception ex)
+            {
+                context.Response.Write("{\"status\": 0, \"msg\": \"" + ex.Message + "\"}");
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 执行备用金借款明细附件
+        /// </summary>
+        /// <param name="context"></param>
+        private void get_unBusinessPic(HttpContext context)
+        {
+            try
+            {
+                get_params(context, out jObject);
+                if (jObject["managerid"] == null || string.IsNullOrWhiteSpace(jObject["managerid"].ToString()) || !int.TryParse(jObject["managerid"].ToString(), out int managerid))
+                {
+                    context.Response.Write("{\"status\": 0, \"msg\": \"KeyIsNullOrError\"}");
+                    return;
+                }
+                Model.manager managerModel = new BLL.manager().GetModel(managerid);
+                if (managerModel == null)
+                {
+                    context.Response.Write("{\"status\": 0, \"msg\": \"ManageridIsNullOrError\"}");
+                    return;
+                }
+                int id = Utils.ObjToInt(jObject["ubaid"]);
+                DataTable Data = new BLL.payPic().GetList(2, "pp_type=2 and pp_rid=" + id + "", "pp_addDate desc").Tables[0];
+                if (Data != null && Data.Rows.Count > 0)
+                {
+                    context.Response.Write("{\"status\": 1,\"list\":" + JArray.FromObject(Data) + "}");
+                    return;
+                }
+                context.Response.Write("{\"status\": 1,\"list\":[]}");
+                return;
+            }
+            catch (Exception ex)
+            {
+                context.Response.Write("{\"status\": 0, \"msg\": \"" + ex.Message + "\"}");
+                return;
+            }
+        }
         #endregion
 
         #region 财务管理
@@ -3539,8 +3760,7 @@ namespace MettingSys.Web.tools
         }
 
         #endregion
-
-
+        
         #region 个人业务结算
 
         #endregion

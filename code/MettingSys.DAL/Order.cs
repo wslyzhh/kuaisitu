@@ -566,7 +566,7 @@ namespace MettingSys.DAL
         public DataTable getOrderCollect(string oid)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select o.o_content,o_sdate,o_edate,c_name,t.* from ( ");
+            strSql.Append("select o.o_content,o_sdate,o_edate,isnull(o_financeCust,0) o_financeCust,c_name,t.* from ( ");
             strSql.Append(" select isnull(fin_cid,rpd_cid) fin_cid,isnull(fin_type,rpd_type) fin_type,isnull(fin_oid,rpd_oid) fin_oid,isnull(finMoney,0) finMoney,isnull(profit,0) profit,isnull(rpdMoney,0) rpdMoney,isnull(isnull(finMoney,0)-isnull(rpdMoney,0),0) unReceiptPay from");
             strSql.Append(" (select fin_cid,fin_type,fin_oid,sum(isnull(fin_money,0)) finMoney,sum(case when fin_type=1 then fin_money else 0-fin_money end) profit from MS_finance where fin_oid=@oid group by fin_cid,fin_type,fin_oid) t1");
             strSql.Append(" full join ");

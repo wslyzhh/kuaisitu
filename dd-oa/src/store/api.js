@@ -222,6 +222,18 @@ const api = {
     get bankList(){//获取客户银行账号
         return baseUrl+'/tools/dingtalk_ajax.ashx?action=getBank'
     },
+    get orderSettleMentList(){//获取订单汇总数据
+        return baseUrl+'/tools/dingtalk_ajax.ashx?action=getSettlementlist'
+    },
+    get orderInvoiceList(){//获取订单发票申请数据
+        return baseUrl+'/tools/dingtalk_ajax.ashx?action=getInvoiceList'
+    },
+    get orderunBusinessList(){//获取执行备用金借款明细
+        return baseUrl+'/tools/dingtalk_ajax.ashx?action=getunBusinessList'
+    },
+    get orderunBusinessPic(){//获取执行备用金借款明细附件
+        return baseUrl+'/tools/dingtalk_ajax.ashx?action=getunBusinessPic'
+    },
     ///订单管理模块 end--------------------------------------------------------
 
     ///财务管理模块 start------------------------------------------------------

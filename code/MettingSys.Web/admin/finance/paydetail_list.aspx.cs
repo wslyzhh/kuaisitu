@@ -156,7 +156,7 @@ namespace MettingSys.Web.admin.finance
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("paydetail_list.aspx", "page={0}&ddlcheck1={1}&ddlcheck2={2}&ddlcheck3={3}&txtforesdate={4}&txtforeedate={5}&self={6}&txtCusName={7}&hCusId={8}&ddlcollect={9}&txtPerson={10}&ddlsign={11}&txtmoney={12}&txtorderid={13}&ddlarea={14}&txtPerson1={15}&txtsdate={16}&txtedate={17}", "__id__",_check1,_check2,_check3,_foresdate,_foreedate,_self,_cusName,_cid,_collect,_person,_sign,_money,_oID,_area,_person1,_sdate,_edate);
+            string pageUrl = backUrl();
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
 
             pCount.Text = dt.Rows.Count.ToString();
@@ -311,6 +311,11 @@ namespace MettingSys.Web.admin.finance
             
         }
 
+        private string backUrl()
+        {
+            return Utils.CombUrlTxt("paydetail_list.aspx", "page={0}&ddlcheck1={1}&ddlcheck2={2}&ddlcheck3={3}&txtforesdate={4}&txtforeedate={5}&self={6}&txtCusName={7}&hCusId={8}&ddlcollect={9}&txtPerson={10}&ddlsign={11}&txtmoney={12}&txtorderid={13}&ddlarea={14}&txtPerson1={15}&txtsdate={16}&txtedate={17}&check={18}", "__id__", _check1, _check2, _check3, _foresdate, _foreedate, _self, _cusName, _cid, _collect, _person, _sign, _money, _oID, _area, _person1, _sdate, _edate,_check);
+        }
+
         //设置分页数量
         protected void txtPageNum_TextChanged(object sender, EventArgs e)
         {
@@ -322,7 +327,7 @@ namespace MettingSys.Web.admin.finance
                     Utils.WriteCookie("paydetail_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("paydetail_list.aspx", "page={0}&ddlcheck1={1}&ddlcheck2={2}&ddlcheck3={3}&txtforesdate={4}&txtforeedate={5}&self={6}&txtCusName={7}&hCusId={8}&ddlcollect={9}&txtPerson={10}&ddlsign={11}&txtmoney={12}&txtorderid={13}&ddlarea={14}&txtPerson1={15}&txtsdate={16}&txtedate={17}", "__id__", _check1, _check2, _check3, _foresdate, _foreedate, _self, _cusName, _cid,_collect,_person,_sign,_money,_oID,_area,_person1,_sdate,_edate));
+            Response.Redirect(backUrl());
         }
 
         //批量删除

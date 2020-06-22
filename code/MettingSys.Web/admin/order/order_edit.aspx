@@ -1228,7 +1228,6 @@
                         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
                             <tr style="text-align: center;">
                                 <th width="8%">客户</th>
-                                <th width="8%">订单号</th>
                                 <th>开票项目</th>
                                 <th width="6%">专普票</th>
                                 <th width="6%">开票金额</th>
@@ -1245,7 +1244,6 @@
                     <ItemTemplate>
                         <tr style="text-align: center;">
                             <td><%#Eval("c_name")%></td>
-                            <td><%#Eval("inv_oid")%></td>
                             <td style="text-align: left;"><%#Eval("inv_serviceType")%>/<%#Eval("inv_serviceName")%></td>
                             <td><%# string.IsNullOrEmpty(Utils.ObjectToStr(Eval("inv_type")))?"":BusinessDict.invType()[Utils.StrToBool(Utils.ObjectToStr(Eval("inv_type")),false)] %></td>
                             <td><%#Eval("inv_money")%></td>

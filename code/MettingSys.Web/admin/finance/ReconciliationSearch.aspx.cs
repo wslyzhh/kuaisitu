@@ -20,7 +20,7 @@ namespace MettingSys.Web.admin.finance
         protected int totalCount; //数据总记录数
         protected int page; //当前页码
         protected int pageSize; //每页大小
-        protected string _orderid = "", _cusName = "", _cid = "", _type = "", _num = "";
+        protected string _orderid = "", _cusName = "", _cid = "", _type = "", _num = "", _sdate = "", _edate = "", _cusName1 = "", _cid1 = "", _content = "", _sign = "", _money = "";
 
         decimal _pMoney = 0, _tMoney = 0;
 
@@ -31,7 +31,14 @@ namespace MettingSys.Web.admin.finance
             _cid = DTRequest.GetString("hCusId");
             _type = DTRequest.GetString("ddltype");
             _num = DTRequest.GetString("txtNum");
-            
+            _sdate = DTRequest.GetString("txtsDate");
+            _edate = DTRequest.GetString("txteDate");
+            _cusName1 = DTRequest.GetString("txtCusName1");
+            _cid1 = DTRequest.GetString("hCusId1");
+            _content = DTRequest.GetString("txtContent");
+            _sign = DTRequest.GetString("ddlsign");
+            _money = DTRequest.GetString("txtMoney");
+
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
             {
@@ -70,7 +77,7 @@ namespace MettingSys.Web.admin.finance
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("ReconciliationSearch.aspx", "page={0}&txtOrderID={1}&txtCusName={2}&hCusId={3}&ddltype={4}&txtNum={5}", "__id__", _orderid, _cusName, _cid, _type, _num);
+            string pageUrl = backUrl();
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
 
             if (dt != null)
@@ -92,6 +99,13 @@ namespace MettingSys.Web.admin.finance
             hCusId.Value = _cid;
             ddltype.SelectedValue = _type;
             txtNum.Text = _num;
+            txtsDate.Text = _sdate;
+            txteDate.Text = _edate;
+            txtCusName1.Text = _cusName1;
+            hCusId1.Value = _cid1;
+            txtContent.Text = _content;
+            ddlsign.SelectedValue = _sign;
+            txtMoney.Text = _money;
         }
         #endregion
 
@@ -102,6 +116,10 @@ namespace MettingSys.Web.admin.finance
             if (!string.IsNullOrEmpty(_cid) && _cid != "0")
             {
                 strTemp.Append(" and fin_cid=" + _cid + "");
+            }
+            else
+            {
+                strTemp.Append(" and c1.c_name like '%" + _cusName + "%'");
             }
             if (!string.IsNullOrEmpty(_orderid))
             {
@@ -114,6 +132,30 @@ namespace MettingSys.Web.admin.finance
             if (!string.IsNullOrEmpty(_num))
             {
                 strTemp.Append(" and fc_num='" + _num + "'");
+            }
+            if (!string.IsNullOrEmpty(_sdate))
+            {
+                strTemp.Append(" and datediff(day,o_edate,'" + _sdate + "')<=0");
+            }
+            if (!string.IsNullOrEmpty(_edate))
+            {
+                strTemp.Append(" and datediff(day,o_edate,'" + _edate + "')>=0");
+            }
+            if (!string.IsNullOrEmpty(_cid1) && _cid1 != "0")
+            {
+                strTemp.Append(" and o_cid=" + _cid1 + "");
+            }
+            else
+            {
+                strTemp.Append(" and c2.c_name like '%" + _cusName1 + "%'");
+            }
+            if (!string.IsNullOrEmpty(_content))
+            {
+                strTemp.Append(" and o_content like '%" + _content + "%'");
+            }
+            if (!string.IsNullOrEmpty(_money))
+            {
+                strTemp.Append(" and fc_money "+_sign+" " + _money + "");
             }
             return strTemp.ToString();
         }
@@ -143,7 +185,19 @@ namespace MettingSys.Web.admin.finance
             _cid = DTRequest.GetFormString("hCusId");
             _type = DTRequest.GetFormString("ddltype");
             _num = DTRequest.GetFormString("txtNum");
+            _sdate = DTRequest.GetFormString("txtsDate");
+            _edate = DTRequest.GetFormString("txteDate");
+            _cusName1 = DTRequest.GetFormString("txtCusName1");
+            _cid1 = DTRequest.GetFormString("hCusId1");
+            _content = DTRequest.GetFormString("txtContent");
+            _sign = DTRequest.GetFormString("ddlsign");
+            _money = DTRequest.GetFormString("txtMoney");
             RptBind("1=1" + CombSqlTxt(), "o_addDate desc,o_id desc");
+        }
+
+        private string backUrl()
+        {
+            return Utils.CombUrlTxt("ReconciliationSearch.aspx", "page={0}&txtOrderID={1}&txtCusName={2}&hCusId={3}&ddltype={4}&txtNum={5}&txtsDate={6}&txteDate={7}&txtCusName1={8}&hCusId1={9}&txtContent={10}&ddlsign={11}&txtMoney={12}", "__id__", _orderid, _cusName, _cid, _type, _num, _sdate, _edate, _cusName1, _cid1, _content, _sign, _money);
         }
 
         protected void btnExcel_Click(object sender, EventArgs e)
@@ -289,7 +343,7 @@ namespace MettingSys.Web.admin.finance
                     Utils.WriteCookie("ReconciliationSearch_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("ReconciliationSearch.aspx", "page={0}&txtOrderID={1}&txtCusName={2}&hCusId={3}&ddltype={4}&txtNum={5}", "__id__", _orderid, _cusName, _cid, _type, _num));
+            Response.Redirect(backUrl());
         }
 
 

@@ -12,7 +12,12 @@ import adviceOfReceipt from '../pages/shoppingCart/adviceOfReceipt'
 import adviceOfPayment from '../pages/shoppingCart/adviceOfPayment'
 //新增发票申请
 import addInvoice from '../pages/shoppingCart/addInvoice'
-
+//结算汇总
+import settlement from '../pages/shoppingCart/settlement'
+//发票申请汇总
+import invoiceslist from '../pages/shoppingCart/invoicesList'
+//执行备用金借款明细
+import unbusinesslist from '../pages/shoppingCart/unBusinessList'
 
 const routes = [
     {
@@ -43,6 +48,18 @@ const routes = [
         path:'/addInvoice',
         component:addInvoice,
     },
+    {
+        path:'/settlement',
+        component:settlement,
+    },
+    {
+        path:'/invoiceslist',
+        component:invoiceslist,
+    },
+    {
+        path:'/unBusiness',
+        component:unbusinesslist,
+    }
 ]
 
 export default routes  

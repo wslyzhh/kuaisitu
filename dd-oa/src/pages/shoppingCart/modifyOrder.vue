@@ -110,6 +110,11 @@
             部分人员可查看，文件大小限制：51200KB</br> 
             文件类型：gif,jpg,jpeg,png,bmp,rar,zip,doc,xls,txt,docx,xlsx
         </div>
+		<ul class="button_list">
+			<router-link tag="li" :to="{path:'/invoiceslist',query:{oID:formData.orderID}}" style="background-color:#47a21f;">发票申请汇总</router-link>
+            <router-link tag="li" :to="{path:'/settlement',query:{oID:formData.orderID}}" style="background-color:#008265;">结算汇总</router-link>
+			<router-link tag="li" :to="{path:'/unBusiness',query:{oID:formData.orderID}}" style="background-color:#008265;">执行备用金借款明细</router-link>
+		</ul>
 		<choose :show.sync="showChoose" :type="chooseType" :list="chooseList" @on-affirm="activeChoose"></choose>
 		<ul class="looK_button_list c_flex">
             <router-link tag="li" :to="{path:'/UnBusinessPayAdd',query:{oID:formData.orderID,paytype:0,payfunction:0,type:'add'}}" style="background-color:#3395fa;">非业务申请</router-link>
@@ -647,5 +652,28 @@ export default {
             margin-bottom: .2rem;
         }
     }
+	.button_list{
+		margin: 0 0.2rem;
+		li{
+			outline: none;
+            background: none;
+            border: none;
+            width: 3.5rem;
+            height: .8rem;
+            line-height: .8rem;
+            text-align: center;
+            color: #FFF;
+            font-size: .36rem;
+            margin: 0 auto;
+            border-radius: 4px;
+            margin-bottom: .2rem;
+			display:inline-block;
+
+
+		}
+		li:nth-child(3){
+			width: 6.9rem;
+		}
+	}
 </style>
 

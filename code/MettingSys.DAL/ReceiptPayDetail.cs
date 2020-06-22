@@ -30,7 +30,25 @@ namespace MettingSys.DAL
 
             return DbHelperSQL.Exists(strSql.ToString(), parameters);
         }
+        /// <summary>
+        /// 某个订单号下的该应收付对象的该对账标识下存在已分配款
+        /// </summary>
+        public bool Exists(string oid,string chk,int cid)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select count(1) from  MS_ReceiptPayDetail");
+            strSql.Append(" where rpd_oid=@oid and rpd_num=@num and rpd_cid=@cid  ");
+            SqlParameter[] parameters = {
+                    new SqlParameter("@oid", SqlDbType.VarChar,11),
+                    new SqlParameter("@num", SqlDbType.VarChar,20),
+                    new SqlParameter("@cid", SqlDbType.Int,4)
+            };
+            parameters[0].Value = oid;
+            parameters[1].Value = chk;
+            parameters[2].Value = cid;
 
+            return DbHelperSQL.Exists(strSql.ToString(), parameters);
+        }
         /// <summary>
         /// 增加一条数据
         /// </summary>

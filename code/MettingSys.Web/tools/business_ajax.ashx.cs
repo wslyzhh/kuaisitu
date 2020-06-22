@@ -184,6 +184,9 @@ namespace MettingSys.Web.tools
                 case "getChkDetail":
                     get_ChkDetail(context);
                     break;
+                case "changeChkNum":
+                    change_ChkNum(context);
+                    break;
                 default:
                     break;
             }
@@ -664,7 +667,6 @@ namespace MettingSys.Web.tools
             }
         }
         #endregion
-
         #region 添加合作分成
         private void AddShareFinance(HttpContext context)
         {
@@ -708,7 +710,6 @@ namespace MettingSys.Web.tools
 
         }
         #endregion
-
         #region 审批应收付记录
         private void check_finance(HttpContext context)
         {
@@ -1068,7 +1069,6 @@ namespace MettingSys.Web.tools
 
         }
         #endregion
-
         #region 填充付款方式
         private void setPayMethod_mutli(HttpContext context)
         {
@@ -1094,7 +1094,6 @@ namespace MettingSys.Web.tools
 
         }
         #endregion
-
         #region 删除收付款明细
         private void delete_ReceiptPayDetail(HttpContext context)
         {
@@ -1676,6 +1675,24 @@ namespace MettingSys.Web.tools
             context.Response.End();
         }
         #endregion
+        #region 修改对账标识
+        private void change_ChkNum(HttpContext context)
+        {
+            Model.manager adminModel = new ManagePage().GetAdminInfo();//获得当前登录管理员信息
+            int id = DTRequest.GetFormInt("id", 0);
+            string num = DTRequest.GetFormString("num");
+
+            string result = new BLL.finance_chk().updateChk(id, num, adminModel);
+            if (string.IsNullOrEmpty(result))
+            {
+                context.Response.Write("{ \"msg\":\"对账成功\", \"status\":0 }");
+                context.Response.End();
+            }
+            context.Response.Write("{ \"msg\":\"" + result + "\", \"status\":1 }");
+            context.Response.End();            
+        }
+        #endregion        
+
         public bool IsReusable
         {
             get

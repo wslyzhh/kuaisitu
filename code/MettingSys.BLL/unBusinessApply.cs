@@ -60,6 +60,11 @@ namespace MettingSys.BLL
             {
                 return "请选择预付日期";
             }
+            model.uba_addDate = DateTime.Now;
+            model.uba_flag1 = 0;
+            model.uba_flag2 = 0;
+            model.uba_flag3 = 0;
+            model.uba_isConfirm = false;
             id = dal.Add(model);
             if (id > 0)
             {

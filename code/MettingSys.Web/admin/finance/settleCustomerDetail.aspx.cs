@@ -21,7 +21,7 @@ namespace MettingSys.Web.admin.finance
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _cusName = "", _cid = "", _type = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _sdate2 = "", _edate2 = "", _status = "", _sign = "", _money1 = "", _tag = "", _self = "", _lockstatus = "", _area = "", _person1 = "";
+        protected string _cusName = "", _cid = "", _type = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _sdate2 = "", _edate2 = "", _status = "", _sign = "", _money1 = "", _tag = "", _self = "", _lockstatus = "", _area = "", _person1 = "", _group = "";
         private Model.manager manager = null;
         decimal money1 = 0, money2 = 0, money3 = 0, money4 = 0, money5 = 0, money6 = 0;
         protected void Page_Load(object sender, EventArgs e)
@@ -44,7 +44,11 @@ namespace MettingSys.Web.admin.finance
             _lockstatus = DTRequest.GetString("ddllock");
             _area = DTRequest.GetString("ddlarea");
             _person1 = DTRequest.GetString("txtPerson1").ToUpper();
-
+            _group = DTRequest.GetString("ddlGroup");
+            if (string.IsNullOrEmpty(_group))
+            {
+                _group = "1";
+            }
             if (_tag == "1")
             {
                 _type = "True";
@@ -119,13 +123,26 @@ namespace MettingSys.Web.admin.finance
                 this.page = 1;
             }
             BLL.finance bll = new BLL.finance();
-            DataTable dt= bll.getSettleCustomerDetailList(this.pageSize, this.page, _type, _cid, _cusName, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, _self == "1" ? manager.user_name : "", _lockstatus, _area, _person1, _orderby, out this.totalCount, out  money1, out money2, out money3, out money4, out money5, out money6).Tables[0];
-            this.rptList.DataSource = dt;
-            this.rptList.DataBind();
-
+            DataTable dt = null;
+            if (_group == "1")
+            {
+                dt = bll.getSettleCustomerDetailList(this.pageSize, this.page, _type, _cid, _cusName, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, _self == "1" ? manager.user_name : "", _lockstatus, _area, _person1, _orderby, out this.totalCount, out money1, out money2, out money3, out money4, out money5, out money6).Tables[0];
+                this.rptList.DataSource = dt;
+                this.rptList.DataBind();
+                rptList.Visible = true;
+                rptPersonList.Visible = false;
+            }
+            else
+            {
+                dt = bll.getSettleCustomerDetailListByUser(this.pageSize, this.page, _type, _cid, _cusName, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, _self == "1" ? manager.user_name : "", _lockstatus, _area, _person1, "op_name asc", out this.totalCount, out money1, out money2, out money3).Tables[0];
+                this.rptPersonList.DataSource = dt;
+                this.rptPersonList.DataBind();
+                rptList.Visible = false;
+                rptPersonList.Visible = true;
+            }
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("settleCustomerDetail.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddltype={3}&txtsDate={4}&txteDate={5}&txtsDate1={6}&txteDate1={7}&txtsDate2={8}&txteDate2={9}&ddlstatus={10}&ddlsign={11}&txtMoney1={12}&tag={13}&self={14}", "__id__", _cusName, _cid, _type, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, _tag, _self);
+            string pageUrl = backUrl();
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
 
             pCount.Text = dt.Rows.Count.ToString();
@@ -137,26 +154,34 @@ namespace MettingSys.Web.admin.finance
                     _pmoney1 += Utils.ObjToDecimal(dr["orderFinMoney"], 0);
                     _pmoney2 += Utils.ObjToDecimal(dr["orderRpdMoney"], 0);
                     _pmoney3 += Utils.ObjToDecimal(dr["orderUnMoney"], 0);
-                    _pmoney4 += Utils.ObjToDecimal(dr["rpmoney"], 0);
-                    _pmoney5 += Utils.ObjToDecimal(dr["rpdmoney"], 0);
-                    _pmoney6 += Utils.ObjToDecimal(dr["unmoney"], 0);
+                    if (_group == "1")
+                    {
+                        _pmoney4 += Utils.ObjToDecimal(dr["rpmoney"], 0);
+                        _pmoney5 += Utils.ObjToDecimal(dr["rpdmoney"], 0);
+                        _pmoney6 += Utils.ObjToDecimal(dr["unmoney"], 0);
+                    }
                 }
             }
             tCount.Text = totalCount.ToString();
             pMoney1.Text = _pmoney1.ToString();
             pMoney2.Text = _pmoney2.ToString();
             pMoney3.Text = _pmoney3.ToString();
-            pMoney4.Text = _pmoney4.ToString();
-            pMoney5.Text = _pmoney5.ToString();
-            pMoney6.Text = _pmoney6.ToString();
+            if (_group == "1")
+            {
+                pMoney4.Text = _pmoney4.ToString();
+                pMoney5.Text = _pmoney5.ToString();
+                pMoney6.Text = _pmoney6.ToString();
+            }
 
             tMoney1.Text = money1.ToString();
             tMoney2.Text = money2.ToString();
             tMoney3.Text = money3.ToString();
-            tMoney4.Text = money4.ToString();
-            tMoney5.Text = money5.ToString();
-            tMoney6.Text = money6.ToString();
-
+            if (_group == "1")
+            {
+                tMoney4.Text = money4.ToString();
+                tMoney5.Text = money5.ToString();
+                tMoney6.Text = money6.ToString();
+            }
             ddltype.SelectedValue = _type;
             txtCusName.Text = _cusName;
             hCusId.Value = _cid;
@@ -223,6 +248,7 @@ namespace MettingSys.Web.admin.finance
             _lockstatus = DTRequest.GetFormString("ddllock");
             _area = DTRequest.GetFormString("ddlarea");
             _person1 = DTRequest.GetFormString("txtPerson1").ToUpper();
+            _group = DTRequest.GetFormString("ddlGroup");
             if (_tag == "1")
             {
                 _type = "True";
@@ -374,6 +400,12 @@ namespace MettingSys.Web.admin.finance
             HttpContext.Current.Response.BinaryWrite(file.GetBuffer());
             HttpContext.Current.Response.End();
         }
+
+        private string backUrl()
+        {
+            return Utils.CombUrlTxt("settleCustomerDetail.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddltype={3}&txtsDate={4}&txteDate={5}&txtsDate1={6}&txteDate1={7}&txtsDate2={8}&txteDate2={9}&ddlstatus={10}&ddlsign={11}&txtMoney1={12}&tag={13}&self={14}&ddllock={15}&ddlarea={16}&txtPerson1={17}&ddlGroup={18}", "__id__", _cusName, _cid, _type, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, _tag, _self,_lockstatus,_area,_person1,_group);
+        }
+
         //设置分页数量
         protected void txtPageNum_TextChanged(object sender, EventArgs e)
         {
@@ -385,7 +417,7 @@ namespace MettingSys.Web.admin.finance
                     Utils.WriteCookie("settleCustomerDetail_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("settleCustomerDetail.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddltype={3}&txtsDate={4}&txteDate={5}&txtsDate1={6}&txteDate1={7}&txtsDate2={8}&txteDate2={9}&ddlstatus={10}&ddlsign={11}&txtMoney1={12}&tag={13}&self={14}", "__id__", _cusName, _cid, _type, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, _tag, _self));
+            Response.Redirect(backUrl());
         }
     }
 }

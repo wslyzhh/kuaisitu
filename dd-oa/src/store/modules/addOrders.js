@@ -76,6 +76,18 @@ const actions = {
 	changeSelectClient ({commit},clientArray) {
 		commit("change_select_client_array", clientArray)
 	},
+	getOrderSettleMentList({commit},params){
+		return ajax.post(api.orderSettleMentList,params)
+	},
+	getOrderInvoiceList({commit},params){
+		return ajax.post(api.orderInvoiceList,params)
+	},
+	getOrderunBusinessList({commit},params){
+		return ajax.post(api.orderunBusinessList,params)
+	},
+	getOrderunBusinessPic({commit},params){
+		return ajax.post(api.orderunBusinessPic,params)
+	}
 }
 
 const mutations = {

@@ -213,11 +213,7 @@ namespace MettingSys.Web.admin.unBusiness
             model.uba_foreDate = ConvertHelper.toDate(txtforedate.Text.Trim());
             model.uba_remark = txtRemark.Text.Trim();
             model.uba_PersonNum = manager.user_name;
-            model.uba_personName = manager.real_name;
-            model.uba_addDate = DateTime.Now;
-            model.uba_flag1 = 0;
-            model.uba_flag2 = 0;
-            model.uba_flag3 = 0;
+            model.uba_personName = manager.real_name;            
             model.uba_area = manager.area;
             if (fileUp.HasFile)
             {

@@ -24,7 +24,13 @@ namespace MettingSys.BLL
         {
             return dal.Exists(id);
         }
-
+        /// <summary>
+        /// 某个订单号下的该应收付对象的该对账标识下存在已分配款
+        /// </summary>
+        public bool Exists(string oid, string chk, int cid)
+        {
+            return dal.Exists(oid, chk, cid);
+        }
         /// <summary>
         /// 分配或取消分配
         /// </summary>
