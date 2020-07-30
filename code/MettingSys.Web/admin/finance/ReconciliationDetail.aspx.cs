@@ -380,7 +380,7 @@ namespace MettingSys.Web.admin.finance
             //txtsDate3.Text = _sdate3;
             //txteDate3.Text = _edate3;
             ddlstatus.SelectedValue = _status;
-            ddlsign.SelectedValue = _sign;
+            ddlsign.SelectedValue = _sign; 
             txtMoney1.Text = _money1;
             ddlsign1.SelectedValue = _sign1;
             txtMoney2.Text = _money2;
@@ -396,13 +396,14 @@ namespace MettingSys.Web.admin.finance
             txtPerson3.Text = _person3;
             txtPerson4.Text = _person4;
             txtPerson5.Text = _person5;
+            ddlcheck.SelectedValue = _check;
         }
         #endregion
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("ReconciliationDetail.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddltype={3}&ddlsign={4}&txtMoney1={5}&ddlnature={6}&txtsDate={7}&txteDate={8}&txtsDate1={9}&txteDate1={10}&txtName={11}&txtAddress={12}&ddlsign1={13}&txtMoney2={14}&txtPerson1={15}&txtPerson2={16}&txtPerson3={17}&txtPerson4={18}&txtPerson5={19}&txtOrderID={20}&txtChk={21}&ddlstatus={22}&ddllock={23}&ddlarea={24}&txtsDate2={25}&txteDate2={26}&self={27}",
-                "__id__", _cusName, _cid, _type, _sign, _money1, _nature, _sdate, _edate, _sdate1, _edate1, _name, _address, _sign1, _money2, _person1, _person2, _person3, _person4, _person5, _oid, _chk, _status, _lockstatus, _area, _sdate2, _edate2, _self);
+            return Utils.CombUrlTxt("ReconciliationDetail.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddltype={3}&ddlsign={4}&txtMoney1={5}&ddlnature={6}&txtsDate={7}&txteDate={8}&txtsDate1={9}&txteDate1={10}&txtName={11}&txtAddress={12}&ddlsign1={13}&txtMoney2={14}&txtPerson1={15}&txtPerson2={16}&txtPerson3={17}&txtPerson4={18}&txtPerson5={19}&txtOrderID={20}&txtChk={21}&ddlstatus={22}&ddllock={23}&ddlarea={24}&txtsDate2={25}&txteDate2={26}&self={27}&ddlcheck={28}",
+                "__id__", _cusName, _cid, _type, _sign, _money1, _nature, _sdate, _edate, _sdate1, _edate1, _name, _address, _sign1, _money2, _person1, _person2, _person3, _person4, _person5, _oid, _chk, _status, _lockstatus, _area, _sdate2, _edate2, _self,_check);
         }
 
         #region 返回每页数量=============================

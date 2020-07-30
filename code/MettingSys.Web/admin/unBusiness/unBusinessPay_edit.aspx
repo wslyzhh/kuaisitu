@@ -194,14 +194,14 @@
                 </dd>
             </dl>
             <dl id="dlAddUpload" runat="server">
-                <dt>上传图片</dt>
+                <dt>上传文件</dt>
                 <dd>
                     <asp:FileUpload runat="server" ID="fileUp" AllowMultiple="true" />
                     <div style="color: red;">文件类型：<%=sysConfig.fileextension %>，文件大小限制：<%=sysConfig.attachsize %>KB</div>
                 </dd>
             </dl>
             <dl id="dlEditUpload" runat="server">
-                <dt>上传图片</dt>
+                <dt>上传文件</dt>
                 <dd>
                     <div class="upload-box upload-album" id="uploadDiv" runat="server"></div>
                     <input type="hidden" name="hidFocusPhoto" id="hidFocusPhoto" runat="server" class="focus-photo" />

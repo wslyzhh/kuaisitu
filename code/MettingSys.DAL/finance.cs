@@ -667,6 +667,7 @@ namespace MettingSys.DAL
                 if (dict.ContainsKey("check"))
                 {
                     strWhere1.Append(" and fin_flag=" + dict["check"] + "");
+                    strWhere3.Append(" and exists(select 1 from MS_finance where fin_oid=o_id and  fin_flag=" + dict["check"] + ")");
                 }
                 if (dict.ContainsKey("name"))
                 {
