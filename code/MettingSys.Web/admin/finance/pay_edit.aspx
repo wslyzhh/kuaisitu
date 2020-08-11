@@ -62,6 +62,35 @@
                     showBank(cid);
                 }
             });
+
+            $("#ddlmethod").change(function () {
+                if ($(this).val() != "") {
+                    var ptype = $(this).find('option:selected').attr("py");
+                    if (ptype == "True") {
+                        $("#dlceDate").show();
+                        $("#dlceNum").show();
+                        $("#dlBank").hide();
+                    }
+                    else {
+                        $("#dlceDate").hide();
+                        $("#dlceNum").hide();
+                        $("#dlBank").show();
+                    }
+                } else {
+                    $("#dlceDate").hide();
+                    $("#dlceNum").hide();
+                    $("#dlBank").show();
+                }
+            });
+
+            if ("<%=isChongzhang%>" == "True") {
+                $("#dlceDate").show();
+                $("#dlceNum").show();
+                $("#dlBank").hide();
+            } else {
+                $("#dlBank").show();
+            }
+
         });
         //绑定凭证
         function bingCertificate() {
@@ -204,11 +233,11 @@
                 <dt>付款方式</dt>
                 <dd>
                     <div class="rule-single-select">
-                        <asp:DropDownList ID="ddlmethod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlmethod_SelectedIndexChanged"></asp:DropDownList>
+                        <asp:DropDownList ID="ddlmethod" runat="server" OnDataBound="ddlmethod_DataBound"></asp:DropDownList>
                     </div>
                 </dd>
             </dl>
-            <dl id="dlBank" runat="server">
+            <dl id="dlBank" style="display:none;">
                 <dt>客户银行账号</dt>
                 <dd>
                     <asp:TextBox ID="txtBank" runat="server" CssClass="input normal" Width="380px"></asp:TextBox>
@@ -222,14 +251,14 @@
                     <asp:TextBox ID="txtContent" runat="server" CssClass="input normal" Width="400px" Height="110px" TextMode="MultiLine" />
                 </dd>
             </dl>
-            <dl id="dlceNum" runat="server">
+            <dl id="dlceNum" style="display:none;">
                 <dt>凭证号</dt>
                 <dd>
                     <asp:TextBox ID="txtCenum" runat="server" CssClass="input " Width="150" />
                     <span class="Validform_checktip">*不存在的凭证号，添加凭证日期后提交，可生成新的凭证号</span>
                 </dd>
             </dl>
-            <dl id="dlceDate" runat="server">
+            <dl id="dlceDate" style="display:none;">
                 <dt>凭证日期</dt>
                 <dd>
                     <asp:TextBox ID="txtCedate" runat="server" CssClass="input rule-date-input" Width="120" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />

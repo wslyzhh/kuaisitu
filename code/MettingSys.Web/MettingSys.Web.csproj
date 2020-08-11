@@ -934,9 +934,6 @@
     <Content Include="scripts\webuploader\webuploader.min.js" />
     <Content Include="tools\dingtalk_ajax.ashx" />
     <Content Include="tools\dingtalk_login.ashx" />
-    <Content Include="uploadPay\1\201905\11\logo.png" />
-    <Content Include="uploadPay\1\201905\11\thumb_logo.png" />
-    <Content Include="uploadPay\1\201905\15\logo.png" />
     <Content Include="watermark.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -2111,7 +2108,6 @@
     <Folder Include="admin\TempletExcel\" />
     <Folder Include="aspx\" />
     <Folder Include="templates\" />
-    <Folder Include="upload\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="admin\skin\icon\iconfont.eot" />

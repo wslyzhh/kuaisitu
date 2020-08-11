@@ -102,15 +102,62 @@
                 $(".Detail" + rpid).remove();
             }
         }
+        function toggleCheckDiv() {
+            $("#confirmDiv").hide();
+            $("#certificateDiv").hide();
+            $("#checkDiv").toggle();
+        }
         function toggleconfirmDiv() {
+            $("#checkDiv").hide();
             $("#certificateDiv").hide();
             $("#confirmDiv").toggle();
             $(".spdate").show();
         }
         function togglecertificateDiv() {
+            $("#checkDiv").hide();
             $("#confirmDiv").hide();
             $("#certificateDiv").toggle();
         }
+        /*批量审批 */
+        function submitCheck() {
+            if ($(".checkall input:checked").size() < 1) {
+                parent.dialog({
+                    title: '提示',
+                    content: '对不起，请选中您要操作的记录！',
+                    okValue: '确定',
+                    ok: function () { }
+                }).showModal();
+                return;
+            }
+            if ($("#ddlchecktype").val() == "") {
+                jsprint("请选择审批类型");
+                return;
+            }
+            if ($("#ddlcheck1").val() == "") {
+                jsprint("请选择审批状态");
+                return;
+            }
+            $(".checkall input:checked").each(function () {
+                var id = $(this).parent().next().val();
+                var postData = { "id": id, "ctype": $("#ddlchecktype").val(), "status": $("#ddlcheck1").val(), "remark": $("#txtremark").val() };
+                //发送AJAX请求
+                $.ajax({
+                    type: "post",
+                    url: "../../tools/Business_ajax.ashx?action=checkPay",
+                    data: postData,
+                    dataType: "json",
+                    success: function (data) {
+                        $("#tr" + id).children().last().children().last().html("");
+                        if (data.status == 0) {
+                            $("#tr" + id).find(".checkTd").children().eq($("#ddlchecktype").val() - 1).removeClass().addClass("check_" + $("#ddlcheck1").val());
+                        } else {
+                            $("#tr" + id).children().last().children().last().append(data.msg);
+                        }
+                    }
+                });
+            });
+        }
+        /*批量审批 */
         /*确认收款 */
         function submitConfirm() {
             if ($(".checkall input:checked").size() < 1) {
@@ -242,6 +289,15 @@
                 content: 'rpDistribution.aspx?id=' + id
             });
         }
+        //付款凭证
+        function showPay(rpid, unMoney) {
+            layer.open({
+                type: 2,
+                title: '付款凭证',
+                area: ['750px', '600px'],
+                content: ['payCertification.aspx?rpid=' + rpid + '&unmoney=' + unMoney, 'no']
+            });
+        }
     </script>
     <style type="text/css">
         .date-input {
@@ -249,6 +305,14 @@
         }
         .myRuleSelect .select-tit {
             padding: 5px 5px 7px 5px;
+        }
+        .sup {
+            vertical-align: super;
+            color: red;
+            font-size: 12px;
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 10px 0px 0px 0px;
+            margin-left: 5px;
         }
     </style>
 </head>
@@ -270,6 +334,9 @@
                         <li><a <%=_flag=="0"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=0">全部列表</a></li>
                         <li><a <%=_flag=="1"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=1">未到账列表</a></li>
                         <li><a <%=_flag=="2"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=2">已到账列表</a></li>
+                        <li><a <%=_flag=="3"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=3">退款财务审批</a></li>
+                        <li><a <%=_flag=="4"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=4">退款总经理审批</a></li>
+                        <li><a <%=_flag=="5"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=5">已审批未付退款<sup class="sup"><asp:Label ID="labUnCheckCount" runat="server">0</asp:Label></sup></a></li>
                     </ul>
                 </div>
             </div>
@@ -288,20 +355,38 @@
                                 <asp:LinkButton ID="btnDelete" runat="server" OnClientClick="return ExePostBack('btnDelete','删除后无法恢复，是否继续？');" OnClick="btnDelete_Click"><i class="iconfont icon-delete"></i><span>删除</span></asp:LinkButton></li>
                             <li><a href="javascript:;" onclick="toggleconfirmDiv()"><span>确认收款</span></a></li>
                             <li><a href="javascript:;" onclick="togglecertificateDiv()"><span>标记凭证</span></a></li>
+                            <li id="checkli" runat="server"><a href="javascript:;" onclick="toggleCheckDiv()"><span>审批退款</span></a></li>
                         </ul>
+                        <div id="checkDiv" style="display: none;">
+                            审批类型：
+                            <div class="rule-single-select">
+                                <asp:DropDownList ID="ddlchecktype" runat="server">
+                                    <asp:ListItem Value="">请选择</asp:ListItem>
+                                    <asp:ListItem Value="1">财务审批</asp:ListItem>
+                                    <asp:ListItem Value="2">总经理审批</asp:ListItem>
+                                </asp:DropDownList>
+                            </div>
+                            审批状态：
+                            <div class="rule-single-select">
+                                <asp:DropDownList ID="ddlcheck1" runat="server"></asp:DropDownList>
+                            </div>
+                            备注：
+                            <asp:TextBox ID="txtremark" runat="server" CssClass="input"></asp:TextBox>
+                            <input type="button" class="btn" value="提交" onclick="submitCheck()" />
+                        </div>
                         <div id="confirmDiv" style="display: none;">
                             收款状态：
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlisConfirm1" runat="server">
                                 </asp:DropDownList>
                             </div>
-                            <span class="spdate" style="display: none;">实收日期：<asp:TextBox ID="txtdate1" runat="server" CssClass="input rule-date-input" Width="120" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+                            <span class="spdate" style="display: none;">实收日期：<asp:TextBox ID="txtdate1" runat="server" CssClass="input rule-date-input" Width="100" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
                             </span>
                             <input type="button" class="btn" value="提交" onclick="submitConfirm()" />
                         </div>
                         <div id="certificateDiv" style="display: none;">
                             凭证号：<asp:TextBox ID="txtCenum" runat="server" CssClass="input " Width="150" />
-                            凭证日期：<asp:TextBox ID="txtCedate" runat="server" CssClass="input rule-date-input" Width="120" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+                            凭证日期：<asp:TextBox ID="txtCedate" runat="server" CssClass="input rule-date-input" Width="100" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
                             <input type="button" class="btn" value="标记凭证" onclick="submitCertificate()" />
                             <%--<input type="button" class="btn" value="添加凭证" onclick="addCertificate()" />--%>
                             <input type="button" class="btn" value="取消凭证" onclick="cancelCertificate()" />
@@ -318,6 +403,14 @@
             收款方式：
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlmethod" runat="server"></asp:DropDownList>
+                            </div>
+            财务审批：
+                            <div class="rule-single-select">
+                                <asp:DropDownList ID="ddlcheck" runat="server"></asp:DropDownList>
+                            </div>
+            总经理审批：
+                            <div class="rule-single-select">
+                                <asp:DropDownList ID="ddlcheck2" runat="server"></asp:DropDownList>
                             </div>
             收款状态：
                             <div class="rule-single-select">
@@ -381,13 +474,17 @@
                             <th align="left" width="10%">收款对象</th>
                             <th align="left" width="6%">凭证</th>
                             <th align="left">收款内容</th>
+                            <th align="left" width="10%">客户银行账号</th>
                             <th align="left" width="6%">收款金额</th>
                             <th align="left" width="6%">未分配金额</th>
                             <th align="left" width="6%">预收日期</th>
                             <th align="left" width="6%">收款方式</th>
                             <th align="left" width="6%">实收日期</th>
                             <th align="left" width="6%">申请人</th>
-                            <th align="left" width="4%">确认收款</th>
+                            <%if (_flag == "3" || _flag == "4" || _flag == "5"){ %>
+                            <th align="left" width="5%">审批</th>
+                            <%} %>
+                            <th align="left" width="5%">确认收款</th>
                             <th width="8%">操作</th>
                         </tr>
                 </HeaderTemplate>
@@ -400,22 +497,30 @@
                         <td><%# Eval("c_name") %><%# bool.Parse(Eval("rp_isExpect").ToString())?"<font color='green'>[预]</font>":"" %></td>
                         <td class="numTd"><span onmouseover="tip_index=layer.tips('凭证日期：<%#Eval("ce_date").ToString()==""?"":Convert.ToDateTime(Eval("ce_date")).ToString("yyyy-MM-dd")%><br/>备注：<%# Eval("ce_remark") %>', this, { time: 0 });" onmouseout="layer.close(tip_index);"><%# Eval("ce_num") %></span></td>
                         <td><%# Eval("rp_content") %></td>
+                        <td><%#Eval("cb_bankName")%><br /><%#Eval("cb_bankNum")%><br /><%#Eval("cb_bank")%></td>
                         <td class="moneyTd"><%# Eval("rp_money") %></td>
                         <td class="umoneyTd"><a href="javascript:;" onclick="showDetail(<%#Eval("rp_id")%>)"><%# Eval("undistribute") %></a></td>
                         <td><%# Convert.ToDateTime(Eval("rp_foredate")).ToString("yyyy-MM-dd") %></td>
                         <td><%# Eval("pm_name") %></td>
                         <td class="dateTd"><%# ConvertHelper.toDate(Eval("rp_date"))==null?"":Convert.ToDateTime(Eval("rp_date")).ToString("yyyy-MM-dd") %></td>
                         <td><span title="<%# Eval("rp_personNum") %>"><%# Eval("rp_personName") %></span></td>
+                        <%if (_flag == "3" || _flag == "4" || _flag == "5"){ %>
+                        <td class="checkTd">
+                            <span onmouseover="tip_index=layer.tips('财务审批<br/>审批人：<%#Eval("rp_checkNum")%>-<%#Eval("rp_checkName")%><br/>审批备注：<%#Eval("rp_checkRemark").ToString().Replace("\r\n","").Replace("\r","").Replace("\n","")%><br/>审批时间：<%#Eval("rp_checkTime")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Eval("rp_flag")%>"></span>
+                            <span onmouseover="tip_index=layer.tips('总经理审批<br/>审批人：<%#Eval("rp_checkNum1")%>-<%#Eval("rp_checkName1")%><br/>审批备注：<%#Eval("rp_checkRemark1").ToString().Replace("\r\n","").Replace("\r","").Replace("\n","")%><br/>审批时间：<%#Eval("rp_checkTime1")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Eval("rp_flag1")%>"></span>
+                        </td>
+                         <%} %>
                         <td class="confirmTd"><span onmouseover="tip_index=layer.tips('收款确认人：<%#Eval("rp_confirmerNum")%>-<%#Eval("rp_confirmerName")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Convert.ToBoolean(Eval("rp_isConfirm"))?"2":"0"%>"></span></td>
                         <td align="center">
                             <a href="receipt_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("rp_id")%>">修改</a>
                             <a href="javascript:;" onclick="dealDistribution(<%#Eval("rp_id")%>)">分配</a>
+                            <%#Convert.ToBoolean(Eval("rp_isConfirm").ToString())?"<a href=\"javascript:;\" onclick=\"showPay("+Eval("rp_id")+","+Eval("undistribute")+")\">凭证</a>":""%>
                             <span style="color:red;"></span>
                         </td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"12\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"13\">暂无记录</td></tr>" : ""%>
   </table>
                 </FooterTemplate>
             </asp:Repeater>

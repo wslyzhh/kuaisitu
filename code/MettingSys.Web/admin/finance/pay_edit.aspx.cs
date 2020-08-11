@@ -17,6 +17,7 @@ namespace MettingSys.Web.admin.finance
 
         protected Model.business_log logmodel = null;
         protected Model.manager manager = null;
+        protected bool isChongzhang = false;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -46,8 +47,8 @@ namespace MettingSys.Web.admin.finance
             }
             if (!Page.IsPostBack)
             {
-                dlceNum.Visible = false;
-                dlceDate.Visible = false;
+                //dlceNum.Visible = false;
+                //dlceDate.Visible = false;
                 InitData();
                 ChkAdminLevel("sys_payment_list0", DTEnums.ActionEnum.View.ToString()); //检查权限
                 if (action == DTEnums.ActionEnum.Edit.ToString() || action == DTEnums.ActionEnum.View.ToString()) //修改
@@ -67,10 +68,9 @@ namespace MettingSys.Web.admin.finance
                 sqlwhere = " and pm_type=0";
             }
             ddlmethod.DataSource = new BLL.payMethod().GetList(0, "pm_isUse=1 "+sqlwhere+"", "pm_sort asc,pm_id asc");
-            ddlmethod.DataTextField = "pm_name";
-            ddlmethod.DataValueField = "pm_id";
+            ddlmethod.DataBound += new EventHandler(ddlmethod_DataBound);
             ddlmethod.DataBind();
-            ddlmethod.Items.Insert(0, new ListItem("请选择", ""));
+            //ddlmethod.Items.Insert(0, new ListItem("请选择", ""));
         }
         #endregion
         #region 赋值操作=================================
@@ -97,9 +97,10 @@ namespace MettingSys.Web.admin.finance
                 txtContent.Text = dr["rp_content"].ToString();
                 if (Utils.ObjToInt(dr["rp_method"],0)> 0 && new BLL.payMethod().GetModel(Utils.ObjToInt(dr["rp_method"], 0)).pm_type.Value)
                 {
-                    dlceDate.Visible = true;
-                    dlceNum.Visible = true;
-                    dlBank.Visible = false;
+                    isChongzhang = true;
+                    //dlceDate.Visible = true;
+                    //dlceNum.Visible = true;
+                    //dlBank.Visible = false;
 
                     txtCenum.Text = Utils.ObjectToStr(dr["ce_num"]);
                     txtCedate.Text = ConvertHelper.toDate(dr["ce_date"]).Value.ToString("yyyy-MM-dd");
@@ -226,29 +227,29 @@ namespace MettingSys.Web.admin.finance
         }
         protected void ddlmethod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DropDownList ddl = (DropDownList)sender;
-            if (!string.IsNullOrEmpty(ddl.SelectedValue))
-            {
-                Model.payMethod model = new BLL.payMethod().GetModel(Utils.StrToInt(ddl.SelectedValue, 0));
-                if (model.pm_type.Value)
-                {
-                    dlceDate.Visible = true;
-                    dlceNum.Visible = true;
-                    dlBank.Visible = false;
-                }
-                else
-                {
-                    dlceDate.Visible = false;
-                    dlceNum.Visible = false;
-                    dlBank.Visible = true;
-                }
-            }
-            else
-            {
-                dlceDate.Visible = false;
-                dlceNum.Visible = false;
-                dlBank.Visible = true;
-            }
+            //DropDownList ddl = (DropDownList)sender;
+            //if (!string.IsNullOrEmpty(ddl.SelectedValue))
+            //{
+            //    Model.payMethod model = new BLL.payMethod().GetModel(Utils.StrToInt(ddl.SelectedValue, 0));
+            //    if (model.pm_type.Value)
+            //    {
+            //        dlceDate.Visible = true;
+            //        dlceNum.Visible = true;
+            //        dlBank.Visible = false;
+            //    }
+            //    else
+            //    {
+            //        dlceDate.Visible = false;
+            //        dlceNum.Visible = false;
+            //        dlBank.Visible = true;
+            //    }
+            //}
+            //else
+            //{
+            //    dlceDate.Visible = false;
+            //    dlceNum.Visible = false;
+            //    dlBank.Visible = true;
+            //}
         }
 
         protected void btnSubmitToDistribute_Click(object sender, EventArgs e)
@@ -278,6 +279,18 @@ namespace MettingSys.Web.admin.finance
                 JscriptMsg("添加付款通知成功！", "rpDistribution.aspx?id="+ rpid);
             }
         }
-        
+
+        protected void ddlmethod_DataBound(object sender, EventArgs e)
+        {
+            DropDownList ddl = sender as DropDownList;
+            DataTable dt = ((DataSet)ddl.DataSource).Tables[0];
+            ddl.Items.Clear();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ddl.Items.Add(new ListItem(Utils.ObjectToStr(dr["pm_name"]), Utils.ObjectToStr(dr["pm_id"])));
+                ddl.Items.FindByValue(Utils.ObjectToStr(dr["pm_id"])).Attributes.Add("py", Utils.ObjectToStr(dr["pm_type"]));
+            }
+            ddl.Items.Insert(0, new ListItem("请选择", ""));
+        }
     }
 }

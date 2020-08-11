@@ -585,8 +585,8 @@ namespace MettingSys.DAL
         public int getUnCheckOrderCount(string _edate1,string _status,string _dstatus,string _flag)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select count(*) from MS_Order");
-            strSql.Append(" where exists(select * from ms_finance where fin_oid=o_id) and exists(select * from MS_finance where fin_oid=o_id and fin_flag=0)");
+            strSql.Append("select count(*) from MS_Order where 1=1");
+            //strSql.Append(" where exists(select * from ms_finance where fin_oid=o_id) and exists(select * from MS_finance where fin_oid=o_id and fin_flag=0)");
             if (!string.IsNullOrEmpty(_edate1))
             {
                 strSql.Append(" and datediff(s,o_edate,'" + _edate1 + "')>=0");
@@ -625,6 +625,7 @@ namespace MettingSys.DAL
             {
                 strSql.Append(" and o_flag=" + _flag + "");
             }
+            strSql.Append(" and o_lockStatus=0");
             SqlParameter[] parameters = {};
             return Utils.ObjToInt(DbHelperSQL.GetSingle(strSql.ToString(), parameters));
         }

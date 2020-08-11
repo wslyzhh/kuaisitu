@@ -7,11 +7,13 @@
 // </自动生成>
 //------------------------------------------------------------------------------
 
-namespace MettingSys.Web.admin.finance {
-    
-    
-    public partial class receipt_edit {
-        
+namespace MettingSys.Web.admin.finance
+{
+
+
+    public partial class receipt_edit
+    {
+
         /// <summary>
         /// form1 控件。
         /// </summary>
@@ -20,7 +22,7 @@ namespace MettingSys.Web.admin.finance {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-        
+
         /// <summary>
         /// topDiv 控件。
         /// </summary>
@@ -29,7 +31,7 @@ namespace MettingSys.Web.admin.finance {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl topDiv;
-        
+
         /// <summary>
         /// floatHead 控件。
         /// </summary>
@@ -38,7 +40,7 @@ namespace MettingSys.Web.admin.finance {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl floatHead;
-        
+
         /// <summary>
         /// txtCusName 控件。
         /// </summary>
@@ -47,7 +49,7 @@ namespace MettingSys.Web.admin.finance {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCusName;
-        
+
         /// <summary>
         /// hCusId 控件。
         /// </summary>
@@ -56,7 +58,7 @@ namespace MettingSys.Web.admin.finance {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hCusId;
-        
+
         /// <summary>
         /// txtMoney 控件。
         /// </summary>
@@ -65,7 +67,7 @@ namespace MettingSys.Web.admin.finance {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMoney;
-        
+
         /// <summary>
         /// txtforedate 控件。
         /// </summary>
@@ -74,7 +76,7 @@ namespace MettingSys.Web.admin.finance {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtforedate;
-        
+
         /// <summary>
         /// ddlmethod 控件。
         /// </summary>
@@ -83,7 +85,25 @@ namespace MettingSys.Web.admin.finance {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlmethod;
-        
+
+        /// <summary>
+        /// txtBank 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBank;
+
+        /// <summary>
+        /// hBankId 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hBankId;
+
         /// <summary>
         /// txtContent 控件。
         /// </summary>
@@ -92,16 +112,7 @@ namespace MettingSys.Web.admin.finance {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtContent;
-        
-        /// <summary>
-        /// dlceNum 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dlceNum;
-        
+
         /// <summary>
         /// txtCenum 控件。
         /// </summary>
@@ -110,16 +121,7 @@ namespace MettingSys.Web.admin.finance {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCenum;
-        
-        /// <summary>
-        /// dlceDate 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dlceDate;
-        
+
         /// <summary>
         /// txtCedate 控件。
         /// </summary>
@@ -128,7 +130,7 @@ namespace MettingSys.Web.admin.finance {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCedate;
-        
+
         /// <summary>
         /// btnSubmit 控件。
         /// </summary>
@@ -137,7 +139,7 @@ namespace MettingSys.Web.admin.finance {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSubmit;
-        
+
         /// <summary>
         /// btnSubmitToDistribute 控件。
         /// </summary>
@@ -146,7 +148,7 @@ namespace MettingSys.Web.admin.finance {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSubmitToDistribute;
-        
+
         /// <summary>
         /// btnReturn 控件。
         /// </summary>

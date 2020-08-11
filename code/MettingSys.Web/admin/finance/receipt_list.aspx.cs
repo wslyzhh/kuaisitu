@@ -21,7 +21,7 @@ namespace MettingSys.Web.admin.finance
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _cusName = "", _cid = "", _method = string.Empty, _isconfirm = string.Empty, _sforedate = string.Empty, _eforedate = string.Empty, _sdate = string.Empty, _edate = string.Empty, _num = "", _chk = "", _numdate = "", _self = "", _moneyType = "1", _sign = "", _money = "", _type = "", _flag = "", _addperson = "";
+        protected string _cusName = "", _cid = "", _method = string.Empty, _isconfirm = string.Empty, _sforedate = string.Empty, _eforedate = string.Empty, _sdate = string.Empty, _edate = string.Empty, _num = "", _chk = "", _numdate = "", _self = "", _moneyType = "1", _sign = "", _money = "", _type = "", _flag = "", _addperson = "", _check = string.Empty, _check2 = string.Empty;
         protected Model.business_log logmodel = null;
         protected Model.manager manager = null;
         decimal _tmoney = 0, _tunmoney = 0;
@@ -47,10 +47,13 @@ namespace MettingSys.Web.admin.finance
             _type = DTRequest.GetString("ddlType");
             _flag = DTRequest.GetString("flag");
             _addperson = DTRequest.GetString("txtAddPerson");
+            _check = DTRequest.GetString("ddlcheck");
+            _check2 = DTRequest.GetString("ddlcheck2");
             if (string.IsNullOrEmpty(this._flag))
             {
                 this._flag = "0";
             }
+            checkli.Visible = false;
             switch (this._flag)
             {
                 case "1":
@@ -58,6 +61,29 @@ namespace MettingSys.Web.admin.finance
                     break;
                 case "2":
                     this._isconfirm = "True";
+                    break;
+                case "3":
+                    _moneyType = "1";
+                    _sign = "<";
+                    _money = "0";
+                    checkli.Visible = true;
+                    this._check = "0";
+                    break;
+                case "4":
+                    _moneyType = "1";
+                    _sign = "<";
+                    _money = "0";
+                    checkli.Visible = true;
+                    this._check = "2";
+                    this._check2 = "0";
+                    break;
+                case "5":
+                    _moneyType = "1";
+                    _sign = "<";
+                    _money = "0";
+                    checkli.Visible = true;
+                    this._check = "2";
+                    this._check2 = "2";
                     break;
                 default:
                     break;
@@ -83,6 +109,7 @@ namespace MettingSys.Web.admin.finance
                 {
                     ChkAdminLevel("sys_payment_list1", DTEnums.ActionEnum.View.ToString()); //检查权限
                 }
+                labUnCheckCount.Text = new BLL.ReceiptPay().getUnPaycount().ToString();
                 RptBind("rp_type=1 " + CombSqlTxt(), orderby);
             }
         }
@@ -114,6 +141,24 @@ namespace MettingSys.Web.admin.finance
             ddlisConfirm1.DataBind();
             ddlisConfirm1.Items.Insert(0, new ListItem("请选择", ""));
             ddlisConfirm1.SelectedValue = "True";
+
+            ddlcheck.DataSource = Common.BusinessDict.checkStatus();
+            ddlcheck.DataTextField = "value";
+            ddlcheck.DataValueField = "key";
+            ddlcheck.DataBind();
+            ddlcheck.Items.Insert(0, new ListItem("不限", ""));
+
+            ddlcheck1.DataSource = Common.BusinessDict.checkStatus();
+            ddlcheck1.DataTextField = "value";
+            ddlcheck1.DataValueField = "key";
+            ddlcheck1.DataBind();
+            ddlcheck1.Items.Insert(0, new ListItem("请选择", ""));
+
+            ddlcheck2.DataSource = Common.BusinessDict.checkStatus();
+            ddlcheck2.DataTextField = "value";
+            ddlcheck2.DataValueField = "key";
+            ddlcheck2.DataBind();
+            ddlcheck2.Items.Insert(0, new ListItem("不限", ""));
 
         }
         #endregion
@@ -158,6 +203,8 @@ namespace MettingSys.Web.admin.finance
             txtCusName.Text = _cusName;
             hCusId.Value = _cid;
             ddlmethod.SelectedValue = _method;
+            ddlcheck.SelectedValue = _check;
+            ddlcheck2.SelectedValue = _check2;
             ddlisConfirm.SelectedValue = _isconfirm;
             txtsforedate.Text = _sforedate;
             txteforedate.Text = _eforedate;
@@ -170,12 +217,21 @@ namespace MettingSys.Web.admin.finance
             txtMoney.Text = _money;
             ddlmoneyType.SelectedValue = _moneyType;
             txtAddPerson.Text = _addperson;
+
+            if (_flag == "3")
+            {
+                ddlchecktype.SelectedValue = "1";
+            }
+            else if (_flag == "4")
+            {
+                ddlchecktype.SelectedValue = "2";
+            }
         }
         #endregion
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("receipt_list.aspx", "page={0}&ddlmethod={1}&ddlisConfirm={2}&txtsforedate={3}&txteforedate={4}&txtsdate={5}&txtedate={6}&txtNum={7}&txtCusName={8}&hCusId={9}&txtChk={10}&txtNumDate={11}&ddlsign={12}&txtmoney={13}&ddlmoneyType={14}&ddlType={15}&txtAddPerson={16}", "__id__", _method, _isconfirm, _sforedate, _eforedate, _sdate, _edate, _num, _cusName, _cid, _chk, _numdate, _sign, _money, _moneyType, _type, _addperson);
+            return Utils.CombUrlTxt("receipt_list.aspx", "page={0}&ddlmethod={1}&ddlisConfirm={2}&txtsforedate={3}&txteforedate={4}&txtsdate={5}&txtedate={6}&txtNum={7}&txtCusName={8}&hCusId={9}&txtChk={10}&txtNumDate={11}&ddlsign={12}&txtmoney={13}&ddlmoneyType={14}&ddlType={15}&txtAddPerson={16}&ddlcheck={17}&ddlcheck2={18}", "__id__", _method, _isconfirm, _sforedate, _eforedate, _sdate, _edate, _num, _cusName, _cid, _chk, _numdate, _sign, _money, _moneyType, _type, _addperson,_check,_check2);
         }
 
         #region 组合SQL查询语句==========================
@@ -212,6 +268,14 @@ namespace MettingSys.Web.admin.finance
             if (!string.IsNullOrEmpty(_method))
             {
                 strTemp.Append(" and rp_method=" + _method + "");
+            }
+            if (!string.IsNullOrEmpty(_check))
+            {
+                strTemp.Append(" and rp_flag=" + _check + "");
+            }
+            if (!string.IsNullOrEmpty(_check2))
+            {
+                strTemp.Append(" and rp_flag1=" + _check2 + "");
             }
             if (!string.IsNullOrEmpty(_isconfirm))
             {

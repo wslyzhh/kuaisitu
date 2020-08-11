@@ -255,7 +255,7 @@ namespace MettingSys.Web.admin.finance
 
             if (flag == "0")
             {
-                strTemp.Append(" and exists(select * from ms_finance where fin_oid=o_id) and exists(select * from MS_finance where fin_oid=o_id and fin_flag=0)");
+                //strTemp.Append(" and exists(select * from ms_finance where fin_oid=o_id) and exists(select * from MS_finance where fin_oid=o_id and fin_flag=0)");
             }
             else if (flag == "1")
             {

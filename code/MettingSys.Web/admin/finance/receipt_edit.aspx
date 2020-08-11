@@ -31,6 +31,7 @@
                     minChars: 1,
                     onSelect: function (suggestion) {
                         $('#hCusId').val(suggestion.id);
+                        showBank(suggestion.id);
                     },
                     showNoSuggestionNotice: true,
                     noSuggestionNotice: '抱歉，没有匹配的选项',
@@ -41,6 +42,45 @@
                 $("#hCusId").val("");
             });
             bingCertificate();
+
+            $("#txtBank").change(function () {
+                $('#hBankId').val("");
+                var cid = parseInt($('#hCusId').val());
+                if (cid > 0) {
+                    showBank(cid);
+                }
+            });
+
+            $("#txtMoney").change(function () {
+                if ($(this).val() != "") {
+                    if ($(this).val() < 0) {
+                        $("#dlBank").show();
+                    }
+                    else {
+                        $("#dlBank").hide();
+                    }
+                }
+            });
+
+            $("#ddlmethod").change(function () {
+                var ptype = $(this).find('option:selected').attr("py");
+                if (ptype == "True") {
+                    $("#dlceDate").show();
+                    $("#dlceNum").show();
+                }
+                else {
+                    $("#dlceDate").hide();
+                    $("#dlceNum").hide();
+                }
+            });
+            if ("<%=isFushu%>" == "True") {
+                $("#dlBank").show();
+            }
+            if ("<%=isChongzhang%>"== "True") {
+                $("#dlceDate").show();
+                $("#dlceNum").show();
+                $("#dlBank").hide();
+            }
         });
         //绑定凭证
         function bingCertificate() {
@@ -55,6 +95,48 @@
                     noSuggestionNotice: '抱歉，没有匹配的选项'
                 });
             });
+        }
+        function showBank(cid) {
+            var postData = { "cid": cid, "field": "1" };
+            //发送AJAX请求
+            $.ajax({
+                type: "post",
+                url: "../../tools/Business_ajax.ashx?action=getCusBank",
+                data: postData,
+                dataType: "json",
+                success: function (json) {
+                    $('#txtBank').devbridgeAutocomplete({
+                        lookup: json,
+                        minChars: 0,
+                        width: '500px',
+                        onSelect: function (suggestion) {
+                            $(this).next().val(suggestion.id);
+                        },
+                        showNoSuggestionNotice: true,
+                        noSuggestionNotice: '抱歉，没有匹配的选项'
+                    });
+                }
+            });
+        }
+        function addBank() {
+            var cid = parseInt($('#hCusId').val());
+            if (cid > 0) {
+                layer.open({
+                    type: 2,
+                    title: '添加银行账号',
+                    shadeClose: true,
+                    shade: false,
+                    maxmin: false, //开启最大化最小化按钮
+                    area: ['600px', '400px'],
+                    content: '../customer/bank_edit.aspx?action=Add&fromPay=true&cid=' + cid + '&tag=1',
+                    end: function () {
+                        //location.reload();
+                    }
+                });
+            }
+            else {
+                jsprint("请选择收款对象");
+            }
         }
     </script>
 </head>
@@ -110,10 +192,18 @@
             <dl>
                 <dt>收款方式</dt>
                 <dd>
-                    <div class="rule-single-select">
-                        <asp:DropDownList ID="ddlmethod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlmethod_SelectedIndexChanged"></asp:DropDownList>
+                    <div class="rule-single-select"><%--AutoPostBack="true" OnSelectedIndexChanged="ddlmethod_SelectedIndexChanged"--%>
+                        <asp:DropDownList ID="ddlmethod" OnDataBound="ddlmethod_DataBound" runat="server" ></asp:DropDownList>
                     </div>
                     <span class="Validform_checktip">*</span>
+                </dd>
+            </dl>
+            <dl id="dlBank" style="display:none;">
+                <dt>客户银行账号</dt>
+                <dd>
+                    <asp:TextBox ID="txtBank" runat="server" CssClass="input normal" Width="380px"></asp:TextBox>
+                    <asp:HiddenField ID="hBankId" runat="server" />
+                    <a href="javascript:void(0);" onclick="addBank()">新增银行账号</a>
                 </dd>
             </dl>
             <dl>
@@ -122,14 +212,14 @@
                     <asp:TextBox ID="txtContent" runat="server" CssClass="input normal" Width="400px" Height="110px" TextMode="MultiLine" />
                 </dd>
             </dl>
-            <dl id="dlceNum" runat="server">
+            <dl id="dlceNum" style="display:none;">
                 <dt>凭证号</dt>
                 <dd>
                     <asp:TextBox ID="txtCenum" runat="server" CssClass="input " Width="150" />
                     <span class="Validform_checktip">*不存在的凭证号，添加凭证日期后提交，可生成新的凭证号</span>
                 </dd>
             </dl>
-            <dl id="dlceDate" runat="server">
+            <dl id="dlceDate" style="display:none;">
                 <dt>凭证日期</dt>
                 <dd>
                     <asp:TextBox ID="txtCedate" runat="server" CssClass="input rule-date-input" Width="120" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />

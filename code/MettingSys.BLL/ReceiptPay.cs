@@ -26,6 +26,15 @@ namespace MettingSys.BLL
         }
 
         /// <summary>
+        /// 计算已审未支付退款的数量
+        /// </summary>
+        /// <returns></returns>
+        public int getUnPaycount()
+        {
+            return dal.getUnPaycount();
+        }
+
+        /// <summary>
         /// 增加一条数据
         /// </summary>
         public string Add(Model.ReceiptPay model,Model.manager manager,string num,string date,out int rpid,bool flag=true)
@@ -119,18 +128,45 @@ namespace MettingSys.BLL
 
             bool isChongzhang = false;
             if (model.rp_type.Value)
-            {                
-                model.rp_flag = 2;
-                model.rp_checkTime = DateTime.Now;
-                model.rp_flag1 = 2;
-                model.rp_checkTime1 = DateTime.Now;
-                isChongzhang = model.rp_method.Value >0 && new BLL.payMethod().GetModel(model.rp_method.Value).pm_type.Value;
-                if (model.rp_method > 0 && isChongzhang)
+            {
+                model.rp_flag = 0;
+                model.rp_flag1 = 0;
+                if (model.rp_money >= 0)
                 {
-                    model.rp_isConfirm = true;
-                    model.rp_date = model.rp_foredate;
-                    model.rp_confirmerName = manager.real_name;
-                    model.rp_confirmerNum = manager.user_name;
+                    model.rp_flag = 2;
+                    model.rp_checkTime = DateTime.Now;
+                    model.rp_flag1 = 2;
+                    model.rp_checkTime1 = DateTime.Now;
+                    isChongzhang = model.rp_method.Value > 0 && new BLL.payMethod().GetModel(model.rp_method.Value).pm_type.Value;
+                    if (isChongzhang)
+                    {
+                        model.rp_isConfirm = true;
+                        model.rp_date = model.rp_foredate;
+                        model.rp_confirmerName = manager.real_name;
+                        model.rp_confirmerNum = manager.user_name;
+                    }
+                }
+                else
+                {
+                    isChongzhang = model.rp_method.Value > 0 && new BLL.payMethod().GetModel(model.rp_method.Value).pm_type.Value;
+                    if (isChongzhang)
+                    {
+                        model.rp_flag = 2;
+                        model.rp_checkTime = DateTime.Now;
+                        model.rp_flag1 = 2;
+                        model.rp_checkTime1 = DateTime.Now;
+                        model.rp_isConfirm = true;
+                        model.rp_date = model.rp_foredate;
+                        model.rp_confirmerName = manager.real_name;
+                        model.rp_confirmerNum = manager.user_name;
+                    }
+                    else 
+                    {
+                        if (model.rp_cbid == 0)
+                        {
+                            return "请选择客户银行账号";
+                        }
+                    }
                 }
             }
             else
@@ -139,7 +175,7 @@ namespace MettingSys.BLL
                 model.rp_flag = 0;
                 model.rp_flag1 = 0;
                 isChongzhang = model.rp_method.Value > 0 && new BLL.payMethod().GetModel(model.rp_method.Value).pm_type.Value;
-                if ((model.rp_method > 0 && isChongzhang) || model.rp_money <0)
+                if (isChongzhang || model.rp_money <0)
                 {
                     model.rp_flag = 2;
                     model.rp_checkTime = DateTime.Now;
