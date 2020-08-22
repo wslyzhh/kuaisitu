@@ -51,7 +51,7 @@
                 }
             });
 
-            $("#txtMoney").change(function () {
+            $("#txtMoney").blur(function () {
                 if ($(this).val() != "") {
                     if ($(this).val() < 0) {
                         $("#dlBank").show();
@@ -67,6 +67,7 @@
                 if (ptype == "True") {
                     $("#dlceDate").show();
                     $("#dlceNum").show();
+                    $("#dlBank").hide();
                 }
                 else {
                     $("#dlceDate").hide();
@@ -75,12 +76,19 @@
             });
             if ("<%=isFushu%>" == "True") {
                 $("#dlBank").show();
+            } else {
+                $("#dlBank").hide();
             }
-            if ("<%=isChongzhang%>"== "True") {
+
+            if ("<%=isChongzhang%>" == "True") {
                 $("#dlceDate").show();
                 $("#dlceNum").show();
                 $("#dlBank").hide();
+            } else {
+                $("#dlceDate").hide();
+                $("#dlceNum").hide();
             }
+
         });
         //绑定凭证
         function bingCertificate() {

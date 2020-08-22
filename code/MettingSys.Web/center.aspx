@@ -25,6 +25,15 @@
         <!--/导航栏-->
         <!--内容-->
         <div class="line10"></div>
+        <div class="nlist-2" style="color:red;">
+            <h3>提醒信息</h3>
+            <ul>
+                <li id="unpayli" runat="server">
+                    <p>未付退款：<a href="admin/finance/receipt_list.aspx?flag=5"><%=unPayCount %></a></p>
+                </li>
+            </ul>
+        </div>
+        <div class="line10"></div>
         <div class="nlist-1">
             <ul>
                 <li>

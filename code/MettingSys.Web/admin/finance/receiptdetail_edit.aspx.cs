@@ -19,6 +19,7 @@ namespace MettingSys.Web.admin.finance
         protected Model.manager manager = null;
         protected string oID = string.Empty, cname = string.Empty, contentText=string.Empty;
         protected string fromOrder = "";//true时表示从订单页面添加
+        protected bool isChongzhang = false, isFushu = false;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -84,7 +85,21 @@ namespace MettingSys.Web.admin.finance
             ddlmethod.DataBind();
             ddlmethod.Items.Insert(0, new ListItem("请选择", ""));
         }
+
+        protected void ddlmethod_DataBound(object sender, EventArgs e)
+        {
+            DropDownList ddl = sender as DropDownList;
+            DataTable dt = ((DataSet)ddl.DataSource).Tables[0];
+            ddl.Items.Clear();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ddl.Items.Add(new ListItem(Utils.ObjectToStr(dr["pm_name"]), Utils.ObjectToStr(dr["pm_id"])));
+                ddl.Items.FindByValue(Utils.ObjectToStr(dr["pm_id"])).Attributes.Add("py", Utils.ObjectToStr(dr["pm_type"]));
+            }
+            ddl.Items.Insert(0, new ListItem("请选择", ""));
+        }
         #endregion
+
         #region 赋值操作=================================
         private void ShowInfo(int _id)
         {
@@ -96,12 +111,23 @@ namespace MettingSys.Web.admin.finance
                 txtCusName.Text = dr["c_name"].ToString();
                 hCusId.Value = dr["rpd_cid"].ToString();
                 txtMoney.Text = dr["rpd_money"].ToString();
+                if (Utils.StrToFloat(dr["rp_money"].ToString(), 0) < 0)
+                {
+                    isFushu = true;
+                }
                 if (dr["rpd_foredate"] != null)
                 {
                     txtforedate.Text = Convert.ToDateTime(dr["rpd_foredate"]).ToString("yyyy-MM-dd");
                 }
+                txtBank.Text = Utils.ObjectToStr(dr["cb_bank"]) + "(" + Utils.ObjectToStr(dr["cb_bankName"]) + "/" + Utils.ObjectToStr(dr["cb_bankNum"]) + ")";
+                hBankId.Value = Utils.ObjectToStr(dr["rp_cbid"]);
+
                 ddlmethod.SelectedValue = dr["rpd_method"].ToString();
                 txtContent.Text = dr["rpd_content"].ToString();
+                if (dr["pm_type"].ToString() == "True")
+                {
+                    isChongzhang = true;
+                }
             }
 
         }
@@ -127,6 +153,11 @@ namespace MettingSys.Web.admin.finance
             model.rpd_adddate = DateTime.Now;
             model.rpd_flag1 = 2;
             //model.rpd_area = manager.area;    
+            model.rpd_cbid = 0;
+            if (model.rpd_money < 0)
+            {
+                model.rpd_cbid = Utils.StrToInt(hBankId.Value, 0);
+            }
             return bll.AddReceiptPay(model, manager,out id);
         }
         #endregion

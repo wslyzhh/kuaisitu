@@ -124,8 +124,14 @@ namespace MettingSys.BLL
                 rp.rp_isConfirm = false;
                 rp.rp_isExpect = false;
                 rp.rp_flag = 2;
+                if (rp.rp_money < 0)
+                {
+                    rp.rp_flag = 0;
+                    rp.rp_flag1 = 0;
+                }
                 rp.rp_adddate = model.rpd_adddate;
                 rp.rp_area = model.rpd_area;
+                rp.rp_cbid = model.rpd_cbid;
             }
             else
             {

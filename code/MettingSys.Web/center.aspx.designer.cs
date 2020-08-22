@@ -7,11 +7,13 @@
 // </自动生成>
 //------------------------------------------------------------------------------
 
-namespace MettingSys.Web {
-    
-    
-    public partial class center {
-        
+namespace MettingSys.Web
+{
+
+
+    public partial class center
+    {
+
         /// <summary>
         /// form1 控件。
         /// </summary>
@@ -20,7 +22,16 @@ namespace MettingSys.Web {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-        
+
+        /// <summary>
+        /// unpayli 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl unpayli;
+
         /// <summary>
         /// litIP 控件。
         /// </summary>
@@ -29,7 +40,7 @@ namespace MettingSys.Web {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litIP;
-        
+
         /// <summary>
         /// litBackIP 控件。
         /// </summary>
@@ -38,7 +49,7 @@ namespace MettingSys.Web {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litBackIP;
-        
+
         /// <summary>
         /// litBackTime 控件。
         /// </summary>
@@ -47,7 +58,7 @@ namespace MettingSys.Web {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litBackTime;
-        
+
         /// <summary>
         /// LitUpgrade 控件。
         /// </summary>

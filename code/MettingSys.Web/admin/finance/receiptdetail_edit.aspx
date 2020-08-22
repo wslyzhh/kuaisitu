@@ -31,6 +31,7 @@
                     minChars: 1,
                     onSelect: function (suggestion) {
                         $('#hCusId').val(suggestion.id);
+                        showBank(suggestion.id);
                     },
                     showNoSuggestionNotice: true,
                     noSuggestionNotice: '抱歉，没有匹配的选项',
@@ -40,7 +41,93 @@
             $("#txtCusName").change(function () {
                 $("#hCusId").val("");
             });
+            if (<%=cid %> > 0) {
+                showBank(<%=cid %>);
+            }
+            $("#txtMoney").change(function () {
+                if ($(this).val() != "") {
+                    if ($(this).val() < 0) {
+                        $("#dlBank").show();
+                    }
+                    else {
+                        $("#dlBank").hide();
+                    }
+                }
+            });
+
+            $("#ddlmethod").change(function () {
+                var ptype = $(this).find('option:selected').attr("py");
+                if (ptype == "True") {
+                    $("#dlceDate").show();
+                    $("#dlceNum").show();
+                    $("#dlBank").hide();
+                }
+                else {
+                    $("#dlceDate").hide();
+                    $("#dlceNum").hide();
+                }
+            });
+
+            $("#txtBank").change(function () {
+                $('#hBankId').val("");
+                var cid = parseInt($('#hCusId').val());
+                if (cid > 0) {
+                    showBank(cid);
+                }
+            });
+
+            if ("<%=isFushu%>" == "True") {
+                $("#dlBank").show();
+            } else {
+                $("#dlBank").hide();
+            }
+
+            if ("<%=isChongzhang%>" == "True") {
+                $("#dlBank").hide();
+            }
         });
+        function showBank(cid) {
+            var postData = { "cid": cid, "field": "1" };
+            //发送AJAX请求
+            $.ajax({
+                type: "post",
+                url: "../../tools/Business_ajax.ashx?action=getCusBank",
+                data: postData,
+                dataType: "json",
+                success: function (json) {
+                    $('#txtBank').devbridgeAutocomplete({
+                        lookup: json,
+                        minChars: 0,
+                        width: '500px',
+                        onSelect: function (suggestion) {
+                            $(this).next().val(suggestion.id);
+                        },
+                        showNoSuggestionNotice: true,
+                        noSuggestionNotice: '抱歉，没有匹配的选项'
+                    });
+                }
+            });
+        }
+        function addBank() {
+            var cid = parseInt($('#hCusId').val());
+            if (cid > 0) {
+                layer.open({
+                    type: 2,
+                    title: '添加银行账号',
+                    shadeClose: true,
+                    shade: false,
+                    maxmin: false, //开启最大化最小化按钮
+                    area: ['600px', '400px'],
+                    content: '../customer/bank_edit.aspx?action=Add&fromPay=true&cid=' + cid + '&tag=1',
+                    end: function () {
+                        //location.reload();
+                    }
+                });
+            }
+            else {
+                jsprint("请选择收款对象");
+            }
+        }
     </script>
 </head>
 
@@ -102,11 +189,19 @@
                 <dt>收款方式</dt>
                 <dd>
                     <div class="rule-single-select">
-                        <asp:DropDownList ID="ddlmethod" runat="server"></asp:DropDownList>
+                        <asp:DropDownList ID="ddlmethod" runat="server" OnDataBound="ddlmethod_DataBound"></asp:DropDownList>
                     </div>
                     <span class="Validform_checktip">*</span>
                 </dd>
             </dl>     
+            <dl id="dlBank" style="display:none;">
+                <dt>客户银行账号</dt>
+                <dd>
+                    <asp:TextBox ID="txtBank" runat="server" CssClass="input normal" Width="380px"></asp:TextBox>
+                    <asp:HiddenField ID="hBankId" runat="server" />
+                    <a href="javascript:void(0);" onclick="addBank()">新增银行账号</a>
+                </dd>
+            </dl>
             <dl>
                 <dt>收款内容</dt>
                 <dd>
