@@ -81,8 +81,8 @@ export default {
         //     console.log(res.code);
         //     _this.userid(res.code)
         // })
-        console.log('用户ID：'+ _this.userInfo.id)
-        _this.getAduitCount({managerid:_this.userInfo.id}).then(res => {
+        //console.log('用户ID：'+ _this.userInfo.id)
+        _this.getAduitCount({managerid:14}).then(res => {
             if(res.data.status==1){
                 _this.aduitCount1 = res.data.count1
                 _this.aduitCount2 = res.data.count2
@@ -122,7 +122,7 @@ export default {
                     if (this.powers[j] === arr[i])return true;
                 }
             }
-            return false
+            return true
         },
         getMessage(_id){
             this.getMessageList({pageIndex:1,pageSize:10,managerid:_id,isRead:'False'}).then(res => {
