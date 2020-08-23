@@ -69,6 +69,12 @@ let list = [
                 name:'预付款审批',
                 code:['0402','0601']
             },
+            {
+                imgUrl:require('../img/nav_list/icon_notice_2.png'),
+                link:'refundAudit',
+                name:'业务退款审批',
+                code:['0402','0601']
+            }
         ]
     },
     {
