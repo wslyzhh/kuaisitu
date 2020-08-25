@@ -35,7 +35,7 @@ namespace MettingSys.Model
         /// <param name="o_financecust">o_financeCust</param>
         /// <param name="o_adddate">o_addDate</param>
         /// <param name="o_lastupdatedate">o_lastUpdateDate</param>
-        public Order(string o_id, int? o_cid, int? o_coid, string o_content, string o_address, string o_contractprice, string o_contractcontent, DateTime? o_sdate, DateTime? o_edate, string o_place, byte? o_status, byte? o_dstatus, byte? o_lockstatus, string o_remarks, bool? o_ispush, byte? o_flag, decimal? o_financecust, DateTime? o_adddate, DateTime? o_lastupdatedate,string o_finremarks)
+        public Order(string o_id, int? o_cid, int? o_coid, string o_content, string o_address, string o_contractprice, string o_contractcontent, DateTime? o_sdate, DateTime? o_edate, string o_place, byte? o_status,DateTime? o_statusTime, byte? o_dstatus, byte? o_lockstatus, string o_remarks, bool? o_ispush, byte? o_flag, decimal? o_financecust, DateTime? o_adddate, DateTime? o_lastupdatedate,string o_finremarks)
         {
             this.o_id = o_id;
             this.o_cid = o_cid;
@@ -48,6 +48,7 @@ namespace MettingSys.Model
             this.o_edate = o_edate;
             this.o_place = o_place;
             this.o_status = o_status;
+            this.o_statusTime = o_statusTime;
             this.o_lockStatus = o_lockstatus;
             this.o_remarks = o_remarks;
             this.o_isPush = o_ispush;
@@ -114,7 +115,12 @@ namespace MettingSys.Model
         /// o_status
         /// </summary>
         public byte? o_status { get; set; }
-        
+
+        /// <summary>
+        /// o_statusTime
+        /// </summary>
+        public DateTime? o_statusTime { get; set; }
+
         /// <summary>
         /// o_lockStatus
         /// </summary>

@@ -134,6 +134,12 @@ namespace MettingSys.BLL
                 person5 = person5.TrimEnd(',');
             }
 
+            //当订单状态为确认时，添加订单确认时间
+            if (model.o_status == 2)
+            {
+                model.o_statusTime = DateTime.Now;
+            }
+
             if (dal.AddOrder(model))
             {
                 StringBuilder content = new StringBuilder();
