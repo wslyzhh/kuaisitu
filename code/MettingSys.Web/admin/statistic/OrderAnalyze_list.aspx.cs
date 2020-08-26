@@ -20,7 +20,7 @@ namespace MettingSys.Web.admin.statistic
         protected int totalCount; //数据总记录数
         protected int page; //当前页码
         protected int pageSize; //每页大小
-        protected string _orderid = "", _cusName = "", _cid = "", _status = "", _dstatus = "", _lockstatus = "", _content = "", _address = "", _sign = "", _money = "", _person1 = "", _person3 = "", _person5 = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _area = "", _sign1 = "", _money1 = "", _sign2 = "", _money2 = "", _sign3 = "", _money3 = "", _sign4 = "", _money4 = "", _sign5 = "", _money5 = "", _orderarea = "", _method = "", _pushstatus = "", _flag = "";
+        protected string _orderid = "", _cusName = "", _cid = "", _status = "", _dstatus = "", _lockstatus = "", _content = "", _address = "", _sign = "", _money = "", _person1 = "", _person3 = "", _person5 = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _area = "", _sign1 = "", _money1 = "", _sign2 = "", _money2 = "", _sign3 = "", _money3 = "", _sign4 = "", _money4 = "", _sign5 = "", _money5 = "", _orderarea = "", _method = "", _pushstatus = "", _flag = "", _sdate2 = "", _edate2 = "";
         Model.manager manager = null;
         protected Model.business_log logmodel = null;
         decimal money1 = 0, money2 = 0, money3 = 0, money4 = 0, money5 = 0, money6 = 0;
@@ -58,6 +58,8 @@ namespace MettingSys.Web.admin.statistic
             _money5 = DTRequest.GetString("txtMoney5");
             _orderarea = DTRequest.GetString("ddlorderarea");
             _method = DTRequest.GetString("ddlmethod");
+            _sdate2 = DTRequest.GetString("txtsDate2");
+            _edate2 = DTRequest.GetString("txteDate2");
             manager = GetAdminInfo();
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
@@ -230,7 +232,7 @@ namespace MettingSys.Web.admin.statistic
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("OrderAnalyze_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlstatus={3}&ddldstatus={4}&ddllock={5}&txtContent={6}&txtAddress={7}&ddlsign={8}&txtMoney={9}&txtPerson1={10}&txtPerson3={11}&txtPerson5={12}&txtsDate={13}&txteDate={14}&txtsDate1={15}&txteDate1={16}&txtOrderID={17}&ddlarea={18}&ddlsign1={19}&txtMoney1={20}&ddlsign2={21}&txtMoney2={22}&ddlsign3={23}&txtMoney3={24}&ddlsign4={25}&txtMoney4={26}&ddlsign5={27}&txtMoney5={28}&ddlispush={29}&ddlflag={30}", "__id__", _cusName, _cid, _status, _dstatus, _lockstatus, _content, _address, _sign, _money, _person1, _person3, _person5, _sdate, _edate, _sdate1, _edate1, _orderid, _area, _sign1, _money1, _sign2, _money2, _sign3, _money3, _sign4, _money4, _sign5, _money5,_pushstatus,_flag);
+            return Utils.CombUrlTxt("OrderAnalyze_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlstatus={3}&ddldstatus={4}&ddllock={5}&txtContent={6}&txtAddress={7}&ddlsign={8}&txtMoney={9}&txtPerson1={10}&txtPerson3={11}&txtPerson5={12}&txtsDate={13}&txteDate={14}&txtsDate1={15}&txteDate1={16}&txtOrderID={17}&ddlarea={18}&ddlsign1={19}&txtMoney1={20}&ddlsign2={21}&txtMoney2={22}&ddlsign3={23}&txtMoney3={24}&ddlsign4={25}&txtMoney4={26}&ddlsign5={27}&txtMoney5={28}&ddlispush={29}&ddlflag={30}&txtsDate2={31}&txteDate2={32}", "__id__", _cusName, _cid, _status, _dstatus, _lockstatus, _content, _address, _sign, _money, _person1, _person3, _person5, _sdate, _edate, _sdate1, _edate1, _orderid, _area, _sign1, _money1, _sign2, _money2, _sign3, _money3, _sign4, _money4, _sign5, _money5, _pushstatus, _flag, _sdate2, _sdate2);
         }
 
         #region 组合SQL查询语句==========================
@@ -408,6 +410,14 @@ namespace MettingSys.Web.admin.statistic
             {
                 strTemp.Append(" and exists(select * from MS_ReceiptPayDetail where rpd_oid=o_id and rpd_type=1 and rpd_method=" + _method + ")");
             }
+            if (!string.IsNullOrEmpty(_sdate2))
+            {
+                strTemp.Append(" and datediff(day,o_statusTime,'" + _sdate2 + "')<=0");
+            }
+            if (!string.IsNullOrEmpty(_edate2))
+            {
+                strTemp.Append(" and datediff(day,o_statusTime,'" + _edate2 + "')>=0");
+            }
             return strTemp.ToString();
         }
         #endregion
@@ -459,6 +469,8 @@ namespace MettingSys.Web.admin.statistic
             _sign5 = DTRequest.GetFormString("ddlsign5");
             _money5 = DTRequest.GetFormString("txtMoney5");
             _orderarea = DTRequest.GetFormString("ddlorderarea");
+            _sdate2 = DTRequest.GetFormString("txtsDate2");
+            _edate2 = DTRequest.GetFormString("txteDate2");
             RptBind("1=1" + CombSqlTxt(), "o_addDate desc,o_id desc");
         }
 
@@ -509,6 +521,8 @@ namespace MettingSys.Web.admin.statistic
             _sign5 = DTRequest.GetFormString("ddlsign5");
             _money5 = DTRequest.GetFormString("txtMoney5");
             _orderarea = DTRequest.GetFormString("ddlorderarea");
+            _sdate2 = DTRequest.GetFormString("txtsDate2");
+            _edate2 = DTRequest.GetFormString("txteDate2");
             BLL.statisticBLL bll = new BLL.statisticBLL();
             DataTable dt = bll.GetList(this.pageSize, this.page, "1=1" + CombSqlTxt(), "o_addDate desc,o_id desc", out this.totalCount, out money1, out money2, out money3, out money4, out money5, out money6, false).Tables[0];
             
@@ -577,6 +591,7 @@ namespace MettingSys.Web.admin.statistic
             headRow.CreateCell(14).SetCellValue("未付款");
             headRow.CreateCell(15).SetCellValue("税费");
             headRow.CreateCell(16).SetCellValue("业绩利润");
+            headRow.CreateCell(17).SetCellValue("确认时间");
 
             headRow.GetCell(0).CellStyle = titleCellStyle;
             headRow.GetCell(1).CellStyle = titleCellStyle;
@@ -595,6 +610,7 @@ namespace MettingSys.Web.admin.statistic
             headRow.GetCell(14).CellStyle = titleCellStyle;
             headRow.GetCell(15).CellStyle = titleCellStyle;
             headRow.GetCell(16).CellStyle = titleCellStyle;
+            headRow.GetCell(17).CellStyle = titleCellStyle;
 
             sheet.SetColumnWidth(0, 15 * 256);
             sheet.SetColumnWidth(1, 20 * 256);
@@ -613,6 +629,7 @@ namespace MettingSys.Web.admin.statistic
             sheet.SetColumnWidth(14, 20 * 256);
             sheet.SetColumnWidth(15, 20 * 256);
             sheet.SetColumnWidth(16, 20 * 256);
+            sheet.SetColumnWidth(17, 25 * 256);
 
             if (dt != null)
             {
@@ -626,7 +643,7 @@ namespace MettingSys.Web.admin.statistic
                     row.CreateCell(3).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_name"]));
                     row.CreateCell(4).SetCellValue(ConvertHelper.toDate(dt.Rows[i]["o_sdate"]).Value.ToString("yyyy-MM-dd")+"/"+ ConvertHelper.toDate(dt.Rows[i]["o_edate"]).Value.ToString("yyyy-MM-dd"));
                     row.CreateCell(5).SetCellValue(new MettingSys.BLL.department().getAreaText(dt.Rows[i]["o_place"].ToString()));
-                    row.CreateCell(6).SetCellValue(BusinessDict.fStatus()[Convert.ToByte(dt.Rows[i]["o_status"])]);
+                    row.CreateCell(6).SetCellValue(BusinessDict.fStatus()[Utils.ObjToByte(dt.Rows[i]["o_status"])]);
                     row.CreateCell(7).SetCellValue(BusinessDict.lockStatus()[Utils.ObjToByte(dt.Rows[i]["o_lockStatus"])]);
                     row.CreateCell(8).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["op_name"]));
                     row.CreateCell(9).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["person3"]));
@@ -637,6 +654,7 @@ namespace MettingSys.Web.admin.statistic
                     row.CreateCell(14).SetCellValue(Utils.ObjToDecimal(dt.Rows[i]["weifu"], 0).ToString());
                     row.CreateCell(15).SetCellValue(Utils.ObjToDecimal(dt.Rows[i]["o_financeCust"], 0).ToString());
                     row.CreateCell(16).SetCellValue(Utils.ObjToDecimal(dt.Rows[i]["profit"], 0).ToString());
+                    row.CreateCell(17).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["o_statusTime"]) == "" ? "" : Utils.ObjectToDateTime(dt.Rows[i]["o_statusTime"]).ToString("yyyy-MM-dd HH:mm:ss"));
 
                     row.GetCell(0).CellStyle = cellStyle;
                     row.GetCell(1).CellStyle = cellStyle;
@@ -655,6 +673,7 @@ namespace MettingSys.Web.admin.statistic
                     row.GetCell(14).CellStyle = cellStyle;
                     row.GetCell(15).CellStyle = cellStyle;
                     row.GetCell(16).CellStyle = cellStyle;
+                    row.GetCell(17).CellStyle = cellStyle;
                 }
             }
 

@@ -20,7 +20,7 @@ namespace MettingSys.Web.admin.order
         protected int page; //当前页码
         protected int pageSize; //每页大小
         protected string _type = "";//type=check时是订单业务审批列表
-        protected string flag = "", _orderid = "", _cusName = "", _cid = "", _contractPrice = "", _status = "", _dstatus = "", _pushstatus = "", _flag = "", _lockstatus = "", _content = "", _address = "", _sign = "", _money = "", _person1 = "", _person2 = "", _person3 = "", _person4 = "", _person5 = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _area = "", _moneyType = "", _orderarea = "";
+        protected string flag = "", _orderid = "", _cusName = "", _cid = "", _contractPrice = "", _status = "", _dstatus = "", _pushstatus = "", _flag = "", _lockstatus = "", _content = "", _address = "", _sign = "", _money = "", _person1 = "", _person2 = "", _person3 = "", _person4 = "", _person5 = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _area = "", _moneyType = "", _orderarea = "", _sdate2 = "", _edate2 = "";
         Model.manager manager = null;
         protected Model.business_log logmodel = null;
         protected void Page_Load(object sender, EventArgs e)
@@ -51,6 +51,8 @@ namespace MettingSys.Web.admin.order
             _sdate1 = DTRequest.GetString("txtsDate1");
             _edate1 = DTRequest.GetString("txteDate1");
             _area = DTRequest.GetString("ddlarea");
+            _sdate2 = DTRequest.GetString("txtsDate2");
+            _edate2 = DTRequest.GetString("txteDate2");
             _orderarea = DTRequest.GetString("ddlorderarea");
             if (string.IsNullOrEmpty(flag))
             {
@@ -203,6 +205,8 @@ namespace MettingSys.Web.admin.order
             txtsDate1.Text = _sdate1;
             txteDate1.Text = _edate1;
             ddlarea.SelectedValue = _area;
+            txtsDate2.Text = _sdate2;
+            txteDate2.Text = _edate2;
         }
         #endregion
 
@@ -369,6 +373,14 @@ namespace MettingSys.Web.admin.order
             {
                 strTemp.Append(" and datediff(day,o_edate,'" + _edate1 + "')>=0");
             }
+            if (!string.IsNullOrEmpty(_sdate2))
+            {
+                strTemp.Append(" and datediff(day,o_statusTime,'" + _sdate2 + "')<=0");
+            }
+            if (!string.IsNullOrEmpty(_edate2))
+            {
+                strTemp.Append(" and datediff(day,o_statusTime,'" + _edate2 + "')>=0");
+            }
 
             if (flag == "0")
             {
@@ -470,6 +482,8 @@ namespace MettingSys.Web.admin.order
             _edate = DTRequest.GetFormString("txteDate");
             _sdate1 = DTRequest.GetFormString("txtsDate1");
             _edate1 = DTRequest.GetFormString("txteDate1");
+            _sdate2 = DTRequest.GetFormString("txtsDate2");
+            _edate2 = DTRequest.GetFormString("txteDate2");
             _area = DTRequest.GetFormString("ddlarea");
             _orderarea = DTRequest.GetFormString("ddlorderarea");
             if (flag == "1")
@@ -511,9 +525,12 @@ namespace MettingSys.Web.admin.order
                     Utils.WriteCookie("Order_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "page={0}&flag={1}&type={2}&txtCusName={3}&hCusId={4}&ddlContractPrice={5}&ddlstatus={6}&ddldstatus={7}&ddlispush={8}&ddlflag={9}&ddllock={10}&txtContent={11}&txtAddress={12}&ddlsign={13}&txtMoney={14}&txtPerson1={15}&txtPerson2={16}&txtPerson3={17}&txtPerson4={18}&txtPerson5={19}&txtsDate={20}&txteDate={21}&txtsDate1={22}&txteDate1={23}&txtOrderID={24}&ddlarea={25}&ddlmoneyType={26}&ddlorderarea={27}", "__id__", flag, _type, _cusName, _cid, _contractPrice, _status, _dstatus, _pushstatus, _flag, _lockstatus, _content, _address, _sign, _money, _person1, _person2, _person3, _person4, _person5, _sdate, _edate, _sdate1, _edate1,_orderid,_area,_moneyType,_orderarea));
-        }        
-
+            Response.Redirect(backUrl());
+        }
+        private string backUrl()
+        {
+            return Utils.CombUrlTxt("order_list.aspx", "page={0}&flag={1}&type={2}&txtCusName={3}&hCusId={4}&ddlContractPrice={5}&ddlstatus={6}&ddldstatus={7}&ddlispush={8}&ddlflag={9}&ddllock={10}&txtContent={11}&txtAddress={12}&ddlsign={13}&txtMoney={14}&txtPerson1={15}&txtPerson2={16}&txtPerson3={17}&txtPerson4={18}&txtPerson5={19}&txtsDate={20}&txteDate={21}&txtsDate1={22}&txteDate1={23}&txtOrderID={24}&ddlarea={25}&ddlmoneyType={26}&ddlorderarea={27}&txtsDate2={28}&txteDate2={29}", "__id__", flag, _type, _cusName, _cid, _contractPrice, _status, _dstatus, _pushstatus, _flag, _lockstatus, _content, _address, _sign, _money, _person1, _person2, _person3, _person4, _person5, _sdate, _edate, _sdate1, _edate1, _orderid, _area, _moneyType, _orderarea, _sdate2, _edate2);
+        }
         //批量删除
         protected void btnDelete_Click(object sender, EventArgs e)
         {
@@ -540,7 +557,7 @@ namespace MettingSys.Web.admin.order
                     }
                 }
             }
-            JscriptMsg("共选择" + (success + error) + "条记录，成功" + success + "条，失败" + error + "条<br/>" + sb.ToString(), Utils.CombUrlTxt("order_list.aspx", "page={0}&flag={1}&type={2}&txtCusName={3}&hCusId={4}&ddlContractPrice={5}&ddlstatus={6}&ddldstatus={7}&ddlispush={8}&ddlflag={9}&ddllock={10}&txtContent={11}&txtAddress={12}&ddlsign={13}&txtMoney={14}&txtPerson1={15}&txtPerson2={16}&txtPerson3={17}&txtPerson4={18}&txtPerson5={19}&txtsDate={20}&txteDate={21}&txtsDate1={22}&txteDate1={23}&txtOrderID={24}&ddlarea={25}", "__id__", flag, _type, _cusName, _cid, _contractPrice, _status, _dstatus, _pushstatus, _flag, _lockstatus, _content, _address, _sign, _money, _person1, _person2, _person3, _person4, _person5, _sdate, _edate, _sdate1, _edate1,_orderid,_area));
+            JscriptMsg("共选择" + (success + error) + "条记录，成功" + success + "条，失败" + error + "条<br/>" + sb.ToString(), backUrl());
         }
 
         protected void btnExcel_Click(object sender, EventArgs e)
@@ -569,6 +586,8 @@ namespace MettingSys.Web.admin.order
             _edate = DTRequest.GetFormString("txteDate");
             _sdate1 = DTRequest.GetFormString("txtsDate1");
             _edate1 = DTRequest.GetFormString("txteDate1");
+            _sdate2 = DTRequest.GetFormString("txtsDate2");
+            _edate2 = DTRequest.GetFormString("txteDate2");
             _area = DTRequest.GetFormString("ddlarea");
             _orderarea = DTRequest.GetFormString("ddlorderarea");
             BLL.Order bll = new BLL.Order();
@@ -640,6 +659,7 @@ namespace MettingSys.Web.admin.order
             headRow.CreateCell(15).SetCellValue("应收款");
             headRow.CreateCell(16).SetCellValue("未收款");
             headRow.CreateCell(17).SetCellValue("业绩利润");
+            headRow.CreateCell(18).SetCellValue("确认时间");
 
             headRow.GetCell(0).CellStyle = titleCellStyle;
             headRow.GetCell(1).CellStyle = titleCellStyle;
@@ -659,6 +679,7 @@ namespace MettingSys.Web.admin.order
             headRow.GetCell(15).CellStyle = titleCellStyle;
             headRow.GetCell(16).CellStyle = titleCellStyle;
             headRow.GetCell(17).CellStyle = titleCellStyle;
+            headRow.GetCell(18).CellStyle = titleCellStyle;
 
             sheet.SetColumnWidth(0, 15 * 256);
             sheet.SetColumnWidth(1, 20 * 256);
@@ -678,6 +699,7 @@ namespace MettingSys.Web.admin.order
             sheet.SetColumnWidth(15, 15 * 256);
             sheet.SetColumnWidth(16, 15 * 256);
             sheet.SetColumnWidth(17, 15 * 256);
+            sheet.SetColumnWidth(18, 25 * 256);
 
             if (dt != null)
             {
@@ -692,9 +714,9 @@ namespace MettingSys.Web.admin.order
                     row.CreateCell(4).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["o_contractPrice"]));
                     row.CreateCell(5).SetCellValue(ConvertHelper.toDate(dt.Rows[i]["o_sdate"]).Value.ToString("yyyy-MM-dd") + "/" + ConvertHelper.toDate(dt.Rows[i]["o_sdate"]).Value.ToString("yyyy-MM-dd"));
                     row.CreateCell(6).SetCellValue(new BLL.department().getAreaText(Utils.ObjectToStr(dt.Rows[i]["o_place"])) );
-                    row.CreateCell(7).SetCellValue(BusinessDict.fStatus()[Convert.ToByte(dt.Rows[i]["o_status"])]);
-                    row.CreateCell(8).SetCellValue(BusinessDict.pushStatus()[Convert.ToBoolean(dt.Rows[i]["o_isPush"])]);
-                    row.CreateCell(9).SetCellValue(BusinessDict.checkStatus()[Convert.ToByte(dt.Rows[i]["o_flag"])]);
+                    row.CreateCell(7).SetCellValue(BusinessDict.fStatus()[Utils.ObjToByte(dt.Rows[i]["o_status"])]);
+                    row.CreateCell(8).SetCellValue(BusinessDict.pushStatus()[Utils.StrToBool(Utils.ObjectToStr(dt.Rows[i]["o_isPush"]),false)]);
+                    row.CreateCell(9).SetCellValue(BusinessDict.checkStatus()[Utils.ObjToByte(dt.Rows[i]["o_flag"])]);
                     row.CreateCell(10).SetCellValue(BusinessDict.lockStatus()[Utils.ObjToByte(dt.Rows[i]["o_lockStatus"])]);
                     row.CreateCell(11).SetCellValue(dt.Rows[i]["op_name"].ToString());
                     row.CreateCell(12).SetCellValue(dt.Rows[i]["person2"].ToString());
@@ -703,6 +725,7 @@ namespace MettingSys.Web.admin.order
                     row.CreateCell(15).SetCellValue(dt.Rows[i]["finMoney"].ToString());
                     row.CreateCell(16).SetCellValue(dt.Rows[i]["unMoney"].ToString());
                     row.CreateCell(17).SetCellValue(dt.Rows[i]["profit"].ToString());
+                    row.CreateCell(18).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["o_statusTime"])==""?"":Utils.ObjectToDateTime(dt.Rows[i]["o_statusTime"]).ToString("yyyy-MM-dd HH:mm:ss"));
 
                     row.GetCell(0).CellStyle = cellStyle;
                     row.GetCell(1).CellStyle = cellStyle;
@@ -722,6 +745,7 @@ namespace MettingSys.Web.admin.order
                     row.GetCell(15).CellStyle = cellStyle;
                     row.GetCell(16).CellStyle = cellStyle;
                     row.GetCell(17).CellStyle = cellStyle;
+                    row.GetCell(18).CellStyle = cellStyle;
                 }
             }
 

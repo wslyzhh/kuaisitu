@@ -341,7 +341,7 @@ namespace MettingSys.Common
         public static DateTime StrToDateTime(string str)
         {
             return StrToDateTime(str, DateTime.Now);
-        }
+        } 
 
         /// <summary>
         /// 将对象转换为日期时间类型

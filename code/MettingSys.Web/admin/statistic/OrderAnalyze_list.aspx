@@ -159,6 +159,10 @@
                             </asp:DropDownList>
                         </div>
                 <asp:TextBox ID="txtMoney2" runat="server" CssClass="input small"></asp:TextBox>
+                收款方式：
+                            <div class="rule-single-select">
+                                <asp:DropDownList ID="ddlmethod" runat="server"></asp:DropDownList>
+                            </div>
             </div>
             <div class="searchbar">
                 未付款：
@@ -205,10 +209,10 @@
                         <asp:TextBox ID="txtsDate1" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate1\')}'})"></asp:TextBox>
                 -
                         <asp:TextBox ID="txteDate1" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({minDate:'#F{$dp.$D(\'txtsDate1\')}'})"></asp:TextBox>
-                收款方式：
-                            <div class="rule-single-select">
-                                <asp:DropDownList ID="ddlmethod" runat="server"></asp:DropDownList>
-                            </div>
+                订单确认时间：
+                        <asp:TextBox ID="txtsDate2" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate2\')}'})"></asp:TextBox>
+                -
+                        <asp:TextBox ID="txteDate2" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({minDate:'#F{$dp.$D(\'txtsDate2\')}'})"></asp:TextBox>
                <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
             <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
             </div>
@@ -244,7 +248,7 @@
                             <td><%#Eval("c_name")%></td>
                             <td><%#ConvertHelper.toDate(Eval("o_sdate")).Value.ToString("yyyy-MM-dd")%><br /><%#ConvertHelper.toDate(Eval("o_edate")).Value.ToString("yyyy-MM-dd")%></td>
                             <td><%# new MettingSys.BLL.department().getAreaText(Eval("o_place").ToString())%></td>
-                            <td><span onmouseover="tip_index=layer.tips('推送状态：<%#MettingSys.Common.BusinessDict.pushStatus()[Convert.ToBoolean(Eval("o_isPush"))]%><br/>上级审批：<%#MettingSys.Common.BusinessDict.checkStatus()[Convert.ToByte(Eval("o_flag"))]%>', this, { time: 0 });" onmouseout="layer.close(tip_index);"><%#MettingSys.Common.BusinessDict.fStatus(2)[Convert.ToByte(Eval("o_status"))]%></span></td>
+                            <td><span onmouseover="tip_index=layer.tips('推送状态：<%#MettingSys.Common.BusinessDict.pushStatus()[Convert.ToBoolean(Eval("o_isPush"))]%><br/>上级审批：<%#MettingSys.Common.BusinessDict.checkStatus()[Utils.ObjToByte(Eval("o_flag"))]%>', this, { time: 0 });" onmouseout="layer.close(tip_index);"><%#MettingSys.Common.BusinessDict.fStatus(2)[Utils.ObjToByte(Eval("o_status"))]%></span></td>
                             <td><%#MettingSys.Common.BusinessDict.lockStatus()[Utils.ObjToByte(Eval("o_lockStatus"))]%></td>
                             <td><span title="工号：<%#Eval("op_number")%>，下单时间:<%#Eval("o_addDate")%>"><%#Eval("op_name")%></span></td>
                             <td><%#Eval("person3").ToString().Replace("待定","<font color='red'>待定</font>").Replace("处理中","<font color='blue'>处理中</font>").Replace("已完成","<font color='green'>已完成</font>")%></td>

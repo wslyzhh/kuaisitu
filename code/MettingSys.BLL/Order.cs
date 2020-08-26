@@ -139,6 +139,10 @@ namespace MettingSys.BLL
             {
                 model.o_statusTime = DateTime.Now;
             }
+            else
+            {
+                model.o_statusTime = null;
+            }
 
             if (dal.AddOrder(model))
             {
@@ -326,10 +330,23 @@ namespace MettingSys.BLL
                 content += "活动归属地：" + oldModel.o_place + "→<font color='red'>" + newModel.o_place + "</font><br/>";
             }
             bool isChangeStatus = false;
+
             if (oldModel.o_status != newModel.o_status)
             {
                 isChangeStatus = true;
                 content += "订单状态：" + Common.BusinessDict.fStatus()[oldModel.o_status] + "→<font color='red'>" + Common.BusinessDict.fStatus()[newModel.o_status] + "</font><br/>";
+                if (oldModel.o_status != 2 && newModel.o_status == 2)
+                {
+                    newModel.o_statusTime = DateTime.Now;
+                }
+                if (oldModel.o_status == 2 && newModel.o_status != 2)
+                {
+                    newModel.o_statusTime = null;
+                }
+            }
+            else
+            {
+                newModel.o_statusTime = oldModel.o_statusTime;
             }
             if (oldModel.o_isPush != newModel.o_isPush)
             {

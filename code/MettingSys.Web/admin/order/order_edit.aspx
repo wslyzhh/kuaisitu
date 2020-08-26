@@ -902,6 +902,7 @@
                                 <asp:DropDownList ID="ddlfStatus" runat="server">
                                 </asp:DropDownList>
                             </div>
+                            确认时间：<asp:Label ID="labStatusTime" runat="server"></asp:Label>
                         </td>
                         <th>业务报账人员(一个)</th>
                         <td>

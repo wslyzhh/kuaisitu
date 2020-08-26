@@ -248,7 +248,7 @@ namespace MettingSys.Web.admin.order
             ddlfStatus.SelectedValue = dr["o_status"].ToString();
             //ddldstatus.SelectedValue = dr["o_dstatus"].ToString();
             ddlpushStatus.SelectedValue = dr["o_isPush"].ToString();
-            labFlag.Text = Common.BusinessDict.checkStatus()[Convert.ToByte(dr["o_flag"])];
+            labFlag.Text = Common.BusinessDict.checkStatus()[Utils.ObjToByte(dr["o_flag"])];
             ddlflag.SelectedValue = dr["o_flag"].ToString();
             labLockStatus.Text = Common.BusinessDict.lockStatus()[Utils.ObjToByte(dr["o_lockStatus"])];
             labfinanceCost.Text = dr["o_financeCust"].ToString();
@@ -257,6 +257,7 @@ namespace MettingSys.Web.admin.order
             ddllockstatus.SelectedValue = dr["o_lockStatus"].ToString();
             labFinRemarks.Text = dr["o_finRemarks"].ToString();
             txtFinRemark.Text = dr["o_finRemarks"].ToString();
+            labStatusTime.Text = Utils.ObjectToStr(dr["o_statusTime"]) == "" ? "" : Utils.StrToDateTime(Utils.ObjectToStr(dr["o_statusTime"])).ToString("yyyy-MM-dd HH:mm:ss");
 
             #region 归属地
             string placeStr = dr["o_place"].ToString();

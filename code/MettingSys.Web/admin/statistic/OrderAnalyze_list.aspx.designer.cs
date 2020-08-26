@@ -211,6 +211,15 @@ namespace MettingSys.Web.admin.statistic {
         protected global::System.Web.UI.WebControls.TextBox txtMoney2;
         
         /// <summary>
+        /// ddlmethod 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlmethod;
+        
+        /// <summary>
         /// ddlsign3 控件。
         /// </summary>
         /// <remarks>
@@ -301,13 +310,22 @@ namespace MettingSys.Web.admin.statistic {
         protected global::System.Web.UI.WebControls.TextBox txteDate1;
         
         /// <summary>
-        /// ddlmethod 控件。
+        /// txtsDate2 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlmethod;
+        protected global::System.Web.UI.WebControls.TextBox txtsDate2;
+        
+        /// <summary>
+        /// txteDate2 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txteDate2;
         
         /// <summary>
         /// btnSearch 控件。
