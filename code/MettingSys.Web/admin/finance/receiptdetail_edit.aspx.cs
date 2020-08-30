@@ -196,6 +196,11 @@ namespace MettingSys.Web.admin.finance
                 _content += "收款内容：" + model.rpd_content + "→<font color='red'>" + txtContent.Text.Trim() + "</font><br/>";
             }
             model.rpd_content = txtContent.Text.Trim();
+            if (model.rpd_cbid != Utils.StrToInt(hBankId.Value, 0))
+            {
+                _content += "客户银行账号：" + model.rpd_cbid + "→<font color='red'>" + hBankId.Value + "</font><br/>";
+            }
+            model.rpd_cbid = Utils.StrToInt(hBankId.Value, 0);
             return bll.Update(model, _content, manager, updateMoney);
         }
         #endregion

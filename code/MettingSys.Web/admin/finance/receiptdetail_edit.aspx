@@ -58,13 +58,10 @@
             $("#ddlmethod").change(function () {
                 var ptype = $(this).find('option:selected').attr("py");
                 if (ptype == "True") {
-                    $("#dlceDate").show();
-                    $("#dlceNum").show();
                     $("#dlBank").hide();
                 }
                 else {
-                    $("#dlceDate").hide();
-                    $("#dlceNum").hide();
+                    $("#dlBank").show();
                 }
             });
 
@@ -84,6 +81,8 @@
 
             if ("<%=isChongzhang%>" == "True") {
                 $("#dlBank").hide();
+            } else {
+                $("#dlBank").show();
             }
         });
         function showBank(cid) {

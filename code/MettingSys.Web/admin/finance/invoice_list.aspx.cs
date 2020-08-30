@@ -191,7 +191,7 @@ namespace MettingSys.Web.admin.finance
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("invoice_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlcheck1={3}&ddlcheck2={4}&ddlcheck3={5}&ddlisConfirm={6}&txtOid={7}&self={8}&ddlsign={9}&txtMoney={10}&txtsDate={11}&txteDate={12}&ddlfarea={13}&ddldarea={14}&ddlinvType={15}&txtName={16}", "__id__",_cusName,_cid,_check1,_check2,_check3,_isconfirm,_oid,_self,_sign,_money,_sdate,_edate,_farea,_darea,_invType,_name);
+            string pageUrl = backUrl();
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
 
             pCount.Text = dt.Rows.Count.ToString();
@@ -352,7 +352,11 @@ namespace MettingSys.Web.admin.finance
                     Utils.WriteCookie("invoice_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("invoice_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlcheck1={3}&ddlcheck2={4}&ddlcheck3={5}&ddlisConfirm={6}&txtOid={7}&self={8}&ddlsign={9}&txtMoney={10}&txtsDate={11}&txteDate={12}&ddlfarea={13}&ddldarea={14}&ddlinvType={15}&txtName={16}", "__id__", _cusName, _cid, _check1, _check2, _check3, _isconfirm, _oid, _self, _sign, _money, _sdate, _edate,_farea,_darea,_invType,_name));
+            Response.Redirect(backUrl());
+        }
+        private string backUrl()
+        {
+            return Utils.CombUrlTxt("invoice_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlcheck1={3}&ddlcheck2={4}&ddlcheck3={5}&ddlisConfirm={6}&txtOid={7}&self={8}&ddlsign={9}&txtMoney={10}&txtsDate={11}&txteDate={12}&ddlfarea={13}&ddldarea={14}&ddlinvType={15}&txtName={16}&check={17}", "__id__", _cusName, _cid, _check1, _check2, _check3, _isconfirm, _oid, _self, _sign, _money, _sdate, _edate, _farea, _darea, _invType, _name, _check);
         }
         protected void btnExcel_Click(object sender, EventArgs e)
         {

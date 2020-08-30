@@ -72,6 +72,7 @@
                 else {
                     $("#dlceDate").hide();
                     $("#dlceNum").hide();
+                    $("#dlBank").show();
                 }
             });
             if ("<%=isFushu%>" == "True") {
@@ -87,6 +88,7 @@
             } else {
                 $("#dlceDate").hide();
                 $("#dlceNum").hide();
+                $("#dlBank").show();
             }
 
         });
