@@ -171,6 +171,7 @@ namespace MettingSys.Web.admin.finance
                         rpdModel.rpd_flag3 = 2;
                         rpdModel.rpd_adddate = DateTime.Now;
                         rpdModel.rpd_content = "";
+                        rpdModel.rpd_cbid = model.rp_cbid;
                         new BLL.ReceiptPayDetail().AddOrCancleDistribution(rpdModel, manager);
                     }
                 }
