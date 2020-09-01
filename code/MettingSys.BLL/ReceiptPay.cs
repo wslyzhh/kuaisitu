@@ -214,7 +214,7 @@ namespace MettingSys.BLL
                 new business_log().Add(DTEnums.ActionEnum.Add.ToString(), logmodel, manager.user_name, manager.real_name);
 
                 //钉钉通知
-                if (!model.rp_type.Value && model.rp_money >=0 && (model.rp_method == 0 || !isChongzhang))
+                if (!model.rp_type.Value && model.rp_money >= 0 && (model.rp_method == 0 || !isChongzhang))
                 {
                     DataTable userDt = new BLL.manager().getUserByPermission("0402").Tables[0];
                     if (userDt != null)
@@ -227,6 +227,25 @@ namespace MettingSys.BLL
                             if (!string.IsNullOrEmpty(Utils.ObjectToStr(dr["oauth_userid"])))
                             {
                                 new BLL.selfMessage().sentDingMessage("添加预付款", dr["oauth_userid"].ToString(), replaceContent, replaceUser);
+                            }
+                        }
+                    }
+                }
+
+                //退款订单通知
+                if (model.rp_type.Value && model.rp_money<0 && !isChongzhang)
+                {
+                    DataTable userDt = new BLL.manager().getUserByPermission("0402").Tables[0];
+                    if (userDt != null)
+                    {
+                        string replaceContent = model.rp_money + "," + model.rp_content;
+                        string replaceUser = model.rp_personNum + "," + model.rp_personName;
+                        foreach (DataRow dr in userDt.Rows)
+                        {
+                            //钉钉推送通知
+                            if (!string.IsNullOrEmpty(Utils.ObjectToStr(dr["oauth_userid"])))
+                            {
+                                new BLL.selfMessage().sentDingMessage("添加退款", dr["oauth_userid"].ToString(), replaceContent, replaceUser);
                             }
                         }
                     }
@@ -483,7 +502,7 @@ namespace MettingSys.BLL
             Model.ReceiptPay model = GetModel(id);
             if (model == null)
                 return "数据不存在";
-            if (!model.rp_isExpect.Value)
+            if (!model.rp_isExpect.Value && model.rp_money >=0)
             {
                 return "非预付款不需要做审批";
             }

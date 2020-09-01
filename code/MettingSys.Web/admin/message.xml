@@ -228,4 +228,13 @@
     <remark>@content:付款金额+支付内容（或用途）</remark>
   </list>
   <!--预付款-->
+  <!--退款-->
+	<list name="添加退款">
+		<title>退款审批</title>
+		<content>
+			员工【@user】添加了退款【@content】，请及时审批！
+		</content>
+		<remark>@content:付款金额+支付内容（或用途）</remark>
+	</list>
+  <!--退款-->
 </lists>
