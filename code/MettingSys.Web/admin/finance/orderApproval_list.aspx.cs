@@ -421,9 +421,9 @@ namespace MettingSys.Web.admin.finance
                     row.CreateCell(3).SetCellValue(dt.Rows[i]["o_contractPrice"].ToString());
                     row.CreateCell(4).SetCellValue(ConvertHelper.toDate(dt.Rows[i]["o_sdate"]).Value.ToString("yyyy-MM-dd") + "/" + ConvertHelper.toDate(dt.Rows[i]["o_edate"]).Value.ToString("yyyy-MM-dd"));
                     row.CreateCell(5).SetCellValue(new BLL.department().getAreaText(dt.Rows[i]["o_place"].ToString()));
-                    row.CreateCell(6).SetCellValue(Common.BusinessDict.fStatus()[Convert.ToByte(dt.Rows[i]["o_status"])]);
-                    row.CreateCell(7).SetCellValue(Common.BusinessDict.pushStatus()[Convert.ToBoolean(dt.Rows[i]["o_isPush"])]);
-                    row.CreateCell(8).SetCellValue(Common.BusinessDict.checkStatus()[Convert.ToByte(dt.Rows[i]["o_flag"])]);
+                    row.CreateCell(6).SetCellValue(Common.BusinessDict.fStatus()[Utils.ObjToByte(dt.Rows[i]["o_status"])]);
+                    row.CreateCell(7).SetCellValue(Common.BusinessDict.pushStatus()[Utils.StrToBool(Utils.ObjectToStr(dt.Rows[i]["o_isPush"]), false)]);
+                    row.CreateCell(8).SetCellValue(Common.BusinessDict.checkStatus()[Utils.ObjToByte(dt.Rows[i]["o_flag"])]);
                     row.CreateCell(9).SetCellValue(Common.BusinessDict.lockStatus()[Utils.ObjToByte(dt.Rows[i]["o_lockStatus"])]);
                     row.CreateCell(10).SetCellValue(dt.Rows[i]["op_name"].ToString()+""+ dt.Rows[i]["op_number"].ToString());
                     row.CreateCell(11).SetCellValue(dt.Rows[i]["count0"].ToString());

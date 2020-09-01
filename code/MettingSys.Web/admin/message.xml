@@ -236,5 +236,26 @@
 		</content>
 		<remark>@content:付款金额+支付内容（或用途）</remark>
 	</list>
+  <list name="退款财务审批通过">
+    <title>退款审批</title>
+    <content>
+      退款【@content】已经被员工【@user】审批通过；现处于你处审批中！
+    </content>
+    <remark>@content:付款金额+支付内容（或用途）</remark>
+  </list>
+  <list name="退款审批未通过">
+    <title>退款审批</title>
+    <content>
+      退款【@content】已经被员工【@user】审批不通过！
+    </content>
+    <remark>@content:付款金额+支付内容（或用途）</remark>
+  </list>
+  <list name="退款审批通过">
+    <title>退款审批</title>
+    <content>
+      退款【@content】已经被员工【@user】审批通过！
+    </content>
+    <remark>@content:付款金额+支付内容（或用途）</remark>
+  </list>
   <!--退款-->
 </lists>

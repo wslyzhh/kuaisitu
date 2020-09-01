@@ -577,9 +577,15 @@ namespace MettingSys.BLL
                 log.ol_content = _content;
                 new business_log().Add(DTEnums.ActionEnum.Audit.ToString(), log, manager.user_name, manager.real_name);
 
+                string payTypeName = "预付款";
+                if (model.rp_money < 0)
+                {
+                    payTypeName = "退款";
+                }
+
                 if (status == 1 || status == 2)
                 {
-                    string nodeName = status == 2 ? "预付款审批通过" : "预付款审批未通过";
+                    string nodeName = status == 2 ? ""+ payTypeName + "审批通过" : "" + payTypeName + "审批未通过";
                     string replaceContent = new BLL.Customer().GetModel(model.rp_cid.Value).c_name + "," + model.rp_money + "," + model.rp_content;
                     string replaceUser = manager.user_name + "," + manager.real_name;
                     //钉钉通知申请人
@@ -602,7 +608,7 @@ namespace MettingSys.BLL
                             //钉钉推送通知
                             if (!string.IsNullOrEmpty(Utils.ObjectToStr(dr["oauth_userid"])))
                             {
-                                new BLL.selfMessage().sentDingMessage("预付款财务审批通过", dr["oauth_userid"].ToString(), replaceContent, replaceUser);
+                                new BLL.selfMessage().sentDingMessage("" + payTypeName + "财务审批通过", dr["oauth_userid"].ToString(), replaceContent, replaceUser);
                             }
                         }
                     }         
