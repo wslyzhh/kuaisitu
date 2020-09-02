@@ -67,7 +67,9 @@ export default {
 			    pageIndex:1,
                 pageSize:999,
                 keywords:'',
-                isExpect:'True',
+                isExpect:'',
+                isRefund:'1',
+                rptype:'1',
                 type:'check',
                 flag:'0',
                 managerid:0
@@ -103,7 +105,7 @@ export default {
         payList(){
             let _this = this
             _this.searchData.pageIndex++
-            _this.searchData.managerid = _this.userInfo.id
+            _this.searchData.managerid = 14//_this.userInfo.id
             this.getPaytList(_this.searchData).then(res => {
                 _this.recordTotal=0
                 if(res.data.msg){

@@ -3551,10 +3551,16 @@ namespace MettingSys.Web.tools
                     return;
                 }
                 string keywords = jObject["keywords"]==null?"": jObject["keywords"].ToString();//凭证号或收款对象
+                string rptype = Utils.ObjectToStr(jObject["rptype"]);//1收款，0付款
+                if (string.IsNullOrEmpty(rptype))
+                {
+                    rptype = "0";
+                }
+                string isRefund = Utils.ObjectToStr(jObject["isRefund"]);//1退款
                 string isExpect= jObject["isExpect"] == null ? "" : jObject["isExpect"].ToString();//预付款
                 string _type = jObject["type"] == null ? "" : jObject["type"].ToString();
                 string _flag = jObject["flag"] == null ? "" : jObject["flag"].ToString();//flag:"0"待审批页签，"1"已审批页签
-
+                
                 #region 筛选条件
                 StringBuilder strTemp = new StringBuilder();
                 keywords = keywords.Replace("'", "");
@@ -3566,6 +3572,10 @@ namespace MettingSys.Web.tools
                 if (!string.IsNullOrEmpty(isExpect))
                 {
                     strTemp.Append(" and rp_isExpect='" + isExpect + "'");
+                }
+                if (!string.IsNullOrEmpty(isRefund) && isRefund == "1")
+                {
+                    strTemp.Append(" and rp_money < 0");
                 }
                 #endregion
 
@@ -3605,7 +3615,7 @@ namespace MettingSys.Web.tools
                 }
                 #endregion
 
-                string _strWhere = "rp_type=0" + strTemp.ToString();
+                string _strWhere = "rp_type="+ rptype + "" + strTemp.ToString();
 
                 BLL.ReceiptPay bll = new BLL.ReceiptPay();
                 DataTable lst = bll.GetList(pageSize, pageIndex, _strWhere, "isnull(rp_date,'3000-01-01') desc,isnull(pm_sort,-1) asc,rp_id desc", out int pageTotal, out decimal _tmoney, out decimal _tunmoney).Tables[0];
