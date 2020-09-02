@@ -37,6 +37,9 @@
                             <div v-else-if="item.name==='预付款审批'">
                                 <span v-show="aduitCount5>0" class="num">{{aduitCount5}}</span>
                             </div>
+                            <div v-else-if="item.name==='业务退款审批'">
+                                <span v-show="aduitCount6>0" class="num">{{aduitCount6}}</span>
+                            </div>
                         </div>
                         <p class="name">{{item.name}}</p>
                     </router-link>
@@ -61,7 +64,8 @@ export default {
             aduitCount2:0,
             aduitCount3:0,
             aduitCount4:0,
-            aduitCount5:0
+            aduitCount5:0,
+            aduitCount6:0
         };
     },
     components: {},
@@ -89,6 +93,7 @@ export default {
                 _this.aduitCount3 = res.data.count3
                 _this.aduitCount4 = res.data.count4
                 _this.aduitCount5 = res.data.count5
+                _this.aduitCount6 = res.data.count6
             }
         })
     },

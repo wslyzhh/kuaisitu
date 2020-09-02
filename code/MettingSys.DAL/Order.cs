@@ -515,6 +515,28 @@ namespace MettingSys.DAL
         }
 
         /// <summary>
+        /// 获取退款未审核数量
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        public int getRefund(byte type)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select count(*) from MS_ReceiptPay where rp_type=1 and rp_money<0");
+            if (type == 1)
+            {
+                strSql.Append(" and rp_flag=0");
+            }
+            else
+            {
+                strSql.Append(" and rp_flag=2 and rp_flag1 = 0");
+            }
+            SqlParameter[] parameters = { };
+            return Utils.ObjToInt(DbHelperSQL.GetSingle(strSql.ToString(), parameters), 0);
+        }
+
+        /// <summary>
         /// 获得查询分页数据
         /// </summary>
         /// <param name="pageSize"></param>

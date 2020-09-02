@@ -1004,6 +1004,16 @@ namespace MettingSys.BLL
             return dal.getUnAduitExpectPay(type);
         }
         /// <summary>
+        /// 获取退款未审核数量
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        public int getRefund(byte type)
+        {
+            return dal.getRefund(type);
+        }
+        /// <summary>
         /// 获得前几行数据
         /// </summary>
         public DataSet GetList(int Top, string strWhere, string filedOrder)

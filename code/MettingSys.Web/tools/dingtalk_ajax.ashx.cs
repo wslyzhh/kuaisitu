@@ -697,7 +697,7 @@ namespace MettingSys.Web.tools
                     context.Response.Write("{\"status\": 0, \"msg\": \"ManageridIsNullOrError\"}");
                     return;
                 }
-                int c1 = 0, c2 = 0, c3 = 0, c4 = 0, c5 = 0;
+                int c1 = 0, c2 = 0, c3 = 0, c4 = 0, c5 = 0, c6 = 0;
                 BLL.Order bll = new BLL.Order();
                 if (new BLL.permission().checkHasPermission(managerModel, "0603"))//业务审批
                 {
@@ -733,20 +733,23 @@ namespace MettingSys.Web.tools
                         c4 = bll.getUnAduitInvoice(2, "");
                     }
                 }
-                if (new BLL.permission().checkHasPermission(managerModel, "0402,0601"))//预付款审批
+                if (new BLL.permission().checkHasPermission(managerModel, "0402,0601"))//预付款审批,业务退款审批
                 {
                     if (new BLL.permission().checkHasPermission(managerModel, "0402"))
                     {
                         c5 = bll.getUnAduitExpectPay(1);
+                        c6 = bll.getRefund(1);
                     }
                     else
                     {
                         c5 = bll.getUnAduitExpectPay(2);
+                        c6 = bll.getRefund(2);
                     }
                 }
+                
 
 
-                context.Response.Write("{\"status\": 1, \"count1\": "+ c1 + ", \"count2\": " + c2 + ", \"count3\": " + c3 + ", \"count4\": " + c4 + ", \"count5\": " + c5 + " }");
+                context.Response.Write("{\"status\": 1, \"count1\": "+ c1 + ", \"count2\": " + c2 + ", \"count3\": " + c3 + ", \"count4\": " + c4 + ", \"count5\": " + c5 + ", \"count6\": " + c6 + " }");
             }
             catch (Exception ex)
             {

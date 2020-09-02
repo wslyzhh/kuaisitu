@@ -44,6 +44,8 @@ import unbusinessAudit from './unbusinessAudit'
 import performanceStat from './performanceStat'
 //个人消息
 import selfMessage from './message'
+//业务退款审批
+import refundAudit from './refundAudit'
 
 let routes = [
     {
@@ -77,6 +79,7 @@ routes = routes.concat(
     unbusinessAudit,
     performanceStat,
     selfMessage,
+    refundAudit,
     [{
       path: '*',
       redirect: '/register'
