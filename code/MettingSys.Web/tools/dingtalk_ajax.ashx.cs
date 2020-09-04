@@ -325,7 +325,7 @@ namespace MettingSys.Web.tools
         {
             get_params(context, out jObject);
             string type = Utils.ObjectToStr(jObject["type"]);
-            StringBuilder sb = init_dictionary(context, Common.BusinessDict.fStatus(Convert.ToByte(Utils.StrToInt(type, 0)))); 
+            StringBuilder sb = init_dictionary(context, Common.BusinessDict.fStatus(Utils.ObjToByte(type))); 
             if (sb != null && sb.Length > 0) { context.Response.Write(sb.ToString()); return; }
 
             context.Response.Write("[]");
@@ -1183,7 +1183,7 @@ namespace MettingSys.Web.tools
                     foreach (string item in list)
                     {
                         pli = item.Split('|');
-                        order.personlist.Add(new Model.OrderPerson() { op_type = 3, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_dstatus = Convert.ToByte(pli[3]) });
+                        order.personlist.Add(new Model.OrderPerson() { op_type = 3, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_dstatus = Utils.ObjToByte(pli[3]) });
                     }
                 }
                 #endregion
@@ -1210,7 +1210,7 @@ namespace MettingSys.Web.tools
                     foreach (string item in list)
                     {
                         pli = item.Split('|');
-                        order.personlist.Add(new Model.OrderPerson() { op_type = 5, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_dstatus = Convert.ToByte(pli[3]) });
+                        order.personlist.Add(new Model.OrderPerson() { op_type = 5, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_dstatus = Utils.ObjToByte(pli[3]) });
                     }
                 }
                 #endregion
@@ -1293,10 +1293,10 @@ namespace MettingSys.Web.tools
                 _object.Add("o_contractContent", dr["o_contractContent"].ToString());//合同内容
                 _object.Add("o_remarks", dr["o_remarks"].ToString());//备注
                 _object.Add("o_status", dr["o_status"].ToString());//订单状态
-                _object.Add("o_statusText", BusinessDict.fStatus()[Convert.ToByte(dr["o_status"].ToString())]);//订单状态
+                _object.Add("o_statusText", BusinessDict.fStatus()[Utils.ObjToByte(dr["o_status"].ToString())]);//订单状态
                 _object.Add("o_ispush", dr["o_isPush"].ToString());//推送上级审批
                 _object.Add("o_flag", dr["o_flag"].ToString());//业务上级审批
-                _object.Add("o_flagText", Common.BusinessDict.checkStatus()[Convert.ToByte(dr["o_flag"])]);//业务上级审批
+                _object.Add("o_flagText", Common.BusinessDict.checkStatus()[Utils.ObjToByte(dr["o_flag"])]);//业务上级审批
                 _object.Add("o_lockStatusText", Common.BusinessDict.lockStatus()[Utils.ObjToByte(dr["o_lockStatus"])]);//锁单状态
                 _object.Add("o_financecust", dr["o_financeCust"].ToString());//税费成本
                 _object.Add("o_lockStatus", dr["o_lockStatus"].ToString());//锁单状态
@@ -2814,7 +2814,7 @@ namespace MettingSys.Web.tools
                     _object.Add("type", checktype);
                     _object.Add("typeText", checktypeText);
                     _object.Add("flag", flag);
-                    _object.Add("flagText", BusinessDict.checkStatus()[Convert.ToByte(flag)]);
+                    _object.Add("flagText", BusinessDict.checkStatus()[Utils.ObjToByte(flag)]);
                     _object.Add("remark", remark);
                 }
                 context.Response.Write(_object);
@@ -3460,7 +3460,7 @@ namespace MettingSys.Web.tools
                 string remark = Utils.ObjectToStr(jObject["remark"]);
 
                 BLL.ReceiptPayDetail bll = new BLL.ReceiptPayDetail();
-                string result = bll.checkPayDetailStatus(rpdid, Convert.ToByte(type), Convert.ToByte(status), remark, managerModel);
+                string result = bll.checkPayDetailStatus(rpdid, Utils.ObjToByte(type), Utils.ObjToByte(status), remark, managerModel);
                 if (string.IsNullOrEmpty(result))
                 {
                     context.Response.Write("{ \"msg\":\"success\", \"status\":1 }");
@@ -4667,7 +4667,7 @@ namespace MettingSys.Web.tools
                         {
                             Model.Files file = new Model.Files();
                             file.f_oid = keyID;
-                            file.f_type = Convert.ToByte(fileType);
+                            file.f_type = Utils.ObjToByte(fileType);
                             file.f_fileName = fileName;
                             file.f_filePath = jo["path"].ToString();
                             file.f_size = Utils.ObjToDecimal(jo["size"].ToString(), 0);
@@ -4680,7 +4680,7 @@ namespace MettingSys.Web.tools
                         {
                             Model.payPic file = new Model.payPic();
                             file.pp_rid = pid;
-                            file.pp_type = Convert.ToByte(fileType);
+                            file.pp_type = Utils.ObjToByte(fileType);
                             file.pp_fileName = fileName;
                             file.pp_filePath = jo["path"].ToString();
                             file.pp_thumbFilePath = jo["thumb"].ToString();

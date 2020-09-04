@@ -99,7 +99,7 @@ namespace MettingSys.Web.tools
                 Model.manager manager = new ManagePage().GetAdminInfo();//获得当前登录管理员信息
                 Model.Files file = new Model.Files();
                 file.f_oid = oID;
-                file.f_type = Convert.ToByte(ftype);
+                file.f_type = Utils.ObjToByte(ftype);
                 file.f_fileName = fileName;
                 file.f_filePath = jo["path"].ToString();
                 file.f_size = Utils.ObjToDecimal(jo["size"].ToString(), 0);
@@ -179,7 +179,7 @@ namespace MettingSys.Web.tools
                 Model.manager manager = new ManagePage().GetAdminInfo();//获得当前登录管理员信息
                 Model.payPic file = new Model.payPic();
                 file.pp_rid = pid;
-                file.pp_type = Convert.ToByte(ftype);
+                file.pp_type = Utils.ObjToByte(ftype);
                 file.pp_fileName = fileName;
                 file.pp_filePath = jo["path"].ToString();
                 file.pp_thumbFilePath = jo["thumb"].ToString();

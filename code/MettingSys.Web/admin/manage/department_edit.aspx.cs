@@ -159,13 +159,13 @@ namespace MettingSys.Web.admin.manage
                 Model.department model = new Model.department();
                 BLL.department bll = new BLL.department();
                 manager = GetAdminInfo();
-                model.de_type = string.IsNullOrEmpty(ddltype.SelectedValue) ? (byte)0 : Convert.ToByte(ddltype.SelectedValue);
+                model.de_type = string.IsNullOrEmpty(ddltype.SelectedValue) ? (byte)0 : Utils.ObjToByte(ddltype.SelectedValue);
                 model.de_parentid = int.Parse(ddlParentId.SelectedValue);
                 model.de_isGroup = cbIsGroup.Checked;
                 model.de_name = txtTitle.Text.Trim();
                 model.de_subname = txtSubTitle.Text.Trim();
                 model.de_area = txtArea.Text.Trim().ToUpper();
-                model.de_sort = Convert.ToInt32(txtSortId.Text.Trim());
+                model.de_sort = Utils.ObjToInt(txtSortId.Text.Trim(),0);
                 model.de_isUse = cbIsUse.Checked;
                 return bll.Add(model, manager.user_name, manager.real_name);
             }
@@ -186,7 +186,7 @@ namespace MettingSys.Web.admin.manage
                 Model.department model = bll.GetModel(_id);
                 manager = GetAdminInfo();
                 string content = string.Empty;
-                model.de_type = string.IsNullOrEmpty(ddltype.SelectedValue) ? (byte)0 : Convert.ToByte(ddltype.SelectedValue);
+                model.de_type = string.IsNullOrEmpty(ddltype.SelectedValue) ? (byte)0 : Utils.ObjToByte(ddltype.SelectedValue);
                 model.de_parentid = int.Parse(ddlParentId.SelectedValue);
                 if (model.de_name != txtTitle.Text.Trim())
                 {

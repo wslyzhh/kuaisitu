@@ -633,7 +633,7 @@ namespace MettingSys.Web.admin.finance
                                 row.CreateCell(6).SetCellValue(finDt.Rows[j]["na_name"] + "/" + finDt.Rows[j]["fin_detail"]);
                                 row.CreateCell(7).SetCellValue(finDt.Rows[j]["fin_illustration"].ToString());
                                 row.CreateCell(8).SetCellValue(finDt.Rows[j]["fin_expression"] + "=" + finDt.Rows[j]["fin_money"]);
-                                row.CreateCell(9).SetCellValue(BusinessDict.checkStatus()[Convert.ToByte(finDt.Rows[j]["fin_flag"].ToString())]);
+                                row.CreateCell(9).SetCellValue(BusinessDict.checkStatus()[Utils.ObjToByte(finDt.Rows[j]["fin_flag"])]);
                                 row.CreateCell(10).SetCellValue((string.IsNullOrEmpty(_chk) || _chk == "空" ? "" : "" + dt.Rows[i]["fcMoney"] + "/") + dt.Rows[i]["fin_money"]);
                                 row.CreateCell(11).SetCellValue((string.IsNullOrEmpty(_chk) || _chk == "空" ? "" : "" + dt.Rows[i]["chkMoney"] + "/") + dt.Rows[i]["rpd_money"]);
                                 row.CreateCell(12).SetCellValue((string.IsNullOrEmpty(_chk) || _chk == "空" ? "" : "" + dt.Rows[i]["unChkMoney"] + "/") + dt.Rows[i]["unReceiptPay"]);

@@ -285,7 +285,7 @@ namespace MettingSys.Web.tools
             string reason = "";
             foreach (string id in idlist)
             {
-                reason = bll.checkStatus(Convert.ToInt32(id), Convert.ToByte(status), adminModel);
+                reason = bll.checkStatus(Utils.ObjToInt(id,0), Utils.ObjToByte(status), adminModel);
                 if (string.IsNullOrEmpty(reason))
                 {
                     success++;
@@ -559,11 +559,11 @@ namespace MettingSys.Web.tools
                 }
                 model.fin_expression = Expression.Trim();
                 model.fin_month = dr["fin_month"].ToString();
-                model.fin_flag = Convert.ToByte(dr["fin_flag"]);
+                model.fin_flag = Utils.ObjToByte(dr["fin_flag"]);
                 model.fin_area = dr["fin_area"].ToString();
                 model.fin_personNum = dr["fin_personNum"].ToString();
                 model.fin_personName = dr["fin_personName"].ToString();
-                model.fin_adddate = Convert.ToDateTime(dr["fin_adddate"]);
+                model.fin_adddate = ConvertHelper.toDate(dr["fin_adddate"]);
                 model.fin_remark = dr["fin_remark"].ToString();
 
                 result = bll.Update(model, _content, manager);
@@ -756,7 +756,7 @@ namespace MettingSys.Web.tools
             string reason = "";
             foreach (string id in idlist)
             {
-                reason = bll.checkStatus(Convert.ToInt32(id), Convert.ToByte(status), remark, adminModel);
+                reason = bll.checkStatus(Utils.ObjToInt(id,0), Utils.ObjToByte(status), remark, adminModel);
                 if (string.IsNullOrEmpty(reason))
                 {
                     success++;
@@ -847,7 +847,7 @@ namespace MettingSys.Web.tools
             string remark = DTRequest.GetFormString("remark");
             Model.manager adminModel = new ManagePage().GetAdminInfo();//获得当前登录管理员信息
             BLL.ReceiptPay bll = new BLL.ReceiptPay();
-            string reason = bll.checkPay(Convert.ToInt32(id), Convert.ToByte(ctype), Convert.ToByte(status), remark, adminModel);
+            string reason = bll.checkPay(Utils.ObjToInt(id,0), Utils.ObjToByte(ctype), Utils.ObjToByte(status), remark, adminModel);
             if (string.IsNullOrEmpty(reason))
             {
                 context.Response.Write("{ \"msg\":\"操作成功\", \"status\":0 }");
@@ -1155,7 +1155,7 @@ namespace MettingSys.Web.tools
             string remark = DTRequest.GetFormString("remark");
             Model.manager adminModel = new ManagePage().GetAdminInfo();//获得当前登录管理员信息
             BLL.invoices bll = new BLL.invoices();
-            string reason = bll.checkInvoiceStatus(Convert.ToInt32(id), Convert.ToByte(ctype), Convert.ToByte(cstatus), remark, adminModel);
+            string reason = bll.checkInvoiceStatus(Utils.ObjToInt(id,0), Utils.ObjToByte(ctype), Utils.ObjToByte(cstatus), remark, adminModel);
             if (string.IsNullOrEmpty(reason))
             {
                 context.Response.Write("{ \"msg\":\"操作成功\", \"status\":0 }");
@@ -1197,7 +1197,7 @@ namespace MettingSys.Web.tools
             string reason = "";
             foreach (string id in idlist)
             {
-                reason = bll.checkCertificate(Convert.ToInt32(id), Convert.ToByte(status), remark, adminModel.user_name, adminModel.real_name);
+                reason = bll.checkCertificate(Utils.ObjToInt(id,0), Utils.ObjToByte(status), remark, adminModel.user_name, adminModel.real_name);
                 if (string.IsNullOrEmpty(reason))
                 {
                     success++;
@@ -1364,7 +1364,7 @@ namespace MettingSys.Web.tools
                         dataRow.CreateCell(5).SetCellValue(row["fin_illustration"].ToString());
                         dataRow.CreateCell(6).SetCellValue(row["fin_expression"].ToString());
                         dataRow.CreateCell(7).SetCellValue(row["fin_money"].ToString());
-                        dataRow.CreateCell(8).SetCellValue(BusinessDict.checkStatus()[Convert.ToByte(row["fin_flag"])]);
+                        dataRow.CreateCell(8).SetCellValue(BusinessDict.checkStatus()[Utils.ObjToByte(row["fin_flag"])]);
                         dataRow.CreateCell(9).SetCellValue(row["fin_month"].ToString());
                         dataRow.CreateCell(10).SetCellValue(row["fin_remark"].ToString());
                     }

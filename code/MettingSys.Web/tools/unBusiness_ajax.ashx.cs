@@ -94,7 +94,7 @@ namespace MettingSys.Web.tools
             //string reason = "";
             //foreach (string id in idlist)
             //{
-            //    reason = bll.checkStatus(Convert.ToInt32(id), Convert.ToByte(ctype), Convert.ToByte(cstatus), remark, adminModel);
+            //    reason = bll.checkStatus(Convert.ToInt32(id), Utils.ObjToByte(ctype), Utils.ObjToByte(cstatus), remark, adminModel);
             //    if (string.IsNullOrEmpty(reason))
             //    {
             //        success++;
@@ -113,7 +113,7 @@ namespace MettingSys.Web.tools
             string remark = DTRequest.GetFormString("remark");
             BLL.unBusinessApply bll = new BLL.unBusinessApply();
             StringBuilder sb = new StringBuilder();
-            string reason = bll.checkStatus(id, Convert.ToByte(ctype), Convert.ToByte(cstatus), remark, adminModel);
+            string reason = bll.checkStatus(id, Utils.ObjToByte(ctype), Utils.ObjToByte(cstatus), remark, adminModel);
             if (string.IsNullOrEmpty(reason))
             {
                 context.Response.Write("{ \"msg\":\"操作成功\", \"status\":0 }");

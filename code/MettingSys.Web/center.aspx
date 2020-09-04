@@ -29,7 +29,7 @@
             <h3>提醒信息</h3>
             <ul>
                 <li id="unpayli" runat="server">
-                    <p>未付退款：<a href="admin/finance/receipt_list.aspx?flag=5"><%=unPayCount %></a></p>
+                    <p>未付退款：<a href="admin/finance/receipt_list.aspx?flag=5"><asp:Label ID="labUnCheckCount" runat="server">0</asp:Label></a></p>
                 </li>
             </ul>
         </div>

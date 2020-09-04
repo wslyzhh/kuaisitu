@@ -57,11 +57,15 @@
 
             $("#ddlmethod").change(function () {
                 var ptype = $(this).find('option:selected').attr("py");
-                if (ptype == "True") {
+                if (ptype == "True" || $("#txtMoney").val() > 0) {
                     $("#dlBank").hide();
                 }
                 else {
-                    $("#dlBank").show();
+                    if ($("#txtMoney").val() > 0) {
+                        $("#dlBank").hide();
+                    } else {
+                        $("#dlBank").show();
+                    }
                 }
             });
 
@@ -72,17 +76,18 @@
                     showBank(cid);
                 }
             });
+            if ("<%=action%>" == "<%=DTEnums.ActionEnum.Edit.ToString() %>") {
+                if ("<%=isFushu%>" == "True") {
+                    $("#dlBank").show();
+                } else {
+                    $("#dlBank").hide();
+                }
 
-            if ("<%=isFushu%>" == "True") {
-                $("#dlBank").show();
-            } else {
-                $("#dlBank").hide();
-            }
-
-            if ("<%=isChongzhang%>" == "True") {
-                $("#dlBank").hide();
-            } else {
-                $("#dlBank").show();
+                if ("<%=isChongzhang%>" == "True") {
+                    $("#dlBank").hide();
+                } else {
+                    $("#dlBank").show();
+                }
             }
         });
         function showBank(cid) {

@@ -72,23 +72,29 @@
                 else {
                     $("#dlceDate").hide();
                     $("#dlceNum").hide();
-                    $("#dlBank").show();
+                    if ($("#txtMoney").val() > 0) {
+                        $("#dlBank").hide();
+                    } else {
+                        $("#dlBank").show();
+                    }
                 }
             });
-            if ("<%=isFushu%>" == "True") {
-                $("#dlBank").show();
-            } else {
-                $("#dlBank").hide();
-            }
+            if ("<%=action%>" == "<%=DTEnums.ActionEnum.Edit.ToString() %>") {
+                if ("<%=isFushu%>" == "True") {
+                    $("#dlBank").show();
+                } else {
+                    $("#dlBank").hide();
+                }
 
-            if ("<%=isChongzhang%>" == "True") {
-                $("#dlceDate").show();
-                $("#dlceNum").show();
-                $("#dlBank").hide();
-            } else {
-                $("#dlceDate").hide();
-                $("#dlceNum").hide();
-                $("#dlBank").show();
+                if ("<%=isChongzhang%>" == "True") {
+                    $("#dlceDate").show();
+                    $("#dlceNum").show();
+                    $("#dlBank").hide();
+                } else {
+                    $("#dlceDate").hide();
+                    $("#dlceNum").hide();
+                    $("#dlBank").show();
+                }
             }
 
         });

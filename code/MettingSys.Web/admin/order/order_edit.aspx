@@ -934,7 +934,7 @@
                                             <li title="<%#Eval("[\"op_number\"]")%>">
                                                 <input name="hide_employee2" type="hidden" value="<%#Eval("[\"op_name\"]")%>|<%#Eval("[\"op_number\"]")%>|<%#Eval("[\"op_area\"]")%>|<%#Eval("[\"op_dstatus\"]") %>" />
                                                 <a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>
-                                                <span><%#Eval("[\"op_name\"]")%>(<%#MettingSys.Common.BusinessDict.dStatus(2)[Convert.ToByte(Eval("[\"op_dstatus\"]"))]%>)</span>
+                                                <span><%#Eval("[\"op_name\"]")%>(<%#MettingSys.Common.BusinessDict.dStatus(2)[Utils.ObjToByte(Eval("[\"op_dstatus\"]"))]%>)</span>
                                             </li>
                                         </ItemTemplate>
                                     </asp:Repeater>
@@ -953,7 +953,7 @@
                                             <li title="<%#Eval("[\"op_number\"]")%>">
                                                 <input name="hide_employee4" type="hidden" value="<%#Eval("[\"op_name\"]")%>|<%#Eval("[\"op_number\"]")%>|<%#Eval("[\"op_area\"]")%>|<%#Eval("[\"op_dstatus\"]") %>" />
                                                 <a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>
-                                                <span><%#Eval("[\"op_name\"]")%>(<%#MettingSys.Common.BusinessDict.dStatus(2)[Convert.ToByte(Eval("[\"op_dstatus\"]"))]%>)</span>
+                                                <span><%#Eval("[\"op_name\"]")%>(<%#MettingSys.Common.BusinessDict.dStatus(2)[Utils.ObjToByte(Eval("[\"op_dstatus\"]"))]%>)</span>
                                             </li>
                                         </ItemTemplate>
                                     </asp:Repeater>

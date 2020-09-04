@@ -722,8 +722,8 @@ namespace MettingSys.BLL
             DataRow dr = drs[0];
             if (dr["o_lockStatus"].ToString()=="1") return "订单已经锁单，不能变更接单状态";
             if (dr["op_dstatus"].ToString() == status.ToString()) return "状态未变更";
-            string content = "接单状态：" + Common.BusinessDict.dStatus()[Convert.ToByte(dr["op_dstatus"].ToString())] + "→<font color='red'>" + Common.BusinessDict.dStatus()[status] + "</font>";
-            string replaceUser = Common.BusinessDict.dStatus()[Convert.ToByte(dr["op_dstatus"].ToString())],replaceUser1= Common.BusinessDict.dStatus()[status];
+            string content = "接单状态：" + Common.BusinessDict.dStatus()[Utils.ObjToByte(dr["op_dstatus"])] + "→<font color='red'>" + Common.BusinessDict.dStatus()[status] + "</font>";
+            string replaceUser = Common.BusinessDict.dStatus()[Utils.ObjToByte(dr["op_dstatus"])],replaceUser1= Common.BusinessDict.dStatus()[status];
             //model.o_dstatus = status;
             if (dal.updateOrderDstatus(oID,manager.user_name, status))
             {

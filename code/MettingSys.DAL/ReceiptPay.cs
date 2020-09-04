@@ -126,7 +126,7 @@ namespace MettingSys.DAL
         public int getUnPaycount()
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select count(*) from MS_ReceiptPay where rp_type=1  and rp_flag=2 and rp_flag1=2 and rp_isConfirm='False' and rp_money < 0");
+            strSql.Append("select count(*) from MS_ReceiptPay where rp_type=1 and rp_flag=2 and rp_flag1=2 and rp_isConfirm='False' and rp_money < 0");
 
             SqlParameter[] parameters = { };
             return Utils.ObjToInt(DbHelperSQL.GetSingle(strSql.ToString(), parameters));

@@ -268,7 +268,7 @@ namespace MettingSys.Web.admin.customer
                     row.HeightInPoints = 22;
                     row.CreateCell(0).SetCellValue(dt.Rows[i]["c_id"].ToString());
                     row.CreateCell(1).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_name"]));
-                    row.CreateCell(2).SetCellValue(BusinessDict.customerType()[Convert.ToByte(dt.Rows[i]["c_type"])]);
+                    row.CreateCell(2).SetCellValue(BusinessDict.customerType()[Utils.ObjToByte(dt.Rows[i]["c_type"])]);
                     row.CreateCell(3).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_num"]));
                     row.CreateCell(4).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_ownerName"]));
                     row.CreateCell(5).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["co_name"]));

@@ -137,7 +137,7 @@
                                         <asp:HiddenField ID="hidId" Value='<%#Eval("de_id")%>' runat="server" />
                                     </div>
                                     <div class="col col-2">
-                                        <%#MettingSys.Common.BusinessDict.departType()[Convert.ToByte(Eval("de_type"))]%>
+                                        <%#MettingSys.Common.BusinessDict.departType()[Utils.ObjToByte(Eval("de_type"))]%>
                                     </div>
                                     <div class="col index col-3">
                                         <a href="department_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("de_id")%>"><%#Eval("de_name")%></a>

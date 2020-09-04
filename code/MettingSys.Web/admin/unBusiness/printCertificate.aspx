@@ -101,7 +101,7 @@
                     <tr style="text-align: right;">
                         <td width="10%" style="font-weight: bolder;">申请事由：</td>
                         <td style="text-align: left; padding-left: 5px;" colspan="5">
-                            <%=BusinessDict.unBusinessNature()[Convert.ToByte(dr["uba_type"])]%>-<%=dr["uba_function"] %>：<%=dr["uba_oid"]%>，<%=dr["uba_instruction"]%>
+                            <%=BusinessDict.unBusinessNature()[Utils.ObjToByte(dr["uba_type"])]%>-<%=dr["uba_function"] %>：<%=dr["uba_oid"]%>，<%=dr["uba_instruction"]%>
                         </td>
                     </tr>
                     <tr style="text-align: right;">
@@ -125,17 +125,17 @@
                     <tr style="text-align: right;">
                         <td width="10%" rowspan="3" style="font-weight: bolder;">审批人：</td>
                         <td style="text-align: left; height: 17px; padding-left: 5px;" colspan="5">
-                            1:<%=dr["uba_checkName1"] %>(<%=dr["uba_checkNum1"] %>)，<%=BusinessDict.checkStatus()[Convert.ToByte(dr["uba_flag1"])] %>，<%=dr["uba_checkRemark1"] %>，<%=dr["uba_checkTime1"]%>
+                            1:<%=dr["uba_checkName1"] %>(<%=dr["uba_checkNum1"] %>)，<%=BusinessDict.checkStatus()[Utils.ObjToByte(dr["uba_flag1"])] %>，<%=dr["uba_checkRemark1"] %>，<%=dr["uba_checkTime1"]%>
                         </td>
                     </tr>
                     <tr style="text-align: right;">
                         <td style="text-align: left; height: 17px; padding-left: 5px;" colspan="5">
-                            2:<%=dr["uba_checkName2"] %>(<%=dr["uba_checkNum2"] %>)，<%=BusinessDict.checkStatus()[Convert.ToByte(dr["uba_flag2"])] %>，<%=dr["uba_checkRemark2"] %>，<%=dr["uba_checkTime2"] %>
+                            2:<%=dr["uba_checkName2"] %>(<%=dr["uba_checkNum2"] %>)，<%=BusinessDict.checkStatus()[Utils.ObjToByte(dr["uba_flag2"])] %>，<%=dr["uba_checkRemark2"] %>，<%=dr["uba_checkTime2"] %>
                         </td>
                     </tr>
                     <tr style="text-align: right;">
                         <td style="text-align: left; height: 17px; padding-left: 5px;" colspan="5">
-                            3:<%=dr["uba_checkName3"] %>(<%=dr["uba_checkNum3"] %>)，<%=BusinessDict.checkStatus()[Convert.ToByte(dr["uba_flag3"])] %>，<%=dr["uba_checkRemark3"] %>，<%=dr["uba_checkTime3"] %>
+                            3:<%=dr["uba_checkName3"] %>(<%=dr["uba_checkNum3"] %>)，<%=BusinessDict.checkStatus()[Utils.ObjToByte(dr["uba_flag3"])] %>，<%=dr["uba_checkRemark3"] %>，<%=dr["uba_checkTime3"] %>
                         </td>
                     </tr>
                 </table>                

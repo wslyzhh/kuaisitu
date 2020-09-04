@@ -85,7 +85,7 @@ namespace MettingSys.Web.tools
                 foreach (string item in list)
                 {
                     pli = item.Split('|');
-                    order.personlist.Add(new Model.OrderPerson() { op_type = 3, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_dstatus = Convert.ToByte(pli[3]) });
+                    order.personlist.Add(new Model.OrderPerson() { op_type = 3, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_dstatus = Utils.ObjToByte(pli[3]) });
                 }
             }
             #endregion
@@ -110,7 +110,7 @@ namespace MettingSys.Web.tools
                 foreach (string item in list)
                 {
                     pli = item.Split('|');
-                    order.personlist.Add(new Model.OrderPerson() { op_type = 5, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_dstatus = Convert.ToByte(pli[3]) });
+                    order.personlist.Add(new Model.OrderPerson() { op_type = 5, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_dstatus = Utils.ObjToByte(pli[3]) });
                 }
             }
             #endregion

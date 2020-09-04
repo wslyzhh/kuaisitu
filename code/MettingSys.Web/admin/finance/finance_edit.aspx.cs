@@ -213,7 +213,7 @@ namespace MettingSys.Web.admin.finance
         //    model.fin_id = _id;
         //    model.fin_oid = oID;
         //    model.fin_type = Convert.ToBoolean(dr["fin_type"]);
-            
+
         //    string _content = string.Empty;
         //    if (dr["fin_cid"].ToString() != hCusId.Value)
         //    {
@@ -254,7 +254,7 @@ namespace MettingSys.Web.admin.finance
         //    }
         //    model.fin_expression = txtExpression.Text.Trim();
         //    model.fin_month = dr["fin_month"].ToString();
-        //    model.fin_flag = Convert.ToByte(dr["fin_flag"]);
+        //    model.fin_flag = Utils.ObjToByte(dr["fin_flag"]);
         //    model.fin_area = dr["fin_area"].ToString();
         //    model.fin_personNum = dr["fin_personNum"].ToString();
         //    model.fin_personName = dr["fin_personName"].ToString();

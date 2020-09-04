@@ -180,7 +180,7 @@ namespace MettingSys.Web.admin.unBusiness
             BLL.unBusinessApply bll = new BLL.unBusinessApply();
             manager = GetAdminInfo();
 
-            model.uba_type = Convert.ToByte(ddltype.SelectedValue);
+            model.uba_type = Utils.ObjToByte(ddltype.SelectedValue);
             if (string.IsNullOrWhiteSpace(fromOrder))
             {
                 if (model.uba_type == 0)

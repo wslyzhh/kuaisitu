@@ -170,11 +170,11 @@ namespace MettingSys.Web.admin.customer
             model.c_name = txtName.Text.Trim();
             if (model.c_type != 3)
             {
-                if (model.c_type != Convert.ToByte(Utils.ObjToInt(ddltype.SelectedValue)))
+                if (model.c_type != Utils.ObjToByte(ddltype.SelectedValue))
                 {
-                    _content += "客户类别:" + Common.BusinessDict.customerType()[model.c_type] + "→<font color='red'>" + Common.BusinessDict.customerType()[Convert.ToByte(Utils.ObjToInt(ddltype.SelectedValue))] + "<font><br/>";
+                    _content += "客户类别:" + Common.BusinessDict.customerType()[model.c_type] + "→<font color='red'>" + Common.BusinessDict.customerType()[Utils.ObjToByte(ddltype.SelectedValue)] + "<font><br/>";
                 }
-                model.c_type = Convert.ToByte(Utils.ObjToInt(ddltype.SelectedValue));
+                model.c_type = Utils.ObjToByte(ddltype.SelectedValue);
             }
             if (model.c_num != txtNum.Text.Trim())
             {

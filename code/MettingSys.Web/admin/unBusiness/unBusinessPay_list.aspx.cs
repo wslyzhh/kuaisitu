@@ -474,7 +474,7 @@ namespace MettingSys.Web.admin.unBusiness
                 {
                     IRow row = sheet.CreateRow(i + 1);
                     row.HeightInPoints = 22;
-                    row.CreateCell(0).SetCellValue(BusinessDict.unBusinessNature()[Convert.ToByte(dt.Rows[i]["uba_type"])]);
+                    row.CreateCell(0).SetCellValue(BusinessDict.unBusinessNature()[Utils.ObjToByte(dt.Rows[i]["uba_type"])]);
                     row.CreateCell(1).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["uba_function"]));
                     row.CreateCell(2).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["uba_oid"]));
                     row.CreateCell(3).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["uba_instruction"]));

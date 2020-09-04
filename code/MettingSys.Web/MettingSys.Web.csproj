@@ -47,13 +47,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.0.0.999, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
@@ -321,6 +322,7 @@
     <Content Include="css\login.css" />
     <Content Include="css\validate.css" />
     <Content Include="css\valid_icons.png" />
+    <Content Include="DecryptPassword.aspx" />
     <Content Include="default.aspx" />
     <Content Include="editor\dialogs\anchor\anchor.html" />
     <Content Include="editor\dialogs\attachment\attachment.css" />
@@ -2019,6 +2021,13 @@
     </Compile>
     <Compile Include="center.aspx.designer.cs">
       <DependentUpon>center.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DecryptPassword.aspx.cs">
+      <DependentUpon>DecryptPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DecryptPassword.aspx.designer.cs">
+      <DependentUpon>DecryptPassword.aspx</DependentUpon>
     </Compile>
     <Compile Include="default.aspx.cs">
       <DependentUpon>default.aspx</DependentUpon>

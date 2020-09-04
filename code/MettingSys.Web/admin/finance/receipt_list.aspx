@@ -293,9 +293,9 @@
         function showPay(rpid, unMoney) {
             layer.open({
                 type: 2,
-                title: '付款凭证',
+                title: '收款凭证',
                 area: ['750px', '600px'],
-                content: ['payCertification.aspx?rpid=' + rpid + '&unmoney=' + unMoney, 'no']
+                content: ['payCertification.aspx?rpid=' + rpid + '&rptype=1&&unmoney=' + unMoney, 'no']
             });
         }
     </script>

@@ -377,7 +377,7 @@
                                 <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Style="vertical-align: middle;" />
                                 <asp:HiddenField ID="hidId" Value='<%#Eval("uba_id")%>' runat="server" />
                             </td>
-                            <td><%# BusinessDict.unBusinessNature()[Convert.ToByte(Eval("uba_type"))]%></td>
+                            <td><%# BusinessDict.unBusinessNature()[Utils.ObjToByte(Eval("uba_type"))]%></td>
                             <td><%#Eval("uba_function") %></td>
                             <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("uba_oid")%>"><span class="orderstatus_<%#Eval("o_status")%>"><%#Eval("uba_oid") %></span></a></td>
                             <td style="padding-right:10px;"><%#Eval("uba_instruction") %></td>

@@ -356,7 +356,7 @@ namespace MettingSys.Web.admin.finance
                     row.CreateCell(4).SetCellValue(ConvertHelper.toDate(dt.Rows[i]["rpd_foredate"]).Value.ToString("yyyy-MM-dd"));
                     row.CreateCell(5).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["pm_name"]));
                     row.CreateCell(6).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["rpd_personNum"])+"-"+Utils.ObjectToStr(dt.Rows[i]["rpd_personName"]));
-                    row.CreateCell(7).SetCellValue(BusinessDict.checkStatus()[Convert.ToByte(dt.Rows[i]["rpd_flag1"].ToString())]);
+                    row.CreateCell(7).SetCellValue(BusinessDict.checkStatus()[Utils.ObjToByte(dt.Rows[i]["rpd_flag1"])]);
                     row.CreateCell(8).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["rp_confirmerName"]));
                     row.CreateCell(9).SetCellValue(ConvertHelper.toDate(dt.Rows[i]["rp_date"])==null?"":ConvertHelper.toDate(dt.Rows[i]["rp_date"]).Value.ToString("yyyy-MM-dd"));
 

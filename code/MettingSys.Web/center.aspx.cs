@@ -11,7 +11,6 @@ namespace MettingSys.Web
     public partial class center : Web.UI.ManagePage
     {
         Model.manager admin_info = new Model.manager();
-        protected int unPayCount = 0;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -19,10 +18,11 @@ namespace MettingSys.Web
             {
                 admin_info = GetAdminInfo(); //管理员信息
 
-                if (!new BLL.permission().checkHasPermission(admin_info, "0404"))
+                unpayli.Visible = false;
+                if (new BLL.permission().checkHasPermission(admin_info, "0404"))
                 {
-                    unpayli.Visible = false;
-                    unPayCount = new BLL.ReceiptPay().getUnPaycount();
+                    unpayli.Visible = true;
+                    labUnCheckCount.Text = new BLL.ReceiptPay().getUnPaycount().ToString();
                 }
                 //登录信息
                 if (admin_info != null)

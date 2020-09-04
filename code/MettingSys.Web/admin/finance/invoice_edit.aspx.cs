@@ -125,7 +125,7 @@ namespace MettingSys.Web.admin.finance
                     if (stype[item].ToString()==dr["inv_serviceType"].ToString())
                     {
                         ddlserviceType.SelectedValue = item.ToString();
-                        _type = Convert.ToByte(item);
+                        _type = Utils.ObjToByte(item);
                         break;
                     }
                 }
@@ -397,7 +397,7 @@ namespace MettingSys.Web.admin.finance
             DropDownList ddl = (DropDownList)sender;
             if (!string.IsNullOrEmpty(ddl.SelectedValue))
             {
-                ddlserviceName.DataSource = Common.BusinessDict.serviceName(Convert.ToByte(ddl.SelectedValue));
+                ddlserviceName.DataSource = Common.BusinessDict.serviceName(Utils.ObjToByte(ddl.SelectedValue));
                 ddlserviceName.DataTextField = "value";
                 ddlserviceName.DataValueField = "key";
                 ddlserviceName.DataBind();

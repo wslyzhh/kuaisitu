@@ -312,11 +312,11 @@ namespace MettingSys.Web.admin.order
             }
             if (!string.IsNullOrEmpty(_flag))
             {
-                strTemp.Append(" and o_flag=" + _flag + "");
+                strTemp.Append(" and isnull(o_flag,0)=" + _flag + "");
             }
             if (!string.IsNullOrEmpty(_lockstatus))
             {
-                strTemp.Append(" and o_lockStatus='" + _lockstatus + "'");
+                strTemp.Append(" and isnull(o_lockStatus,0)='" + _lockstatus + "'");
             }
             if (!string.IsNullOrEmpty(_content))
             {
