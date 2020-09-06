@@ -149,6 +149,7 @@ namespace MettingSys.BLL
         public string Update(Model.finance model, string content, Model.manager manager)
         {
             if (model == null) return "数据不存在";
+            if (!string.IsNullOrEmpty(model.fin_month)) return "已结账，不能更新";
             Model.Order order = new BLL.Order().GetModel(model.fin_oid);
             if (order == null)
             {
@@ -256,6 +257,7 @@ namespace MettingSys.BLL
         {
             Model.finance model = GetModel(id);
             if (model == null) return "数据不存在";
+            if (!string.IsNullOrEmpty(model.fin_month)) return "已结账，不能删除";
             if (model.fin_flag == 2) return "已审批通过，不能删除";
             Model.Order order = new BLL.Order().GetModel(model.fin_oid);
             if (order == null)
@@ -442,6 +444,7 @@ namespace MettingSys.BLL
         {
             Model.finance model = GetModel(id);
             if (model == null) return "数据不存在";
+            if (!string.IsNullOrEmpty(model.fin_month)) return "已结账，不能审批";
             if (model.fin_flag == status) return "状态未变更";
             if (manager.area != new BLL.department().getGroupArea() || !new BLL.permission().checkHasPermission(manager, "0405"))
             {

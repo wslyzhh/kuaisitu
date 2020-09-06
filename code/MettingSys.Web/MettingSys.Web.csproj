@@ -187,6 +187,7 @@
     <Content Include="admin\finance\ReconciliationBill.aspx" />
     <Content Include="admin\finance\ReconciliationDetail.aspx" />
     <Content Include="admin\finance\ReconciliationSearch.aspx" />
+    <Content Include="admin\finance\refundCertification.aspx" />
     <Content Include="admin\finance\rpDistribution.aspx" />
     <Content Include="admin\finance\settleCustomer.aspx" />
     <Content Include="admin\finance\settleCustomerDetail.aspx" />
@@ -1409,6 +1410,13 @@
     </Compile>
     <Compile Include="admin\finance\ReconciliationSearch.aspx.designer.cs">
       <DependentUpon>ReconciliationSearch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\finance\refundCertification.aspx.cs">
+      <DependentUpon>refundCertification.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\finance\refundCertification.aspx.designer.cs">
+      <DependentUpon>refundCertification.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\finance\rpDistribution.aspx.cs">
       <DependentUpon>rpDistribution.aspx</DependentUpon>

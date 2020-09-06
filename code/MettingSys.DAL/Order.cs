@@ -152,13 +152,11 @@ namespace MettingSys.DAL
                     if (!pi.Name.Equals("o_id"))
                     {
                         //判断属性值是否为空
-                        if (pi.GetValue(model, null) != null)
+                        if (pi.GetValue(model, null) != null || pi.Name == "o_statusTime")
                         {
                             str1.Append(pi.Name + "=@" + pi.Name + ",");//声明参数
                             paras.Add(new SqlParameter("@" + pi.Name, pi.GetValue(model, null)));//对参数赋值
                         }
-                        str1.Append(pi.Name + "=@" + pi.Name + ",");//声明参数
-                        paras.Add(new SqlParameter("@" + pi.Name, pi.GetValue(model, null)));//对参数赋值
                     }
                 }
             }

@@ -237,11 +237,11 @@ namespace MettingSys.Web.admin.finance
             }
             if (!string.IsNullOrEmpty(_flag))
             {
-                strTemp.Append(" and o_flag=" + _flag + "");
+                strTemp.Append(" and isnull(o_flag,0)=" + _flag + "");
             }
             if (!string.IsNullOrEmpty(_lockstatus))
             {
-                strTemp.Append(" and o_lockStatus='" + _lockstatus + "'");
+                strTemp.Append(" and isnull(o_lockStatus,0)='" + _lockstatus + "'");
             }
             if (!string.IsNullOrEmpty(_area))
             {
@@ -259,15 +259,15 @@ namespace MettingSys.Web.admin.finance
             }
             else if (flag == "1")
             {
-                strTemp.Append(" and o_lockStatus=0 and exists(select * from ms_finance where fin_oid=o_id) and not exists(select * from MS_finance where fin_oid=o_id and (fin_flag=0 or fin_flag=1))");
+                strTemp.Append(" and isnull(o_lockStatus,0)=0 and exists(select * from ms_finance where fin_oid=o_id) and not exists(select * from MS_finance where fin_oid=o_id and (fin_flag=0 or fin_flag=1))");
             }
             else if (flag == "2")
             {
-                strTemp.Append(" and o_lockStatus=1");
+                strTemp.Append(" and isnull(o_lockStatus,0)=1");
             }
             else if (flag == "4")
             {
-                strTemp.Append(" and o_lockStatus=2");
+                strTemp.Append(" and isnull(o_lockStatus,0)=2");
             }
             else
             {
