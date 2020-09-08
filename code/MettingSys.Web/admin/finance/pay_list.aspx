@@ -396,6 +396,14 @@
         .myRuleSelect .select-tit {
             padding: 5px 5px 7px 5px;
         }
+        .sup {
+            vertical-align: super;
+            color: red;
+            font-size: 12px;
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 10px 0px 0px 0px;
+            margin-left: 5px;
+        }
     </style>
 </head>
 
@@ -416,8 +424,9 @@
                         <li><a <%=_flag=="0"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=0">全部列表</a></li>
                         <li><a <%=_flag=="1"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=1">财务未审批</a></li>
                         <li><a <%=_flag=="2"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=2">总经理未审批</a></li>
-                        <li><a <%=_flag=="3"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=3">已审未支付</a></li>
+                        <li><a <%=_flag=="3"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=3">已审未支付<sup class="sup"><asp:Label ID="labUnPayCount" runat="server">0</asp:Label></sup></a></li>
                         <li><a <%=_flag=="4"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=4">已支付</a></li>
+                        <li><a <%=_flag=="5"?"class=\"selected\"":"" %> href="refund_list.aspx?flag=5">已审批未付退款<sup class="sup"><asp:Label ID="labUnCheckCount" runat="server">0</asp:Label></sup></a></li>
                     </ul>
                 </div>
             </div>

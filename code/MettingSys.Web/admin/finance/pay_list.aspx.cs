@@ -91,6 +91,8 @@ namespace MettingSys.Web.admin.finance
                     }
                 }
                 initData();
+                labUnPayCount.Text = new BLL.ReceiptPay().getCheckUnPaycount().ToString();
+                labUnCheckCount.Text = new BLL.ReceiptPay().getUnPaycount().ToString();
                 ChkAdminLevel("sys_payment_list0", DTEnums.ActionEnum.View.ToString()); //检查权限
                 RptBind("rp_type=0 " + CombSqlTxt(), orderby);
             }

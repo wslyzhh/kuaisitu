@@ -499,7 +499,7 @@ namespace MettingSys.DAL
         public int getUnAduitExpectPay(byte type)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select count(*) from MS_ReceiptPay where 1=1 ");
+            strSql.Append("select count(*) from MS_ReceiptPay where rp_type=0 and rp_isExpect='True' ");
             if (type == 1)
             {
                 strSql.Append(" and rp_flag=0");

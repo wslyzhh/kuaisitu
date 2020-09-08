@@ -86,7 +86,7 @@ export default {
         //     _this.userid(res.code)
         // })
         //console.log('用户ID：'+ _this.userInfo.id)
-        _this.getAduitCount({managerid:14}).then(res => {
+        _this.getAduitCount({managerid:_this.userInfo.id}).then(res => {
             if(res.data.status==1){
                 _this.aduitCount1 = res.data.count1
                 _this.aduitCount2 = res.data.count2

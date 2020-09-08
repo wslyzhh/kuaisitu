@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="receipt_list.aspx.cs" Inherits="MettingSys.Web.admin.finance.receipt_list" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="refund_list.aspx.cs" Inherits="MettingSys.Web.admin.finance.refund_list" %>
 
 <%@ Import Namespace="MettingSys.Common" %>
 <!DOCTYPE html>
@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>收款通知列表</title>
+    <title>退款通知列表</title>
     <link rel="stylesheet" type="text/css" href="../../scripts/artdialog/ui-dialog.css" />
     <link rel="stylesheet" type="text/css" href="../../css/pagination.css" />
     <link rel="stylesheet" type="text/css" href="../skin/icon/iconfont.css" />
@@ -158,7 +158,7 @@
             });
         }
         /*批量审批 */
-        /*确认收款 */
+        /*确认退款 */
         function submitConfirm() {
             if ($(".checkall input:checked").size() < 1) {
                 parent.dialog({
@@ -170,7 +170,7 @@
                 return;
             }
             if ($("#ddlisConfirm1").val() == "") {
-                jsprint("请选择收款状态");
+                jsprint("请选择退款状态");
                 return;
             }
             if ($("#ddlisConfirm1").val() == "True") {
@@ -206,7 +206,7 @@
                 });
             });            
         }
-        /*确认收款 */
+        /*确认退款 */
         /*凭证 */
         function submitCertificate() {
             if ($(".checkall input:checked").size() < 1) {
@@ -284,7 +284,7 @@
         function dealDistribution(id) {
             layer.open({
                 type: 2,
-                title: '分配收款金额',
+                title: '分配退款金额',
                 area: ['950px', '650px'],
                 content: 'rpDistribution.aspx?id=' + id
             });
@@ -293,7 +293,7 @@
         function showPay(rpid, unMoney) {
             layer.open({
                 type: 2,
-                title: '收款凭证',
+                title: '退款凭证',
                 area: ['750px', '600px'],
                 content: ['refundCertification.aspx?rpid=' + rpid + '&&unmoney=' + unMoney, 'no']
             });
@@ -324,19 +324,19 @@
             <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
             <a href="../center.aspx" class="home"><i class="iconfont icon-home"></i><span>首页</span></a>
             <i class="arrow iconfont icon-arrow-right"></i>
-            <span>收款通知列表</span>
+            <span>退款通知列表</span>
         </div>
         <!--/导航栏-->
         <div class="content-tab-wrap" id="titleDiv" runat="server">
             <div class="content-tab">
                 <div class="content-tab-ul-wrap">
                     <ul>
-                        <li><a <%=_flag=="0"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=0">全部列表</a></li>
-                        <li><a <%=_flag=="1"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=1">未到账列表</a></li>
-                        <li><a <%=_flag=="2"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=2">已到账列表</a></li>
-                        <li><a <%=_flag=="3"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=3">退款财务审批</a></li>
-                        <li><a <%=_flag=="4"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=4">退款总经理审批</a></li>
-                        <%--<li><a <%=_flag=="5"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=5">已审批未付退款<sup class="sup"><asp:Label ID="labUnCheckCount" runat="server">0</asp:Label></sup></a></li>--%>
+                        <li><a <%=_flag=="0"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=0">全部列表</a></li>
+                        <li><a <%=_flag=="1"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=1">财务未审批</a></li>
+                        <li><a <%=_flag=="2"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=2">总经理未审批</a></li>
+                        <li><a <%=_flag=="3"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=3">已审未支付<sup class="sup"><asp:Label ID="labUnPayCount" runat="server">0</asp:Label></sup></a></li>
+                        <li><a <%=_flag=="4"?"class=\"selected\"":"" %> href="pay_list.aspx?flag=4">已支付</a></li>
+                        <li><a <%=_flag=="5"?"class=\"selected\"":"" %> href="refund_list.aspx?flag=5">已审批未付退款<sup class="sup"><asp:Label ID="labUnCheckCount" runat="server">0</asp:Label></sup></a></li>
                     </ul>
                 </div>
             </div>
@@ -353,7 +353,7 @@
                             <li><a href="javascript:;" onclick="reverseCheckAll();computeSelect();"><i class="iconfont icon-check-mark"></i><span>反选</span></a></li>
                             <li>
                                 <asp:LinkButton ID="btnDelete" runat="server" OnClientClick="return ExePostBack('btnDelete','删除后无法恢复，是否继续？');" OnClick="btnDelete_Click"><i class="iconfont icon-delete"></i><span>删除</span></asp:LinkButton></li>
-                            <li><a href="javascript:;" onclick="toggleconfirmDiv()"><span>确认收款</span></a></li>
+                            <li><a href="javascript:;" onclick="toggleconfirmDiv()"><span>确认退款</span></a></li>
                             <li><a href="javascript:;" onclick="togglecertificateDiv()"><span>标记凭证</span></a></li>
                             <li id="checkli" runat="server"><a href="javascript:;" onclick="toggleCheckDiv()"><span>审批退款</span></a></li>
                         </ul>
@@ -375,7 +375,7 @@
                             <input type="button" class="btn" value="提交" onclick="submitCheck()" />
                         </div>
                         <div id="confirmDiv" style="display: none;">
-                            收款状态：
+                            退款状态：
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlisConfirm1" runat="server">
                                 </asp:DropDownList>
@@ -397,10 +397,10 @@
         </div>
         <!--/工具栏-->
         <div class="searchbar">
-            收款对象：
+            退款对象：
                             <asp:TextBox ID="txtCusName" runat="server" CssClass="input"></asp:TextBox>
             <asp:HiddenField ID="hCusId" runat="server" />
-            收款方式：
+            退款方式：
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlmethod" runat="server"></asp:DropDownList>
                             </div>
@@ -412,7 +412,7 @@
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlcheck2" runat="server"></asp:DropDownList>
                             </div>
-            收款状态：
+            退款状态：
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlisConfirm" runat="server"></asp:DropDownList>
                             </div>
@@ -453,12 +453,12 @@
                             </asp:DropDownList>
                         </div>
             <asp:TextBox ID="txtMoney" runat="server" CssClass="input small"></asp:TextBox>   
-            预收款：
+            预退款：
             <div class="rule-single-select">
                             <asp:DropDownList ID="ddlType" runat="server">
                                 <asp:ListItem Value="">不限</asp:ListItem>
-                                <asp:ListItem Value="True">预收款</asp:ListItem>
-                                <asp:ListItem Value="False">非预收款</asp:ListItem>
+                                <asp:ListItem Value="True">预退款</asp:ListItem>
+                                <asp:ListItem Value="False">非预退款</asp:ListItem>
                             </asp:DropDownList>
                         </div>
             申请人：
@@ -471,20 +471,20 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
                             <th width="6%">选择</th>
-                            <th align="left" width="10%">收款对象</th>
+                            <th align="left" width="10%">退款对象</th>
                             <th align="left" width="6%">凭证</th>
-                            <th align="left">收款内容</th>
-                            <th align="left" width="10%">客户银行账号</th>
-                            <th align="left" width="6%">收款金额</th>
+                            <th align="left">退款内容</th>
+                            <th align="left" width="12%">客户银行账号</th>
+                            <th align="left" width="6%">退款金额</th>
                             <th align="left" width="6%">未分配金额</th>
                             <th align="left" width="6%">预收日期</th>
-                            <th align="left" width="6%">收款方式</th>
+                            <th align="left" width="6%">退款方式</th>
                             <th align="left" width="6%">实收日期</th>
                             <th align="left" width="6%">申请人</th>
                             <%if (_flag == "3" || _flag == "4" || _flag == "5"){ %>
                             <th align="left" width="5%">审批</th>
                             <%} %>
-                            <th align="left" width="5%">确认收款</th>
+                            <th align="left" width="5%">确认退款</th>
                             <th width="8%">操作</th>
                         </tr>
                 </HeaderTemplate>
@@ -498,7 +498,7 @@
                         <td class="numTd"><span onmouseover="tip_index=layer.tips('凭证日期：<%#Eval("ce_date").ToString()==""?"":Convert.ToDateTime(Eval("ce_date")).ToString("yyyy-MM-dd")%><br/>备注：<%# Eval("ce_remark") %>', this, { time: 0 });" onmouseout="layer.close(tip_index);"><%# Eval("ce_num") %></span></td>
                         <td><%# Eval("rp_content") %></td>
                         <td><%#Eval("cb_bankName")%><br /><%#Eval("cb_bankNum")%><br /><%#Eval("cb_bank")%></td>
-                        <td class="moneyTd"><%# Eval("rp_money") %></td>
+                        <td class="moneyTd"><%# Utils.ObjectToStr(Eval("rp_money")).Replace("-","") %></td>
                         <td class="umoneyTd"><a href="javascript:;" onclick="showDetail(<%#Eval("rp_id")%>)"><%# Eval("undistribute") %></a></td>
                         <td><%# Convert.ToDateTime(Eval("rp_foredate")).ToString("yyyy-MM-dd") %></td>
                         <td><%# Eval("pm_name") %></td>
@@ -510,7 +510,7 @@
                             <span onmouseover="tip_index=layer.tips('总经理审批<br/>审批人：<%#Eval("rp_checkNum1")%>-<%#Eval("rp_checkName1")%><br/>审批备注：<%#Eval("rp_checkRemark1").ToString().Replace("\r\n","").Replace("\r","").Replace("\n","")%><br/>审批时间：<%#Eval("rp_checkTime1")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Eval("rp_flag1")%>"></span>
                         </td>
                          <%} %>
-                        <td class="confirmTd"><span onmouseover="tip_index=layer.tips('收款确认人：<%#Eval("rp_confirmerNum")%>-<%#Eval("rp_confirmerName")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Convert.ToBoolean(Eval("rp_isConfirm"))?"2":"0"%>"></span></td>
+                        <td class="confirmTd"><span onmouseover="tip_index=layer.tips('退款确认人：<%#Eval("rp_confirmerNum")%>-<%#Eval("rp_confirmerName")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Convert.ToBoolean(Eval("rp_isConfirm"))?"2":"0"%>"></span></td>
                         <td align="center">
                             <a href="receipt_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("rp_id")%>">修改</a>
                             <a href="javascript:;" onclick="dealDistribution(<%#Eval("rp_id")%>)">分配</a>
@@ -526,17 +526,17 @@
             </asp:Repeater>
         </div>
         <div style="font-size: 12px;color:darkblue;">
-            <span style="float: left;">选中：<asp:Label ID="sCount" runat="server">0</asp:Label>条记录，收款金额：<asp:Label ID="sMoney" runat="server">0</asp:Label>，未分配金额：<asp:Label ID="suMoney" runat="server">0</asp:Label></span>
+            <span style="float: left;">选中：<asp:Label ID="sCount" runat="server">0</asp:Label>条记录，退款金额：<asp:Label ID="sMoney" runat="server">0</asp:Label>，未分配金额：<asp:Label ID="suMoney" runat="server">0</asp:Label></span>
         </div>
         <div style="font-size: 12px;margin-top: 25px;">
-            <span style="float: left;">本页：<asp:Label ID="pCount" runat="server">0</asp:Label>条记录，总计收款金额：<asp:Label ID="pMoney" runat="server">0</asp:Label>，总计未分配金额：<asp:Label ID="pUnMoney" runat="server">0</asp:Label></span>
-            <span style="float: right;">总计：<asp:Label ID="tCount" runat="server">0</asp:Label>条记录，总计收款金额：<asp:Label ID="tMoney" runat="server">0</asp:Label>，总计未分配金额：<asp:Label ID="tUnMoney" runat="server">0</asp:Label></span>
+            <span style="float: left;">本页：<asp:Label ID="pCount" runat="server">0</asp:Label>条记录，总计退款金额：<asp:Label ID="pMoney" runat="server">0</asp:Label>，总计未分配金额：<asp:Label ID="pUnMoney" runat="server">0</asp:Label></span>
+            <span style="float: right;">总计：<asp:Label ID="tCount" runat="server">0</asp:Label>条记录，总计退款金额：<asp:Label ID="tMoney" runat="server">0</asp:Label>，总计未分配金额：<asp:Label ID="tUnMoney" runat="server">0</asp:Label></span>
         </div>
         <!--/列表-->
         <div class="dRemark" style="margin-top: 47px;">
-            <p>1.收款：<span class="check_0"></span>待收款，<span class="check_2"></span>已收款</p>
-            <p>2.删除收款通知会连同收款明细一起删除</p>
-            <p>3.付款对象后面带“<font color='green'>[预]</font>”，表示预收款</p>            
+            <p>1.退款：<span class="check_0"></span>待退款，<span class="check_2"></span>已退款</p>
+            <p>2.删除退款通知会连同退款明细一起删除</p>
+            <p>3.付款对象后面带“<font color='green'>[预]</font>”，表示预退款</p>            
             <p>4.搜索凭证号：填“0”表示搜索凭证号为空的记录；填“1”表示搜索凭证号不为空的记录</p>
         </div>
         <!--内容底部-->

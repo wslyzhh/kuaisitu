@@ -15,7 +15,7 @@ using BorderStyle = NPOI.SS.UserModel.BorderStyle;
 
 namespace MettingSys.Web.admin.finance
 {
-    public partial class receipt_list : Web.UI.ManagePage
+    public partial class refund_list : Web.UI.ManagePage
     {
         protected int totalCount; //数据总记录数
         protected int page; //当前页码
@@ -109,7 +109,8 @@ namespace MettingSys.Web.admin.finance
                 {
                     ChkAdminLevel("sys_payment_list1", DTEnums.ActionEnum.View.ToString()); //检查权限
                 }
-                //labUnCheckCount.Text = new BLL.ReceiptPay().getUnPaycount().ToString();
+                labUnPayCount.Text = new BLL.ReceiptPay().getCheckUnPaycount().ToString();
+                labUnCheckCount.Text = new BLL.ReceiptPay().getUnPaycount().ToString();
                 RptBind("rp_type=1 " + CombSqlTxt(), orderby);
             }
         }
@@ -122,12 +123,12 @@ namespace MettingSys.Web.admin.finance
             {
                 sqlwhere = " and pm_type=0";
             }
-            ddlmethod.DataSource = new BLL.payMethod().GetList(0, "pm_isUse=1 "+ sqlwhere + "", "pm_sort asc,pm_id asc");
+            ddlmethod.DataSource = new BLL.payMethod().GetList(0, "pm_isUse=1 " + sqlwhere + "", "pm_sort asc,pm_id asc");
             ddlmethod.DataTextField = "pm_name";
             ddlmethod.DataValueField = "pm_id";
             ddlmethod.DataBind();
             ddlmethod.Items.Insert(0, new ListItem("不限", ""));
-            
+
             //收款状态
             ddlisConfirm.DataSource = Common.BusinessDict.financeConfirmStatus(1);
             ddlisConfirm.DataTextField = "value";
@@ -231,7 +232,7 @@ namespace MettingSys.Web.admin.finance
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("receipt_list.aspx", "page={0}&ddlmethod={1}&ddlisConfirm={2}&txtsforedate={3}&txteforedate={4}&txtsdate={5}&txtedate={6}&txtNum={7}&txtCusName={8}&hCusId={9}&txtChk={10}&txtNumDate={11}&ddlsign={12}&txtmoney={13}&ddlmoneyType={14}&ddlType={15}&txtAddPerson={16}&ddlcheck={17}&ddlcheck2={18}", "__id__", _method, _isconfirm, _sforedate, _eforedate, _sdate, _edate, _num, _cusName, _cid, _chk, _numdate, _sign, _money, _moneyType, _type, _addperson,_check,_check2);
+            return Utils.CombUrlTxt("receipt_list.aspx", "page={0}&ddlmethod={1}&ddlisConfirm={2}&txtsforedate={3}&txteforedate={4}&txtsdate={5}&txtedate={6}&txtNum={7}&txtCusName={8}&hCusId={9}&txtChk={10}&txtNumDate={11}&ddlsign={12}&txtmoney={13}&ddlmoneyType={14}&ddlType={15}&txtAddPerson={16}&ddlcheck={17}&ddlcheck2={18}", "__id__", _method, _isconfirm, _sforedate, _eforedate, _sdate, _edate, _num, _cusName, _cid, _chk, _numdate, _sign, _money, _moneyType, _type, _addperson, _check, _check2);
         }
 
         #region 组合SQL查询语句==========================
@@ -322,7 +323,7 @@ namespace MettingSys.Web.admin.finance
             }
             if (!string.IsNullOrEmpty(_addperson))
             {
-                strTemp.Append(" and (rp_personNum like '%"+_addperson+ "%' or rp_personName like '%" + _addperson + "%')");
+                strTemp.Append(" and (rp_personNum like '%" + _addperson + "%' or rp_personName like '%" + _addperson + "%')");
             }
             return strTemp.ToString();
         }
@@ -364,7 +365,7 @@ namespace MettingSys.Web.admin.finance
             _moneyType = DTRequest.GetFormString("ddlmoneyType");
             _type = DTRequest.GetFormString("ddlType");
             _addperson = DTRequest.GetFormString("txtAddPerson");
-            RptBind("rp_type=1 " + CombSqlTxt(), orderby);            
+            RptBind("rp_type=1 " + CombSqlTxt(), orderby);
         }
 
         //设置分页数量
@@ -483,7 +484,7 @@ namespace MettingSys.Web.admin.finance
                 {
                     IRow row = sheet.CreateRow(i + 1);
                     row.HeightInPoints = 22;
-                    row.CreateCell(0).SetCellValue(dt.Rows[i]["c_name"].ToString()+(Utils.StrToBool(Utils.ObjectToStr(dt.Rows[i]["rp_isExpect"]),false)?"[预]":""));
+                    row.CreateCell(0).SetCellValue(dt.Rows[i]["c_name"].ToString() + (Utils.StrToBool(Utils.ObjectToStr(dt.Rows[i]["rp_isExpect"]), false) ? "[预]" : ""));
                     row.CreateCell(1).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["ce_num"]));
                     row.CreateCell(2).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["rp_content"]));
                     row.CreateCell(3).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["rp_money"]));

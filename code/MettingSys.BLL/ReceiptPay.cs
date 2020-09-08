@@ -35,6 +35,15 @@ namespace MettingSys.BLL
         }
 
         /// <summary>
+        /// 计算已审未支付付款的数量
+        /// </summary>
+        /// <returns></returns>
+        public int getCheckUnPaycount()
+        {
+            return dal.getCheckUnPaycount();
+        }
+
+        /// <summary>
         /// 增加一条数据
         /// </summary>
         public string Add(Model.ReceiptPay model,Model.manager manager,string num,string date,out int rpid,bool flag=true)
@@ -699,6 +708,11 @@ namespace MettingSys.BLL
             }
             else
             {
+                //退款要先确认总经理审批已经通过，否则不能直接确认
+                if (model.rp_money < 0 && model.rp_flag1 != 2)
+                {
+                    return text + "总经理审批状态未通过，不能确认退款";
+                }
                 if (string.IsNullOrEmpty(isConfirm))
                 {
                     return "请选择" + text + "状态";

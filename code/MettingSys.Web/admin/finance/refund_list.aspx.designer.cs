@@ -11,7 +11,7 @@ namespace MettingSys.Web.admin.finance
 {
 
 
-    public partial class pay_list
+    public partial class refund_list
     {
 
         /// <summary>
@@ -60,6 +60,15 @@ namespace MettingSys.Web.admin.finance
         protected global::System.Web.UI.WebControls.LinkButton btnDelete;
 
         /// <summary>
+        /// checkli 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl checkli;
+
+        /// <summary>
         /// ddlchecktype 控件。
         /// </summary>
         /// <remarks>
@@ -103,15 +112,6 @@ namespace MettingSys.Web.admin.finance
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtdate1;
-
-        /// <summary>
-        /// ddlmethod1 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlmethod1;
 
         /// <summary>
         /// txtCenum 控件。
@@ -222,6 +222,24 @@ namespace MettingSys.Web.admin.finance
         protected global::System.Web.UI.WebControls.TextBox txtedate;
 
         /// <summary>
+        /// btnSearch 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSearch;
+
+        /// <summary>
+        /// btnExcel 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnExcel;
+
+        /// <summary>
         /// txtNum 控件。
         /// </summary>
         /// <remarks>
@@ -285,22 +303,13 @@ namespace MettingSys.Web.admin.finance
         protected global::System.Web.UI.WebControls.DropDownList ddlType;
 
         /// <summary>
-        /// btnSearch 控件。
+        /// txtAddPerson 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSearch;
-
-        /// <summary>
-        /// btnExcel 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnExcel;
+        protected global::System.Web.UI.WebControls.TextBox txtAddPerson;
 
         /// <summary>
         /// rptList 控件。

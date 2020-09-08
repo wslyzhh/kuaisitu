@@ -132,6 +132,20 @@ namespace MettingSys.DAL
             return Utils.ObjToInt(DbHelperSQL.GetSingle(strSql.ToString(), parameters));
         }
 
+        /// <summary>
+        /// 计算已审未支付付款的数量
+        /// </summary>
+        /// <returns></returns>
+        public int getCheckUnPaycount()
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select count(*) from MS_ReceiptPay where rp_type=0 and rp_flag=2 and rp_flag1=2 and rp_isConfirm='False'");
+
+            SqlParameter[] parameters = { };
+            return Utils.ObjToInt(DbHelperSQL.GetSingle(strSql.ToString(), parameters));
+        }
+
+
         public DataTable getOrderUser(int rpid)
         {
             StringBuilder strSql = new StringBuilder();

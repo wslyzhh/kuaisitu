@@ -26,11 +26,11 @@
 
         //})
         function PreviewMytable() {
-            LODOP.PRINT_INIT("业务<%=typeName%>凭证");
+            LODOP.PRINT_INIT("业务付款凭证");
             var strStyle = "<style> table,td,th {border-width: 1px;border-style: solid;border-collapse: collapse}</style>"
             LODOP.NewPageA();
             LODOP.SET_PRINT_STYLE("FontSize", 12);
-            LODOP.ADD_PRINT_HTML(20, "40%", "90%", 20, "<B>业务<%=typeName%>凭证</B>");
+            LODOP.ADD_PRINT_HTML(20, "40%", "90%", 20, "<B>业务付款凭证</B>");
             LODOP.SET_PRINT_STYLEA(0, "ItemType", 1);
             //LODOP.ADD_PRINT_HTM(20, "40%", "90%", 20, document.getElementById("headDiv").innerHTML);
             //LODOP.SET_PRINT_STYLEA(0, "ItemType", 1);
@@ -80,23 +80,23 @@
                 <input type="button" value="打印" onclick="PreviewMytable()" class="btn Noprn" />
             </div>
             <div class="table-container" id="printDIV" style="text-align: center; line-height: 24px; height: 450px; overflow-y: auto;">
-                <div id="headDiv" style="font-size: 24px; margin-bottom: 9px; text-align: center;">业务<%=typeName%>凭证</div>
+                <div id="headDiv" style="font-size: 24px; margin-bottom: 9px; text-align: center;">业务付款凭证</div>
                 <div id="middleDiv" style="text-align: right; padding-right: 10px;">实付日期：<%=string.IsNullOrEmpty(Utils.ObjectToStr(dr["rp_date"]))?"":ConvertHelper.toDate(dr["rp_date"]).Value.ToString("yyyy年MM月dd日") %></div>
                 <div id="footDiv" style="text-align: left; padding-left: 10px; margin-top: 10px;font-weight: bolder;">
                     打印时间：<%=DateTime.Now.ToString("yyyy年MM月dd日") %>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     打印人：<%=manager.real_name %>(<%=manager.user_name %>)
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <%=typeName%>人：<%=dr["rp_confirmerName"] %>
+                    付款人：<%=dr["rp_confirmerName"] %>
                 </div>
                 <table width="100%" border="1" cellspacing="0" cellpadding="0" class="ltable" style="min-width: 0;">
                     <thead>
                         <tr style="text-align: right;">
-                            <td width="12%" style="font-weight: bolder;"><%=typeName%>对象：</td>
+                            <td width="12%" style="font-weight: bolder;">付款对象：</td>
                             <td width="28%" style="text-align: left; padding-left: 5px;"><%=dr["c_name"] %></td>
-                            <td width="7%" style="font-weight: bolder;"><%=typeName%>方式：</td>
+                            <td width="7%" style="font-weight: bolder;">付款方式：</td>
                             <td width="15%" style="text-align: left; padding-left: 5px;"><%=dr["pm_name"] %></td>
-                            <td width="12%" style="font-weight: bolder;"><%=typeName%>总额：</td>
+                            <td width="12%" style="font-weight: bolder;">付款总额：</td>
                             <td style="text-align: left; padding-left: 5px;"><%=dr["rp_money"] %></td>
                         </tr>
                         <tr>
@@ -106,13 +106,13 @@
                         <%if (Utils.StrToBool(Utils.ObjectToStr(dr["rp_isExpect"]), false))
                             { %>
                         <tr style="text-align: right;">
-                            <td style="font-weight: bolder;">预<%=typeName%>审批人：</td>
+                            <td style="font-weight: bolder;">预付款审批人：</td>
                             <td style="text-align: left; padding-left: 5px;" colspan="2">
                                 1:<%=dr["rp_checkName"]%>(<%=dr["rp_checkNum"] %>)，<%=BusinessDict.checkStatus()[Utils.ObjToByte(dr["rp_flag"])] %>，<%=dr["rp_checkRemark"] %>，<%=dr["rp_checkTime"]%>
                                 <br />
                                 2:<%=dr["rp_checkName1"]%>(<%=dr["rp_checkNum1"] %>)，<%=BusinessDict.checkStatus()[Utils.ObjToByte(dr["rp_flag1"])] %>，<%=dr["rp_checkRemark1"] %>，<%=dr["rp_checkTime1"]%>
                             </td>
-                            <td style="font-weight: bolder;"><%=typeName%>内容：</td>
+                            <td style="font-weight: bolder;">付款内容：</td>
                             <td style="text-align: left; padding-left: 5px;" colspan="2">
                                 <%=dr["rp_content"] %>
                             </td>
@@ -122,9 +122,9 @@
                             { %>
                         <tr style="text-align: right; text-align: center;font-weight: bolder;">
                             <td>订单号</td>
-                            <td><%=typeName%>内容</td>
-                            <td><%=typeName%>金额</td>
-                            <td><%=typeName%>申请人</td>
+                            <td>付款内容</td>
+                            <td>付款金额</td>
+                            <td>付款申请人</td>
                             <td colspan="2">审批人</td>
                         </tr>
                     </thead>

@@ -61,8 +61,8 @@ export default {
            list:[],
            isIocn:[audit,audit_no,audit_yes],
            checkType:0,
-           pageTotal:9,
-		   recordTotal:9,
+           pageTotal:0,
+		   recordTotal:0,
 		   searchData:{
 			    pageIndex:1,
                 pageSize:999,
@@ -103,7 +103,7 @@ export default {
         payList(){
             let _this = this
             _this.searchData.pageIndex++
-            _this.searchData.managerid = _this.userInfo.id
+            _this.searchData.managerid = 14//_this.userInfo.id
             this.getPaytList(_this.searchData).then(res => {
                 _this.recordTotal=0
                 if(res.data.msg){

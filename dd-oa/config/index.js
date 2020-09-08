@@ -13,8 +13,8 @@ module.exports = {
     proxyTable: {
       '/api': {
           //target: 'http://www.crystalmice.com.cn',//后端正式接口地址
-          //target: 'http://crystalmice.cn',//后端测试接口地址
-          target: 'http://localhost',//后端本地接口地址
+          target: 'http://crystalmice.cn',//后端测试接口地址
+          //target: 'http://localhost:8080',//后端本地接口地址
           changeOrigin: true,//是否允许跨越
           pathRewrite: {
               '^/api': '',//重写,

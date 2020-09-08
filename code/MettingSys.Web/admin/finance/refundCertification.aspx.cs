@@ -11,11 +11,10 @@ namespace MettingSys.Web.admin.finance
 {
     public partial class refundCertification : Web.UI.ManagePage
     {
-        protected int rpid = 0, rptype = 0;
+        protected int rpid = 0;
         protected Model.manager manager = null;
         protected DataRow dr = null;
         protected DataTable detailDT = null;
-        protected string typeName = "付款";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -24,11 +23,6 @@ namespace MettingSys.Web.admin.finance
             {
                 JscriptMsg("传输参数不正确！", "back");
                 return;
-            }
-            rptype = DTRequest.GetInt("rptype", 0);
-            if (rptype == 1)
-            {
-                typeName = "收款";
             }
             RptBind("rpd_rpid=" + rpid + "", "rpd_oid");
         }

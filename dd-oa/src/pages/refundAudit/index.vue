@@ -18,7 +18,7 @@
                                 <img class="icon" :src="isIocn[item.rp_flag1]" alt="22">
                             </div>
                             <h2 class="name">{{item.c_name}}</h2>
-                            <input type="button" :class="{blue:item.rp_isConfirm}" :value="item.rp_isConfirm?'已付款':'待付款'" class="blueq">
+                            <input type="button" :class="{blue:item.rp_isConfirm}" :value="item.rp_isConfirm?'已退款':'待退款'" class="blueq">
                             <!-- <span class="isExpect">{{item.rp_isExpect?'[预]':''}}</span> -->
                         </section>
                         <section class="operation_icon flex">
@@ -28,7 +28,7 @@
                     <div class="message flex flex_a_c flex_s_b">
                         <div class="message_list flex">
                             <!-- <span>{{item.rp_foredate | formatDate}}</span> -->
-                            <span>{{item.rp_money}}</span>
+                            <span>{{-item.rp_money}}</span>
                             <span v-show="item.pm_name">{{item.pm_name}}</span>
                             <span v-show="item.rp_date">{{item.rp_date | formatDate}}</span>
                             <span>{{item.rp_personNum}}({{item.rp_personName}})</span>
@@ -105,7 +105,7 @@ export default {
         payList(){
             let _this = this
             _this.searchData.pageIndex++
-            _this.searchData.managerid = 14//_this.userInfo.id
+            _this.searchData.managerid = _this.userInfo.id
             this.getPaytList(_this.searchData).then(res => {
                 _this.recordTotal=0
                 if(res.data.msg){
