@@ -178,7 +178,7 @@ namespace MettingSys.Web.admin.order
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("order_list.aspx", "page={0}&flag={1}&type={2}&txtCusName={3}&hCusId={4}&ddlContractPrice={5}&ddlstatus={6}&ddldstatus={7}&ddlispush={8}&ddlflag={9}&ddllock={10}&txtContent={11}&txtAddress={12}&ddlsign={13}&txtMoney={14}&txtPerson1={15}&txtPerson2={16}&txtPerson3={17}&txtPerson4={18}&txtPerson5={19}&txtsDate={20}&txteDate={21}&txtsDate1={22}&txteDate1={23}&txtOrderID={24}&ddlarea={25}&ddlmoneyType={26}", "__id__",flag,_type,_cusName,_cid,_contractPrice,_status,_dstatus,_pushstatus,_flag,_lockstatus,_content,_address,_sign,_money,_person1,_person2,_person3,_person4,_person5,_sdate,_edate,_sdate1,_edate1,_orderid,_area,_moneyType);
+            string pageUrl = backUrl();
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
 
             txtOrderID.Text = _orderid;
