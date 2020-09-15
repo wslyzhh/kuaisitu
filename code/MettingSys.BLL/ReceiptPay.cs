@@ -24,14 +24,13 @@ namespace MettingSys.BLL
         {
             return dal.Exists(id);
         }
-
         /// <summary>
         /// 计算已审未支付退款的数量
         /// </summary>
         /// <returns></returns>
-        public int getUnPaycount()
+        public int getUnPaycount(string type="0")
         {
-            return dal.getUnPaycount();
+            return dal.getUnPaycount(type);
         }
 
         /// <summary>

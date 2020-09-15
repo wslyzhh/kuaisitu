@@ -109,7 +109,8 @@ namespace MettingSys.Web.admin.finance
                 {
                     ChkAdminLevel("sys_payment_list1", DTEnums.ActionEnum.View.ToString()); //检查权限
                 }
-                //labUnCheckCount.Text = new BLL.ReceiptPay().getUnPaycount().ToString();
+                labUnCheckCount1.Text = new BLL.ReceiptPay().getUnPaycount("1").ToString();
+                labUnCheckCount2.Text = new BLL.ReceiptPay().getUnPaycount("2").ToString();
                 RptBind("rp_type=1 " + CombSqlTxt(), orderby);
             }
         }

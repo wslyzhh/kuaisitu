@@ -118,16 +118,27 @@ namespace MettingSys.DAL
             }
             return false;
         }
-
+        
         /// <summary>
         /// 计算已审未支付退款的数量
         /// </summary>
         /// <returns></returns>
-        public int getUnPaycount()
+        public int getUnPaycount(string type = "0")
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select count(*) from MS_ReceiptPay where rp_type=1 and rp_flag=2 and rp_flag1=2 and rp_isConfirm='False' and rp_money < 0");
-
+            strSql.Append("select count(*) from MS_ReceiptPay where rp_type=1 and rp_money < 0");
+            if (type == "0")
+            {
+                strSql.Append(" and rp_flag=2 and rp_flag1=2 and rp_isConfirm='False'");
+            }
+            else if (type == "1")
+            {
+                strSql.Append("and rp_flag=0  and rp_flag1=0 and rp_isConfirm='False'");
+            }
+            else
+            {
+                strSql.Append("and rp_flag=2 and rp_flag1=0 and rp_isConfirm='False'");
+            }
             SqlParameter[] parameters = { };
             return Utils.ObjToInt(DbHelperSQL.GetSingle(strSql.ToString(), parameters));
         }

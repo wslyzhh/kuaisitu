@@ -334,8 +334,8 @@
                         <li><a <%=_flag=="0"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=0">全部列表</a></li>
                         <li><a <%=_flag=="1"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=1">未到账列表</a></li>
                         <li><a <%=_flag=="2"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=2">已到账列表</a></li>
-                        <li><a <%=_flag=="3"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=3">退款财务审批</a></li>
-                        <li><a <%=_flag=="4"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=4">退款总经理审批</a></li>
+                        <li><a <%=_flag=="3"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=3">退款财务审批<sup class="sup"><asp:Label ID="labUnCheckCount1" runat="server">0</asp:Label></sup></a></li>
+                        <li><a <%=_flag=="4"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=4">退款总经理审批<sup class="sup"><asp:Label ID="labUnCheckCount2" runat="server">0</asp:Label></sup></a></li>
                         <%--<li><a <%=_flag=="5"?"class=\"selected\"":"" %> href="receipt_list.aspx?flag=5">已审批未付退款<sup class="sup"><asp:Label ID="labUnCheckCount" runat="server">0</asp:Label></sup></a></li>--%>
                     </ul>
                 </div>
