@@ -93,7 +93,11 @@
                 } else {
                     $("#dlceDate").hide();
                     $("#dlceNum").hide();
-                    $("#dlBank").show();
+                    if ($("#txtMoney").val() > 0) {
+                        $("#dlBank").hide();
+                    } else {
+                        $("#dlBank").show();
+                    }
                 }
             }
 

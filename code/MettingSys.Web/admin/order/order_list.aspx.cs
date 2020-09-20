@@ -98,12 +98,12 @@ namespace MettingSys.Web.admin.order
             }
             if (!Page.IsPostBack)
             {
+                ChkAdminLevel("sys_order_list", DTEnums.ActionEnum.View.ToString()); //检查权限
                 if (flag != "0" && flag != "1" && flag != "2" && flag != "4" && string.IsNullOrEmpty(DTRequest.GetString("page")))
                 {
                     _lockstatus = "0";
                 }
                 InitData();
-                ChkAdminLevel("sys_order_list", DTEnums.ActionEnum.View.ToString()); //检查权限
                 RptBind("1=1" + CombSqlTxt(), "o_addDate desc,o_id desc");
             }            
         }
