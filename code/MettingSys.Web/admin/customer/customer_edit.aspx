@@ -160,6 +160,12 @@
                 </dd>
             </dl>
             <dl>
+                <dt>业务范围</dt>
+                <dd>
+                    <asp:TextBox ID="txtBusinessScope" runat="server" CssClass="input normal" TextMode="MultiLine" />
+                </dd>
+            </dl>
+            <dl>
                 <dt>信用代码(税号)</dt>
                 <dd>
                     <asp:TextBox ID="txtNum" runat="server" CssClass="input normal"></asp:TextBox>

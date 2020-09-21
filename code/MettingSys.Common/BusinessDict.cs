@@ -146,18 +146,39 @@ namespace MettingSys.Common
         public static Dictionary<byte?, string> customerType(byte? type=3)
         {
             Dictionary<byte?, string> dict = new Dictionary<byte?, string>();
+            //if (type == 1)
+            //{
+            //    dict.Add(1, "普通客户");
+            //}
+            //else if (type == 2)
+            //{
+            //    dict.Add(1, "普通客户");
+            //    dict.Add(2, "管理用客户");
+            //}
+            //else
+            //{
+            //    dict.Add(1, "普通客户");
+            //    dict.Add(2, "管理用客户");
+            //    dict.Add(3, "内部客户");
+            //}
             if (type == 1)
             {
-                dict.Add(1, "普通客户");
+                dict.Add(1, "客户");
+                dict.Add(4, "供应商");
+                dict.Add(5, "客户兼供应商");
             }
             else if (type == 2)
             {
-                dict.Add(1, "普通客户");
+                dict.Add(1, "客户");
+                dict.Add(4, "供应商");
+                dict.Add(5, "客户兼供应商");
                 dict.Add(2, "管理用客户");
             }
             else
             {
-                dict.Add(1, "普通客户");
+                dict.Add(1, "客户");
+                dict.Add(4, "供应商");
+                dict.Add(5, "客户兼供应商");
                 dict.Add(2, "管理用客户");
                 dict.Add(3, "内部客户");
             }
