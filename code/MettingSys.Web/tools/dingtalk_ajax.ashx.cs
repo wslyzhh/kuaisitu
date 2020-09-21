@@ -738,12 +738,12 @@ namespace MettingSys.Web.tools
                     if (new BLL.permission().checkHasPermission(managerModel, "0402"))
                     {
                         c5 = bll.getUnAduitExpectPay(1);
-                        c6 = bll.getRefund(1);
+                        c6 = new BLL.ReceiptPay().getUnPaycount("1");
                     }
                     else
                     {
                         c5 = bll.getUnAduitExpectPay(2);
-                        c6 = bll.getRefund(2);
+                        c6 = new BLL.ReceiptPay().getUnPaycount("2");
                     }
                 }
                 
@@ -3588,7 +3588,7 @@ namespace MettingSys.Web.tools
                         checkType = "1";
                         if (_flag == "0")
                         {
-                            strTemp.Append(" and rp_flag=0 ");
+                            strTemp.Append(" and rp_flag=0 and rp_flag1=0 and rp_isConfirm='False'");
                         }
                         else if (_flag == "1")
                         {
@@ -3600,7 +3600,7 @@ namespace MettingSys.Web.tools
                         checkType = "2";
                         if (_flag == "0")
                         {
-                            strTemp.Append(" and rp_flag=2 and rp_flag1=0");
+                            strTemp.Append(" and rp_flag=2 and rp_flag1=0 and rp_isConfirm='False'");
                         }
                         else if (_flag == "1")
                         {

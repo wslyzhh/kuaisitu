@@ -127,7 +127,7 @@ export default {
                     if (this.powers[j] === arr[i])return true;
                 }
             }
-            return true
+            return false
         },
         getMessage(_id){
             this.getMessageList({pageIndex:1,pageSize:10,managerid:_id,isRead:'False'}).then(res => {

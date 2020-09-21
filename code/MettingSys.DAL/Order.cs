@@ -423,11 +423,11 @@ namespace MettingSys.DAL
             strSql.Append("select count(*) from MS_ReceiptPayDetail where 1=1 ");
             if (type == 1)
             {
-                strSql.Append(" and rpd_area=@area and rpd_flag1=0");
+                strSql.Append(" and rpd_area=@area and rpd_flag1=0 and rpd_flag2=0 and rpd_flag3=0");
             }
             else if (type == 2)
             {
-                strSql.Append(" and rpd_flag1=2 and rpd_flag2=0");
+                strSql.Append(" and rpd_flag1=2 and rpd_flag2=0 and rpd_flag3=0");
             }
             else
             {
@@ -451,15 +451,15 @@ namespace MettingSys.DAL
             strSql.Append("select count(*) from MS_unBusinessApply where 1=1 ");
             if (type == 1)
             {
-                strSql.Append(" and uba_area=@area and uba_flag1=0");
+                strSql.Append(" and uba_area=@area and uba_flag1=0 and uba_flag2=0 and uba_flag3=0 and uba_isConfirm='False'");
             }
             else if (type == 2)
             {
-                strSql.Append(" and uba_flag1=2 and uba_flag2=0");
+                strSql.Append(" and uba_flag1=2 and uba_flag2=0 and uba_flag3=0 and uba_isConfirm='False'");
             }
             else
             {
-                strSql.Append(" and uba_flag1=2 and uba_flag2=2 and uba_flag3=0");
+                strSql.Append(" and uba_flag1=2 and uba_flag2=2 and uba_flag3=0 and uba_isConfirm='False'");
             }
             SqlParameter[] parameters = {
                     new SqlParameter("@area", SqlDbType.VarChar,11)};
@@ -483,7 +483,7 @@ namespace MettingSys.DAL
             }
             else
             {
-                strSql.Append(" and inv_flag1=2 and inv_flag2=2 and inv_flag3=0");
+                strSql.Append(" and inv_flag1=2 and inv_flag2=2 and inv_flag3=0 and inv_isConfirm='False'");
             }
             SqlParameter[] parameters = {
                     new SqlParameter("@area", SqlDbType.VarChar,11)};
@@ -502,35 +502,13 @@ namespace MettingSys.DAL
             strSql.Append("select count(*) from MS_ReceiptPay where rp_type=0 and rp_isExpect='True' ");
             if (type == 1)
             {
-                strSql.Append(" and rp_flag=0");
+                strSql.Append(" and rp_flag=0 and rp_flag1=0 and rp_isConfirm='False'");
             }
             else
             {
-                strSql.Append(" and rp_flag=2 and rp_flag1 = 0");
+                strSql.Append(" and rp_flag=2 and rp_flag1 = 0 and rp_isConfirm='False'");
             }
             SqlParameter[] parameters = {};
-            return Utils.ObjToInt(DbHelperSQL.GetSingle(strSql.ToString(), parameters), 0);
-        }
-
-        /// <summary>
-        /// 获取退款未审核数量
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="area"></param>
-        /// <returns></returns>
-        public int getRefund(byte type)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("select count(*) from MS_ReceiptPay where rp_type=1 and rp_money<0");
-            if (type == 1)
-            {
-                strSql.Append(" and rp_flag=0");
-            }
-            else
-            {
-                strSql.Append(" and rp_flag=2 and rp_flag1 = 0");
-            }
-            SqlParameter[] parameters = { };
             return Utils.ObjToInt(DbHelperSQL.GetSingle(strSql.ToString(), parameters), 0);
         }
 
