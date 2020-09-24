@@ -1,11 +1,16 @@
 ﻿using MettingSys.Common;
+using NPOI.HSSF.UserModel;
+using NPOI.HSSF.Util;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using BorderStyle = NPOI.SS.UserModel.BorderStyle;
 
 namespace MettingSys.Web.admin.statistic
 {
@@ -250,7 +255,7 @@ namespace MettingSys.Web.admin.statistic
                 switch (_group)
                 {
                     case "1"://供应商
-                        dt = bll.getExpendAnalyzeData1(dict, this.pageSize, this.page, "c_name,op_area,na_name", "c_name,op_area,na_name", "c_name asc", out this.totalCount, out _tFu).Tables[0];
+                        dt = bll.getExpendAnalyzeData1(dict, this.pageSize, this.page, "c_name,c_type,c_business,op_area,na_name", "c_name,c_type,c_business,op_area,na_name", "c_name asc", out this.totalCount, out _tFu).Tables[0];
                         rptList1.DataSource = dt;
                         rptList1.DataBind();
                         rptList.Visible = false;
@@ -344,7 +349,51 @@ namespace MettingSys.Web.admin.statistic
             Response.Redirect(Utils.CombUrlTxt("ExpendAnalyze_list.aspx", "page={0}&txtsDate={1}&txteDate={2}&action={3}&hide_place={4}&hide_nature={5}&txtCusName={6}&hCusId={7}&hide_employee1={8}&hide_employee3={9}&ddlGroup={10}", "__id__", _sMonth, _eMonth, action, _area, _nature, _cusName, _cid, _person1, _person3, _group));
         }
         protected void Excel()
-        {
+        {           
+            HSSFWorkbook hssfworkbook = new HSSFWorkbook();
+            ISheet sheet = hssfworkbook.CreateSheet("明细");
+            IFont font = hssfworkbook.CreateFont();
+            font.Boldweight = short.MaxValue;
+            font.FontHeightInPoints = 11;
+
+            #region 表格样式
+            //设置单元格的样式：水平垂直对齐居中
+            ICellStyle cellStyle = hssfworkbook.CreateCellStyle();
+            cellStyle.Alignment = HorizontalAlignment.Center;
+            cellStyle.VerticalAlignment = VerticalAlignment.Center;
+            cellStyle.BorderBottom = BorderStyle.Thin;
+            cellStyle.BorderLeft = BorderStyle.Thin;
+            cellStyle.BorderRight = BorderStyle.Thin;
+            cellStyle.BorderTop = BorderStyle.Thin;
+            cellStyle.BottomBorderColor = HSSFColor.Black.Index;
+            cellStyle.LeftBorderColor = HSSFColor.Black.Index;
+            cellStyle.RightBorderColor = HSSFColor.Black.Index;
+            cellStyle.TopBorderColor = HSSFColor.Black.Index;
+            cellStyle.WrapText = true;//自动换行
+
+            //设置表头的样式：水平垂直对齐居中，加粗
+            ICellStyle titleCellStyle = hssfworkbook.CreateCellStyle();
+            titleCellStyle.Alignment = HorizontalAlignment.Center;
+            titleCellStyle.VerticalAlignment = VerticalAlignment.Center;
+            titleCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index; //图案颜色
+            titleCellStyle.FillPattern = FillPattern.SparseDots; //图案样式
+            titleCellStyle.FillBackgroundColor = HSSFColor.Grey25Percent.Index; //背景颜色
+            //设置边框
+            titleCellStyle.BorderBottom = BorderStyle.Thin;
+            titleCellStyle.BorderLeft = BorderStyle.Thin;
+            titleCellStyle.BorderRight = BorderStyle.Thin;
+            titleCellStyle.BorderTop = BorderStyle.Thin;
+            titleCellStyle.BottomBorderColor = HSSFColor.Black.Index;
+            titleCellStyle.LeftBorderColor = HSSFColor.Black.Index;
+            titleCellStyle.RightBorderColor = HSSFColor.Black.Index;
+            titleCellStyle.TopBorderColor = HSSFColor.Black.Index;
+            //设置字体
+            titleCellStyle.SetFont(font);
+            #endregion
+            //表头
+            IRow headRow = sheet.CreateRow(0);
+            headRow.HeightInPoints = 25;
+
             string fileName = "";
             string[] strFieldsName = { };
             string[] strFields = new string[] { };
@@ -353,44 +402,255 @@ namespace MettingSys.Web.admin.statistic
             Dictionary<string, string> dict = getDict();
             if (string.IsNullOrEmpty(_group))
             {
-                fileName = "供应商支出分析-明细列表";
-                strFieldsName = new string[] { "订单号", "供应商", "活动名称", "活动地点", "活动结束日期", "业务性质", "业务明细", "应付金额", "区域", "业务员", "地接添加人"};
-                strFields = new string[] { "o_id", "c_name", "o_content", "o_address", "o_edate","na_name", "fin_detail", "fu", "profit", "op_area", "op_name", "fin_personName" };
+                #region
+                fileName = "供应商支出分析-明细列表";                
                 dt = bll.getExpendAnalyzeData(dict, this.pageSize, this.page, "o_id asc", out this.totalCount, out _tFu, false).Tables[0];
+
+                HttpContext.Current.Response.Clear();
+                HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename="+ fileName + ".xlsx"); //HttpUtility.UrlEncode(fileName));
+                HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
+                headRow.CreateCell(0).SetCellValue("订单号");
+                headRow.CreateCell(1).SetCellValue("供应商");
+                headRow.CreateCell(2).SetCellValue("活动名称");
+                headRow.CreateCell(3).SetCellValue("活动地点");
+                headRow.CreateCell(4).SetCellValue("活动结束日期");
+                headRow.CreateCell(5).SetCellValue("业务性质");
+                headRow.CreateCell(6).SetCellValue("业务明细");
+                headRow.CreateCell(7).SetCellValue("应付金额");
+                headRow.CreateCell(8).SetCellValue("区域");
+                headRow.CreateCell(9).SetCellValue("业务员");
+                headRow.CreateCell(10).SetCellValue("地接添加人");
+
+                headRow.GetCell(0).CellStyle = titleCellStyle;
+                headRow.GetCell(1).CellStyle = titleCellStyle;
+                headRow.GetCell(2).CellStyle = titleCellStyle;
+                headRow.GetCell(3).CellStyle = titleCellStyle;
+                headRow.GetCell(4).CellStyle = titleCellStyle;
+                headRow.GetCell(5).CellStyle = titleCellStyle;
+                headRow.GetCell(6).CellStyle = titleCellStyle;
+                headRow.GetCell(7).CellStyle = titleCellStyle;
+                headRow.GetCell(8).CellStyle = titleCellStyle;
+                headRow.GetCell(9).CellStyle = titleCellStyle;
+                headRow.GetCell(10).CellStyle = titleCellStyle;
+
+                sheet.SetColumnWidth(0, 15 * 256);
+                sheet.SetColumnWidth(1, 20 * 256);
+                sheet.SetColumnWidth(2, 20 * 256);
+                sheet.SetColumnWidth(3, 30 * 256);
+                sheet.SetColumnWidth(4, 20 * 256);
+                sheet.SetColumnWidth(5, 20 * 256);
+                sheet.SetColumnWidth(6, 15 * 256);
+                sheet.SetColumnWidth(7, 20 * 256);
+                sheet.SetColumnWidth(8, 20 * 256);
+                sheet.SetColumnWidth(9, 20 * 256);
+                sheet.SetColumnWidth(10, 20 * 256);
+
+                if (dt != null)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        IRow row = sheet.CreateRow(i + 1);
+                        row.HeightInPoints = 22;
+                        row.CreateCell(0).SetCellValue(dt.Rows[i]["o_id"].ToString());
+                        row.CreateCell(1).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_name"]));
+                        row.CreateCell(2).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["o_content"]));
+                        row.CreateCell(3).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["o_address"]));
+                        row.CreateCell(4).SetCellValue(ConvertHelper.toDate(dt.Rows[i]["o_edate"]).Value.ToString("yyyy-mm-dd"));
+                        row.CreateCell(5).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["na_name"]));
+                        row.CreateCell(6).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fin_detail"]));
+                        row.CreateCell(7).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fu"]));
+                        row.CreateCell(8).SetCellValue(new MettingSys.BLL.department().getAreaText(Utils.ObjectToStr(dt.Rows[i]["op_area"])));
+                        row.CreateCell(9).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["op_name"]));
+                        row.CreateCell(10).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fin_personName"]));
+
+                        row.GetCell(0).CellStyle = cellStyle;
+                        row.GetCell(1).CellStyle = cellStyle;
+                        row.GetCell(2).CellStyle = cellStyle;
+                        row.GetCell(3).CellStyle = cellStyle;
+                        row.GetCell(4).CellStyle = cellStyle;
+                        row.GetCell(5).CellStyle = cellStyle;
+                        row.GetCell(6).CellStyle = cellStyle;
+                        row.GetCell(7).CellStyle = cellStyle;
+                        row.GetCell(8).CellStyle = cellStyle;
+                        row.GetCell(9).CellStyle = cellStyle;
+                        row.GetCell(10).CellStyle = cellStyle;
+                    }
+                }
+                #endregion
             }
             else
             {
                 switch (_group)
                 {
                     case "1"://供应商
+                        #region
                         fileName = "供应商支出分析-供应商分组";
-                        strFieldsName = new string[] { "供应商","区域", "业务性质", "应付金额" };
-                        strFields = new string[] { "c_name", "op_area", "na_name", "fu"};
-                        dt = dt = bll.getExpendAnalyzeData1(dict, this.pageSize, this.page, "c_name,op_area,na_name", "c_name,op_area,na_name", "c_name asc", out this.totalCount, out _tFu,false).Tables[0];
+                        dt = bll.getExpendAnalyzeData1(dict, this.pageSize, this.page, "c_name,c_type,c_business,op_area,na_name", "c_name,c_type,c_business,op_area,na_name", "c_name asc", out this.totalCount, out _tFu,false).Tables[0];
+                        HttpContext.Current.Response.Clear();
+                        HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=" + fileName + ".xlsx"); //HttpUtility.UrlEncode(fileName));
+                        HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
+                        headRow.CreateCell(0).SetCellValue("供应商");
+                        headRow.CreateCell(1).SetCellValue("客户类别");
+                        headRow.CreateCell(2).SetCellValue("业务范围");
+                        headRow.CreateCell(3).SetCellValue("区域");
+                        headRow.CreateCell(4).SetCellValue("业务性质");
+                        headRow.CreateCell(5).SetCellValue("应付金额");
+
+                        headRow.GetCell(0).CellStyle = titleCellStyle;
+                        headRow.GetCell(1).CellStyle = titleCellStyle;
+                        headRow.GetCell(2).CellStyle = titleCellStyle;
+                        headRow.GetCell(3).CellStyle = titleCellStyle;
+                        headRow.GetCell(4).CellStyle = titleCellStyle;
+                        headRow.GetCell(5).CellStyle = titleCellStyle;
+
+                        sheet.SetColumnWidth(0, 15 * 256);
+                        sheet.SetColumnWidth(1, 20 * 256);
+                        sheet.SetColumnWidth(2, 20 * 256);
+                        sheet.SetColumnWidth(3, 30 * 256);
+                        sheet.SetColumnWidth(4, 20 * 256);
+                        sheet.SetColumnWidth(5, 20 * 256);
+
+                        if (dt != null)
+                        {
+                            for (int i = 0; i < dt.Rows.Count; i++)
+                            {
+                                IRow row = sheet.CreateRow(i + 1);
+                                row.HeightInPoints = 22;
+                                row.CreateCell(0).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_name"]));
+                                row.CreateCell(1).SetCellValue(MettingSys.Common.BusinessDict.customerType()[Utils.ObjToByte(dt.Rows[i]["c_type"])]);
+                                row.CreateCell(2).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_business"]));
+                                row.CreateCell(3).SetCellValue(new MettingSys.BLL.department().getAreaText(Utils.ObjectToStr(dt.Rows[i]["op_area"])));
+                                row.CreateCell(4).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["na_name"]));
+                                row.CreateCell(5).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fu"]));
+
+                                row.GetCell(0).CellStyle = cellStyle;
+                                row.GetCell(1).CellStyle = cellStyle;
+                                row.GetCell(2).CellStyle = cellStyle;
+                                row.GetCell(3).CellStyle = cellStyle;
+                                row.GetCell(4).CellStyle = cellStyle;
+                                row.GetCell(5).CellStyle = cellStyle;
+                            }
+                        }
+                        #endregion
                         break;
                     case "2"://区域
+                        #region
                         fileName = "供应商支出分析-区域分组";
-                        strFieldsName = new string[] {"区域", "业务性质", "应付金额"};
-                        strFields = new string[] {"op_area", "na_name", "fu" };
                         dt = bll.getExpendAnalyzeData1(dict, this.pageSize, this.page, "op_area,na_name", "op_area,na_name", "op_area asc", out this.totalCount, out _tFu,false).Tables[0];
+                        HttpContext.Current.Response.Clear();
+                        HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=" + fileName + ".xlsx"); //HttpUtility.UrlEncode(fileName));
+                        HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
+                        headRow.CreateCell(0).SetCellValue("区域");
+                        headRow.CreateCell(1).SetCellValue("业务性质");
+                        headRow.CreateCell(2).SetCellValue("应付金额");
+
+                        headRow.GetCell(0).CellStyle = titleCellStyle;
+                        headRow.GetCell(1).CellStyle = titleCellStyle;
+                        headRow.GetCell(2).CellStyle = titleCellStyle;
+
+                        sheet.SetColumnWidth(0, 15 * 256);
+                        sheet.SetColumnWidth(1, 20 * 256);
+                        sheet.SetColumnWidth(2, 20 * 256);
+
+                        if (dt != null)
+                        {
+                            for (int i = 0; i < dt.Rows.Count; i++)
+                            {
+                                IRow row = sheet.CreateRow(i + 1);
+                                row.HeightInPoints = 22;
+                                row.CreateCell(0).SetCellValue(new MettingSys.BLL.department().getAreaText(Utils.ObjectToStr(dt.Rows[i]["op_area"])));
+                                row.CreateCell(1).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["na_name"]));
+                                row.CreateCell(2).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fu"]));
+
+                                row.GetCell(0).CellStyle = cellStyle;
+                                row.GetCell(1).CellStyle = cellStyle;
+                                row.GetCell(2).CellStyle = cellStyle;
+                            }
+                        }
+                        #endregion
                         break;
                     case "3"://月份
+                        #region
                         fileName = "供应商支出分析-月份分组";
-                        strFieldsName = new string[] { "月份", "业务性质","应付金额" };
-                        strFields = new string[] { "oYear/oMonth", "na_name", "fu" };
                         dt = bll.getExpendAnalyzeData1(dict, this.pageSize, this.page, "datepart(year,o_edate) oYear,datepart(month,o_edate) oMonth,na_name", "datepart(year,o_edate),datepart(month,o_edate),na_name", "datepart(year,o_edate) asc,datepart(month,o_edate) asc", out this.totalCount, out _tFu, false).Tables[0];
+                        HttpContext.Current.Response.Clear();
+                        HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=" + fileName + ".xlsx"); //HttpUtility.UrlEncode(fileName));
+                        HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
+                        headRow.CreateCell(0).SetCellValue("月份");
+                        headRow.CreateCell(1).SetCellValue("业务性质");
+                        headRow.CreateCell(2).SetCellValue("应付金额");
+
+                        headRow.GetCell(0).CellStyle = titleCellStyle;
+                        headRow.GetCell(1).CellStyle = titleCellStyle;
+                        headRow.GetCell(2).CellStyle = titleCellStyle;
+
+                        sheet.SetColumnWidth(0, 15 * 256);
+                        sheet.SetColumnWidth(1, 20 * 256);
+                        sheet.SetColumnWidth(2, 20 * 256);
+
+                        if (dt != null)
+                        {
+                            for (int i = 0; i < dt.Rows.Count; i++)
+                            {
+                                IRow row = sheet.CreateRow(i + 1);
+                                row.HeightInPoints = 22;
+                                row.CreateCell(0).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["oYear"])+"/"+ Utils.ObjectToStr(dt.Rows[i]["oMonth"]));
+                                row.CreateCell(1).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["na_name"]));
+                                row.CreateCell(2).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fu"]));
+
+                                row.GetCell(0).CellStyle = cellStyle;
+                                row.GetCell(1).CellStyle = cellStyle;
+                                row.GetCell(2).CellStyle = cellStyle;
+                            }
+                        }
+                        #endregion
                         break;
                     case "4"://业务性质
+                        #region
                         fileName = "供应商支出分析-业务性质分组";
-                        strFieldsName = new string[] { "业务性质", "业务明细", "应付金额" };
-                        strFields = new string[] { "na_name", "fin_detail","fu"};
                         dt = bll.getExpendAnalyzeData1(dict, this.pageSize, this.page, "na_name,na_sort,fin_detail", "na_name,na_sort,fin_detail", "na_sort asc", out this.totalCount, out _tFu, false).Tables[0];
+                        HttpContext.Current.Response.Clear();
+                        HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=" + fileName + ".xlsx"); //HttpUtility.UrlEncode(fileName));
+                        HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
+                        headRow.CreateCell(0).SetCellValue("业务性质");
+                        headRow.CreateCell(1).SetCellValue("业务明细");
+                        headRow.CreateCell(2).SetCellValue("应付金额");
+
+                        headRow.GetCell(0).CellStyle = titleCellStyle;
+                        headRow.GetCell(1).CellStyle = titleCellStyle;
+                        headRow.GetCell(2).CellStyle = titleCellStyle;
+
+                        sheet.SetColumnWidth(0, 15 * 256);
+                        sheet.SetColumnWidth(1, 20 * 256);
+                        sheet.SetColumnWidth(2, 20 * 256);
+
+                        if (dt != null)
+                        {
+                            for (int i = 0; i < dt.Rows.Count; i++)
+                            {
+                                IRow row = sheet.CreateRow(i + 1);
+                                row.HeightInPoints = 22;
+                                row.CreateCell(0).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["na_name"]));
+                                row.CreateCell(1).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fin_detail"]));
+                                row.CreateCell(2).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fu"]));
+
+                                row.GetCell(0).CellStyle = cellStyle;
+                                row.GetCell(1).CellStyle = cellStyle;
+                                row.GetCell(2).CellStyle = cellStyle;
+                            }
+                        }
+                        #endregion
                         break;
                     default:
                         break;
                 }
             }
-            ExcelHelper.Write(HttpContext.Current, dt, fileName, fileName, strFields, strFieldsName, string.Format("{0}.xlsx", fileName));
+            //ExcelHelper.Write(HttpContext.Current, dt, fileName, fileName, strFields, strFieldsName, string.Format("{0}.xlsx", fileName));
+            MemoryStream file = new MemoryStream();
+            hssfworkbook.Write(file);
+
+            HttpContext.Current.Response.BinaryWrite(file.GetBuffer());
+            HttpContext.Current.Response.End();
         }
     }
 }

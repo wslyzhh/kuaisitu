@@ -94,6 +94,7 @@ namespace MettingSys.Web.admin.customer
                 liAdd.Visible = false;
             }
             txtNum.Text = model.c_num;
+            txtBusinessScope.Text = model.c_business;
             txtRemark.Text = model.c_remarks;
             if (model.c_isUse.Value)
             {
@@ -144,6 +145,7 @@ namespace MettingSys.Web.admin.customer
             model.c_owner = manager.user_name;
             model.c_ownerName = manager.real_name;
             model.c_addDate = DateTime.Now;
+            model.c_business = txtBusinessScope.Text.Trim();
 
             Model.Contacts contact = new Model.Contacts();
             contact.co_flag = true;
@@ -191,6 +193,12 @@ namespace MettingSys.Web.admin.customer
                 _content += "备注:" + model.c_remarks + "→<font color='red'>" + txtRemark.Text.Trim() + "<font><br/>";
             }
             model.c_remarks = txtRemark.Text.Trim();
+            if (model.c_business != txtBusinessScope.Text.Trim())
+            {
+                _content += "业务范围:" + model.c_business + "→<font color='red'>" + txtBusinessScope.Text.Trim() + "<font><br/>";
+            }
+            model.c_business = txtBusinessScope.Text.Trim();
+
 
             return bll.Update(oldtype,model, manager, _content);
         }

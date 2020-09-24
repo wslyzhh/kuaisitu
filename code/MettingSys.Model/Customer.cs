@@ -24,7 +24,7 @@ namespace MettingSys.Model
         /// <param name="c_owner">c_owner</param>
         /// <param name="c_ownername">c_ownerName</param>
         /// <param name="c_adddate">c_addDate</param>
-        public Customer(int? c_id, string c_name, byte? c_type, string c_num, string c_remarks, byte? c_flag, bool? c_isuse, string c_owner, string c_ownername, DateTime? c_adddate)
+        public Customer(int? c_id, string c_name, byte? c_type, string c_num, string c_remarks, byte? c_flag, bool? c_isuse, string c_owner, string c_ownername, DateTime? c_adddate,string c_business)
         {
             this.c_id = c_id;
             this.c_name = c_name;
@@ -36,6 +36,7 @@ namespace MettingSys.Model
             this.c_owner = c_owner;
             this.c_ownerName = c_ownername;
             this.c_addDate = c_adddate;
+            this.c_business = c_business;
         }
 
         #region 实体属性
@@ -90,7 +91,11 @@ namespace MettingSys.Model
         /// </summary>
         public DateTime? c_addDate { get; set; }
 
+        /// <summary>
+        /// c_remarks
+        /// </summary>
+        public string c_business { get; set; }
         #endregion
-        
+
     }
 }

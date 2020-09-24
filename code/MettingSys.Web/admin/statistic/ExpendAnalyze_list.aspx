@@ -222,7 +222,7 @@
                                 </div>
                 <input type="hidden" name="action" value="Search" />
                 <input <%--id="btnSave"--%> type="submit" class="btn" value="查询" />
-                <a href="<%=Utils.CombUrlTxt("ExpendAnalyze_list.aspx", "page={0}&txtsDate={1}&txteDate={2}&action={3}&hide_place={4}&hide_nature={5}&txtCusName={6}&hCusId={7}&hide_employee1={8}&hide_employee3={9}&ddlGroup={10}&Excel={11}", "__id__", _sMonth, _eMonth, action, _area, _nature, _cusName, _cid, _person1, _person3, _group,"on") %>"><i class="iconfont icon-exl"></i><span>导出Excel</span></a>
+                <a href="<%=Utils.CombUrlTxt("ExpendAnalyze_list.aspx", "page={0}&txtsDate={1}&txteDate={2}&action={3}&hide_place={4}&hide_nature={5}&txtCusName={6}&hCusId={7}&hide_employee1={8}&hide_employee3={9}&ddlGroup={10}&Excel={11}&ddllock={12}", "__id__", _sMonth, _eMonth, action, _area, _nature, _cusName, _cid, _person1, _person3, _group,"on",_lockstatus) %>"><i class="iconfont icon-exl"></i><span>导出Excel</span></a>
                 <%--<asp:LinkButton ID="btnExcel" runat="server" PostBackUrl="~/admin/statistic/RevenueAnalysis_list.aspx?Excel=on"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>--%>
             </div>
         </div>
@@ -255,8 +255,8 @@
                         <td><%#Eval("na_name") %></td>
                         <td><%#Eval("fin_detail") %></td>
                         <td><%#Eval("fu") %></td>
-                        <td><%#Eval("op_area") %></td>
-                        <td><%#Eval("op_area") %>(<%#Eval("op_name") %>)</td>
+                        <td><%#new MettingSys.BLL.department().getAreaText(Utils.ObjectToStr(Eval("op_area"))) %></td>
+                        <td><%#new MettingSys.BLL.department().getAreaText(Utils.ObjectToStr(Eval("op_area"))) %>(<%#Eval("op_name") %>)</td>
                         <td><%#Eval("fin_personNum") %>(<%#Eval("fin_personName") %>)</td>
                     </tr>
                 </ItemTemplate>
@@ -269,16 +269,20 @@
                 <HeaderTemplate>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr style="text-align: left;">
-                            <th>供应商</th>
-                            <th width="20%">区域</th>
-                            <th width="20%">业务性质</th>
-                            <th width="20%">应付金额</th>
+                            <th width="20%">供应商</th>
+                            <th width="10%">客户类别</th>
+                            <th>业务范围</th>
+                            <th width="10%">区域</th>
+                            <th width="10%">业务性质</th>
+                            <th width="10%">应付金额</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
                         <td><%#Eval("c_name") %></td>
-                        <td><%#Eval("op_area") %></td>
+                        <td><%#MettingSys.Common.BusinessDict.customerType()[Utils.ObjToByte(Eval("c_type"))] %></td>
+                        <td><%#Eval("c_business") %></td>
+                        <td><%#new MettingSys.BLL.department().getAreaText(Utils.ObjectToStr(Eval("op_area"))) %></td>
                         <td><%#Eval("na_name") %></td>
                         <td><%#Eval("fu") %></td>
                     </tr>
@@ -299,7 +303,7 @@
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
-                        <td><%#Eval("op_area") %></td>
+                        <td><%#new MettingSys.BLL.department().getAreaText(Utils.ObjectToStr(Eval("op_area"))) %></td>
                         <td><%#Eval("na_name") %></td>
                         <td><%#Eval("fu") %></td>
                     </tr>

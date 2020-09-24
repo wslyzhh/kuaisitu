@@ -21,7 +21,7 @@ namespace MettingSys.Web.admin.customer
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _cusName = "", _cid = "", _check1 = string.Empty, _type = string.Empty, _isUse = string.Empty,_owner1;
+        protected string _cusName = "", _cid = "", _check1 = string.Empty, _type = string.Empty, _isUse = string.Empty,_owner1,_business;
         protected Model.business_log logmodel = null;
         protected Model.manager manager = null;
         protected void Page_Load(object sender, EventArgs e)
@@ -32,6 +32,7 @@ namespace MettingSys.Web.admin.customer
             _type = DTRequest.GetString("ddltype");
             _isUse = DTRequest.GetString("ddlisUse");
             _owner1 = DTRequest.GetString("txtOwner1");
+            _business = DTRequest.GetString("txtBusiness");
 
             this.pageSize = GetPageSize(10); //每页数量
             manager = GetAdminInfo();
@@ -89,7 +90,7 @@ namespace MettingSys.Web.admin.customer
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("customer_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlcheck1={3}&ddltype={4}&ddlisUse={5}&txtOwner1={6}", "__id__", _cusName, _cid, _check1, _type, _isUse,_owner1);
+            string pageUrl = backUrl();
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
 
             txtCusName.Text = _cusName;
@@ -129,7 +130,10 @@ namespace MettingSys.Web.admin.customer
             {
                 strTemp.Append(" and (c_owner like '%" + _owner1 + "%' or c_ownerName like '%" + _owner1 + "%')");
             }
-
+            if (!string.IsNullOrEmpty(_business))
+            {
+                strTemp.Append(" and c_business like '%" + _business + "%'");
+            }
             return strTemp.ToString();
         }
         #endregion
@@ -158,6 +162,7 @@ namespace MettingSys.Web.admin.customer
             _type = DTRequest.GetFormString("ddltype");
             _isUse = DTRequest.GetFormString("ddlisUse");
             _owner1 = DTRequest.GetFormString("txtOwner1");
+            _business = DTRequest.GetFormString("txtBusiness");
             RptBind("c_id>0" + CombSqlTxt(), "c_isUse desc,c_addDate desc,c_id desc");
         }
 
@@ -172,9 +177,12 @@ namespace MettingSys.Web.admin.customer
                     Utils.WriteCookie("customer_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("customer_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlcheck1={3}&ddltype={4}&ddlisUse={5}&txtOwner1={6}", "__id__", _cusName, _cid, _check1, _type, _isUse,_owner1));
+            Response.Redirect(backUrl());
         }
-
+        private string backUrl()
+        {
+            return Utils.CombUrlTxt("customer_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlcheck1={3}&ddltype={4}&ddlisUse={5}&txtOwner1={6}&txtBusiness={7}", "__id__", _cusName, _cid, _check1, _type, _isUse, _owner1, _business);
+        }
         protected void btnExcel_Click(object sender, EventArgs e)
         {
             _cusName = DTRequest.GetFormString("txtCusName");
@@ -236,11 +244,12 @@ namespace MettingSys.Web.admin.customer
             headRow.CreateCell(0).SetCellValue("客户ID");
             headRow.CreateCell(1).SetCellValue("客户名称");
             headRow.CreateCell(2).SetCellValue("客户类别");
-            headRow.CreateCell(3).SetCellValue("信用代码(税号)");
-            headRow.CreateCell(4).SetCellValue("所属人");
-            headRow.CreateCell(5).SetCellValue("联系人");
-            headRow.CreateCell(6).SetCellValue("审批状态");
-            headRow.CreateCell(7).SetCellValue("启用状态");
+            headRow.CreateCell(3).SetCellValue("业务范围");
+            headRow.CreateCell(4).SetCellValue("信用代码(税号)");
+            headRow.CreateCell(5).SetCellValue("所属人");
+            headRow.CreateCell(6).SetCellValue("联系人");
+            headRow.CreateCell(7).SetCellValue("审批状态");
+            headRow.CreateCell(8).SetCellValue("启用状态");
 
             headRow.GetCell(0).CellStyle = titleCellStyle;
             headRow.GetCell(1).CellStyle = titleCellStyle;
@@ -250,15 +259,17 @@ namespace MettingSys.Web.admin.customer
             headRow.GetCell(5).CellStyle = titleCellStyle;
             headRow.GetCell(6).CellStyle = titleCellStyle;
             headRow.GetCell(7).CellStyle = titleCellStyle;
+            headRow.GetCell(8).CellStyle = titleCellStyle;
 
             sheet.SetColumnWidth(0, 15 * 256);
             sheet.SetColumnWidth(1, 20 * 256);
             sheet.SetColumnWidth(2, 20 * 256);
-            sheet.SetColumnWidth(3, 20 * 256);
+            sheet.SetColumnWidth(3, 30 * 256);
             sheet.SetColumnWidth(4, 20 * 256);
-            sheet.SetColumnWidth(5, 15 * 256);
-            sheet.SetColumnWidth(6, 20 * 256);
+            sheet.SetColumnWidth(5, 20 * 256);
+            sheet.SetColumnWidth(6, 15 * 256);
             sheet.SetColumnWidth(7, 20 * 256);
+            sheet.SetColumnWidth(8, 20 * 256);
 
             if (dt != null)
             {
@@ -269,11 +280,12 @@ namespace MettingSys.Web.admin.customer
                     row.CreateCell(0).SetCellValue(dt.Rows[i]["c_id"].ToString());
                     row.CreateCell(1).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_name"]));
                     row.CreateCell(2).SetCellValue(BusinessDict.customerType()[Utils.ObjToByte(dt.Rows[i]["c_type"])]);
-                    row.CreateCell(3).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_num"]));
-                    row.CreateCell(4).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_ownerName"]));
-                    row.CreateCell(5).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["co_name"]));
-                    row.CreateCell(6).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_flag"])=="0"?"待审批": Utils.ObjectToStr(dt.Rows[i]["c_flag"])=="1"?"审批未通过":"审批通过");
-                    row.CreateCell(7).SetCellValue(BusinessDict.isUseStatus(1)[Convert.ToBoolean(dt.Rows[i]["c_isUse"])]);
+                    row.CreateCell(3).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_business"]));
+                    row.CreateCell(4).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_num"]));
+                    row.CreateCell(5).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_ownerName"]));
+                    row.CreateCell(6).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["co_name"]));
+                    row.CreateCell(7).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_flag"])=="0"?"待审批": Utils.ObjectToStr(dt.Rows[i]["c_flag"])=="1"?"审批未通过":"审批通过");
+                    row.CreateCell(8).SetCellValue(BusinessDict.isUseStatus(1)[Convert.ToBoolean(dt.Rows[i]["c_isUse"])]);
 
                     row.GetCell(0).CellStyle = cellStyle;
                     row.GetCell(1).CellStyle = cellStyle;
@@ -283,6 +295,7 @@ namespace MettingSys.Web.admin.customer
                     row.GetCell(5).CellStyle = cellStyle;
                     row.GetCell(6).CellStyle = cellStyle;
                     row.GetCell(7).CellStyle = cellStyle;
+                    row.GetCell(8).CellStyle = cellStyle;
                 }
             }
 

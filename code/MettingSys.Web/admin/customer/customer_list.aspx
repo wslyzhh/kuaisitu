@@ -221,7 +221,7 @@
         </div>
         <!--/工具栏-->
         <div class="searchbar">
-            客户：
+            客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户：
                             <asp:TextBox ID="txtCusName" runat="server" CssClass="input"></asp:TextBox>
             <asp:HiddenField ID="hCusId" runat="server" />
             客户类别：
@@ -241,7 +241,10 @@
             <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
                 <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
         </div>
-
+        <div class="searchbar">
+            业务范围：
+                            <asp:TextBox ID="txtBusiness" runat="server" CssClass="input"></asp:TextBox>
+        </div>
         <!--列表-->
         <div class="table-container" onload="alert('ddd');jsloading();">
             <asp:Repeater ID="rptList" runat="server">
@@ -250,11 +253,12 @@
                         <tr style="text-align: center;">
                             <th width="4%">选择</th>
                             <th width="6%">客户ID</th>
-                            <th>客户名称</th>
-                            <th width="10%">客户类别</th>
+                            <th width="15%">客户名称</th>
+                            <th width="6%">客户类别</th>
+                            <th>业务范围</th>
                             <th width="10%">信用代码(税号)</th>
-                            <th width="10%">所属人</th>
-                            <th width="15%">联系人</th>
+                            <th width="6%">所属人</th>
+                            <th width="6%">联系人</th>
                             <th width="6%">审批</th>
                             <th width="6%">启用</th>
                             <th width="6%">操作</th>
@@ -269,10 +273,11 @@
                         <td><%#Eval("c_id")%></td>
                         <td style="text-align: left;"><%#Eval("c_name")%></td>
                         <td><%# MettingSys.Common.BusinessDict.customerType()[Utils.ObjToByte(Eval("c_type"))]%></td>
+                        <td style="text-align: left;"><%#Eval("c_business")%></td>
                         <td><%#Eval("c_num")%></td>
-                        <td><%#Eval("c_owner")%>,<%#Eval("c_ownerName")%></td>
+                        <td><%#Eval("c_owner")%><br/><%#Eval("c_ownerName")%></td>
                         <td style="text-align: left;">
-                            <%#string.IsNullOrEmpty(Eval("co_name").ToString())?"暂无":"<span onmouseover=\"showTip(this,"+Eval("c_id")+")\"  onmouseout =\"layer.close(tip_index);\">"+Eval("co_name")+","+Eval("co_number")+"</span>" %>
+                            <%#string.IsNullOrEmpty(Eval("co_name").ToString())?"暂无":"<span onmouseover=\"showTip(this,"+Eval("c_id")+")\"  onmouseout =\"layer.close(tip_index);\">"+Eval("co_name")+"<br/>"+Eval("co_number")+"</span>" %>
                         </td>
                         <td><span class="check_<%#Eval("c_flag")%>"></span></td>
                         <td><%#MettingSys.Common.BusinessDict.isUseStatus()[Convert.ToBoolean(Eval("c_isUse"))]%></td>
@@ -282,7 +287,7 @@
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"10\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"11\">暂无记录</td></tr>" : ""%>
   </table>
                 </FooterTemplate>
             </asp:Repeater>

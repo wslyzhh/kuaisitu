@@ -70,6 +70,10 @@ namespace MettingSys.BLL
             {
                 return "该客户名称已存在";
             }
+            if (string.IsNullOrEmpty(model.c_business))
+            {
+                return "请填写业务范围";
+            }
             if (string.IsNullOrEmpty(contact.co_name))
             {
                 return "主要联系人不能为空";
@@ -89,7 +93,7 @@ namespace MettingSys.BLL
                 Model.business_log log = new Model.business_log();
                 log.ol_title = "添加客户";
                 log.ol_cid = cid;
-                log.ol_content = "客户名称：" + model.c_name + "<br/>客户类别：" + Common.BusinessDict.customerType()[model.c_type] + "<br/>信用代码(税号)：" + model.c_num + "<br/>备注：" + model.c_remarks + "<br/>主要联系人：" + contact.co_name + "<br/>主要联系人号码：" + contact.co_number + "";
+                log.ol_content = "客户名称：" + model.c_name + "<br/>客户类别：" + Common.BusinessDict.customerType()[model.c_type] + "<br/>信用代码(税号)：" + model.c_num + "<br/>业务范围：" + model.c_business + "<br/>备注：" + model.c_remarks + "<br/>主要联系人：" + contact.co_name + "<br/>主要联系人号码：" + contact.co_number + "";
                 log.ol_operateDate = DateTime.Now;
                 log.ol_operaterNum = manager.user_name;
                 log.ol_operaterName = manager.real_name;
@@ -123,6 +127,10 @@ namespace MettingSys.BLL
             if (Exists(model.c_name, model.c_id.Value))
             {
                 return "该客户名称已存在";
+            }
+            if (string.IsNullOrEmpty(model.c_business))
+            {
+                return "请填写业务范围";
             }
             if (oldtype != model.c_type)
             {
