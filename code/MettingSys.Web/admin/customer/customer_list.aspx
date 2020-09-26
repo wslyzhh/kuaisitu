@@ -273,7 +273,7 @@
                         <td><%#Eval("c_id")%></td>
                         <td style="text-align: left;"><%#Eval("c_name")%></td>
                         <td><%# MettingSys.Common.BusinessDict.customerType()[Utils.ObjToByte(Eval("c_type"))]%></td>
-                        <td style="text-align: left;"><%#Eval("c_business")%></td>
+                        <td><%#Eval("c_business")%></td>
                         <td><%#Eval("c_num")%></td>
                         <td><%#Eval("c_owner")%><br/><%#Eval("c_ownerName")%></td>
                         <td style="text-align: left;">

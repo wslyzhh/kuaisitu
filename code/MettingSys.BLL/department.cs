@@ -191,7 +191,13 @@ namespace MettingSys.BLL
         /// <returns></returns>
         public string getGroupArea()
         {
-            return dal.getGroupArea();
+            string jc = CacheHelper.Get<string>(DTKeys.COMPANY_JC);//从缓存取出
+            if (string.IsNullOrEmpty(jc))
+            {
+                jc = dal.getGroupArea();
+                CacheHelper.Insert(DTKeys.COMPANY_JC, jc, 10);//重新写入缓存
+            }
+            return jc;
         }
         /// <summary>
         /// 得到一个对象实体

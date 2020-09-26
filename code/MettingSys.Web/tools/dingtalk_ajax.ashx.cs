@@ -1526,11 +1526,11 @@ namespace MettingSys.Web.tools
                         {
                             if (managerModel.area == new BLL.department().getGroupArea())
                             {
-                                strTemp.Append(" and uba_flag1=0");
+                                strTemp.Append(" and uba_flag1=0 and uba_flag2=0 and uba_flag3=0 and uba_isConfirm='False'");
                             }
                             else
                             {
-                                strTemp.Append(" and uba_area='" + managerModel.area + "' and uba_flag1=0");
+                                strTemp.Append(" and uba_area='" + managerModel.area + "' and uba_flag1=0 and uba_flag2=0 and uba_flag3=0 and uba_isConfirm='False'");
                             }
                         }
                         else if (_flag == "1")
@@ -1550,7 +1550,7 @@ namespace MettingSys.Web.tools
                         checkType = "2";
                         if (_flag == "0")
                         {
-                            strTemp.Append(" and uba_flag1=2 and uba_flag2=0");
+                            strTemp.Append(" and uba_flag1=2 and uba_flag2=0 and uba_flag3=0 and uba_isConfirm='False'");
                         }
                         else if (_flag == "1")
                         {
@@ -1562,7 +1562,7 @@ namespace MettingSys.Web.tools
                         checkType = "3";
                         if (_flag == "0")
                         {
-                            strTemp.Append(" and uba_flag1=2 and uba_flag2=2 and uba_flag3=0");
+                            strTemp.Append(" and uba_flag1=2 and uba_flag2=2 and uba_flag3=0 and uba_isConfirm='False'");
                         }
                         else if (_flag == "1")
                         {
@@ -3275,7 +3275,14 @@ namespace MettingSys.Web.tools
                         checkType = "1";
                         if (_flag == "0")
                         {
-                            strTemp.Append(" and rpd_area='" + managerModel.area + "' and rpd_flag1=0");
+                            if (managerModel.area == new BLL.department().getGroupArea())
+                            {
+                                strTemp.Append(" and rpd_flag1=0 and rpd_flag2=0 and rpd_flag3=0");
+                            }
+                            else
+                            {
+                                strTemp.Append(" and rpd_area='" + managerModel.area + "' and rpd_flag1=0 and rpd_flag2=0 and rpd_flag3=0");
+                            }
                         }
                         else if (_flag == "1")
                         {
@@ -3287,7 +3294,7 @@ namespace MettingSys.Web.tools
                         checkType = "2";
                         if (_flag == "0")
                         {
-                            strTemp.Append(" and rpd_flag1=2 and rpd_flag2=0");
+                            strTemp.Append(" and rpd_flag1=2 and rpd_flag2=0 and rpd_flag3=0");
                         }
                         else if (_flag == "1")
                         {

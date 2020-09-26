@@ -971,7 +971,7 @@ namespace MettingSys.BLL
         /// <returns></returns>
         public int getUnAduitPay(byte type, string area)
         {
-            return dal.getUnAduitPay(type, area);
+            return dal.getUnAduitPay(type, area,new BLL.department().getGroupArea());
         }
         /// <summary>
         /// 获取非业务支付未审核数量
@@ -981,7 +981,7 @@ namespace MettingSys.BLL
         /// <returns></returns>
         public int getUnAduitUnBusinessPay(byte type, string area)
         {
-            return dal.getUnAduitUnBusinessPay(type, area);
+            return dal.getUnAduitUnBusinessPay(type, area, new BLL.department().getGroupArea());
         }
         /// <summary>
         /// 获取发票未审核数量
@@ -991,7 +991,7 @@ namespace MettingSys.BLL
         /// <returns></returns>
         public int getUnAduitInvoice(byte type, string area)
         {
-            return dal.getUnAduitInvoice(type, area);
+            return dal.getUnAduitInvoice(type, area, new BLL.department().getGroupArea());
         }
         /// <summary>
         /// 获取预付款未审核数量

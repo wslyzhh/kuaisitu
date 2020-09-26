@@ -60,7 +60,7 @@ export default {
             checkType:0,
             uArea:'',
 		    pageTotal:9,
-            recordTotal:9,
+            recordTotal:0,
 		    searchData:{
                 pageIndex:0,
                 pageSize:10,

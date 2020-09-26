@@ -175,5 +175,10 @@ namespace MettingSys.Common
         /// 公司区域
         /// </summary>
         public const string COMPANY_AREA = "company_area";
+
+        /// <summary>
+        /// 总公司简称
+        /// </summary>
+        public const string COMPANY_JC = "company_jc";
     }
 }
