@@ -364,6 +364,7 @@ namespace MettingSys.Common
                 dict.Add(2, "已完成");
                 dict.Add(3, "未安排人员");
                 dict.Add(4, "未安排人员或已完成");
+                dict.Add(5, "待定与处理中");
             }
             else if (type == 2)
             {
