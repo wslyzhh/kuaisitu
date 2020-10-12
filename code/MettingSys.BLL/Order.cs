@@ -90,7 +90,7 @@ namespace MettingSys.BLL
             }
 
             //添加下单人
-            model.personlist.Add(new OrderPerson() { op_oid = model.o_id, op_type = 1, op_number = manager.user_name, op_name = manager.real_name, op_area = manager.area });
+            model.personlist.Add(new OrderPerson() { op_oid = model.o_id, op_type = 1, op_number = manager.user_name, op_name = manager.real_name, op_area = manager.area, op_addTime = DateTime.Now });
             string person2 = string.Empty, person3 = string.Empty, person4 = string.Empty, person5 = string.Empty;
             IEnumerable<OrderPerson> list = model.personlist.Where(p => p.op_type == 2);
             if (list.ToArray().Length != 1)
@@ -375,15 +375,14 @@ namespace MettingSys.BLL
             }
             //添加下单人
             IEnumerable<OrderPerson> list0 = oldModel.personlist.Where(p => p.op_type == 1);
-            newModel.personlist.Add(new OrderPerson() { op_oid = newModel.o_id, op_type = 1, op_number = list0.ToArray()[0].op_number, op_name = list0.ToArray()[0].op_name, op_area = list0.ToArray()[0].op_area });
+            newModel.personlist.Add(new OrderPerson() { op_oid = newModel.o_id, op_type = 1, op_number = list0.ToArray()[0].op_number, op_name = list0.ToArray()[0].op_name, op_area = list0.ToArray()[0].op_area,op_addTime = list0.ToArray()[0].op_addTime });
 
             string oStr2 = string.Empty, oStr3 = string.Empty, oStr4 = string.Empty, oStr5 = string.Empty;//旧人员
             string nStr2 = string.Empty, nStr3 = string.Empty, nStr4 = string.Empty, nStr5 = string.Empty;//新人员
             IEnumerable<OrderPerson> oli = null, nli = null;
             #region 业务报账人员
             oli = oldModel.personlist.Where(p => p.op_type == 2);
-            nli = newModel.personlist.Where(p => p.op_type == 2);
-            
+            nli = newModel.personlist.Where(p => p.op_type == 2);            
             List<OrderPerson> addlist2 = null, cutlist2 = null;
             dealPerson(nli, oli, out addlist2, out cutlist2);
             foreach (var item in oli)
@@ -644,6 +643,7 @@ namespace MettingSys.BLL
         {
             addPerson = new List<OrderPerson>();
             cutPerson = new List<OrderPerson>();
+            //得到添加了哪些人
             foreach (OrderPerson item in nli)
             {
                 IEnumerable<OrderPerson> li = oli.Where(p => p.op_number == item.op_number && p.op_name == item.op_name);
@@ -651,7 +651,14 @@ namespace MettingSys.BLL
                 {
                     addPerson.Add(item);
                 }
+                else
+                {
+                    //如果新的人员数组中某个人存在于旧的人员数组中，则把人员的添加时间更新回旧的时间
+                    item.op_addTime = li.ToArray()[0].op_addTime;
+                }
+                
             }
+            //得到删除了哪些人
             foreach (OrderPerson item in oli)
             {
                 IEnumerable<OrderPerson> li = nli.Where(p => p.op_number == item.op_number && p.op_name == item.op_name);
@@ -660,6 +667,7 @@ namespace MettingSys.BLL
                     cutPerson.Add(item);
                 }
             }
+            
         }
 
         /// <summary>
@@ -1016,9 +1024,9 @@ namespace MettingSys.BLL
         /// <summary>
         /// 获得查询分页数据
         /// </summary>
-        public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount, bool type = false, string where = "", bool isPage = true)
+        public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount, bool type = false, string where = "", bool isPage = true, string orderType = "", string currentUser = "")
         {
-            return dal.GetList(pageSize, pageIndex, strWhere, filedOrder, out recordCount, type, where, isPage);
+            return dal.GetList(pageSize, pageIndex, strWhere, filedOrder, out recordCount, type, where, isPage, orderType, currentUser);
         }
 
         /// <summary>

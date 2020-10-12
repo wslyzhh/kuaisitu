@@ -23,6 +23,8 @@ namespace MettingSys.Web.admin.order
         protected string flag = "", _orderid = "", _cusName = "", _cid = "", _contractPrice = "", _status = "", _dstatus = "", _pushstatus = "", _flag = "", _lockstatus = "", _content = "", _address = "", _sign = "", _money = "", _person1 = "", _person2 = "", _person3 = "", _person4 = "", _person5 = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _area = "", _moneyType = "", _orderarea = "", _sdate2 = "", _edate2 = "";
         Model.manager manager = null;
         protected Model.business_log logmodel = null;
+        private string whereOrderBy = " o_addDate desc,o_id desc ";
+        string orderType = "", currentUser = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             flag = DTRequest.GetString("flag");
@@ -85,6 +87,9 @@ namespace MettingSys.Web.admin.order
             {
                 _person3 = manager.user_name;
                 txtPerson3.Enabled = false;
+                orderType = "3";
+                currentUser = manager.user_name;
+                whereOrderBy = " op_addTime1 desc,o_addDate desc,o_id desc";
             }
             else if (flag == "4")
             {
@@ -95,6 +100,9 @@ namespace MettingSys.Web.admin.order
             {
                 _person5 = manager.user_name;
                 txtPerson5.Enabled = false;
+                orderType = "5";
+                currentUser = manager.user_name;
+                whereOrderBy = " op_addTime1 desc,o_addDate desc,o_id desc";
             }
             if (!Page.IsPostBack)
             {
@@ -105,7 +113,7 @@ namespace MettingSys.Web.admin.order
                     _dstatus = "5";
                 }
                 InitData();
-                RptBind("1=1" + CombSqlTxt(), "o_addDate desc,o_id desc");
+                RptBind("1=1" + CombSqlTxt(), whereOrderBy);
             }            
         }
 
@@ -174,7 +182,7 @@ namespace MettingSys.Web.admin.order
                 this.page = 1;
             }
             BLL.Order bll = new BLL.Order();
-            this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
+            this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount, false, "", true, orderType, currentUser);
             this.rptList.DataBind();
 
             //绑定页码
@@ -247,23 +255,6 @@ namespace MettingSys.Web.admin.order
             {
                 switch (_dstatus)
                 {
-                    case "5":
-                        if (string.IsNullOrEmpty(_person3) && string.IsNullOrEmpty(_person5))
-                        {
-                            strTemp.Append(" and exists(select * from MS_OrderPerson where op_oid=o_id and (op_type=3 or op_type=5) and (op_dstatus=0 or op_dstatus=1))");
-                        }
-                        else
-                        {
-                            if (!string.IsNullOrEmpty(_person3))
-                            {
-                                strTemp.Append(" and exists(select * from MS_OrderPerson where op_oid=o_id and op_type=3 and op_number='" + _person3 + "' and (op_dstatus=0 or op_dstatus=1))");
-                            }
-                            if (!string.IsNullOrEmpty(_person5))
-                            {
-                                strTemp.Append(" and exists(select * from MS_OrderPerson where op_oid=o_id and op_type=5 and op_number='" + _person5 + "' and (op_dstatus=0 or op_dstatus=1))");
-                            }
-                        }
-                        break;
                     case "4":
                         strTemp.Append(" and (not exists(select * from MS_OrderPerson where op_oid=o_id and (op_type=3 or op_type=5)) ");
                         if (string.IsNullOrEmpty(_person3) && string.IsNullOrEmpty(_person5))
@@ -529,7 +520,7 @@ namespace MettingSys.Web.admin.order
                 _person5 = manager.user_name;
                 txtPerson5.Enabled = false;
             }
-            RptBind("1=1" + CombSqlTxt(), "o_addDate desc,o_id desc");
+            RptBind("1=1" + CombSqlTxt(), whereOrderBy);
         }
 
         //设置分页数量
@@ -609,7 +600,7 @@ namespace MettingSys.Web.admin.order
             _area = DTRequest.GetFormString("ddlarea");
             _orderarea = DTRequest.GetFormString("ddlorderarea");
             BLL.Order bll = new BLL.Order();
-            DataTable dt = bll.GetList(this.pageSize, this.page, "1=1" + CombSqlTxt(), "o_addDate desc,o_id desc", out this.totalCount,false,"",false).Tables[0];
+            DataTable dt = bll.GetList(this.pageSize, this.page, "1=1" + CombSqlTxt(), whereOrderBy, out this.totalCount,false,"",false,orderType,currentUser).Tables[0];
 
             HttpContext.Current.Response.Clear();
             HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=订单列表.xlsx"); //HttpUtility.UrlEncode(fileName));

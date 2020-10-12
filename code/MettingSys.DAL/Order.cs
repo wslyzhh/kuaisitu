@@ -93,7 +93,7 @@ namespace MettingSys.DAL
                         #region 插入人员表==========================
                         if (obj > 0)
                         {
-                            string sql = "insert into MS_OrderPerson(op_oid,op_type,op_number,op_name,op_area,op_dstatus) values(@oid,@type,@number,@name,@area,@status)";
+                            string sql = "insert into MS_OrderPerson(op_oid,op_type,op_number,op_name,op_area,op_dstatus,op_addTime) values(@oid,@type,@number,@name,@area,@status,@addtime)";
                             foreach (OrderPerson person in model.personlist)
                             {
                                 person.op_oid = model.o_id;
@@ -103,7 +103,8 @@ namespace MettingSys.DAL
                                     new SqlParameter("@number",SqlDbType.VarChar,5),
                                     new SqlParameter("@name",SqlDbType.VarChar,20),
                                     new SqlParameter("@area",SqlDbType.VarChar,2),
-                                    new SqlParameter("@status",SqlDbType.TinyInt,4)
+                                    new SqlParameter("@status",SqlDbType.TinyInt,4),
+                                    new SqlParameter("@addtime",SqlDbType.DateTime,20)
                                 };
                                 meter[0].Value = person.op_oid;
                                 meter[1].Value = person.op_type;
@@ -111,6 +112,7 @@ namespace MettingSys.DAL
                                 meter[3].Value = person.op_name;
                                 meter[4].Value = person.op_area;
                                 meter[5].Value = person.op_dstatus;
+                                meter[6].Value = person.op_addTime;
                                 DbHelperSQL.ExecuteSql(conn, trans, sql, meter);
                             }
                             trans.Commit();
@@ -186,7 +188,7 @@ namespace MettingSys.DAL
                             meter1[0].Value = model.o_id;
                             DbHelperSQL.ExecuteSql(conn, trans, sql, meter1);
 
-                            sql = "insert into MS_OrderPerson(op_oid,op_type,op_number,op_name,op_area,op_dstatus) values(@oid,@type,@number,@name,@area,@status)";
+                            sql = "insert into MS_OrderPerson(op_oid,op_type,op_number,op_name,op_area,op_dstatus,op_addTime) values(@oid,@type,@number,@name,@area,@status,@addtime)";
                             foreach (OrderPerson person in model.personlist)
                             {
                                 person.op_oid = model.o_id;
@@ -196,7 +198,8 @@ namespace MettingSys.DAL
                                     new SqlParameter("@number",SqlDbType.VarChar,5),
                                     new SqlParameter("@name",SqlDbType.VarChar,20),
                                     new SqlParameter("@area",SqlDbType.VarChar,2),
-                                    new SqlParameter("@status",SqlDbType.TinyInt,4)
+                                    new SqlParameter("@status",SqlDbType.TinyInt,4),
+                                    new SqlParameter("@addtime",SqlDbType.DateTime,20)
                                 };
                                 meter[0].Value = person.op_oid;
                                 meter[1].Value = person.op_type;
@@ -204,6 +207,7 @@ namespace MettingSys.DAL
                                 meter[3].Value = person.op_name;
                                 meter[4].Value = person.op_area;
                                 meter[5].Value = person.op_dstatus;
+                                meter[6].Value = person.op_addTime;
                                 DbHelperSQL.ExecuteSql(conn, trans, sql, meter);
                             }                            
 
@@ -542,12 +546,19 @@ namespace MettingSys.DAL
         /// <param name="filedOrder"></param>
         /// <param name="recordCount"></param>
         /// <param name="type">默认false,当为true时为订单上的未收款订单和多付款订单</param>
+        /// <param name="type">当查询我的策划订单和我的设计订单时，orderType、currentUser这两个参数才有值，用于实现“我的策划订单”“我的设计订单”这两个页签按人员的添加时间排序</param>
         /// <returns></returns>
-        public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount,bool type=false,string where="",bool isPage = true)
+        public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount,bool type=false,string where="",bool isPage = true,string orderType="",string currentUser ="")
         {
+            string addTable = "", addfield = "";
+            if (!string.IsNullOrEmpty(orderType))
+            {
+                addfield = ",op2.op_addTime as op_addTime1";
+                addTable = " left join ms_orderperson op2 on o_id=op2.op_oid and op2.op_type="+ orderType + " and op2.op_number='"+ currentUser + "' ";
+            }
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select *,unMoney=finMoney - rpdMoney,profit=finMoney-finMoney1-isnull(o_financeCust,0) from (select *,person2 = (SELECT op_name FROM MS_OrderPerson WHERE op_oid=o_id and op_type=2),person3 = isnull(STUFF((SELECT ',' + op_name+'('+(case when op_dstatus=0 then '待定' else case when op_dstatus=1 then '处理中' else '已完成' end end)+')' FROM MS_OrderPerson WHERE  op_oid=o_id and op_type=3 FOR XML PATH('')), 1, 1, ''),'无')");
-            strSql.Append(" , person4 = isnull(STUFF((SELECT ',' + op_name + '(' + (case when op_dstatus = 0 then '待定' else case when op_dstatus = 1 then '处理中' else '已完成' end end) + ')' FROM MS_OrderPerson WHERE  op_oid = o_id and op_type = 5 FOR XML PATH('')), 1, 1, ''),'无') ,finMoney=isnull((select sum(isnull(fin_money,0)) fin_money from MS_finance where fin_type=1 and fin_oid=o_id),0),finMoney1=isnull((select sum(isnull(fin_money,0)) fin_money from MS_finance where fin_type=0 and fin_oid=o_id),0),rpdMoney = isnull((select sum(isnull(rpd_money,0)) rpd_money from MS_ReceiptPayDetail left join MS_ReceiptPay on rp_id=rpd_rpid where rpd_type=1 and rp_isConfirm=1 and rpd_oid=o_id),0) FROM MS_Order left join ms_customer on o_cid=c_id left join ms_contacts on o_coid=co_id left join ms_orderperson on o_id=op_oid and op_type=1) t");
+            strSql.Append("select *,unMoney=finMoney - rpdMoney,profit=finMoney-finMoney1-isnull(o_financeCust,0) from (select o.*,c.*,co.*,op1.* "+addfield+",person2 = (SELECT op_name FROM MS_OrderPerson WHERE op_oid=o_id and op_type=2),person3 = isnull(STUFF((SELECT ',' + op_name+'('+(case when op_dstatus=0 then '待定' else case when op_dstatus=1 then '处理中' else '已完成' end end)+')' FROM MS_OrderPerson WHERE  op_oid=o_id and op_type=3 FOR XML PATH('')), 1, 1, ''),'无')");
+            strSql.Append(" , person4 = isnull(STUFF((SELECT ',' + op_name + '(' + (case when op_dstatus = 0 then '待定' else case when op_dstatus = 1 then '处理中' else '已完成' end end) + ')' FROM MS_OrderPerson WHERE  op_oid = o_id and op_type = 5 FOR XML PATH('')), 1, 1, ''),'无') ,finMoney=isnull((select sum(isnull(fin_money,0)) fin_money from MS_finance where fin_type=1 and fin_oid=o_id),0),finMoney1=isnull((select sum(isnull(fin_money,0)) fin_money from MS_finance where fin_type=0 and fin_oid=o_id),0),rpdMoney = isnull((select sum(isnull(rpd_money,0)) rpd_money from MS_ReceiptPayDetail left join MS_ReceiptPay on rp_id=rpd_rpid where rpd_type=1 and rp_isConfirm=1 and rpd_oid=o_id),0) FROM MS_Order o left join ms_customer c on o_cid=c_id left join ms_contacts co on o_coid=co_id left join ms_orderperson op1 on o_id=op_oid and op_type=1 "+ addTable + ") t");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);

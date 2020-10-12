@@ -74,7 +74,7 @@ namespace MettingSys.Web.tools
             if (!string.IsNullOrEmpty(employee1))
             {
                 pli = employee1.Split('|');
-                order.personlist.Add(new Model.OrderPerson() { op_type = 2, op_name = pli[0], op_number = pli[1], op_area = pli[2] });
+                order.personlist.Add(new Model.OrderPerson() { op_type = 2, op_name = pli[0], op_number = pli[1], op_area = pli[2],op_addTime=DateTime.Now });
             }
             #endregion
             #region 业务策划人员
@@ -85,7 +85,7 @@ namespace MettingSys.Web.tools
                 foreach (string item in list)
                 {
                     pli = item.Split('|');
-                    order.personlist.Add(new Model.OrderPerson() { op_type = 3, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_dstatus = Utils.ObjToByte(pli[3]) });
+                    order.personlist.Add(new Model.OrderPerson() { op_type = 3, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_dstatus = Utils.ObjToByte(pli[3]), op_addTime = DateTime.Now });
                 }
             }
             #endregion
@@ -98,7 +98,7 @@ namespace MettingSys.Web.tools
                 foreach (string item in list)
                 {
                     pli = item.Split('|');
-                    order.personlist.Add(new Model.OrderPerson() { op_type = 4, op_name = pli[0], op_number = pli[1], op_area = pli[2] });
+                    order.personlist.Add(new Model.OrderPerson() { op_type = 4, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_addTime = DateTime.Now });
                 }
             }
             #endregion
@@ -110,7 +110,7 @@ namespace MettingSys.Web.tools
                 foreach (string item in list)
                 {
                     pli = item.Split('|');
-                    order.personlist.Add(new Model.OrderPerson() { op_type = 5, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_dstatus = Utils.ObjToByte(pli[3]) });
+                    order.personlist.Add(new Model.OrderPerson() { op_type = 5, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_dstatus = Utils.ObjToByte(pli[3]), op_addTime = DateTime.Now });
                 }
             }
             #endregion
