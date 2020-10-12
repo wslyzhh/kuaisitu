@@ -12,9 +12,11 @@ namespace MettingSys.Web.admin
     public partial class selectEmployee : Web.UI.ManagePage
     {
         private string area = string.Empty;
+        private bool IsshowNum = false;
         protected void Page_Load(object sender, EventArgs e)
         {
             area = DTRequest.GetQueryString("area");
+            IsshowNum = Utils.StrToBool(DTRequest.GetQueryString("showNum"), false);
             if (!Page.IsPostBack)
             {
                 RptBind();

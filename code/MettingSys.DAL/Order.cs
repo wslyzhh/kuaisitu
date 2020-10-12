@@ -401,6 +401,19 @@ namespace MettingSys.DAL
         }
 
         /// <summary>
+        /// 获取所有策划和设计人员中订单的接单状态为“待定与处理中”的订单数量
+        /// </summary>
+        /// <returns></returns>
+        public DataTable getAllDStatusOrder()
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(" select op_number,op_name,count(1) ordernum from(");
+            strSql.Append(" select o_id, op_dstatus, op_number, op_name from MS_OrderPerson left join MS_Order on o_id = op_oid and(op_type = 3 or op_type = 5) and op_dstatus = 5");
+            strSql.Append(" where isnull(o_id, '') <> '') t group by op_number, op_name");
+            return DbHelperSQL.Query(strSql.ToString()).Tables[0];
+        }
+
+        /// <summary>
         /// 获取某个区域已推送未审批的订单数量
         /// </summary>
         /// <param name="area"></param>

@@ -671,6 +671,15 @@ namespace MettingSys.BLL
         }
 
         /// <summary>
+        /// 获取所有策划和设计人员中订单的接单状态为“待定与处理中”的订单数量
+        /// </summary>
+        /// <returns></returns>
+        public DataTable getAllDStatusOrder()
+        {
+            return dal.getAllDStatusOrder();
+        }
+
+        /// <summary>
         /// 检查订单中是否存在对应的应收或应付客户
         /// </summary>
         /// <param name="orderID"></param>

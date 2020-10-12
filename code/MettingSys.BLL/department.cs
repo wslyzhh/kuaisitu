@@ -413,7 +413,14 @@ namespace MettingSys.BLL
             dal.UpdateField(id, "de_sort=" + sort_id);
             return true;
         }
-        public DataTable getAllEmployee(string area,string username="")
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="area"></param>
+        /// <param name="username"></param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public DataTable getAllEmployee(string area,string username="",bool isShowNum = false)
         {
             DataTable dt = GetList(0, area, false);
             string sqlwhere = "";
@@ -482,6 +489,11 @@ namespace MettingSys.BLL
                         newDT.Rows.Add(ndr);
                     }
                 }
+            }
+            //显示人员的订单数量
+            if (isShowNum)
+            {
+                DataTable orderNumDT = new BLL.Order().getAllDStatusOrder();
             }
             return newDT;
         }

@@ -315,7 +315,7 @@
         }
 
         //人员选择
-        function chooseEmployee(obj, n, flag,isShow) {
+        function chooseEmployee(obj, n, flag,isShow,IsshowNum) {
             //业务报账员和业务执行人员必须在选择活动归属地后才能选择
             var area = "";
             if (n == 1 || n == 3) {
@@ -336,7 +336,7 @@
                 id: 'specDialogId',
                 padding: 0,
                 title: "选择员工",
-                url: 'admin/selectEmployee.aspx?area=' + area + ''
+                url: 'admin/selectEmployee.aspx?area=' + area + '&showNum='+IsshowNum+''
             }).showModal();
             //将容器对象传进去
             d.data = liObj;
@@ -918,7 +918,7 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <li class="icon-btn" id="liemployee1" runat="server">
-                                        <a href="javascript:" onclick="chooseEmployee(this,1,false,true)"><i class="iconfont icon-close"></i></a>
+                                        <a href="javascript:" onclick="chooseEmployee(this,1,false,true,false)"><i class="iconfont icon-close"></i></a>
                                     </li>
                                 </ul>
                             </div>
@@ -939,7 +939,7 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <li class="icon-btn" id="liemployee2" runat="server">
-                                        <a href="javascript:" onclick="chooseEmployee(this,2,true,true)"><i class="iconfont icon-close"></i></a>
+                                        <a href="javascript:" onclick="chooseEmployee(this,2,true,true,true)"><i class="iconfont icon-close"></i></a>
                                     </li>
                                 </ul>
                             </div>
@@ -958,7 +958,7 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <li class="icon-btn" id="liemployee4" runat="server">
-                                        <a href="javascript:" onclick="chooseEmployee(this,4,true,true)"><i class="iconfont icon-close"></i></a>
+                                        <a href="javascript:" onclick="chooseEmployee(this,4,true,true,true)"><i class="iconfont icon-close"></i></a>
                                     </li>
                                 </ul>
                             </div>
@@ -977,7 +977,7 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <li class="icon-btn" id="liemployee3" runat="server">
-                                        <a href="javascript:" onclick="chooseEmployee(this,3,true,true)"><i class="iconfont icon-close"></i></a>
+                                        <a href="javascript:" onclick="chooseEmployee(this,3,true,true,false)"><i class="iconfont icon-close"></i></a>
                                     </li>
                                 </ul>
                             </div>
