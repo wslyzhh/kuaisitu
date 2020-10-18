@@ -420,7 +420,7 @@ namespace MettingSys.BLL
         /// <param name="username"></param>
         /// <param name=""></param>
         /// <returns></returns>
-        public DataTable getAllEmployee(string area,string username="",bool isShowNum = false)
+        public DataTable getAllEmployee(string area,string username="",bool isShowNum = false,string hasOrder="")
         {
             DataTable dt = GetList(0, area, false);
             string sqlwhere = "";
@@ -491,11 +491,25 @@ namespace MettingSys.BLL
                 }
             }
             //显示人员的订单数量
+            DataTable lastDT = newDT.Copy();
+            lastDT.Columns.Add("orderCount");
             if (isShowNum)
             {
-                DataTable orderNumDT = new BLL.Order().getAllDStatusOrder();
+                DataTable orderNumDT = new BLL.Order().getAllDStatusOrder(hasOrder);                
+                foreach (DataRow dr in lastDT.Rows)
+                {
+                    dr["orderCount"] = "0";
+                    if (Utils.ObjectToStr(dr["de_type"]) == "4")
+                    {
+                        DataRow[] drs = orderNumDT.Select("op_number='"+dr["de_subname"] + "' and op_name='" + dr["de_name"] + "'");
+                        if (drs != null && drs.Length >0)
+                        {
+                            dr["orderCount"] = Utils.ObjectToStr(drs[0]["ordernum"]);
+                        }
+                    }
+                }
             }
-            return newDT;
+            return lastDT;
         }
 
         public void filerData(DataTable oldData,DataTable newData,int departid)

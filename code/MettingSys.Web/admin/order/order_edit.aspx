@@ -315,7 +315,7 @@
         }
 
         //人员选择
-        function chooseEmployee(obj, n, flag,isShow,IsshowNum) {
+        function chooseEmployee(obj, n, flag,isShow,IsshowNum,hasOrder) {
             //业务报账员和业务执行人员必须在选择活动归属地后才能选择
             var area = "";
             if (n == 1 || n == 3) {
@@ -336,7 +336,7 @@
                 id: 'specDialogId',
                 padding: 0,
                 title: "选择员工",
-                url: 'admin/selectEmployee.aspx?area=' + area + '&showNum='+IsshowNum+''
+                url: 'admin/selectEmployee.aspx?area=' + area + '&showNum='+IsshowNum+'&hasOrder='+hasOrder+''
             }).showModal();
             //将容器对象传进去
             d.data = liObj;
@@ -939,7 +939,7 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <li class="icon-btn" id="liemployee2" runat="server">
-                                        <a href="javascript:" onclick="chooseEmployee(this,2,true,true,true)"><i class="iconfont icon-close"></i></a>
+                                        <a href="javascript:" onclick="chooseEmployee(this,2,true,true,true,<%=oID %>)"><i class="iconfont icon-close"></i></a>
                                     </li>
                                 </ul>
                             </div>
@@ -958,7 +958,7 @@
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <li class="icon-btn" id="liemployee4" runat="server">
-                                        <a href="javascript:" onclick="chooseEmployee(this,4,true,true,true)"><i class="iconfont icon-close"></i></a>
+                                        <a href="javascript:" onclick="chooseEmployee(this,4,true,true,true,<%=oID %>)"><i class="iconfont icon-close"></i></a>
                                     </li>
                                 </ul>
                             </div>

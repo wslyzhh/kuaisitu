@@ -404,12 +404,17 @@ namespace MettingSys.DAL
         /// 获取所有策划和设计人员中订单的接单状态为“待定与处理中”的订单数量
         /// </summary>
         /// <returns></returns>
-        public DataTable getAllDStatusOrder()
+        public DataTable getAllDStatusOrder(string order)
         {
             StringBuilder strSql = new StringBuilder();
+            string str = string.Empty;
+            if (!string.IsNullOrEmpty(order))
+            {
+                str = " and o_id<>'" + order + "'";
+            }
             strSql.Append(" select op_number,op_name,count(1) ordernum from(");
             strSql.Append(" select o_id, op_dstatus, op_number, op_name from MS_OrderPerson left join MS_Order on o_id = op_oid and(op_type = 3 or op_type = 5) and op_dstatus = 5");
-            strSql.Append(" where isnull(o_id, '') <> '') t group by op_number, op_name");
+            strSql.Append(" where isnull(o_id, '') <> '' " + str + ") t group by op_number, op_name");
             return DbHelperSQL.Query(strSql.ToString()).Tables[0];
         }
 
@@ -570,8 +575,8 @@ namespace MettingSys.DAL
                 addTable = " left join ms_orderperson op2 on o_id=op2.op_oid and op2.op_type="+ orderType + " and op2.op_number='"+ currentUser + "' ";
             }
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select *,unMoney=finMoney - rpdMoney,profit=finMoney-finMoney1-isnull(o_financeCust,0) from (select o.*,c.*,co.*,op1.* "+addfield+",person2 = (SELECT op_name FROM MS_OrderPerson WHERE op_oid=o_id and op_type=2),person3 = isnull(STUFF((SELECT ',' + op_name+'('+(case when op_dstatus=0 then '待定' else case when op_dstatus=1 then '处理中' else '已完成' end end)+')' FROM MS_OrderPerson WHERE  op_oid=o_id and op_type=3 FOR XML PATH('')), 1, 1, ''),'无')");
-            strSql.Append(" , person4 = isnull(STUFF((SELECT ',' + op_name + '(' + (case when op_dstatus = 0 then '待定' else case when op_dstatus = 1 then '处理中' else '已完成' end end) + ')' FROM MS_OrderPerson WHERE  op_oid = o_id and op_type = 5 FOR XML PATH('')), 1, 1, ''),'无') ,finMoney=isnull((select sum(isnull(fin_money,0)) fin_money from MS_finance where fin_type=1 and fin_oid=o_id),0),finMoney1=isnull((select sum(isnull(fin_money,0)) fin_money from MS_finance where fin_type=0 and fin_oid=o_id),0),rpdMoney = isnull((select sum(isnull(rpd_money,0)) rpd_money from MS_ReceiptPayDetail left join MS_ReceiptPay on rp_id=rpd_rpid where rpd_type=1 and rp_isConfirm=1 and rpd_oid=o_id),0) FROM MS_Order o left join ms_customer c on o_cid=c_id left join ms_contacts co on o_coid=co_id left join ms_orderperson op1 on o_id=op_oid and op_type=1 "+ addTable + ") t");
+            strSql.Append("select *,unMoney=finMoney - rpdMoney,profit=finMoney-finMoney1-isnull(o_financeCust,0) from (select o.*,c.*,co.*,op1.* "+addfield+ ",person2 = (SELECT op_name FROM MS_OrderPerson WHERE op_oid=o_id and op_type=2),person3 = isnull(STUFF((SELECT ',' + op_name+'('+(case when op_dstatus=0 then '待定' else case when op_dstatus=1 then '处理中' else case when op_dstatus=2 then '已完成' else '待定与处理中' end end end)+')' FROM MS_OrderPerson WHERE  op_oid=o_id and op_type=3 FOR XML PATH('')), 1, 1, ''),'无')");
+            strSql.Append(" , person4 = isnull(STUFF((SELECT ',' + op_name + '(' + (case when op_dstatus = 0 then '待定' else case when op_dstatus = 1 then '处理中' else case when op_dstatus=2 then '已完成' else '待定与处理中' end end end) + ')' FROM MS_OrderPerson WHERE  op_oid = o_id and op_type = 5 FOR XML PATH('')), 1, 1, ''),'无') ,finMoney=isnull((select sum(isnull(fin_money,0)) fin_money from MS_finance where fin_type=1 and fin_oid=o_id),0),finMoney1=isnull((select sum(isnull(fin_money,0)) fin_money from MS_finance where fin_type=0 and fin_oid=o_id),0),rpdMoney = isnull((select sum(isnull(rpd_money,0)) rpd_money from MS_ReceiptPayDetail left join MS_ReceiptPay on rp_id=rpd_rpid where rpd_type=1 and rp_isConfirm=1 and rpd_oid=o_id),0) FROM MS_Order o left join ms_customer c on o_cid=c_id left join ms_contacts co on o_coid=co_id left join ms_orderperson op1 on o_id=op_oid and op_type=1 " + addTable + ") t");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);

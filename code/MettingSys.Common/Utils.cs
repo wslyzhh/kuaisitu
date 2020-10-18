@@ -376,6 +376,13 @@ namespace MettingSys.Common
             return obj.ToString().Trim();
         }
 
+        public static bool ObjectToBool(object obj)
+        {
+            if (obj == null)
+                return false;
+            return StrToBool(Utils.ObjectToStr(obj), false);
+        }
+
         /// <summary>
         /// 将对象转换为Int类型
         /// </summary>

@@ -170,6 +170,16 @@ namespace MettingSys.Web.admin.order
         }
         #endregion
 
+        protected string showColor(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return "";
+            text = text.Replace("(待定与处理中)", "(<font color='orange'>待定与处理中</font>)");
+            text = text.Replace("(已完成)", "(<font color='green'>已完成</font>)");
+            text = text.Replace("(处理中)", "(<font color='blue'>处理中</font>)");
+            text = text.Replace("(待定)", "(<font color='red'>待定</font>)");
+            return text;
+        }
+
         #region 数据绑定=================================
         private void RptBind(string _strWhere, string _orderby)
         {

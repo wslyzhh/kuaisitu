@@ -225,9 +225,9 @@
                             <td><span onmouseover="tip_index=layer.tips('推送状态：<%#MettingSys.Common.BusinessDict.pushStatus()[Convert.ToBoolean(Eval("o_isPush"))]%><br/>上级审批：<%#MettingSys.Common.BusinessDict.checkStatus()[Utils.ObjToByte(Eval("o_flag"))]%>', this, { time: 0 });" onmouseout="layer.close(tip_index);"><%#MettingSys.Common.BusinessDict.fStatus(2)[Utils.ObjToByte(Eval("o_status"))]%></span></td>
                             <td><%#MettingSys.Common.BusinessDict.lockStatus()[Utils.ObjToByte(Eval("o_lockStatus"))]%></td>
                             <td><span title="工号：<%#Eval("op_number")%>，下单时间:<%#Eval("o_addDate")%>"><%#Eval("op_name")%></span></td>
-                            <td><%#Eval("person2").ToString().Replace("待定","<font color='red'>待定</font>").Replace("处理中","<font color='blue'>处理中</font>").Replace("已完成","<font color='green'>已完成</font>")%></td>
-                            <td><%#Eval("person3").ToString().Replace("待定","<font color='red'>待定</font>").Replace("处理中","<font color='blue'>处理中</font>").Replace("已完成","<font color='green'>已完成</font>")%></td>
-                            <td><%#Eval("person4").ToString().Replace("待定","<font color='red'>待定</font>").Replace("处理中","<font color='blue'>处理中</font>").Replace("已完成","<font color='green'>已完成</font>")%></td>
+                            <td><%# Utils.ObjectToStr(Eval("person2"))%></td>
+                            <td><%# showColor(Utils.ObjectToStr(Eval("person3")))%></td>
+                            <td><%# showColor(Utils.ObjectToStr(Eval("person4")))%></td>
                             <td>应收：<%#Eval("finMoney") %><br />未收：<%#Eval("unMoney") %></td>
                             <td><%#Eval("profit") %></td>
                         </tr>

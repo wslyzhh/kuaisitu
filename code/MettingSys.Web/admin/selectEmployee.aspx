@@ -112,8 +112,14 @@
             $(api.data).before(liHtml);
         }
         //点击选择人员
-        function addemployee(type, username, realname, area) {
+        function addemployee(type, username, realname, area,orderCount) {
             if (type == "4") {
+                if (orderCount > 2) {
+                    var d = dialog({ content: "该员工目前工作饱和，请经他（她）同意后再确认！" }).show();
+                    setTimeout(function () {
+                        d.close().remove();
+                    }, 1000);
+                }
                 var tag = false;
                 $("#employeelist").children().each(function () {
                     if ($(this).attr("title") == username) {
@@ -154,17 +160,42 @@
                     <div class="col col-1" style="padding-left: 20px;">组织机构</div>
                 </div>
                 <ul style="margin-left: 20px;">
+                    <%if (IsshowNum)
+                        { %>
                     <asp:Repeater ID="rptList" runat="server">
                         <ItemTemplate>
                             <li class="layer-<%#Eval("class_layer")%>">
                                 <div class="tbody">
                                     <div class="col index col-1">
-                                        <a href="javascript:" onclick="addemployee('<%#Eval("de_type")%>','<%#Eval("de_subname")%>','<%#Eval("de_name")%>','<%#Eval("de_area")%>')"><%#Eval("de_name")%><%#Eval("de_type").ToString()=="4"?"-"+Eval("de_subname")+"("+Eval("detailDepart")+")":""%></a>
+                                        <a href="javascript:" onclick="addemployee('<%#Eval("de_type")%>','<%#Eval("de_subname")%>','<%#Eval("de_name")%>','<%#Eval("de_area")%>',<%#Eval("orderCount")%>)">
+                                            
+                                            <%# Eval("de_type").ToString()!="4" ? Eval("de_name")
+                                                    :(Convert.ToInt32(Eval("orderCount"))<1?"<font color='green'>"+Eval("de_name")+"-"+Eval("de_subname")+"</font>":(Convert.ToInt32(Eval("orderCount"))>2?"<font color='red'>"+Eval("de_name")+"-"+Eval("de_subname")+"</font>":"<font color='orange'>"+Eval("de_name")+"-"+Eval("de_subname")+"</font>"))+"("+Eval("detailDepart")+") "
+                                                    + (Convert.ToInt32(Eval("orderCount"))<1?"<font color='green'>"+Eval("orderCount")+"</font>":(Convert.ToInt32(Eval("orderCount"))>2?"<font color='red'>"+Eval("orderCount")+"</font>":"<font color='orange'>"+Eval("orderCount")+"</font>")) %>
+                                                                                        
+                                        </a>
                                     </div>
                                 </div>
                             </li>
                         </ItemTemplate>
                     </asp:Repeater>
+                    <%}else{ %>
+                    <asp:Repeater ID="rptList1" runat="server">
+                        <ItemTemplate>
+                            <li class="layer-<%#Eval("class_layer")%>">
+                                <div class="tbody">
+                                    <div class="col index col-1">
+                                        <a href="javascript:" onclick="addemployee('<%#Eval("de_type")%>','<%#Eval("de_subname")%>','<%#Eval("de_name")%>','<%#Eval("de_area")%>')">
+                                            
+                                            <%# Eval("de_type").ToString()!="4" ? Eval("de_name"):Eval("de_name")+"-"+Eval("de_subname")+"("+Eval("detailDepart")+") " %>
+                                                                                        
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                    <%} %>
                 </ul>
             </div>
             <div class="chooseEmployee" style="float: left; width: 200px;">

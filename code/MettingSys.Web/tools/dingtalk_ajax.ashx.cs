@@ -483,8 +483,10 @@ namespace MettingSys.Web.tools
                 return;
             }
 
-            string areaList = jObject["arealist"].ToString();
-            DataTable dt = new BLL.department().getAllEmployee(areaList);
+            string areaList = Utils.ObjectToStr(jObject["arealist"]);
+            bool _isShowNum = Utils.ObjectToBool(jObject["isShowNum"]);
+            string _hasOrder = Utils.ObjectToStr(jObject["hasOrder"]);
+            DataTable dt = new BLL.department().getAllEmployee(areaList,"", _isShowNum, _hasOrder);
             if (dt != null && dt.Rows.Count > 0)
             {
                 context.Response.Write(JArray.FromObject(dt));

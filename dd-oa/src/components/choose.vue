@@ -3,7 +3,7 @@
     <div class="choose_all_list" v-if="show" @click="hide">
         <div class="choose_content" @click.stop="">
             <ul class="all_list">
-                <li :class="{active:item.isChecked}" @click="activeItem(item)" v-for="(item,index) in list" :key="index">{{item.name}}</li>
+                <li :class="{active:item.isChecked}" @click="activeItem(item)" v-for="(item,index) in list" :key="index">{{item.name}} {{ item.orderCount}}</li>
             </ul>
             <div class="choose_btn">
                 <button @click="changeReset">重置</button>
@@ -33,7 +33,11 @@ export default {
 		type:{
 		    type:Number,
 		    default:1 // 1 单选 2 多选
-		}
+        },
+        showNum:{
+            type:Boolean,
+            default:false
+        }
     },
     components: {},
     computed: {},
