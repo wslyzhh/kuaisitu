@@ -410,16 +410,23 @@ export default {
 				this.ddSet.setToast({text:'请先选择活动归属地'})
     			return
     		}
-    		
-            _this.getEmployeebyarea({arealist:_this.formData.o_place}).then(res => {
-    			_this.chooseType = _type;
+    		let _isShowNum = false
+            if(_el == 'employee2' || _el == 'employee4'){
+                _isShowNum = true
+            }
+            _this.getEmployeebyarea({arealist:_this.formData.o_place,isShowNum:_isShowNum,hasOrder:orderId}).then(res => {
+				_this.chooseType = _type;
+				_this.showNum = _isShowNum;
     			_this.chooseEl = _el;
     			let gonghaos = _this.employeeChoose[_el];
     			let source = []
                 res.data.map((item,index) => {
     				if(4 == item.de_type){
     					if(!item.name){
-    					    _this.$set(item,'name',item.de_name)
+							_this.$set(item,'name',item.de_name)
+							if(_isShowNum){
+                                _this.$set(item,'orderCount',item.orderCount)
+                            }
     					}
     					if(gonghaos.includes(item.de_subname)){
     						_this.$set(item,'isChecked',true)

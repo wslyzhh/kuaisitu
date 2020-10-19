@@ -3,7 +3,7 @@
     <div class="choose_all_list" v-if="show" @click="hide">
         <div class="choose_content" @click.stop="">
             <ul class="all_list">
-                <li :class="{active:item.isChecked}" @click="activeItem(item)" v-for="(item,index) in list" :key="index">{{item.name}} {{ item.orderCount}}</li>
+                <li :class="{active:item.isChecked}" :style="item.orderCount<1? green:item.orderCount>2?red:orange"  @click="activeItem(item)" v-for="(item,index) in list" :key="index">{{item.name}} {{item.orderCount==null?"":item.orderCount}}</li>
             </ul>
             <div class="choose_btn">
                 <button @click="changeReset">重置</button>
@@ -49,7 +49,10 @@ export default {
             if(!item.isChecked){
 				if(1 == this.type){
 					this.changeReset();
-				}
+                }
+                if(item.orderCount > 2){
+                    this.ddSet.setToast({text:'该员工目前工作饱和，请经他（她）同意后再确认！'})
+                }
 				this.$set(item,'isChecked',true)
             }else{
                 this.$set(item,'isChecked',!item.isChecked)
@@ -78,6 +81,15 @@ export default {
 </script>
 
 <style scoped lang='scss'>
+    .greenColor{
+        color:green;
+    }
+    .redColor{
+        color:red;
+    }
+    .orangeColor{
+        color:orange;
+    }
     .choose_all_list{
         position: fixed;
         top: 0;

@@ -2,7 +2,7 @@
   "name": "dd-oa",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "Jean <1176205845@qq.com>",
+  "author": "wslyzhh <328384030@qq.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",

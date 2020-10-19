@@ -304,7 +304,7 @@ export default {
 					if(4 == item.de_type){
 						if(!item.name){
                             _this.$set(item,'name',item.de_name)
-                            if(isShowNum){
+                            if(_isShowNum){
                                 _this.$set(item,'orderCount',item.orderCount)
                             }
 						}
