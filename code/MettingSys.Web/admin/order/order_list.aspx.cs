@@ -113,6 +113,10 @@ namespace MettingSys.Web.admin.order
                     _dstatus = "5";
                 }
                 InitData();
+                string _count3 = "0", _count5 = "0";
+                new BLL.Order().getPersonOrderCount(manager.user_name, out _count3, out _count5);
+                labPerson3Count.Text = _count3;
+                labPerson5Count.Text = _count5;
                 RptBind("1=1" + CombSqlTxt(), whereOrderBy);
             }            
         }
@@ -265,6 +269,23 @@ namespace MettingSys.Web.admin.order
             {
                 switch (_dstatus)
                 {
+                    case "5":
+                        if (string.IsNullOrEmpty(_person3) && string.IsNullOrEmpty(_person5))
+                        {
+                            strTemp.Append(" and exists(select * from MS_OrderPerson where op_oid=o_id and (op_type=3 or op_type=5) and (op_dstatus=0 or op_dstatus=1))");
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(_person3))
+                            {
+                                strTemp.Append(" and exists(select * from MS_OrderPerson where op_oid=o_id and op_type=3 and op_number='" + _person3 + "' and (op_dstatus=0 or op_dstatus=1))");
+                            }
+                            if (!string.IsNullOrEmpty(_person5))
+                            {
+                                strTemp.Append(" and exists(select * from MS_OrderPerson where op_oid=o_id and op_type=5 and op_number='" + _person5 + "' and (op_dstatus=0 or op_dstatus=1))");
+                            }
+                        }
+                        break;
                     case "4":
                         strTemp.Append(" and (not exists(select * from MS_OrderPerson where op_oid=o_id and (op_type=3 or op_type=5)) ");
                         if (string.IsNullOrEmpty(_person3) && string.IsNullOrEmpty(_person5))

@@ -413,9 +413,25 @@ namespace MettingSys.DAL
                 str = " and o_id<>'" + order + "'";
             }
             strSql.Append(" select op_number,op_name,count(1) ordernum from(");
-            strSql.Append(" select o_id, op_dstatus, op_number, op_name from MS_OrderPerson left join MS_Order on o_id = op_oid and(op_type = 3 or op_type = 5) and op_dstatus = 5");
+            strSql.Append(" select o_id, op_dstatus, op_number, op_name from MS_OrderPerson left join MS_Order on o_id = op_oid and(op_type = 3 or op_type = 5) and (op_dstatus=0 or op_dstatus=1)");
             strSql.Append(" where isnull(o_id, '') <> '' " + str + ") t group by op_number, op_name");
             return DbHelperSQL.Query(strSql.ToString()).Tables[0];
+        }
+
+        /// <summary>
+        /// 获取某个人的策划和设计中订单状态为待定或处理中的订单数量
+        /// </summary>
+        /// <param name="username"></param>
+        public DataTable getPersonOrderCount(string username)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select op_number,sum(case when op_type = 3 then 1 else 0 end) person3Count,sum(case when op_type = 5 then 1 else 0 end) person5Count from MS_Order left join MS_OrderPerson on o_id=op_oid ");
+            strSql.Append("where(op_type = 3 or op_type = 5) and op_number = @user and(op_dstatus = 0 or op_dstatus = 1)");
+            strSql.Append("group by op_number");
+            SqlParameter[] parameters = {
+                    new SqlParameter("@user", SqlDbType.VarChar,11)};
+            parameters[0].Value = username;
+            return DbHelperSQL.Query(strSql.ToString(), parameters).Tables[0];
         }
 
         /// <summary>

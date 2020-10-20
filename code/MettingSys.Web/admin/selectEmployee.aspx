@@ -115,9 +115,9 @@
         function addemployee(type, username, realname, area,orderCount) {
             if (type == "4") {
                 if (orderCount > 2) {
-                    var d = dialog({ content: "该员工目前工作饱和，请经他（她）同意后再确认！" }).show();
+                    var d1 = dialog({ content: "该员工目前工作饱和，请经他（她）同意后再确认！" }).show();
                     setTimeout(function () {
-                        d.close().remove();
+                        d1.close().remove();
                     }, 1000);
                 }
                 var tag = false;

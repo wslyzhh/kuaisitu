@@ -49,6 +49,14 @@
         .myRuleSelect .select-tit {
             padding: 5px 5px 7px 5px;
         }
+        .sup {
+            vertical-align: super;
+            color: red;
+            font-size: 12px;
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 10px 0px 0px 0px;
+            margin-left: 5px;
+        }
     </style>
 </head>
 
@@ -69,8 +77,8 @@
                         <li><a <%=flag=="0"?"class=\"selected\"":"" %> href="order_list.aspx?flag=0">全部订单</a></li>
                         <li id="li1" runat="server"><a <%=flag=="1"?"class=\"selected\"":"" %> href="order_list.aspx?flag=1">我的订单</a></li>
                         <li id="li2" runat="server"><a <%=flag=="2"?"class=\"selected\"":"" %> href="order_list.aspx?flag=2">我的报账订单</a></li>
-                        <li id="li3" runat="server"><a <%=flag=="3"?"class=\"selected\"":"" %> href="order_list.aspx?flag=3">我的策划订单</a></li>
-                        <li id="li5" runat="server"><a <%=flag=="5"?"class=\"selected\"":"" %> href="order_list.aspx?flag=5">我的设计订单</a></li>
+                        <li id="li3" runat="server"><a <%=flag=="3"?"class=\"selected\"":"" %> href="order_list.aspx?flag=3">我的策划订单<sup class="sup"><asp:Label ID="labPerson3Count" runat="server">0</asp:Label></sup></a></li>
+                        <li id="li5" runat="server"><a <%=flag=="5"?"class=\"selected\"":"" %> href="order_list.aspx?flag=5">我的设计订单<sup class="sup"><asp:Label ID="labPerson5Count" runat="server">0</asp:Label></sup></a></li>
                         <li id="li4" runat="server"><a <%=flag=="4"?"class=\"selected\"":"" %> href="order_list.aspx?flag=4">我的执行订单</a></li>
                     </ul>
                 </div>

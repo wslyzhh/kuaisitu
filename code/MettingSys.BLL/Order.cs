@@ -680,6 +680,21 @@ namespace MettingSys.BLL
         }
 
         /// <summary>
+        /// 获取某个人的策划和设计中订单状态为待定或处理中的订单数量
+        /// </summary>
+        /// <param name="username"></param>
+        public void getPersonOrderCount(string username,out string person3Count,out string person5Count)
+        {
+            person3Count = "0";person5Count = "0";
+            DataTable dt = dal.getPersonOrderCount(username);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                person3Count = Utils.ObjectToStr(dt.Rows[0]["person3Count"]);
+                person5Count = Utils.ObjectToStr(dt.Rows[0]["person5Count"]);
+            }
+        }
+
+        /// <summary>
         /// 检查订单中是否存在对应的应收或应付客户
         /// </summary>
         /// <param name="orderID"></param>
