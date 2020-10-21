@@ -149,13 +149,13 @@ namespace MettingSys.Web.tools
         #region 订单状态
         private void change_OrderStatus(HttpContext context)
         {
-            int tag = DTRequest.GetQueryInt("tag", 0);
-            string oID = DTRequest.GetQueryString("oID");
-            int status = DTRequest.GetQueryInt("status",0);
-            int flag = DTRequest.GetQueryInt("flag",0);
-            byte? lockstatus = Utils.ObjToByte(DTRequest.GetQueryString("lockstatus"));
-            decimal cost = DTRequest.GetQueryDecimal("cost", 0);
-            string finRemark = DTRequest.GetQueryString("finRemark");
+            int tag = DTRequest.GetFormInt("tag", 0);
+            string oID = DTRequest.GetFormString("oID");
+            int status = DTRequest.GetFormInt("status",0);
+            int flag = DTRequest.GetFormInt("flag",0);
+            byte? lockstatus = Utils.ObjToByte(DTRequest.GetFormString("lockstatus"));
+            decimal cost = DTRequest.GetFormDecimal("cost", 0);
+            string finRemark = DTRequest.GetFormString("finRemark");
             if (tag == 0)
             {
                 context.Response.Write("{ \"msg\":\"参数错误\", \"status\":\"1\" }");

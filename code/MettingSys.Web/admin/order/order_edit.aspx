@@ -703,7 +703,25 @@
                 }
             }
             var i = layer.load(0, { shade: [0.7, '#fff'] });
-            $.getJSON("../../tools/Order_ajax.ashx?action=changeOrderStatus", { tag: flag, oID:'<%=oID %>', status: $("#ddldstatus").val(), flag: $("#ddlflag").val(), lockstatus: $("#ddllockstatus").val(), cost: $("#txtCost").val(),finRemark:$("#txtFinRemark").val() },
+            var postData = { tag: flag, oID: '<%=oID %>', status: $("#ddldstatus").val(), flag: $("#ddlflag").val(), lockstatus: $("#ddllockstatus").val(), cost: $("#txtCost").val(), finRemark: $("#txtFinRemark").val() };
+            //发送AJAX请求
+            $.ajax({
+                type: "post",
+                url: "../../tools/Order_ajax.ashx?action=changeOrderStatus",
+                data: postData,
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == 0) {
+                        layer.msg("操作成功,正在刷新页面...");
+                        setTimeout(function () {
+                            location.href = 'order_edit.aspx?action=Edit&oID=' + data.msg;
+                        }, 1000);
+                    } else {
+                        layer.alert(data.msg);
+                    }
+                }
+            });
+            <%--$.getJSON("../../tools/Order_ajax.ashx?action=changeOrderStatus", { tag: flag, oID:'<%=oID %>', status: $("#ddldstatus").val(), flag: $("#ddlflag").val(), lockstatus: $("#ddllockstatus").val(), cost: $("#txtCost").val(),finRemark:$("#txtFinRemark").val() },
                 function (data) {
                     layer.close(i);
                     if (data.status == 0) {
@@ -714,7 +732,7 @@
                     } else {
                         layer.alert(data.msg);
                     }
-                });
+                });--%>
 
         }
         function loadFile(url) {
