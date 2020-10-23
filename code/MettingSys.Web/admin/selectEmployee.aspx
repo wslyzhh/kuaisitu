@@ -114,12 +114,6 @@
         //点击选择人员
         function addemployee(type, username, realname, area,orderCount) {
             if (type == "4") {
-                if (orderCount > 2) {
-                    var d1 = dialog({ content: "该员工目前工作饱和，请经他（她）同意后再确认！" }).show();
-                    setTimeout(function () {
-                        d1.close().remove();
-                    }, 1000);
-                }
                 var tag = false;
                 $("#employeelist").children().each(function () {
                     if ($(this).attr("title") == username) {
@@ -135,10 +129,25 @@
                         }, 1000);
                         return;
                     }
-                    var li = $("<li title='" + username + "' tip='" + area + "'>" + realname + "</li>").click(function () {
-                        $(this).remove();
-                    });;
-                    $("#employeelist").append(li);
+                    
+                    if (orderCount > 2) {
+                        layer.confirm("<font color='red'>该员工目前工作饱和，请经他（她）同意后再确认！</font>", {
+                            btn: ['确定选择', '放弃选择'] //按钮
+                        }, function (index) {
+                            layer.close(index);
+                            var li = $("<li title='" + username + "' tip='" + area + "'>" + realname + "</li>").click(function () {
+                                $(this).remove();
+                            });
+                            $("#employeelist").append(li);
+                        }, function () { }
+                        );
+                    }
+                    else {
+                        var li = $("<li title='" + username + "' tip='" + area + "'>" + realname + "</li>").click(function () {
+                            $(this).remove();
+                        });
+                        $("#employeelist").append(li);
+                    }
                 }
                 else {
                     var d = dialog({ content: "已选择" }).show();
