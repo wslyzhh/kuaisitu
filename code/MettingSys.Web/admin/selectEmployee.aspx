@@ -170,7 +170,8 @@
                 </div>
                 <ul style="margin-left: 20px;">
                     <%if (IsshowNum)
-                        { %>
+                        { if (rptList.Items.Count > 0)
+                            { %>
                     <asp:Repeater ID="rptList" runat="server">
                         <ItemTemplate>
                             <li class="layer-<%#Eval("class_layer")%>">
@@ -189,6 +190,9 @@
                         </ItemTemplate>
                     </asp:Repeater>
                     <%}else{ %>
+                       <li style="margin-top:10px;">暂无记录...</li>
+                    <%} %>
+                    <%}else{ if(rptList1.Items.Count > 0){ %>
                     <asp:Repeater ID="rptList1" runat="server">
                         <ItemTemplate>
                             <li class="layer-<%#Eval("class_layer")%>">
@@ -204,6 +208,9 @@
                             </li>
                         </ItemTemplate>
                     </asp:Repeater>
+                    <%}else{ %>
+                       <li style="margin-top:10px;">暂无记录...</li>
+                    <%} %>
                     <%} %>
                 </ul>
             </div>
