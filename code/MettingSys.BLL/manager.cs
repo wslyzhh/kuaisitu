@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using MettingSys.Common;
+using MettingSys.Model;
 
 namespace MettingSys.BLL
 {
@@ -206,6 +207,19 @@ namespace MettingSys.BLL
         public DataSet getUserByPermission(string code,string area="")
         {
             return dal.getUserByPermission(code, area);
+        }
+        public DataSet getUserByUserName(IEnumerable<OrderPerson> list)
+        {
+            string usernamelist = string.Empty;
+            foreach (OrderPerson op in list)
+            {
+                usernamelist += op.op_number + ",";
+            }
+            usernamelist = usernamelist.Trim(',');
+
+            if (string.IsNullOrEmpty(usernamelist))
+                return null;
+            return dal.getUserByUserName(usernamelist);
         }
         /// <summary>
         /// 获得查询分页数据

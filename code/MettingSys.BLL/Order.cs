@@ -37,7 +37,7 @@ namespace MettingSys.BLL
         /// <param name="manager"></param>
         /// <returns></returns>
         public string AddOrder(Model.Order model, Model.manager manager, out string o_id)
-        {           
+        {
             model.o_id = getOrderID();
             o_id = model.o_id;
             model.o_lockStatus = 0;
@@ -84,7 +84,7 @@ namespace MettingSys.BLL
             {
                 return "活动归属地须包含下单人所在区域";
             }
-            if (Exists(model.o_cid.Value,model.o_content,model.o_sdate))
+            if (Exists(model.o_cid.Value, model.o_content, model.o_sdate))
             {
                 return "存在相同的客户、活动名称、活动开始日期的订单，请确认是否重复下单";
             }
@@ -125,7 +125,7 @@ namespace MettingSys.BLL
             {
                 foreach (var item in list)
                 {
-                    if (person3.IndexOf(item.op_number)>-1)
+                    if (person3.IndexOf(item.op_number) > -1)
                     {
                         return "一个人不能同时是策划人员和设计人员";
                     }
@@ -185,7 +185,7 @@ namespace MettingSys.BLL
                 {
                     new BLL.selfMessage().AddMessage("增加业务执行人员", op.op_number, op.op_name, replaceContent, replaceUser);
                 }
-                if (model.o_contractPrice=="100万以上")
+                if (model.o_contractPrice == "100万以上")
                 {
                     //通知总经理
                     string area = new BLL.department().getGroupArea();
@@ -213,6 +213,38 @@ namespace MettingSys.BLL
                         foreach (DataRow dr in userDt.Rows)
                         {
                             new BLL.selfMessage().AddMessage("新增特大业务活动", dr["user_name"].ToString(), dr["real_name"].ToString(), replaceContent, replaceUser);
+                        }
+                    }
+                }
+                #endregion
+
+                #region 钉钉消息通知
+                //给策划人员和设计人员发送消息
+                list = model.personlist.Where(p => p.op_type == 3 || p.op_type == 5);
+                if (list.ToArray().Length > 0)
+                {
+                    DataSet ds = new manager().getUserByUserName(list);
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {                        
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            IEnumerable<OrderPerson> newlist = list.Where(p => p.op_number == dr["user_name"].ToString() && p.op_type == 3);
+                            if (newlist.ToArray().Length > 0)
+                            {
+                                //策划人员
+                                if (!string.IsNullOrEmpty(Utils.ObjectToStr(dr["oauth_userid"])))
+                                {
+                                    new BLL.selfMessage().sentDingMessage("增加业务策划人员", dr["oauth_userid"].ToString(), replaceContent, replaceUser);
+                                }
+                            }
+                            else
+                            {
+                                //设计人员
+                                if (!string.IsNullOrEmpty(Utils.ObjectToStr(dr["oauth_userid"])))
+                                {
+                                    new BLL.selfMessage().sentDingMessage("增加业务设计人员", dr["oauth_userid"].ToString(), replaceContent, replaceUser);
+                                }
+                            }
                         }
                     }
                 }
@@ -524,11 +556,23 @@ namespace MettingSys.BLL
                 }
                 foreach (OrderPerson item in addlist3)
                 {
-                    new BLL.selfMessage().AddMessage("增加业务设计策划人员", item.op_number, item.op_name, replaceContent, replaceUser);
+                    new BLL.selfMessage().AddMessage("增加业务策划人员", item.op_number, item.op_name, replaceContent, replaceUser);
+                    //发送钉钉消息                    
+                    DataSet ds = new manager().getUserByUserName(addlist3);
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            if (!string.IsNullOrEmpty(Utils.ObjectToStr(dr["oauth_userid"])))
+                            {
+                                new BLL.selfMessage().sentDingMessage("增加业务策划人员", dr["oauth_userid"].ToString(), replaceContent, replaceUser);
+                            }
+                        }
+                    }
                 }
                 foreach (OrderPerson item in cutlist3)
                 {
-                    new BLL.selfMessage().AddMessage("取消业务设计策划人员", item.op_number, item.op_name, replaceContent, replaceUser);
+                    new BLL.selfMessage().AddMessage("取消业务策划人员", item.op_number, item.op_name, replaceContent, replaceUser);
                 }
                 foreach (OrderPerson item in addlist4)
                 {
@@ -537,6 +581,26 @@ namespace MettingSys.BLL
                 foreach (OrderPerson item in cutlist4)
                 {
                     new BLL.selfMessage().AddMessage("取消业务执行人员", item.op_number, item.op_name, replaceContent, replaceUser);
+                }
+                foreach (OrderPerson item in addlist5)
+                {
+                    new BLL.selfMessage().AddMessage("增加业务设计人员", item.op_number, item.op_name, replaceContent, replaceUser);
+                    //发送钉钉消息                    
+                    DataSet ds = new manager().getUserByUserName(addlist5);
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            if (!string.IsNullOrEmpty(Utils.ObjectToStr(dr["oauth_userid"])))
+                            {
+                                new BLL.selfMessage().sentDingMessage("增加业务设计人员", dr["oauth_userid"].ToString(), replaceContent, replaceUser);
+                            }
+                        }
+                    }
+                }
+                foreach (OrderPerson item in cutlist5)
+                {
+                    new BLL.selfMessage().AddMessage("取消业务设计人员", item.op_number, item.op_name, replaceContent, replaceUser);
                 }
 
                 if (isChangeStatus)
@@ -590,6 +654,8 @@ namespace MettingSys.BLL
             }
             return "修改失败";
         }
+
+
 
         /// <summary>
         /// 删除订单
