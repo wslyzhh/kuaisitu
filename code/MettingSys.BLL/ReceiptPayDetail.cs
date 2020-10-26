@@ -823,7 +823,7 @@ namespace MettingSys.BLL
                     //只能
                     strWhere += " and rpd_PersonNum='" + manager.user_name + "'";
                 }
-            }
+            }            
             return dal.GetList(pageSize, pageIndex, strWhere, filedOrder, out recordCount, out pmoney, isPay, isPage);
         }
         public DataSet GetPayCertificationList(string strWhere)

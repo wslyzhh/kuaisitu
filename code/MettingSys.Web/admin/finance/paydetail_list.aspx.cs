@@ -196,6 +196,10 @@ namespace MettingSys.Web.admin.finance
         protected string CombSqlTxt()
         {
             StringBuilder strTemp = new StringBuilder();
+            if (_check == "1" && new BLL.permission().checkHasPermission(manager, "0603"))
+            {
+                strTemp.Append(" and rpd_area='" + manager.area + "'");
+            }
             if (!string.IsNullOrEmpty(_cid) && _cid != "0")
             {
                 strTemp.Append(" and rpd_cid = " + _cid + "");

@@ -401,12 +401,22 @@ namespace MettingSys.Common
         /// 订单锁单状态
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<byte?, string> lockStatus()
+        public static Dictionary<byte?, string> lockStatus(byte? type = null)
         {
             Dictionary<byte?, string> dict = new Dictionary<byte?, string>();
-            dict.Add(0, "未锁");
-            dict.Add(1, "已锁");
-            dict.Add(2, "待处理");
+            if (type == 1)
+            {
+                dict.Add(0, "未锁");
+                dict.Add(1, "已锁");
+                dict.Add(2, "待处理");
+                dict.Add(3, "未锁与待处理");
+            }
+            else
+            {
+                dict.Add(0, "未锁");
+                dict.Add(1, "已锁");
+                dict.Add(2, "待处理");
+            }
             return dict;
         }
         #endregion

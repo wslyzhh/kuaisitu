@@ -109,7 +109,7 @@ namespace MettingSys.Web.admin.order
                 ChkAdminLevel("sys_order_list", DTEnums.ActionEnum.View.ToString()); //检查权限
                 if (flag != "0" && flag != "1" && flag != "2" && flag != "4" && string.IsNullOrEmpty(DTRequest.GetString("page")))
                 {
-                    _lockstatus = "0";
+                    _lockstatus = "3";
                     _dstatus = "5";
                 }
                 InitData();
@@ -154,7 +154,12 @@ namespace MettingSys.Web.admin.order
             ddlflag.DataBind();
             ddlflag.Items.Insert(0, new ListItem("不限", ""));
 
-            ddllock.DataSource = Common.BusinessDict.lockStatus();
+            byte? _type =  0;
+            if (flag == "3" || flag == "5")
+            {
+                _type = 1;
+            }
+            ddllock.DataSource = Common.BusinessDict.lockStatus(_type);
             ddllock.DataTextField = "value";
             ddllock.DataValueField = "key";
             ddllock.DataBind();
@@ -356,7 +361,14 @@ namespace MettingSys.Web.admin.order
             }
             if (!string.IsNullOrEmpty(_lockstatus))
             {
-                strTemp.Append(" and isnull(o_lockStatus,0)='" + _lockstatus + "'");
+                if (_lockstatus == "3")
+                {
+                    strTemp.Append(" and (isnull(o_lockStatus,0)='0' or isnull(o_lockStatus,0)='1')");
+                }
+                else
+                {
+                    strTemp.Append(" and isnull(o_lockStatus,0)='" + _lockstatus + "'");
+                }
             }
             if (!string.IsNullOrEmpty(_content))
             {
