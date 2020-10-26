@@ -458,7 +458,7 @@ namespace MettingSys.BLL
                 }
                 else
                 {
-                    dt = null;
+                    return null;
                 }
             }
 

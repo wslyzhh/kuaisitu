@@ -470,7 +470,7 @@ namespace MettingSys.DAL
             };
             parameters[0].Value = code;
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select m.user_name,m.real_name,m.area,isnull(mo.oauth_userid,'') oauth_userid from dt_manager m left join MS_userRolePemission on m.role_id=urp_roleid left join dt_manager_oauth mo on m.user_name = mo.manager_name and mo.is_lock=1 where urp_code=@code ");
+            strSql.Append("select m.user_name,m.real_name,m.area,isnull(mo.oauth_userid,'') oauth_userid from dt_manager_oauth mo left join dt_manager m on m.user_name = mo.manager_name and mo.is_lock=1 left join MS_userRolePemission on m.role_id = urp_roleid where urp_code=@code ");
             if (!string.IsNullOrEmpty(area))
             {
                 strSql.Append(" and area=@area");
@@ -478,6 +478,16 @@ namespace MettingSys.DAL
             }
             return DbHelperSQL.Query(strSql.ToString(), parameters);
         }
+
+
+        public DataSet getUserByUserName(string username)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select m.user_name,m.real_name,m.area,mo.oauth_userid from dt_manager_oauth mo left join dt_manager m  on m.user_name = mo.manager_name and mo.is_lock = 1 where isnull(mo.oauth_userid, '') <> '' and  user_name in ('" + username.Replace(",","','") + "')");
+
+            return DbHelperSQL.Query(strSql.ToString());
+        }
+
         /// <summary>
         /// 获得查询分页数据
         /// </summary>
