@@ -363,7 +363,7 @@ namespace MettingSys.Web.admin.order
             {
                 if (_lockstatus == "3")
                 {
-                    strTemp.Append(" and (isnull(o_lockStatus,0)='0' or isnull(o_lockStatus,0)='1')");
+                    strTemp.Append(" and (isnull(o_lockStatus,0)='0' or isnull(o_lockStatus,0)='2')");
                 }
                 else
                 {

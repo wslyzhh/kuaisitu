@@ -226,6 +226,12 @@ namespace MettingSys.Web.admin.unBusiness
         protected string CombSqlTxt()
         {
             StringBuilder strTemp = new StringBuilder();
+            //所有页签下保留可以看到！只是针对HQ工号中有部门审批权限的，他的部门审批页签里只看本区域的
+            if (_check == "1" && new BLL.permission().checkHasPermission(manager, "0603"))
+            {
+                strTemp.Append(" and uba_area='" + manager.area + "'");
+            }
+
             if (!string.IsNullOrEmpty(_check1))
             {
                 strTemp.Append(" and uba_flag1=" + _check1 + "");

@@ -426,7 +426,7 @@ namespace MettingSys.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("select op_number,sum(case when op_type = 3 then 1 else 0 end) person3Count,sum(case when op_type = 5 then 1 else 0 end) person5Count from MS_Order left join MS_OrderPerson on o_id=op_oid ");
-            strSql.Append("where(op_type = 3 or op_type = 5) and op_number = @user and (op_dstatus = 0 or op_dstatus = 1) and (op_lockstatus = 0 or op_lockstatus = 1)");
+            strSql.Append("where(op_type = 3 or op_type = 5) and op_number = @user and (op_dstatus = 0 or op_dstatus = 1) and (o_lockstatus = 0 or o_lockstatus = 2)");
             strSql.Append("group by op_number");
             SqlParameter[] parameters = {
                     new SqlParameter("@user", SqlDbType.VarChar,11)};
