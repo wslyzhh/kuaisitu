@@ -109,7 +109,7 @@ function setChooseInterval({defaultStart = 0,defaultEnd = 0} = {}){
     })
 }
 //确认提示框
-function setConfirm(message='确定操作吗？'){
+function setConfirm(message="<font color='red'>确定操作吗？</font>"){
     return new Promise(function(resolve, reject) {
         dd.device.notification.confirm({
             message,
@@ -128,6 +128,7 @@ function setConfirm(message='确定操作吗？'){
         })
     })
 }
+
 export default {
     infoCode,
     setToast,

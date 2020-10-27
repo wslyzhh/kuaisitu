@@ -675,7 +675,7 @@ namespace MettingSys.DAL
                 }
                 if (dict.ContainsKey("address"))
                 {
-                    strWhere3.Append(" and o_content like '%" + dict["o_address"] + "%'");
+                    strWhere3.Append(" and o_content like '%" + dict["address"] + "%'");
                 }
                 if (dict.ContainsKey("person1"))
                 {
