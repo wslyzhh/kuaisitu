@@ -101,7 +101,7 @@ namespace MettingSys.Web.admin.finance
             ddlflag.DataBind();
             ddlflag.Items.Insert(0, new ListItem("不限", ""));
 
-            ddllock.DataSource = Common.BusinessDict.lockStatus();
+            ddllock.DataSource = Common.BusinessDict.lockStatus(1);
             ddllock.DataTextField = "value";
             ddllock.DataValueField = "key";
             ddllock.DataBind();
@@ -241,7 +241,14 @@ namespace MettingSys.Web.admin.finance
             }
             if (!string.IsNullOrEmpty(_lockstatus))
             {
-                strTemp.Append(" and isnull(o_lockStatus,0)='" + _lockstatus + "'");
+                if (_lockstatus == "3")
+                {
+                    strTemp.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
+                }
+                else
+                {
+                    strTemp.Append(" and o_lockStatus=" + _lockstatus + "");
+                }
             }
             if (!string.IsNullOrEmpty(_area))
             {

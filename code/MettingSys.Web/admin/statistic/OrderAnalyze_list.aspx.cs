@@ -123,7 +123,7 @@ namespace MettingSys.Web.admin.statistic
             ddldstatus.DataBind();
             ddldstatus.Items.Insert(0, new ListItem("不限", ""));
 
-            ddllock.DataSource = Common.BusinessDict.lockStatus();
+            ddllock.DataSource = Common.BusinessDict.lockStatus(1);
             ddllock.DataTextField = "value";
             ddllock.DataValueField = "key";
             ddllock.DataBind();
@@ -336,7 +336,14 @@ namespace MettingSys.Web.admin.statistic
             }
             if (!string.IsNullOrEmpty(_lockstatus))
             {
-                strTemp.Append(" and o_lockStatus='" + _lockstatus + "'");
+                if (_lockstatus == "3")
+                {
+                    strTemp.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
+                }
+                else
+                {
+                    strTemp.Append(" and o_lockStatus=" + _lockstatus + "");
+                }
             }
             if (!string.IsNullOrEmpty(_pushstatus))
             {

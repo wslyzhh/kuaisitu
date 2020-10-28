@@ -211,7 +211,7 @@ namespace MettingSys.Web.admin.statistic
         #region 初始化数据=================================
         private void InitData()
         {
-            ddllock.DataSource = Common.BusinessDict.lockStatus();
+            ddllock.DataSource = Common.BusinessDict.lockStatus(1);
             ddllock.DataTextField = "value";
             ddllock.DataValueField = "key";
             ddllock.DataBind();

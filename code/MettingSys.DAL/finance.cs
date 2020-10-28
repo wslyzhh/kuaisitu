@@ -333,7 +333,14 @@ namespace MettingSys.DAL
             }
             if (!string.IsNullOrEmpty(_lockstatus))
             {
-                strTemp.Append(" and o_lockStatus=" + _lockstatus + "");
+                if (_lockstatus == "3")
+                {
+                    strTemp.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
+                }
+                else
+                {
+                    strTemp.Append(" and o_lockStatus=" + _lockstatus + "");
+                }
             }
             if (!string.IsNullOrEmpty(_area))
             {
@@ -425,7 +432,14 @@ namespace MettingSys.DAL
             }
             if (!string.IsNullOrEmpty(_lockstatus))
             {
-                strTemp1.Append(" and o_lockStatus=" + _lockstatus + "");
+                if (_lockstatus == "3")
+                {
+                    strTemp1.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
+                }
+                else
+                {
+                    strTemp1.Append(" and o_lockStatus=" + _lockstatus + "");
+                }
             }
             if (!string.IsNullOrEmpty(_area))
             {
@@ -539,7 +553,14 @@ namespace MettingSys.DAL
             }
             if (!string.IsNullOrEmpty(_lockstatus))
             {
-                strTemp1.Append(" and o_lockStatus=" + _lockstatus + "");
+                if (_lockstatus == "3")
+                {
+                    strTemp1.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
+                }
+                else
+                {
+                    strTemp1.Append(" and o_lockStatus=" + _lockstatus + "");
+                }
             }
             if (!string.IsNullOrEmpty(_area))
             {
@@ -675,7 +696,7 @@ namespace MettingSys.DAL
                 }
                 if (dict.ContainsKey("address"))
                 {
-                    strWhere3.Append(" and o_content like '%" + dict["address"] + "%'");
+                    strWhere3.Append(" and o_address like '%" + dict["address"] + "%'");
                 }
                 if (dict.ContainsKey("person1"))
                 {
@@ -714,7 +735,14 @@ namespace MettingSys.DAL
                 }
                 if (dict.ContainsKey("lockstatus"))
                 {
-                    strWhere3.Append(" and o_lockStatus='" + dict["lockstatus"] + "'");
+                    if (Utils.ObjectToStr(dict["lockstatus"]) == "3")
+                    {
+                        strWhere3.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
+                    }
+                    else
+                    {
+                        strWhere3.Append(" and o_lockStatus=" + dict["lockstatus"] + "");
+                    }
                 }
                 if (dict.ContainsKey("area"))
                 {

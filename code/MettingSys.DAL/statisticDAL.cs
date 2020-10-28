@@ -70,7 +70,14 @@ namespace MettingSys.DAL
                 }
                 if (dict.ContainsKey("lockstatus"))
                 {
-                    strWhere1.Append(" and o_lockStatus='" + dict["lockstatus"] + "'");
+                    if (dict["lockstatus"] == "3")
+                    {
+                        strWhere1.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
+                    }
+                    else
+                    {
+                        strWhere1.Append(" and o_lockStatus=" + dict["lockstatus"] + "");
+                    }
                 }
                 if (dict.ContainsKey("area"))
                 {
@@ -195,8 +202,16 @@ namespace MettingSys.DAL
                 }
                 if (dict.ContainsKey("lockstatus"))
                 {
-                    strWhere1.Append(" and o_lockStatus='" + dict["lockstatus"] + "'");
-                    strWhere2.Append(" and o_lockStatus='" + dict["lockstatus"] + "'");
+                    if (dict["lockstatus"] == "3")
+                    {
+                        strWhere1.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
+                        strWhere2.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
+                    }
+                    else
+                    {
+                        strWhere1.Append(" and o_lockStatus=" + dict["lockstatus"] + "");
+                        strWhere2.Append(" and o_lockStatus=" + dict["lockstatus"] + "");
+                    }
                 }
                 if (dict.ContainsKey("area"))
                 {
@@ -281,6 +296,14 @@ namespace MettingSys.DAL
                 if (dict.ContainsKey("lockstatus"))
                 {
                     strWhere1.Append(" and o_lockStatus='" + dict["lockstatus"] + "'");
+                    if (dict["lockstatus"] == "3")
+                    {
+                        strWhere1.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
+                    }
+                    else
+                    {
+                        strWhere1.Append(" and o_lockStatus=" + dict["lockstatus"] + "");
+                    }
                 }
                 if (dict.ContainsKey("area"))
                 {
@@ -828,7 +851,14 @@ namespace MettingSys.DAL
                 }
                 if (dict.ContainsKey("lockstatus"))
                 {
-                    strWhere1.Append(" and o_lockStatus='" + dict["lockstatus"] + "'");
+                    if (dict["lockstatus"] == "3")
+                    {
+                        strWhere1.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
+                    }
+                    else
+                    {
+                        strWhere1.Append(" and o_lockStatus=" + dict["lockstatus"] + "");
+                    }
                 }
                 if (dict.ContainsKey("area"))
                 {
@@ -919,7 +949,14 @@ namespace MettingSys.DAL
                 }
                 if (dict.ContainsKey("lockstatus"))
                 {
-                    strWhere1.Append(" and o_lockStatus='" + dict["lockstatus"] + "'");
+                    if (dict["lockstatus"] == "3")
+                    {
+                        strWhere1.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
+                    }
+                    else
+                    {
+                        strWhere1.Append(" and o_lockStatus=" + dict["lockstatus"] + "");
+                    }
                 }
                 if (dict.ContainsKey("area"))
                 {

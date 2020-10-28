@@ -110,7 +110,7 @@ namespace MettingSys.Web.admin.finance
             ddlnature.DataBind();
             ddlnature.Items.Insert(0, new ListItem("不限", ""));
 
-            ddllock.DataSource = Common.BusinessDict.lockStatus();
+            ddllock.DataSource = Common.BusinessDict.lockStatus(1);
             ddllock.DataTextField = "value";
             ddllock.DataValueField = "key";
             ddllock.DataBind();

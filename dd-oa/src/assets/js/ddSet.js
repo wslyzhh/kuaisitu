@@ -109,12 +109,12 @@ function setChooseInterval({defaultStart = 0,defaultEnd = 0} = {}){
     })
 }
 //确认提示框
-function setConfirm(message="<font color='red'>确定操作吗？</font>"){
+function setConfirm(message,button0Text,button1Text){
     return new Promise(function(resolve, reject) {
         dd.device.notification.confirm({
-            message,
+            message:message || '确定操作吗？',
             title: "提示",
-            buttonLabels: ['确定', '取消'],
+            buttonLabels: [button0Text || '确定', button1Text || '取消'],
             onSuccess : function(result) {
                 resolve(result) 
                 //onSuccess将在点击button之后回调

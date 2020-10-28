@@ -200,7 +200,7 @@ namespace MettingSys.Web.admin.order
             ddlflag.DataValueField = "key";
             ddlflag.DataBind();
 
-            ddllockstatus.DataSource = Common.BusinessDict.lockStatus();
+            ddllockstatus.DataSource = Common.BusinessDict.lockStatus(1);
             ddllockstatus.DataTextField = "value";
             ddllockstatus.DataValueField = "key";
             ddllockstatus.DataBind();

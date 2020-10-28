@@ -3,7 +3,7 @@
     <div class="choose_all_list" v-if="show" @click="hide">
         <div class="choose_content" @click.stop="">
             <ul class="all_list">
-                <li :class="{active:item.isChecked}"  @click="activeItem(item)" v-for="(item,index) in list" :key="index">{{item.name}} {{item.orderCount==null?"":item.orderCount}}</li>
+                 <li :class="{active:item.isChecked}" v-bind:style="styleObject(item)" @click="activeItem(item)" v-for="(item,index) in list" :key="index">{{item.name}} {{item.orderCount==null?"":item.orderCount}}</li>
             </ul>
             <div class="choose_btn">
                 <button @click="changeReset">重置</button>
@@ -44,18 +44,31 @@ export default {
     mounted() {
 
     },
-    methods: {
-        activeItem(item){
+    methods: {        
+        styleObject(item) {
+            return {
+                color: item.orderCount==null?'':item.orderCount>2?'red':item.orderCount<1?'green':'orange'
+            }
+        },
+        activeItem(item){            
+            let _this = this;
             if(!item.isChecked){
-				if(1 == this.type){
-					this.changeReset();
+				if(1 == _this.type){
+					_this.changeReset();
                 }
                 if(item.orderCount > 2){
-                    this.ddSet.setToast({text:'该员工目前工作饱和，请经他（她）同意后再确认！'})
+                    //this.ddSet.setToast({text:'该员工目前工作饱和，请经他（她）同意后再确认！'})
+                    _this.ddSet.setConfirm('该员工目前工作饱和，请经他（她）同意后再确认！','确定选择','放弃选择').then(res=>{
+                        if(0 == res.buttonIndex){
+                            _this.$set(item,'isChecked',true)
+                        }
+                    })
                 }
-				this.$set(item,'isChecked',true)
+                else{
+                    _this.$set(item,'isChecked',true)
+                }				
             }else{
-                this.$set(item,'isChecked',!item.isChecked)
+                _this.$set(item,'isChecked',!item.isChecked)
             }
         },
         changeReset(){

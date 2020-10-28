@@ -154,12 +154,7 @@ namespace MettingSys.Web.admin.order
             ddlflag.DataBind();
             ddlflag.Items.Insert(0, new ListItem("不限", ""));
 
-            byte? _type =  0;
-            if (flag == "3" || flag == "5")
-            {
-                _type = 1;
-            }
-            ddllock.DataSource = Common.BusinessDict.lockStatus(_type);
+            ddllock.DataSource = Common.BusinessDict.lockStatus(1);
             ddllock.DataTextField = "value";
             ddllock.DataValueField = "key";
             ddllock.DataBind();
@@ -363,11 +358,11 @@ namespace MettingSys.Web.admin.order
             {
                 if (_lockstatus == "3")
                 {
-                    strTemp.Append(" and (isnull(o_lockStatus,0)='0' or isnull(o_lockStatus,0)='2')");
+                    strTemp.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
                 }
                 else
                 {
-                    strTemp.Append(" and isnull(o_lockStatus,0)='" + _lockstatus + "'");
+                    strTemp.Append(" and o_lockStatus=" + _lockstatus + "");
                 }
             }
             if (!string.IsNullOrEmpty(_content))

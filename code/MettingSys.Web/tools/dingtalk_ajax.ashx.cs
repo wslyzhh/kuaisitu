@@ -358,7 +358,7 @@ namespace MettingSys.Web.tools
         /// </summary>
         private void init_lockstatus(HttpContext context)
         {
-            StringBuilder sb = init_dictionary(context, Common.BusinessDict.lockStatus());
+            StringBuilder sb = init_dictionary(context, Common.BusinessDict.lockStatus(1));
             if (sb != null && sb.Length > 0) { context.Response.Write(sb.ToString()); return; }
 
             context.Response.Write("[]");
@@ -1035,7 +1035,14 @@ namespace MettingSys.Web.tools
                 }
                 if (!string.IsNullOrEmpty(_lockstatus))
                 {
-                    strTemp.Append(" and o_lockStatus='" + _lockstatus + "'");
+                    if (_lockstatus == "3")
+                    {
+                        strTemp.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
+                    }
+                    else
+                    {
+                        strTemp.Append(" and o_lockStatus=" + _lockstatus + "");
+                    }
                 }
 
                 if (flag == 0)

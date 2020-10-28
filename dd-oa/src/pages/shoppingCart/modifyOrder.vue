@@ -115,7 +115,7 @@
             <router-link tag="li" :to="{path:'/settlement',query:{oID:formData.orderID}}" style="background-color:#008265;">结算汇总</router-link>
 			<router-link tag="li" :to="{path:'/unBusiness',query:{oID:formData.orderID}}" style="background-color:#008265;">执行备用金借款明细</router-link>
 		</ul>
-		<choose :show.sync="showChoose" :type="chooseType" :list="chooseList" @on-affirm="activeChoose"></choose>
+		<choose :show.sync="showChoose" :showNum="showNum"  :type="chooseType" :list="chooseList" @on-affirm="activeChoose"></choose>
 		<ul class="looK_button_list c_flex">
             <router-link tag="li" :to="{path:'/UnBusinessPayAdd',query:{oID:formData.orderID,paytype:0,payfunction:0,type:'add'}}" style="background-color:#3395fa;">非业务申请</router-link>
             <router-link tag="li" :to="{path:'/adviceOfReceipt',query:{oID:formData.orderID,type:'add'}}" style="background-color:#47a21f;">收款通知</router-link>
@@ -166,6 +166,7 @@ export default {
             placeText:'',
             showChoose:false,
             date_range:'',
+            showNum:false,
             chooseType:1,
             chooseEl:'',
             employee1Text:'',
