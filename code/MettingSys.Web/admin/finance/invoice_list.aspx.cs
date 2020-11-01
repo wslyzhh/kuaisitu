@@ -284,6 +284,19 @@ namespace MettingSys.Web.admin.finance
                 }
             }
 
+            //所有页签下保留可以看到！只是针对HQ工号中有部门审批权限的，他的部门审批页签里只看本区域的
+            if (new BLL.permission().checkHasPermission(manager, "0603"))
+            {
+                if (_check == "1")
+                {
+                    strTemp.Append(" and inv_farea='" + manager.area + "'");
+                }
+                else if (_check == "2")
+                {
+                    strTemp.Append(" and inv_darea='" + manager.area + "'");
+                }
+            }
+
             return strTemp.ToString();
         }
         #endregion

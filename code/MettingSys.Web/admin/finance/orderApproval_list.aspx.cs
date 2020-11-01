@@ -226,6 +226,9 @@ namespace MettingSys.Web.admin.finance
                     case "4":
                         strTemp.Append(" and ((exists(select * from ms_orderperson where op_oid=o_id and (op_type=3 or op_type=5)) and not exists(select * from ms_orderperson where op_oid=o_id and (op_type=3 or op_type=5) and (op_dstatus=0 or op_dstatus=1))) or not exists(select * from ms_orderperson where op_oid=o_id and (op_type=3 or op_type=5)))");
                         break;
+                    case "5":
+                        strTemp.Append(" and exists(select * from ms_orderperson where op_oid=o_id and (op_type=3 or op_type=5)) and exists(select * from ms_orderperson where op_oid=o_id and (op_type=3 or op_type=5) and (op_dstatus=0 or op_dstatus=1))");
+                        break;
                     default:
                         strTemp.Append(" and exists(select * from ms_orderperson where op_oid=o_id and (op_type=3 or op_type=5) and op_dstatus=" + _dstatus + ")");
                         break;

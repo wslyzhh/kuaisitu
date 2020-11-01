@@ -402,20 +402,23 @@ export default {
         },
         staff(_type,_el){ // 报账人员
             let _this = this
-    		let tmpPlaces = []
-    		if(_this.formData.o_place){
-    			tmpPlaces = _this.formData.o_place.split(',')
-    		}
-    		
-    		if(tmpPlaces.length < 1){
-				this.ddSet.setToast({text:'请先选择活动归属地'})
-    			return
-    		}
-    		let _isShowNum = false
-            if(_el == 'employee2' || _el == 'employee4'){
+            let _isShowNum = false
+            let _arealist = ''
+            if(_el == 'employee2' || _el == 'employee4'){//策划人员和设计人员
                 _isShowNum = true
             }
-            _this.getEmployeebyarea({arealist:_this.formData.o_place,isShowNum:_isShowNum,hasOrder:orderId}).then(res => {
+            else{//报账人员和执行人员
+                let tmpPlaces = []
+                if(_this.formData.o_place){
+                    tmpPlaces = _this.formData.o_place.split(',')
+                }
+                if(tmpPlaces.length < 1){
+                    _this.ddSet.setToast({text:'请先选择活动归属地'})
+                    return
+                }
+                _arealist = _this.formData.o_place
+            }
+            _this.getEmployeebyarea({arealist:_arealist,isShowNum:_isShowNum,hasOrder:orderId}).then(res => {
 				_this.chooseType = _type;
 				_this.showNum = _isShowNum;
     			_this.chooseEl = _el;

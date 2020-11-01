@@ -274,6 +274,23 @@ namespace MettingSys.Web.admin.statistic
             {
                 switch (_dstatus)
                 {
+                    case "5":
+                        if (string.IsNullOrEmpty(_person3) && string.IsNullOrEmpty(_person5))
+                        {
+                            strTemp.Append(" and exists(select * from MS_OrderPerson where op_oid=o_id and (op_type=3 or op_type=5) and (op_dstatus=0 or op_dstatus=1))");
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(_person3))
+                            {
+                                strTemp.Append(" and exists(select * from MS_OrderPerson where op_oid=o_id and op_type=3 and op_number='" + _person3 + "' and (op_dstatus=0 or op_dstatus=1))");
+                            }
+                            if (!string.IsNullOrEmpty(_person5))
+                            {
+                                strTemp.Append(" and exists(select * from MS_OrderPerson where op_oid=o_id and op_type=5 and op_number='" + _person5 + "' and (op_dstatus=0 or op_dstatus=1))");
+                            }
+                        }
+                        break;
                     case "4":
                         strTemp.Append(" and (not exists(select * from MS_OrderPerson where op_oid=o_id and (op_type=3 or op_type=5)) ");
                         if (string.IsNullOrEmpty(_person3) && string.IsNullOrEmpty(_person5))

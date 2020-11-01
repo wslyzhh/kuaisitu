@@ -477,12 +477,6 @@ namespace MettingSys.Web.tools
         private void init_employeebyarea(HttpContext context)
         {
             get_params(context, out jObject);
-            if (jObject["arealist"] == null || string.IsNullOrWhiteSpace(jObject["arealist"].ToString()))
-            {
-                context.Response.Write("{\"status\": 0, \"msg\": \"KeyIsNullOrError\"}");
-                return;
-            }
-
             string areaList = Utils.ObjectToStr(jObject["arealist"]);
             bool _isShowNum = Utils.ObjectToBool(jObject["isShowNum"]);
             string _hasOrder = Utils.ObjectToStr(jObject["hasOrder"]);
@@ -1533,26 +1527,27 @@ namespace MettingSys.Web.tools
                         checkType = "1";
                         if (_flag == "0")
                         {
-                            strTemp.Append(" and uba_area='" + managerModel.area + "' and uba_flag1=0 and uba_flag2=0 and uba_flag3=0 and uba_isConfirm='False'");
+                            strTemp.Append(" and uba_area='" + managerModel.area + "' and uba_flag1=0 and uba_flag2=0 and uba_flag3=0 and isnull(uba_isConfirm,0)=0");
                             //if (managerModel.area == new BLL.department().getGroupArea())
                             //{
-                            //    strTemp.Append("  and uba_flag1=0 and uba_flag2=0 and uba_flag3=0 and uba_isConfirm='False'");
+                            //    strTemp.Append("  and uba_flag1=0 and uba_flag2=0 and uba_flag3=0 and isnull(uba_isConfirm,0)=0");
                             //}
                             //else
                             //{
-                            //    strTemp.Append(" and uba_area='" + managerModel.area + "' and uba_flag1=0 and uba_flag2=0 and uba_flag3=0 and uba_isConfirm='False'");
+                            //    strTemp.Append(" and uba_area='" + managerModel.area + "' and uba_flag1=0 and uba_flag2=0 and uba_flag3=0 and isnull(uba_isConfirm,0)=0");
                             //}
                         }
                         else if (_flag == "1")
                         {
-                            if (managerModel.area == new BLL.department().getGroupArea())
-                            {
-                                strTemp.Append(" and (uba_flag1=1 or  uba_flag1=2)");
-                            }
-                            else
-                            {
-                                strTemp.Append(" and uba_area='" + managerModel.area + "' and (uba_flag1=1 or  uba_flag1=2)");
-                            }
+                            strTemp.Append(" and uba_area='" + managerModel.area + "' and (uba_flag1=1 or  uba_flag1=2)");
+                            //if (managerModel.area == new BLL.department().getGroupArea())
+                            //{
+                            //    strTemp.Append(" and (uba_flag1=1 or  uba_flag1=2)");
+                            //}
+                            //else
+                            //{
+                            //    strTemp.Append(" and uba_area='" + managerModel.area + "' and (uba_flag1=1 or  uba_flag1=2)");
+                            //}
                         }
                     }
                     else if (new BLL.permission().checkHasPermission(managerModel, "0402"))//财务审批
@@ -1560,7 +1555,7 @@ namespace MettingSys.Web.tools
                         checkType = "2";
                         if (_flag == "0")
                         {
-                            strTemp.Append(" and uba_flag1=2 and uba_flag2=0 and uba_flag3=0 and uba_isConfirm='False'");
+                            strTemp.Append(" and uba_flag1=2 and uba_flag2=0 and uba_flag3=0 and isnull(uba_isConfirm,0)=0");
                         }
                         else if (_flag == "1")
                         {
@@ -1572,7 +1567,7 @@ namespace MettingSys.Web.tools
                         checkType = "3";
                         if (_flag == "0")
                         {
-                            strTemp.Append(" and uba_flag1=2 and uba_flag2=2 and uba_flag3=0 and uba_isConfirm='False'");
+                            strTemp.Append(" and uba_flag1=2 and uba_flag2=2 and uba_flag3=0 and isnull(uba_isConfirm,0)=0");
                         }
                         else if (_flag == "1")
                         {
@@ -2267,7 +2262,7 @@ namespace MettingSys.Web.tools
                 }
 
                 string keywords = jObject["keywords"].ToString();
-                byte inv_flag = byte.Parse(jObject["inv_flag"].ToString());
+                byte inv_flag = Utils.ObjToByte(jObject["inv_flag"]);
 
                 string checkType = "0";
                 #region 筛选条件
@@ -2281,25 +2276,27 @@ namespace MettingSys.Web.tools
                     checkType = "1";
                     if (inv_flag == 0)
                     {
-                        if (managerModel.area != new BLL.department().getGroupArea())
-                        {
-                            strTemp.Append(" and ((inv_farea='" + managerModel.area + "' and inv_flag1=0) or (inv_darea='" + managerModel.area + "' and inv_flag2=0))");
-                        }
-                        else
-                        {
-                            strTemp.Append(" and (inv_flag1=0 or inv_flag2=0)");
-                        }
+                        strTemp.Append(" and ((inv_farea='" + managerModel.area + "' and inv_flag1=0) or (inv_darea='" + managerModel.area + "' and inv_flag2=0))");
+                        //if (managerModel.area != new BLL.department().getGroupArea())
+                        //{
+                        //    strTemp.Append(" and ((inv_farea='" + managerModel.area + "' and inv_flag1=0) or (inv_darea='" + managerModel.area + "' and inv_flag2=0))");
+                        //}
+                        //else
+                        //{
+                        //    strTemp.Append(" and (inv_flag1=0 or inv_flag2=0)");
+                        //}
                     }
                     else
                     {
-                        if (managerModel.area != new BLL.department().getGroupArea())
-                        {
-                            strTemp.Append(" and ((inv_farea='" + managerModel.area + "' and (inv_flag1=1 or  inv_flag1=2)) or (inv_darea='" + managerModel.area + "' and (inv_flag2=1 or inv_flag2=2)))");
-                        }
-                        else
-                        {
-                            strTemp.Append(" and ((inv_flag1=1 or  inv_flag1=2) or (inv_flag2=1 or inv_flag2=2))");
-                        }
+                        strTemp.Append(" and ((inv_farea='" + managerModel.area + "' and (inv_flag1=1 or  inv_flag1=2)) or (inv_darea='" + managerModel.area + "' and (inv_flag2=1 or inv_flag2=2)))");
+                        //if (managerModel.area != new BLL.department().getGroupArea())
+                        //{
+                        //    strTemp.Append(" and ((inv_farea='" + managerModel.area + "' and (inv_flag1=1 or  inv_flag1=2)) or (inv_darea='" + managerModel.area + "' and (inv_flag2=1 or inv_flag2=2)))");
+                        //}
+                        //else
+                        //{
+                        //    strTemp.Append(" and ((inv_flag1=1 or  inv_flag1=2) or (inv_flag2=1 or inv_flag2=2))");
+                        //}
                     }
                 }
                 else if (new BLL.department().getGroupArea() == managerModel.area && new BLL.permission().checkHasPermission(managerModel, "0402"))
@@ -3606,7 +3603,7 @@ namespace MettingSys.Web.tools
                         checkType = "1";
                         if (_flag == "0")
                         {
-                            strTemp.Append(" and rp_flag=0 and rp_flag1=0 and rp_isConfirm='False'");
+                            strTemp.Append(" and rp_flag=0 and rp_flag1=0 and isnull(rp_isConfirm,0)=0");
                         }
                         else if (_flag == "1")
                         {
@@ -3618,7 +3615,7 @@ namespace MettingSys.Web.tools
                         checkType = "2";
                         if (_flag == "0")
                         {
-                            strTemp.Append(" and rp_flag=2 and rp_flag1=0 and rp_isConfirm='False'");
+                            strTemp.Append(" and rp_flag=2 and rp_flag1=0 and isnull(rp_isConfirm,0)=0");
                         }
                         else if (_flag == "1")
                         {

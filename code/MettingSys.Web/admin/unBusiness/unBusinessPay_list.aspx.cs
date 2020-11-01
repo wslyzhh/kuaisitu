@@ -200,7 +200,7 @@ namespace MettingSys.Web.admin.unBusiness
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("unBusinessPay_list.aspx", "page={0}&ddlcheck1={1}&ddlcheck2={2}&ddlcheck3={3}&ddlConfirm={4}&txtsforedate={5}&txteforedate={6}&txtsdate={7}&txtedate={8}&ddlarea={9}&ddltype={10}&txtfunction={11}&txtOwner={12}&ddlPayMethod1={13}&ddlsign={14}&txtmoney={15}&txtBankName={16}", "__id__", _check1,_check2,_check3,_payStatus,_sforedate,_eforedate,_sdate,_edate,_area,_type,_function,_owner,_method,_sign,_money,_bankName);
+            string pageUrl = backUrl();
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
 
             ddlchecktype.SelectedValue = this._check;
@@ -346,7 +346,11 @@ namespace MettingSys.Web.admin.unBusiness
             _bankName = DTRequest.GetFormString("txtBankName");
             RptBind("uba_id>0" + CombSqlTxt(), orderby);
         }
-        
+
+        private string backUrl()
+        {
+            return Utils.CombUrlTxt("unBusinessPay_list.aspx", "page={0}&ddlcheck1={1}&ddlcheck2={2}&ddlcheck3={3}&ddlConfirm={4}&txtsforedate={5}&txteforedate={6}&txtsdate={7}&txtedate={8}&ddlarea={9}&ddltype={10}&txtfunction={11}&txtOwner={12}&ddlPayMethod1={13}&ddlsign={14}&txtmoney={15}&txtBankName={16}&check={17}", "__id__", _check1, _check2, _check3, _payStatus, _sforedate, _eforedate, _sdate, _edate, _area, _type, _function, _owner, _method, _sign, _money, _bankName,_check);
+        }
         //设置分页数量
         protected void txtPageNum_TextChanged(object sender, EventArgs e)
         {
@@ -358,7 +362,7 @@ namespace MettingSys.Web.admin.unBusiness
                     Utils.WriteCookie("unBusinessPay_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("unBusinessPay_list.aspx", "page={0}&ddlcheck1={1}&ddlcheck2={2}&ddlcheck3={3}&ddlConfirm={4}&txtsforedate={5}&txteforedate={6}&txtsdate={7}&txtedate={8}&ddlarea={9}&ddltype={10}&txtfunction={11}&txtOwner={12}&ddlPayMethod1={13}&ddlsign={14}&txtmoney={15}&txtBankName={16}", "__id__", _check1, _check2, _check3, _payStatus, _sforedate, _eforedate, _sdate, _edate,_area,_type,_function,_owner,_method,_sign,_money,_bankName));
+            Response.Redirect(backUrl());
         }
         protected void btnExcel_Click(object sender, EventArgs e)
         {
