@@ -118,7 +118,7 @@ namespace MettingSys.BLL
                     }
                     else
                     {
-                        if (model.rp_cbid == 0)
+                        if (model.rp_cbid == 0 && model.rp_money < 0)
                         {
                             return "请选择客户银行账号";
                         }

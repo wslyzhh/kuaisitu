@@ -227,12 +227,13 @@ namespace MettingSys.Web.admin.statistic
             ddlsign5.SelectedValue = _sign5;
             txtMoney5.Text = _money5;
             ddlorderarea.SelectedValue = _orderarea;
+            ddlmethod.SelectedValue = _method;
         }
         #endregion
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("OrderAnalyze_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlstatus={3}&ddldstatus={4}&ddllock={5}&txtContent={6}&txtAddress={7}&ddlsign={8}&txtMoney={9}&txtPerson1={10}&txtPerson3={11}&txtPerson5={12}&txtsDate={13}&txteDate={14}&txtsDate1={15}&txteDate1={16}&txtOrderID={17}&ddlarea={18}&ddlsign1={19}&txtMoney1={20}&ddlsign2={21}&txtMoney2={22}&ddlsign3={23}&txtMoney3={24}&ddlsign4={25}&txtMoney4={26}&ddlsign5={27}&txtMoney5={28}&ddlispush={29}&ddlflag={30}&txtsDate2={31}&txteDate2={32}", "__id__", _cusName, _cid, _status, _dstatus, _lockstatus, _content, _address, _sign, _money, _person1, _person3, _person5, _sdate, _edate, _sdate1, _edate1, _orderid, _area, _sign1, _money1, _sign2, _money2, _sign3, _money3, _sign4, _money4, _sign5, _money5, _pushstatus, _flag, _sdate2, _edate2);
+            return Utils.CombUrlTxt("OrderAnalyze_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlstatus={3}&ddldstatus={4}&ddllock={5}&txtContent={6}&txtAddress={7}&ddlsign={8}&txtMoney={9}&txtPerson1={10}&txtPerson3={11}&txtPerson5={12}&txtsDate={13}&txteDate={14}&txtsDate1={15}&txteDate1={16}&txtOrderID={17}&ddlarea={18}&ddlsign1={19}&txtMoney1={20}&ddlsign2={21}&txtMoney2={22}&ddlsign3={23}&txtMoney3={24}&ddlsign4={25}&txtMoney4={26}&ddlsign5={27}&txtMoney5={28}&ddlispush={29}&ddlflag={30}&txtsDate2={31}&txteDate2={32}&ddlmethod={33}&ddlorderarea={34}", "__id__", _cusName, _cid, _status, _dstatus, _lockstatus, _content, _address, _sign, _money, _person1, _person3, _person5, _sdate, _edate, _sdate1, _edate1, _orderid, _area, _sign1, _money1, _sign2, _money2, _sign3, _money3, _sign4, _money4, _sign5, _money5, _pushstatus, _flag, _sdate2, _edate2,_method,_orderarea);
         }
 
         #region 组合SQL查询语句==========================
