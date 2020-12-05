@@ -178,6 +178,7 @@ namespace MettingSys.BLL
                 content.Append("合同内容：" + model.o_contractContent + "<br/>");
                 content.Append("备注：" + model.o_remarks + "<br/>");
                 content.Append("活动归属地：" + model.o_place + "<br/>");
+                content.Append("业务员：" + person1 + "<br/>");
                 content.Append("业务报账员：" + person2 + "<br/>");
                 content.Append("业务策划人员：" + person3 + "<br/>");
                 content.Append("业务执行人员：" + person4 + "<br/>");
