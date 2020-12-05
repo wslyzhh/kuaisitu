@@ -114,13 +114,13 @@ namespace MettingSys.Web.admin.finance
         protected global::System.Web.UI.WebControls.TextBox txtCedate;
 
         /// <summary>
-        /// btnSubmit 控件。
+        /// btnSave 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSubmit;
+        protected global::System.Web.UI.HtmlControls.HtmlInputButton btnSave;
 
         /// <summary>
         /// btnSubmitToDistribute 控件。
@@ -129,7 +129,7 @@ namespace MettingSys.Web.admin.finance
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSubmitToDistribute;
+        protected global::System.Web.UI.HtmlControls.HtmlInputButton btnSubmitToDistribute;
 
         /// <summary>
         /// btnAudit 控件。

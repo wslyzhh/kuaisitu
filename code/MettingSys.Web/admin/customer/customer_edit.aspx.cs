@@ -104,19 +104,37 @@ namespace MettingSys.Web.admin.customer
             {
                 cbIsUse.Checked = false;
             }
+            btnSubmit.Visible = false;
+            BtnContact.Visible = false;
+            BtnBank.Visible = false;
             //已审核通过的不能再修改
-            if (model.c_flag==2 )
+            if (model.c_flag == 2)
             {
                 btnSubmit.Visible = false;
-                btnDelete.Visible = false;
-                btnDelBank.Visible = false;
+                BtnContact.Visible = false;
+                BtnBank.Visible = false;
             }
+            else
+            {
+                if (manager.user_name == model.c_owner)
+                {
+                    btnSubmit.Visible = true;
+                    BtnContact.Visible = true;
+                    BtnBank.Visible = true;
+                }
+                else
+                {
+                    if (new MettingSys.BLL.permission().checkHasPermission(manager, "0301"))
+                    {
+                        btnSubmit.Visible = true;
+                        BtnContact.Visible = true;
+                        BtnBank.Visible = true;
+                    }
+                }
+            }
+            
             Mdl1.Visible = false;
-            Mdl2.Visible = false;
-            if (model.c_owner != manager.user_name)
-            {
-                btnSubmit.Visible = false;
-            }
+            Mdl2.Visible = false;            
 
             //绑定联系人
             this.rptList.DataSource = new BLL.Contacts().GetList(0,"co_cid="+_id+"","co_flag desc,co_id asc");

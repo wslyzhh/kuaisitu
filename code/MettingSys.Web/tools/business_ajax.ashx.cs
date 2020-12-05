@@ -31,6 +31,12 @@ namespace MettingSys.Web.tools
             string action = DTRequest.GetQueryString("action");
             switch (action)
             {
+                case "AddPay":
+                    addOreditPay(context);
+                    break;
+                case "AddReceipt":
+                    addOreditReceipt(context);
+                    break;
                 case "getAllNature":
                     getAllNature(context);
                     break;
@@ -191,6 +197,200 @@ namespace MettingSys.Web.tools
                     break;
             }
         }
+        #region 添加编辑付款通知
+        private void addOreditPay(HttpContext context)
+        {
+            Model.manager adminModel = new ManagePage().GetAdminInfo();//获得当前登录管理员信息
+            int rpid = 0;
+            string result = string.Empty;
+            Model.ReceiptPay model = new Model.ReceiptPay();
+            BLL.ReceiptPay bll = new BLL.ReceiptPay();
+            rpid = Utils.StrToInt(DTRequest.GetFormString("rpID"), 0);
+            if (rpid == 0)
+            {
+                model.rp_type = false;
+                model.rp_cid = Utils.StrToInt(DTRequest.GetFormString("hCusId"), 0);
+                model.rp_money = Utils.StrToDecimal(DTRequest.GetFormString("txtMoney"), 0);
+                model.rp_foredate = ConvertHelper.toDate(DTRequest.GetFormString("txtforedate"));
+                model.rp_method = Utils.StrToInt(DTRequest.GetFormString("ddlmethod"), 0);
+                model.rp_content = DTRequest.GetFormString("txtContent");
+                model.rp_cbid = Utils.StrToInt(DTRequest.GetFormString("hBankId"), 0);
+                result = bll.Add(model, adminModel, DTRequest.GetFormString("txtCenum"), DTRequest.GetFormString("txtCedate"), out rpid);
+            }
+            else
+            {
+                model = bll.GetModel(rpid);
+                string _content = string.Empty;
+                string _hcusid = DTRequest.GetFormString("hCusId");
+                if (model.rp_cid.ToString() != _hcusid)
+                {
+                    _content += "付款对象ID：" + model.rp_cid + "→<font color='red'>" + _hcusid + "</font><br/>";
+                }
+                model.rp_cid = Utils.StrToInt(_hcusid, 0);
+                bool updateMoney = false;
+                string _money = DTRequest.GetFormString("txtMoney");
+                if (model.rp_money.ToString() != _money)
+                {
+                    if ((model.rp_money < 0 && Utils.ObjToDecimal(_money, 0) >= 0) || (model.rp_money >= 0 && Utils.ObjToDecimal(_money, 0) < 0))
+                    {
+                        updateMoney = true;//表示金额从负数改为正数，或从正数改为负数
+                    }
+                    _content += "付款金额：" + model.rp_money + "→<font color='red'>" + _money + "</font><br/>";
+                }
+                model.rp_money = Utils.StrToDecimal(_money, 0);
+                string _foredate = DTRequest.GetFormString("txtforedate");
+                if (model.rp_foredate.Value.ToString("yyyy-MM-dd") != _foredate)
+                {
+                    _content += "预付日期：" + model.rp_foredate.Value.ToString("yyyy-MM-dd") + "→<font color='red'>" + _foredate + "</font><br/>";
+                }
+                model.rp_foredate = ConvertHelper.toDate(_foredate);
+                string _method = DTRequest.GetFormString("ddlmethod");
+                if (model.rp_method.ToString() != _method)
+                {
+                    _content += "付款方式ID：" + model.rp_method + "→<font color='red'>" + _method + "</font><br/>";
+                }
+                model.rp_method = Utils.StrToInt(_method, 0);
+                string _rpcontent = DTRequest.GetFormString("txtContent");
+                if (model.rp_content != _rpcontent)
+                {
+                    _content += "付款内容：" + model.rp_content + "→<font color='red'>" + _rpcontent + "</font><br/>";
+                }
+                model.rp_content = _rpcontent;
+                string _bankid = DTRequest.GetFormString("hBankId");
+                if (model.rp_cbid != Utils.StrToInt(_bankid, 0))
+                {
+                    _content += "客户银行账号：" + model.rp_cbid + "→<font color='red'>" + _bankid + "</font><br/>";
+                }
+                model.rp_cbid = Utils.StrToInt(_bankid, 0);
+                result = bll.Update(model, _content, adminModel, DTRequest.GetFormString("txtCenum"), DTRequest.GetFormString("txtCedate"), updateMoney);
+            }
+            if (string.IsNullOrEmpty(result))
+            {
+                context.Response.Write("{ \"msg\":\"操作成功\", \"status\":0, \"id\":" + rpid + " }");
+                context.Response.End();
+            }
+            else
+            {
+                context.Response.Write("{ \"msg\":\""+ result + "\", \"status\":1, \"id\":" + rpid + " }");
+                context.Response.End();
+            }
+        }
+        #endregion
+        #region 添加编辑收款通知
+        private void addOreditReceipt(HttpContext context)
+        {
+            Model.manager adminModel = new ManagePage().GetAdminInfo();//获得当前登录管理员信息
+            int rpid = 0;
+            string result = string.Empty;
+            Model.ReceiptPay model = new Model.ReceiptPay();
+            BLL.ReceiptPay bll = new BLL.ReceiptPay();
+            rpid = Utils.StrToInt(DTRequest.GetFormString("rpID"), 0);
+            if (rpid == 0)
+            {
+                model.rp_type = true;
+                model.rp_cid = Utils.StrToInt(DTRequest.GetFormString("hCusId"), 0);
+                model.rp_money = Utils.StrToDecimal(DTRequest.GetFormString("txtMoney"), 0);
+                model.rp_foredate = ConvertHelper.toDate(DTRequest.GetFormString("txtforedate"));
+                model.rp_method = Utils.StrToInt(DTRequest.GetFormString("ddlmethod"), 0);
+                model.rp_content = DTRequest.GetFormString("txtContent");
+                model.rp_cbid = 0;
+                if (model.rp_money < 0)
+                {
+                    model.rp_cbid = Utils.StrToInt(DTRequest.GetFormString("hBankId"), 0);
+                }
+                //在客户对账明细的账单打包时不是预收款
+                string oidStr = DTRequest.GetFormString("oidStr");
+                string tMoney = DTRequest.GetFormString("tMoney");
+                string chk = DTRequest.GetFormString("chk");
+                bool flag = true;
+                if (!string.IsNullOrEmpty(oidStr))
+                {
+                    flag = false;
+                }
+                result = bll.Add(model, adminModel, DTRequest.GetFormString("txtCenum"), DTRequest.GetFormString("txtCedate"), out rpid, flag);
+                if (string.IsNullOrEmpty(result))
+                {
+                    if (!string.IsNullOrEmpty(oidStr) && model.rp_money == Utils.StrToDecimal(tMoney, 0))
+                    {
+                        JArray ja = JArray.Parse(oidStr);
+                        foreach (JObject item in ja)
+                        {
+                            Model.ReceiptPayDetail rpdModel = new Model.ReceiptPayDetail();
+                            rpdModel.rpd_type = true;
+                            rpdModel.rpd_rpid = rpid;
+                            rpdModel.rpd_oid = item["oid"].ToString();
+                            rpdModel.rpd_cid = model.rp_cid;
+                            rpdModel.rpd_num = chk;
+                            rpdModel.rpd_money = Utils.StrToDecimal(item["money"].ToString(), 0);
+                            rpdModel.rpd_foredate = model.rp_foredate;
+                            rpdModel.rpd_method = model.rp_method;
+                            rpdModel.rpd_personName = adminModel.real_name;
+                            rpdModel.rpd_personNum = adminModel.user_name;
+                            rpdModel.rpd_flag1 = 2;
+                            rpdModel.rpd_flag2 = 2;
+                            rpdModel.rpd_flag3 = 2;
+                            rpdModel.rpd_adddate = DateTime.Now;
+                            rpdModel.rpd_content = "";
+                            rpdModel.rpd_cbid = model.rp_cbid;
+                            new BLL.ReceiptPayDetail().AddOrCancleDistribution(rpdModel, adminModel);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                model = bll.GetModel(rpid);                
+                string _content = string.Empty;
+                string _hcusid = DTRequest.GetFormString("hCusId");
+                if (model.rp_cid.ToString() != _hcusid)
+                {
+                    _content += "收款对象ID：" + model.rp_cid + "→<font color='red'>" + _hcusid + "</font><br/>";
+                }
+                model.rp_cid = Utils.StrToInt(_hcusid, 0);
+                string _money = DTRequest.GetFormString("txtMoney");
+                if (model.rp_money.ToString() != _money)
+                {
+                    _content += "收款金额：" + model.rp_money + "→<font color='red'>" + _money + "</font><br/>";
+                }
+                model.rp_money = Utils.StrToDecimal(_money, 0); 
+                string _foredate = DTRequest.GetFormString("txtforedate");
+                if (model.rp_foredate.Value.ToString("yyyy-MM-dd") != _foredate)
+                {
+                    _content += "预收日期：" + model.rp_foredate.Value.ToString("yyyy-MM-dd") + "→<font color='red'>" + _foredate + "</font><br/>";
+                }
+                model.rp_foredate = ConvertHelper.toDate(_foredate);
+                string _method = DTRequest.GetFormString("ddlmethod");
+                if (model.rp_method.ToString() != _method)
+                {
+                    _content += "收款方式ID：" + model.rp_method.ToString() + "→<font color='red'>" + _method + "</font><br/>";
+                }
+                model.rp_method = Utils.StrToInt(_method, 0);
+                string _rpcontent = DTRequest.GetFormString("txtContent");
+                if (model.rp_content != _rpcontent)
+                {
+                    _content += "收款内容：" + model.rp_content + "→<font color='red'>" + _rpcontent + "</font><br/>";
+                }
+                model.rp_content = _rpcontent;
+                string _bankid = DTRequest.GetFormString("hBankId");
+                if (model.rp_cbid != Utils.StrToInt(_bankid, 0))
+                {
+                    _content += "客户银行账号：" + model.rp_cbid + "→<font color='red'>" + _bankid + "</font><br/>";
+                }
+                model.rp_cbid = Utils.StrToInt(_bankid, 0);
+                result = bll.Update(model, _content, adminModel, DTRequest.GetFormString("txtCenum"), DTRequest.GetFormString("txtCedate"));
+            }
+            if (string.IsNullOrEmpty(result))
+            {
+                context.Response.Write("{ \"msg\":\"操作成功\", \"status\":0, \"id\":" + rpid + " }");
+                context.Response.End();
+            }
+            else
+            {
+                context.Response.Write("{ \"msg\":\"" + result + "\", \"status\":1, \"id\":" + rpid + " }");
+                context.Response.End();
+            }
+        }
+        #endregion
         #region 获取所有业务性质
         private void getAllNature(HttpContext context)
         {

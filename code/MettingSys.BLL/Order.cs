@@ -43,6 +43,7 @@ namespace MettingSys.BLL
             model.o_lockStatus = 0;
             model.o_isPush = false;
             model.o_flag = 0;
+            model.o_operator = manager.user_name;
             model.o_addDate = DateTime.Now;
             if (model.o_cid == 0)
             {
@@ -80,19 +81,37 @@ namespace MettingSys.BLL
             {
                 return "请选择活动归属地";
             }
-            if (model.o_place.IndexOf(manager.area) < 0)
-            {
-                return "活动归属地须包含下单人所在区域";
-            }
+            
             if (Exists(model.o_cid.Value, model.o_content, model.o_sdate))
             {
                 return "存在相同的客户、活动名称、活动开始日期的订单，请确认是否重复下单";
             }
 
+            string person1 = string.Empty, person2 = string.Empty, person3 = string.Empty, person4 = string.Empty, person5 = string.Empty;
             //添加下单人
-            model.personlist.Add(new OrderPerson() { op_oid = model.o_id, op_type = 1, op_number = manager.user_name, op_name = manager.real_name, op_area = manager.area, op_addTime = DateTime.Now });
-            string person2 = string.Empty, person3 = string.Empty, person4 = string.Empty, person5 = string.Empty;
-            IEnumerable<OrderPerson> list = model.personlist.Where(p => p.op_type == 2);
+            IEnumerable<OrderPerson> list = model.personlist.Where(p => p.op_type == 1);
+            if (list.ToArray().Length != 1)
+            {
+                return "必须添加下单人，且只能添加一个";
+            }
+            foreach (var item in list)
+            {
+                person1 += "[" + item.op_name + "," + item.op_number + "," + item.op_area + "],";
+                if (item.op_number != manager.user_name)//帮别人下单
+                {
+
+                }
+                else
+                {
+                    if (model.o_place.IndexOf(manager.area) < 0)
+                    {
+                        return "活动归属地须包含下单人所在区域";
+                    }
+                }
+            }
+            person1 = person1.TrimEnd(',');
+            //业务报账人员
+            list = model.personlist.Where(p => p.op_type == 2);
             if (list.ToArray().Length != 1)
             {
                 return "必须添加业务报账人员，且只能添加一个";
@@ -102,6 +121,7 @@ namespace MettingSys.BLL
                 person2 += "[" + item.op_name + "," + item.op_number + "," + item.op_area + "],";
             }
             person2 = person2.TrimEnd(',');
+            //业务策划人员
             list = model.personlist.Where(p => p.op_type == 3);
             if (list.ToArray().Length > 0)
             {
@@ -111,6 +131,7 @@ namespace MettingSys.BLL
                 }
                 person3 = person3.TrimEnd(',');
             }
+            //业务执行人员
             list = model.personlist.Where(p => p.op_type == 4);
             if (list.ToArray().Length > 0)
             {
@@ -120,6 +141,7 @@ namespace MettingSys.BLL
                 }
                 person4 = person4.TrimEnd(',');
             }
+            //业务设计人员
             list = model.personlist.Where(p => p.op_type == 5);
             if (list.ToArray().Length > 0)
             {
@@ -156,9 +178,12 @@ namespace MettingSys.BLL
                 content.Append("合同内容：" + model.o_contractContent + "<br/>");
                 content.Append("备注：" + model.o_remarks + "<br/>");
                 content.Append("活动归属地：" + model.o_place + "<br/>");
+                content.Append("业务员：" + person1 + "<br/>");
                 content.Append("业务报账员：" + person2 + "<br/>");
-                content.Append("业务设计策划人员：" + person3 + "<br/>");
+                content.Append("业务策划人员：" + person3 + "<br/>");
                 content.Append("业务执行人员：" + person4 + "<br/>");
+                content.Append("业务设计人员：" + person5 + "<br/>");
+                content.Append("操作员：" + manager.user_name + "(" + manager.real_name + ")<br/>");
                 Model.business_log logmodel = new Model.business_log();
                 logmodel.ol_oid = model.o_id;
                 logmodel.ol_cid = model.o_cid.Value;

@@ -42,7 +42,6 @@ namespace MettingSys.Web.admin.finance
             if (action == DTEnums.ActionEnum.View.ToString())
             {
                 this.id = DTRequest.GetQueryInt("id");
-                btnSubmit.Visible = false;
                 btnSubmitToDistribute.Visible = false;
             }
             if (!Page.IsPostBack)
@@ -132,153 +131,128 @@ namespace MettingSys.Web.admin.finance
         }
         #endregion
 
-        #region 增加操作=================================
-        private string DoAdd(out int rpid)
-        {
-            rpid = 0;
-            Model.ReceiptPay model = new Model.ReceiptPay();
-            BLL.ReceiptPay bll = new BLL.ReceiptPay();
-            manager = GetAdminInfo();
-            model.rp_type = false;
-            model.rp_cid = Utils.StrToInt(hCusId.Value, 0);
-            model.rp_money = Utils.StrToDecimal(txtMoney.Text.Trim(), 0);
-            model.rp_foredate = ConvertHelper.toDate(txtforedate.Text.Trim());
-            model.rp_method = Utils.StrToInt(ddlmethod.SelectedValue, 0);
-            model.rp_content = txtContent.Text.Trim();
-            model.rp_cbid = Utils.StrToInt(hBankId.Value, 0);
-            return bll.Add(model, manager, txtCenum.Text.Trim(), txtCedate.Text.Trim(),out rpid);
-        }
-        #endregion
+        //#region 增加操作=================================
+        //private string DoAdd(out int rpid)
+        //{
+        //    rpid = 0;
+        //    Model.ReceiptPay model = new Model.ReceiptPay();
+        //    BLL.ReceiptPay bll = new BLL.ReceiptPay();
+        //    manager = GetAdminInfo();
+        //    model.rp_type = false;
+        //    model.rp_cid = Utils.StrToInt(hCusId.Value, 0);
+        //    model.rp_money = Utils.StrToDecimal(txtMoney.Text.Trim(), 0);
+        //    model.rp_foredate = ConvertHelper.toDate(txtforedate.Text.Trim());
+        //    model.rp_method = Utils.StrToInt(ddlmethod.SelectedValue, 0);
+        //    model.rp_content = txtContent.Text.Trim();
+        //    model.rp_cbid = Utils.StrToInt(hBankId.Value, 0);
+        //    return bll.Add(model, manager, txtCenum.Text.Trim(), txtCedate.Text.Trim(),out rpid);
+        //}
+        //#endregion
 
-        #region 修改操作=================================
-        private string DoEdit(int _id)
-        {
-            BLL.ReceiptPay bll = new BLL.ReceiptPay();
-            Model.ReceiptPay model = bll.GetModel(_id);
-            manager = GetAdminInfo();
+        //#region 修改操作=================================
+        //private string DoEdit(int _id)
+        //{
+        //    BLL.ReceiptPay bll = new BLL.ReceiptPay();
+        //    Model.ReceiptPay model = bll.GetModel(_id);
+        //    manager = GetAdminInfo();
 
-            string _content = string.Empty;
-            if (model.rp_cid.ToString() != hCusId.Value)
-            {
-                _content += "付款对象ID：" + model.rp_cid + "→<font color='red'>" + hCusId.Value + "</font><br/>";
-            }
-            model.rp_cid = Utils.StrToInt(hCusId.Value, 0);
-            bool updateMoney = false;
-            if (model.rp_money.ToString() != txtMoney.Text.Trim())
-            {
-                if ((model.rp_money < 0 && Utils.ObjToDecimal(txtMoney.Text.Trim(), 0) >= 0) || (model.rp_money >= 0 && Utils.ObjToDecimal(txtMoney.Text.Trim(), 0) < 0))
-                {
-                    updateMoney = true;//表示金额从负数改为正数，或从正数改为负数
-                }
-                _content += "付款金额：" + model.rp_money + "→<font color='red'>" + txtMoney.Text.Trim() + "</font><br/>";
-            }
-            model.rp_money = Utils.StrToDecimal(txtMoney.Text.Trim(), 0);
-            if (model.rp_foredate.Value.ToString("yyyy-MM-dd") != txtforedate.Text.Trim())
-            {
-                _content += "预付日期：" + model.rp_foredate.Value.ToString("yyyy-MM-dd") + "→<font color='red'>" + txtforedate.Text.Trim() + "</font><br/>";
-            }
-            model.rp_foredate = ConvertHelper.toDate(txtforedate.Text.Trim());
-            if (model.rp_method.ToString() != ddlmethod.SelectedValue)
-            {
-                _content += "付款方式ID：" + model.rp_method + "→<font color='red'>" + ddlmethod.SelectedValue + "</font><br/>";
-            }
-            model.rp_method = Utils.StrToInt(ddlmethod.SelectedValue, 0);
-            if (model.rp_content != txtContent.Text.Trim())
-            {
-                _content += "付款内容：" + model.rp_content + "→<font color='red'>" + txtContent.Text.Trim() + "</font><br/>";
-            }
-            model.rp_content = txtContent.Text.Trim();
-            if (model.rp_cbid != Utils.StrToInt(hBankId.Value, 0))
-            {
-                _content += "客户银行账号：" + model.rp_cbid + "→<font color='red'>" + hBankId.Value + "</font><br/>";
-            }
-            model.rp_cbid = Utils.StrToInt(hBankId.Value, 0);
-            return bll.Update(model, _content, manager, txtCenum.Text.Trim(), txtCedate.Text.Trim(), updateMoney);
-        }
-        #endregion
+        //    string _content = string.Empty;
+        //    if (model.rp_cid.ToString() != hCusId.Value)
+        //    {
+        //        _content += "付款对象ID：" + model.rp_cid + "→<font color='red'>" + hCusId.Value + "</font><br/>";
+        //    }
+        //    model.rp_cid = Utils.StrToInt(hCusId.Value, 0);
+        //    bool updateMoney = false;
+        //    if (model.rp_money.ToString() != txtMoney.Text.Trim())
+        //    {
+        //        if ((model.rp_money < 0 && Utils.ObjToDecimal(txtMoney.Text.Trim(), 0) >= 0) || (model.rp_money >= 0 && Utils.ObjToDecimal(txtMoney.Text.Trim(), 0) < 0))
+        //        {
+        //            updateMoney = true;//表示金额从负数改为正数，或从正数改为负数
+        //        }
+        //        _content += "付款金额：" + model.rp_money + "→<font color='red'>" + txtMoney.Text.Trim() + "</font><br/>";
+        //    }
+        //    model.rp_money = Utils.StrToDecimal(txtMoney.Text.Trim(), 0);
+        //    if (model.rp_foredate.Value.ToString("yyyy-MM-dd") != txtforedate.Text.Trim())
+        //    {
+        //        _content += "预付日期：" + model.rp_foredate.Value.ToString("yyyy-MM-dd") + "→<font color='red'>" + txtforedate.Text.Trim() + "</font><br/>";
+        //    }
+        //    model.rp_foredate = ConvertHelper.toDate(txtforedate.Text.Trim());
+        //    if (model.rp_method.ToString() != ddlmethod.SelectedValue)
+        //    {
+        //        _content += "付款方式ID：" + model.rp_method + "→<font color='red'>" + ddlmethod.SelectedValue + "</font><br/>";
+        //    }
+        //    model.rp_method = Utils.StrToInt(ddlmethod.SelectedValue, 0);
+        //    if (model.rp_content != txtContent.Text.Trim())
+        //    {
+        //        _content += "付款内容：" + model.rp_content + "→<font color='red'>" + txtContent.Text.Trim() + "</font><br/>";
+        //    }
+        //    model.rp_content = txtContent.Text.Trim();
+        //    if (model.rp_cbid != Utils.StrToInt(hBankId.Value, 0))
+        //    {
+        //        _content += "客户银行账号：" + model.rp_cbid + "→<font color='red'>" + hBankId.Value + "</font><br/>";
+        //    }
+        //    model.rp_cbid = Utils.StrToInt(hBankId.Value, 0);
+        //    return bll.Update(model, _content, manager, txtCenum.Text.Trim(), txtCedate.Text.Trim(), updateMoney);
+        //}
+        //#endregion
 
-        //保存
-        protected void btnSubmit_Click(object sender, EventArgs e)
-        {
-            string result = "";
-            if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
-            {
-                ChkAdminLevel("sys_payment_list0", DTEnums.ActionEnum.View.ToString()); //检查权限
-                result = DoEdit(this.id);
-                if (result != "")
-                {
-                    JscriptMsg(result, "");
-                    return;
-                }
-                JscriptMsg("修改付款通知成功！", "pay_list.aspx");
-            }
-            else //添加
-            {
-                ChkAdminLevel("sys_payment_list0", DTEnums.ActionEnum.View.ToString()); //检查权限
-                int rpid = 0;
-                result = DoAdd(out rpid);
-                if (result != "")
-                {
-                    JscriptMsg(result, "");
-                    return;
-                }
-                JscriptMsg("添加付款通知成功！", "pay_list.aspx");
-            }
-        }
-        protected void ddlmethod_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //DropDownList ddl = (DropDownList)sender;
-            //if (!string.IsNullOrEmpty(ddl.SelectedValue))
-            //{
-            //    Model.payMethod model = new BLL.payMethod().GetModel(Utils.StrToInt(ddl.SelectedValue, 0));
-            //    if (model.pm_type.Value)
-            //    {
-            //        dlceDate.Visible = true;
-            //        dlceNum.Visible = true;
-            //        dlBank.Visible = false;
-            //    }
-            //    else
-            //    {
-            //        dlceDate.Visible = false;
-            //        dlceNum.Visible = false;
-            //        dlBank.Visible = true;
-            //    }
-            //}
-            //else
-            //{
-            //    dlceDate.Visible = false;
-            //    dlceNum.Visible = false;
-            //    dlBank.Visible = true;
-            //}
-        }
+        ////保存
+        //protected void btnSubmit_Click(object sender, EventArgs e)
+        //{
+        //    string result = "";
+        //    if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
+        //    {
+        //        ChkAdminLevel("sys_payment_list0", DTEnums.ActionEnum.View.ToString()); //检查权限
+        //        result = DoEdit(this.id);
+        //        if (result != "")
+        //        {
+        //            JscriptMsg(result, "");
+        //            return;
+        //        }
+        //        JscriptMsg("修改付款通知成功！", "pay_list.aspx");
+        //    }
+        //    else //添加
+        //    {
+        //        ChkAdminLevel("sys_payment_list0", DTEnums.ActionEnum.View.ToString()); //检查权限
+        //        int rpid = 0;
+        //        result = DoAdd(out rpid);
+        //        if (result != "")
+        //        {
+        //            JscriptMsg(result, "");
+        //            return;
+        //        }
+        //        JscriptMsg("添加付款通知成功！", "pay_list.aspx");
+        //    }
+        //}
+        
 
-        protected void btnSubmitToDistribute_Click(object sender, EventArgs e)
-        {
-            string result = "";
-            if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
-            {
-                ChkAdminLevel("sys_payment_list0", DTEnums.ActionEnum.View.ToString()); //检查权限
-                result = DoEdit(this.id);
-                if (result != "")
-                {
-                    JscriptMsg(result, "");
-                    return;
-                }
-                JscriptMsg("修改付款通知成功！", "rpDistribution.aspx?id="+ this.id);
-            }
-            else //添加
-            {
-                ChkAdminLevel("sys_payment_list0", DTEnums.ActionEnum.View.ToString()); //检查权限
-                int rpid = 0;
-                result = DoAdd(out rpid);
-                if (result != "")
-                {
-                    JscriptMsg(result, "");
-                    return;
-                }
-                JscriptMsg("添加付款通知成功！", "rpDistribution.aspx?id="+ rpid);
-            }
-        }
+        //protected void btnSubmitToDistribute_Click(object sender, EventArgs e)
+        //{
+        //    string result = "";
+        //    if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
+        //    {
+        //        ChkAdminLevel("sys_payment_list0", DTEnums.ActionEnum.View.ToString()); //检查权限
+        //        result = DoEdit(this.id);
+        //        if (result != "")
+        //        {
+        //            JscriptMsg(result, "");
+        //            return;
+        //        }
+        //        JscriptMsg("修改付款通知成功！", "rpDistribution.aspx?id="+ this.id);
+        //    }
+        //    else //添加
+        //    {
+        //        ChkAdminLevel("sys_payment_list0", DTEnums.ActionEnum.View.ToString()); //检查权限
+        //        int rpid = 0;
+        //        result = DoAdd(out rpid);
+        //        if (result != "")
+        //        {
+        //            JscriptMsg(result, "");
+        //            return;
+        //        }
+        //        JscriptMsg("添加付款通知成功！", "rpDistribution.aspx?id="+ rpid);
+        //    }
+        //}
 
         protected void ddlmethod_DataBound(object sender, EventArgs e)
         {

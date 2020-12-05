@@ -221,7 +221,7 @@
                                     <div class="toolbar">
                                         <div class="box-wrap">
                                             <a class="menu-btn"><i class="iconfont icon-more"></i></a>
-                                            <div class="l-list">
+                                            <div class="l-list" id="BtnContact" runat="server">
                                                 <ul class="icon-list">
                                                     <li id="liAdd" runat="server"><a href="javascript:;" onclick="editContact('<%#DTEnums.ActionEnum.Add %>')"><i class="iconfont icon-close"></i><span>新增</span></a></li>
                                                     <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
@@ -277,7 +277,7 @@
                                 <div class="toolbar">
                                     <div class="box-wrap">
                                         <a class="menu-btn"><i class="iconfont icon-more"></i></a>
-                                        <div class="l-list">
+                                        <div class="l-list" id="BtnBank" runat="server">
                                             <ul class="icon-list">
                                                 <li id="bankliAdd" runat="server"><a href="javascript:;" onclick="editBank('<%#DTEnums.ActionEnum.Add %>')"><i class="iconfont icon-close"></i><span>新增</span></a></li>
                                                 <li>
