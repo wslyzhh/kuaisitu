@@ -114,7 +114,11 @@ namespace MettingSys.BLL
             }
             if (model.c_owner != manager.user_name || model.c_ownerName != manager.real_name)
             {
-                return "您不是客户所属人，不能修改客户信息";
+                if (!new BLL.permission().checkHasPermission(manager, "0301"))
+                {
+                    return "无权限修改客户信息";
+                }
+                    
             }
             if (string.IsNullOrEmpty(model.c_name))
             {

@@ -834,6 +834,22 @@
                         <td><%=oID %></td>
                         <th>下单人</th>
                         <td>
+                            <div class="txt-item">
+                                <ul>
+                                    <asp:Repeater ID="rptEmployee0" runat="server">
+                                        <ItemTemplate>
+                                            <li title="<%#Eval("[\"op_number\"]")%>">
+                                                <input name="hide_employee0" type="hidden" value="<%#Eval("[\"op_name\"]")%>|<%#Eval("[\"op_number\"]")%>|<%#Eval("[\"op_area\"]")%>" />
+                                                <a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>
+                                                <span><%#Eval("[\"op_name\"]")%></span>
+                                            </li>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                    <li class="icon-btn" id="liemployee0" runat="server">
+                                        <a href="javascript:" onclick="chooseEmployee(this,0,false,true,false)"><i class="iconfont icon-close"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
                             <asp:Label ID="labOwner" runat="server"></asp:Label>
                         </td>
                         <th>税费成本</th>

@@ -30,25 +30,6 @@ namespace MettingSys.Web.admin.order
             }
             ChkAdminLevel("sys_order_add", action); //检查权限
             manager = GetAdminInfo();
-            if (action == DTEnums.ActionEnum.Add.ToString())
-            {
-                btnDstatus.Visible = false;
-                btnFlag.Visible = false;
-                btnLockstatus.Visible = false;
-                btnUpdateCost.Visible = false;
-                btnUnBusinessPay.Visible = false;
-                btnReceiptPay.Visible = false;
-                //btnPay.Visible = false;
-                btnInvoince.Visible = false;
-                //btnExcelIn.Visible = false;
-
-                //默认生成下单人的活动归属地
-                Dictionary<string, string> areaDic = new BLL.department().getAreaDict();
-                Dictionary<string, string> orderAreaDic = new Dictionary<string, string>();
-                orderAreaDic.Add(manager.area, areaDic[manager.area]);
-                rptAreaList.DataSource = orderAreaDic;
-                rptAreaList.DataBind();
-            }
             if (!string.IsNullOrEmpty(action) && action == DTEnums.ActionEnum.Edit.ToString())
             {
                 this.action = DTEnums.ActionEnum.Edit.ToString();//修改类型
@@ -71,6 +52,10 @@ namespace MettingSys.Web.admin.order
                 {
                     uploadDiv.Visible = true;
                     uploadDiv2.Visible = true;
+                }
+                if (action == DTEnums.ActionEnum.Add.ToString())//添加
+                {
+                    NewShowInfo();
                 }
                 if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
                 {
@@ -214,9 +199,44 @@ namespace MettingSys.Web.admin.order
 
         #endregion
 
+        private void NewShowInfo()
+        {
+            btnDstatus.Visible = false;
+            btnFlag.Visible = false;
+            btnLockstatus.Visible = false;
+            btnUpdateCost.Visible = false;
+            btnUnBusinessPay.Visible = false;
+            btnReceiptPay.Visible = false;
+            //btnPay.Visible = false;
+            btnInvoince.Visible = false;
+            //btnExcelIn.Visible = false;
+
+            //默认生成下单人的活动归属地
+            Dictionary<string, string> areaDic = new BLL.department().getAreaDict();
+            Dictionary<string, string> orderAreaDic = new Dictionary<string, string>();
+            orderAreaDic.Add(manager.area, areaDic[manager.area]);
+            rptAreaList.DataSource = orderAreaDic;
+            rptAreaList.DataBind();
+
+            //默认下单人
+            DataTable pdt = new DataTable();
+            pdt.Columns.Add("op_number");
+            pdt.Columns.Add("op_name");
+            pdt.Columns.Add("op_area");
+            DataRow pdr= pdt.NewRow();
+            pdr["op_number"] = manager.user_name;
+            pdr["op_name"] = manager.real_name;
+            pdr["op_area"] = manager.area;
+            pdt.Rows.Add(pdr);
+            rptEmployee0.DataSource = pdt;
+            rptEmployee0.DataBind();
+        }
+
         #region 赋值操作=================================
         private void ShowInfo(string _oid)
         {
+            rptEmployee0.Visible = false;
+            liemployee0.Visible = false;
             BLL.Order bll = new BLL.Order();
             DataSet ds = bll.GetList(0, "o_id='" + _oid + "'", "o_addDate desc");
             if (ds == null || ds.Tables[0].Rows.Count == 0)

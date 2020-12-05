@@ -6,12 +6,6 @@
                 <label class="title"><span>订单号</span></label>
                 <h3 class="hint_1">系统自动生成</h3>
             </li>
-			<!-- 
-            <li class="flex flex_a_c flex_s_b">
-                <label class="title"><span>下单人</span></label>
-                <input type="text" :value="loginName" readonly>
-            </li>
-			 -->
             <li class="flex flex_a_c flex_s_b" @click="changeClient">
                 <label class="title"><span class="must">客户</span></label>
                 <input type="text" :value="clientName" readonly>
@@ -44,10 +38,15 @@
                 <input type="text" :value="date_range" readonly placeholder="请选择活动日期">
                 <div class="icon_right time"></div>
             </li>
-            <li class="flex flex_a_c flex_s_b" @click="cahgeArea">
+            <li class="flex flex_a_c flex_s_b" @click="changeArea">
                 <label class="title"><span class="must">归属地</span></label>
                 <input type="text" :value="placeText" readonly>
                 <div class="icon_right arrows_right"></div>
+            </li>
+            <li class="flex flex_a_c flex_s_b" @click="staff(1,'employee0')">
+                <label class="title"><span class="must">下单人</span></label>
+                <input type="text" :value="employee0Text" readonly>
+                <div class="icon_right add"></div>
             </li>
             <li class="flex flex_a_c flex_s_b" @click="staff(1,'employee1')">
                 <label class="title"><span class="must">报账人员</span></label>
@@ -112,6 +111,7 @@ export default {
 				o_content:'',
 				o_contractcontent:'',
 				o_remarks:'',
+				employee0:'',
 				employee1:'',
 				employee2:'',
 				employee3:'',
@@ -132,11 +132,13 @@ export default {
             chooseType:1,
             showNum:false,
             chooseEl:'',
+            employee0Text:'',
             employee1Text:'',
             employee2Text:'',
             employee3Text:'',
             employee4Text:'',
 			employeeChoose:{
+				'employee0':[],
 				'employee1':[],
 				'employee2':[],
 				'employee3':[],
@@ -152,12 +154,26 @@ export default {
             selectClientArray:state => state.addOrders.selectClientArray,
             userInfo: state => state.user.userInfo
         })
+        
     },
     created(){
+       let _this = this
+       _this.employee0Text= _this.userInfo.real_name
+       _this.formData.employee0=_this.userInfo.real_name+'|'+_this.userInfo.user_name+'|'+_this.userInfo.area
        
+       _this.formData.o_place = _this.userInfo.area
+
+        _this.getArea().then(res => {            
+            res.data.map((item,index) => {
+                if(_this.userInfo.area == item.key)
+                {
+                    _this.placeText=item.value
+                }
+            })
+        })
     },
     mounted() {
-		this.clientCallBack(this.selectClientArray)
+        this.clientCallBack(this.selectClientArray)
     },
     methods: {
         ...mapActions([
@@ -175,37 +191,37 @@ export default {
         submit(){   //提交        
 			let _this = this
 			// 判断必填
-			if(!this.clientId){
-                this.ddSet.setToast({text:'请选择客户'})
+			if(!_this.clientId){
+                _this.ddSet.setToast({text:'请选择客户'})
                 return
             }
-            if(!this.formData.o_contractprice){
-                this.ddSet.setToast({text:'请选择合同造价'})
+            if(!_this.formData.o_contractprice){
+                _this.ddSet.setToast({text:'请选择合同造价'})
                 return
             }
-            if(!this.formData.o_content){
-                this.ddSet.setToast({text:'请输入活动名称'})
+            if(!_this.formData.o_content){
+                _this.ddSet.setToast({text:'请输入活动名称'})
                 return
             }
-            if(!this.formData.o_address){
-                this.ddSet.setToast({text:'请输入活动地点'})
+            if(!_this.formData.o_address){
+                _this.ddSet.setToast({text:'请输入活动地点'})
                 return
             }
-            if(!this.date_range){
-                this.ddSet.setToast({text:'请选择活动日期'})
+            if(!_this.date_range){
+                _this.ddSet.setToast({text:'请选择活动日期'})
                 return
             }
-            if(!this.formData.o_place){
-                this.ddSet.setToast({text:'请选择活动归属地'})
+            if(!_this.formData.o_place){
+                _this.ddSet.setToast({text:'请选择活动归属地'})
                 return
             }
-            this.formData.fstatus=this.fstatus
-            this.formData.o_isPush=this.o_isPush
+            _this.formData.fstatus=_this.fstatus
+            _this.formData.o_isPush=_this.o_isPush
 
-            this.formData.c_id = this.clientId;
-            this.formData.managerid=this.userInfo.id
-            this.ddSet.showLoad()
-			_this.submitOrder(this.formData).then(function(res){
+            _this.formData.c_id = _this.clientId;
+            _this.formData.managerid=_this.userInfo.id
+            _this.ddSet.showLoad()
+			_this.submitOrder(_this.formData).then(function(res){
                 _this.ddSet.hideLoad()
 				if(res.data.status){
                     _this.ddSet.setToast({text:'新增订单成功，正在跳转...'}).then(res => {
@@ -257,7 +273,7 @@ export default {
 					_this.$set(_this.formData,'co_id',0)
 				}
 			}
-			if('employee1' == _this.chooseEl || 
+			if('employee0' == _this.chooseEl || 'employee1' == _this.chooseEl || 
 			'employee2' == _this.chooseEl || 'employee3' == _this.chooseEl || 'employee4' == _this.chooseEl){
 				let tmpStatusText = '';
 				// 特殊处理 employee2 和 employee4 需要多加一个状态
@@ -276,7 +292,7 @@ export default {
 				_this.$set(_this.employeeChoose,_this.chooseEl,tmpGonghaos)
 				
 				_this.$set(_this,_this.chooseEl + 'Text',tmpTexts.join(','))
-				_this.$set(_this.formData,_this.chooseEl,tmpEmployees.join(','))
+                _this.$set(_this.formData,_this.chooseEl,tmpEmployees.join(','))
 			}
         },
         staff(_type,_el){ // 报账人员
@@ -286,7 +302,7 @@ export default {
             if(_el == 'employee2' || _el == 'employee4'){//策划人员和设计人员
                 _isShowNum = true
             }
-            else{//报账人员和执行人员
+            else if(_el != 'employee0'){//报账人员和执行人员
                 let tmpPlaces = []
                 if(_this.formData.o_place){
                     tmpPlaces = _this.formData.o_place.split(',')
@@ -314,14 +330,14 @@ export default {
 						if(gonghaos.includes(item.de_subname)){
 							_this.$set(item,'isChecked',true)
 						}
-						source.push(item)
+                        source.push(item)
 					}
                 })
 				_this.chooseList = source;
                 _this.showChoose = true
             })
         },
-        cahgeArea(){    //归属地
+        changeArea(){    //归属地
             let _this = this
             _this.getArea().then(res => {
 				_this.chooseType = 2;

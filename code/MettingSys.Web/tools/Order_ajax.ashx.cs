@@ -50,6 +50,7 @@ namespace MettingSys.Web.tools
             string remark = DTRequest.GetFormString("txtRemark");
             string place = DTRequest.GetFormString("hide_place");
             int fstatus = DTRequest.GetFormInt("ddlfStatus",0);
+            string employee0 = DTRequest.GetFormString("hide_employee0");
             string employee1 = DTRequest.GetFormString("hide_employee1");
             string employee2 = DTRequest.GetFormString("hide_employee2");
             string employee3 = DTRequest.GetFormString("hide_employee3");
@@ -70,9 +71,17 @@ namespace MettingSys.Web.tools
             order.o_isPush = pushStatus == "True" ? true : false;
             order.o_remarks = remark;
             string[] list = new string[] { }, pli = new string[] { };
+            #region 下单人
+            if (!string.IsNullOrEmpty(employee0))
+            {
+                pli = employee0.Split('|');
+                order.personlist.Add(new Model.OrderPerson() { op_type = 1, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_addTime = DateTime.Now });
+            }
+            #endregion
             #region 业务报账员
             if (!string.IsNullOrEmpty(employee1))
             {
+                pli = new string[] { };
                 pli = employee1.Split('|');
                 order.personlist.Add(new Model.OrderPerson() { op_type = 2, op_name = pli[0], op_number = pli[1], op_area = pli[2],op_addTime=DateTime.Now });
             }

@@ -282,7 +282,7 @@
                         <td><span class="check_<%#Eval("c_flag")%>"></span></td>
                         <td><%#MettingSys.Common.BusinessDict.isUseStatus()[Convert.ToBoolean(Eval("c_isUse"))]%></td>
                         <td align="center">
-                            <%# manager.user_name !=Eval("c_owner").ToString() || Eval("c_flag").ToString()=="2"?"<a href=\"customer_edit.aspx?action="+DTEnums.ActionEnum.View+"&id="+Eval("c_id")+"\">查看</a>":"<a href=\"customer_edit.aspx?action="+DTEnums.ActionEnum.Edit+"&id="+Eval("c_id")+"\">修改</a>"%>
+                            <%# Eval("c_flag").ToString()=="2"?"<a href=\"customer_edit.aspx?action="+DTEnums.ActionEnum.View+"&id="+Eval("c_id")+"\">查看</a>": manager.user_name == Eval("c_owner").ToString()?"<a href=\"customer_edit.aspx?action="+DTEnums.ActionEnum.Edit+"&id="+Eval("c_id")+"\">修改</a>": new MettingSys.BLL.permission().checkHasPermission(manager, "0301")?"<a href=\"customer_edit.aspx?action="+DTEnums.ActionEnum.Edit+"&id="+Eval("c_id")+"\">修改</a>":"<a href=\"customer_edit.aspx?action="+DTEnums.ActionEnum.View+"&id="+Eval("c_id")+"\">查看</a>"%>
                         </td>
                     </tr>
                 </ItemTemplate>

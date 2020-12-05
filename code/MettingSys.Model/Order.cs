@@ -35,7 +35,7 @@ namespace MettingSys.Model
         /// <param name="o_financecust">o_financeCust</param>
         /// <param name="o_adddate">o_addDate</param>
         /// <param name="o_lastupdatedate">o_lastUpdateDate</param>
-        public Order(string o_id, int? o_cid, int? o_coid, string o_content, string o_address, string o_contractprice, string o_contractcontent, DateTime? o_sdate, DateTime? o_edate, string o_place, byte? o_status,DateTime? o_statusTime, byte? o_dstatus, byte? o_lockstatus, string o_remarks, bool? o_ispush, byte? o_flag, decimal? o_financecust, DateTime? o_adddate, DateTime? o_lastupdatedate,string o_finremarks)
+        public Order(string o_id, int? o_cid, int? o_coid, string o_content, string o_address, string o_contractprice, string o_contractcontent, DateTime? o_sdate, DateTime? o_edate, string o_place, byte? o_status,DateTime? o_statusTime, byte? o_dstatus, byte? o_lockstatus, string o_remarks, bool? o_ispush, byte? o_flag, decimal? o_financecust, DateTime? o_adddate, DateTime? o_lastupdatedate,string o_finremarks,string o_operator)
         {
             this.o_id = o_id;
             this.o_cid = o_cid;
@@ -57,6 +57,7 @@ namespace MettingSys.Model
             this.o_addDate = o_adddate;
             this.o_lastUpdateDate = o_lastupdatedate;
             this.o_finRemarks = o_finremarks;
+            this.o_operator = o_operator;
         }
 
         #region 实体属性
@@ -157,6 +158,11 @@ namespace MettingSys.Model
         public DateTime? o_lastUpdateDate { get; set; }
 
         public string o_finRemarks { get; set; }
+
+        /// <summary>
+        /// o_place
+        /// </summary>
+        public string o_operator { get; set; }
 
 
         public List<OrderPerson> personlist = new List<OrderPerson>();

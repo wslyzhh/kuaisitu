@@ -1148,6 +1148,7 @@ namespace MettingSys.Web.tools
                 string contract = jObject["o_contractcontent"] == null ? "" : jObject["o_contractcontent"].ToString();//合同内容
                 string remark = jObject["o_remarks"] == null ? "" : jObject["o_remarks"].ToString();//备注
                 string place = jObject["o_place"] == null ? "" : jObject["o_place"].ToString();//活动归属地
+                string employee0 = jObject["employee0"] == null ? "" : jObject["employee0"].ToString();//业务员
                 string employee1 = jObject["employee1"] == null ? "" : jObject["employee1"].ToString();//业务报账人员
                 string employee2 = jObject["employee2"] == null ? "" : jObject["employee2"].ToString();//业务策划人员
                 string employee3 = jObject["employee3"] == null ? "" : jObject["employee3"].ToString();//业务设计人员
@@ -1169,6 +1170,14 @@ namespace MettingSys.Web.tools
                 order.o_isPush = pushStatus == "True" ? true : false;
                 order.o_remarks = remark;
                 string[] list = new string[] { }, pli = new string[] { };
+
+                #region 业务员
+                if (!string.IsNullOrEmpty(employee0))
+                {
+                    pli = employee0.Split('|');
+                    order.personlist.Add(new Model.OrderPerson() { op_type = 1, op_name = pli[0], op_number = pli[1], op_area = pli[2] });
+                }
+                #endregion
 
                 #region 业务报账员
                 if (!string.IsNullOrEmpty(employee1))
