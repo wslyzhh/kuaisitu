@@ -44,6 +44,11 @@ function showTip(obj,content,width) {
         inViewport: true
     });
 }
+
+//返回区域中文
+function getareaText(area) {
+    
+}
 //===========================工具类函数============================
 //只允许输入数字
 function checkNumber(e) {

@@ -428,7 +428,7 @@ namespace MettingSys.BLL
             {
                 sqlwhere = " and (user_name like '%"+ username + "%' or real_name like '%" + username + "%')";
             }
-            DataSet ds = new BLL.manager().GetList(0, "is_lock=0 "+ sqlwhere + "", " user_name asc,id asc");
+            DataSet ds = new BLL.manager().GetList(" is_lock=0 "+ sqlwhere + "");
             if (!string.IsNullOrEmpty(username))
             {
                 DataTable nDt = dt.Clone();

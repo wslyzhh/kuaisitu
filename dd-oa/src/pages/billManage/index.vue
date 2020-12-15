@@ -67,7 +67,7 @@ export default {
                 pageSize:999,
                 keywords:this.searchText,
                 inv_isConfirm,
-                managerid:14//this.userInfo.id
+                managerid:this.userInfo.id
             }
             this.getBillList(params).then(res => {
                 this.list = res.data.list

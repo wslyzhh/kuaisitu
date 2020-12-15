@@ -131,7 +131,7 @@ export default {
         },
         getMethodList(){//收款方式
             let _this = this
-            this.getMethod({managerid:14}).then(res => {
+            this.getMethod({managerid:_this.userInfo.id}).then(res => {
                 let source = []
                 let selectedKey = _this.addData.rpdmethod
                 res.data.map((item,index) => {

@@ -456,6 +456,22 @@ namespace MettingSys.DAL
             strSql.Append(" order by " + filedOrder);
             return DbHelperSQL.Query(strSql.ToString());
         }
+
+        /// <summary>
+        /// 获得前几行数据
+        /// </summary>
+        public DataSet GetList(string strWhere)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select m.* FROM [dbo].[dt_manager] m ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(" where " + strWhere);
+            }
+            strSql.Append(" order by  user_name asc,id asc");
+            return DbHelperSQL.Query(strSql.ToString());
+        }
+
         /// <summary>
         /// 返回某些区域中含有某个权限的人员
         /// </summary>

@@ -343,6 +343,9 @@
             d.n = n;//容器序号，一个页面上有多个容器时要传
             d.multi = flag;//true可以选择多个人,false只能选一个人
             d.showDstatus = isShow;//true显示接单状态，false不显示接单状态
+            if (n == 0) {
+                d.data1 = $("#specAddButton").parent();
+            }
         }
 
         function addFinance(action, title, oID, type, id) {

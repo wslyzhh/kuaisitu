@@ -101,7 +101,7 @@ export default {
 		UnBusinessPayList(){
 			let _this = this
 			_this.searchData.pageIndex++
-			_this.searchData.managerid = 17//_this.userInfo.id
+			_this.searchData.managerid = _this.userInfo.id
 			this.getUnBusinessPayList(this.searchData).then(function(res){
 				console.log(res.data)
 				if(res.data.msg){

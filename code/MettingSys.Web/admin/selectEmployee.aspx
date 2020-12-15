@@ -110,6 +110,17 @@
                 + '<span>' + name + '' + (api.showDstatus &&(api.n == 2 || api.n == 4 )? '(<font style="color: brown;">待定</font>)' : '') + '</span>'
                 + '</li>';
             $(api.data).before(liHtml);
+
+            //选择下单人时变更活动归属地
+            if (api.n == 0) {
+                $(api.data1).siblings("li").remove(); //先删除所有同辈节点
+                var liHtml1 = '<li>'
+                    + '<input name="hide_place" type="hidden" value="' + area + '" />'
+                    + '<a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>'
+                    + '<span>' + area + '</span>'
+                    + '</li>';
+                $(api.data1).before(liHtml1);
+            }
         }
         //点击选择人员
         function addemployee(type, username, realname, area,orderCount) {

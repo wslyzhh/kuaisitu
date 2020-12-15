@@ -124,7 +124,7 @@ export default {
         customerList({type = 1} = {}){
             let _this = this
 			_this.searchData.pageIndex++
-            _this.searchData.managerid = 14//_this.userInfo.id
+            _this.searchData.managerid = _this.userInfo.id
             _this.searchData.type = type
 			_this.ddSet.showLoad()
 			_this.getCustomerList(_this.searchData).then(function(res){

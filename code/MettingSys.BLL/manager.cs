@@ -198,6 +198,10 @@ namespace MettingSys.BLL
         {
             return dal.GetList(Top, strWhere, filedOrder);
         }
+        public DataSet GetList(string strWhere)
+        {
+            return dal.GetList(strWhere);
+        }
         /// <summary>
         /// 返回某些区域中含有某个权限的人员
         /// </summary>
