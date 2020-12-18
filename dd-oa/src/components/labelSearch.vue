@@ -143,7 +143,7 @@ export default {
                     text-align: center;
                     background-color: #f4f4f4;
                     border-radius: 4px;
-                    margin-right: .98rem;
+                    margin-right: .65rem;
                     margin-bottom: .3rem;
                 }
                 .blueSpan{

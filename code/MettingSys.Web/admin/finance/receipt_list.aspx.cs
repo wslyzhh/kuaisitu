@@ -394,6 +394,13 @@ namespace MettingSys.Web.admin.finance
             _edate = DTRequest.GetFormString("txtedate");
             _num = DTRequest.GetFormString("txtNum");
             _chk = DTRequest.GetFormString("txtChk");
+            _numdate = DTRequest.GetFormString("txtNumDate");
+            _self = DTRequest.GetFormString("self");
+            _sign = DTRequest.GetFormString("ddlsign");
+            _money = DTRequest.GetFormString("txtMoney");
+            _moneyType = DTRequest.GetFormString("ddlmoneyType");
+            _type = DTRequest.GetFormString("ddlType");
+            _addperson = DTRequest.GetFormString("txtAddPerson");
             BLL.ReceiptPay bll = new BLL.ReceiptPay();
             DataTable dt = bll.GetList(this.pageSize, this.page, "rp_type=1 " + CombSqlTxt(), "isnull(rp_date,'3000-01-01') desc,isnull(pm_sort,-1) asc,rp_id desc", out this.totalCount, out _tmoney, out _tunmoney, false).Tables[0];
 

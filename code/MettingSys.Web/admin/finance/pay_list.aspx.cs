@@ -21,7 +21,7 @@ namespace MettingSys.Web.admin.finance
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _cusName = "", _cid = "", _method = string.Empty, _check = string.Empty, _check2 = string.Empty, _isconfirm = string.Empty, _sforedate = string.Empty, _eforedate = string.Empty, _sdate = string.Empty, _edate = string.Empty, _num = "", _chk = "", _numdate = "", _moneyType = "1", _sign = "", _money = "", _type = "", _flag = "";
+        protected string _cusName = "", _cid = "", _method = string.Empty, _check = string.Empty, _check2 = string.Empty, _isconfirm = string.Empty, _sforedate = string.Empty, _eforedate = string.Empty, _sdate = string.Empty, _edate = string.Empty, _num = "", _chk = "", _numdate = "", _moneyType = "1", _sign = "", _money = "", _type = "", _flag = "", _addperson = "";
         protected Model.business_log logmodel = null;
         protected Model.manager manager = null;
         decimal _tmoney = 0, _tunmoney = 0;
@@ -47,6 +47,7 @@ namespace MettingSys.Web.admin.finance
             _money = DTRequest.GetString("txtMoney");
             _type = DTRequest.GetString("ddlType");
             _flag = DTRequest.GetString("flag");
+            _addperson = DTRequest.GetString("txtAddPerson");
             if (string.IsNullOrEmpty(this._flag))
             {
                 this._flag = "0";
@@ -208,12 +209,13 @@ namespace MettingSys.Web.admin.finance
             ddlmoneyType.SelectedValue = _moneyType;
 
             ddlchecktype.SelectedValue = _flag;
+            txtAddPerson.Text = _addperson;
         }
         #endregion
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("pay_list.aspx", "page={0}&ddlmethod={1}&ddlisConfirm={2}&txtsforedate={3}&txteforedate={4}&txtsdate={5}&txtedate={6}&txtNum={7}&ddlcheck={8}&txtCusName={9}&hCusId={10}&txtChk={11}&ddlcheck2={12}&txtNumDate={13}&ddlsign={14}&txtmoney={15}&ddlmoneyType={16}&ddlType={17}", "__id__", _method, _isconfirm, _sforedate, _eforedate, _sdate, _edate, _num, _check, _cusName, _cid, _chk, _check2, _numdate, _sign, _money, _moneyType,_type);
+            return Utils.CombUrlTxt("pay_list.aspx", "page={0}&ddlmethod={1}&ddlisConfirm={2}&txtsforedate={3}&txteforedate={4}&txtsdate={5}&txtedate={6}&txtNum={7}&ddlcheck={8}&txtCusName={9}&hCusId={10}&txtChk={11}&ddlcheck2={12}&txtNumDate={13}&ddlsign={14}&txtmoney={15}&ddlmoneyType={16}&ddlType={17}&txtAddPerson={18}", "__id__", _method, _isconfirm, _sforedate, _eforedate, _sdate, _edate, _num, _check, _cusName, _cid, _chk, _check2, _numdate, _sign, _money, _moneyType,_type,_addperson);
         }
 
         #region 组合SQL查询语句==========================
@@ -298,6 +300,10 @@ namespace MettingSys.Web.admin.finance
             {
                 strTemp.Append(" and rp_isExpect='" + _type + "'");
             }
+            if (!string.IsNullOrEmpty(_addperson))
+            {
+                strTemp.Append(" and (rp_personNum like '%" + _addperson + "%' or rp_personName like '%" + _addperson + "%')");
+            }
             return strTemp.ToString();
         }
         #endregion
@@ -338,6 +344,7 @@ namespace MettingSys.Web.admin.finance
             _money = DTRequest.GetFormString("txtMoney");
             _moneyType = DTRequest.GetFormString("ddlmoneyType");
             _type = DTRequest.GetFormString("ddlType");
+            _addperson = DTRequest.GetFormString("txtAddPerson");
             RptBind("rp_type=0 " + CombSqlTxt(), orderby);
         }
 
@@ -369,6 +376,12 @@ namespace MettingSys.Web.admin.finance
             _edate = DTRequest.GetFormString("txtedate");
             _num = DTRequest.GetFormString("txtNum");
             _chk = DTRequest.GetFormString("txtChk");
+            _numdate = DTRequest.GetFormString("txtNumDate");
+            _sign = DTRequest.GetFormString("ddlsign");
+            _money = DTRequest.GetFormString("txtMoney");
+            _moneyType = DTRequest.GetFormString("ddlmoneyType");
+            _type = DTRequest.GetFormString("ddlType");
+            _addperson = DTRequest.GetFormString("txtAddPerson");
             BLL.ReceiptPay bll = new BLL.ReceiptPay();
             DataTable dt = bll.GetList(this.pageSize, this.page, "rp_type=0 " + CombSqlTxt(), "isnull(rp_date,'3000-01-01') desc,isnull(pm_sort,-1) asc,rp_id desc", out this.totalCount, out _tmoney, out _tunmoney, false).Tables[0];
 
