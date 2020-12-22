@@ -47,7 +47,8 @@ function showTip(obj,content,width) {
 
 //返回区域中文
 function getareaText(area) {
-    
+    var list = { "HQ": "集团", "SY": "三亚", "GZ": "广州", "YN": "云南", "BJ": "北京", "SH": "上海" };
+    return list[area];
 }
 //===========================工具类函数============================
 //只允许输入数字

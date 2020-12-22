@@ -158,11 +158,11 @@ export default {
     },
     created(){
        let _this = this
+       //默认下单人
        _this.employee0Text= _this.userInfo.real_name
        _this.formData.employee0=_this.userInfo.real_name+'|'+_this.userInfo.user_name+'|'+_this.userInfo.area
-       
+       //默认活动归属地
        _this.formData.o_place = _this.userInfo.area
-
         _this.getArea().then(res => {            
             res.data.map((item,index) => {
                 if(_this.userInfo.area == item.key)
@@ -293,6 +293,21 @@ export default {
 				
 				_this.$set(_this,_this.chooseEl + 'Text',tmpTexts.join(','))
                 _this.$set(_this.formData,_this.chooseEl,tmpEmployees.join(','))
+
+                //选择下单人时，变更活动归属地
+                if('employee0' == _this.chooseEl){
+                    items.map(function(item,index){
+                        _this.formData.o_place = item['de_area']
+                        _this.getArea().then(res => {            
+                            res.data.map((item,index) => {
+                                if(_this.formData.o_place == item.key)
+                                {
+                                    _this.placeText=item.value
+                                }
+                            })
+                        })
+                    })                    
+                }
 			}
         },
         staff(_type,_el){ // 报账人员

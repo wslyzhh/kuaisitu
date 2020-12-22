@@ -117,7 +117,7 @@
                 var liHtml1 = '<li>'
                     + '<input name="hide_place" type="hidden" value="' + area + '" />'
                     + '<a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>'
-                    + '<span>' + area + '</span>'
+                    + '<span>' + getareaText(area) + '</span>'
                     + '</li>';
                 $(api.data1).before(liHtml1);
             }
