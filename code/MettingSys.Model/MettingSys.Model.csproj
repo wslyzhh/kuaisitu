@@ -67,6 +67,7 @@
     <Compile Include="businessNature.cs" />
     <Compile Include="business_log.cs" />
     <Compile Include="express.cs" />
+    <Compile Include="invoiceUnit.cs" />
     <Compile Include="mail_template.cs" />
     <Compile Include="manager.cs" />
     <Compile Include="manager_log.cs" />

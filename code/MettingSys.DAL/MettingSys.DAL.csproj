@@ -76,6 +76,7 @@
     <Compile Include="manager_log.cs" />
     <Compile Include="manager_oauth.cs" />
     <Compile Include="manager_role.cs" />
+    <Compile Include="invoiceUnit.cs" />
     <Compile Include="payMethod.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="order_config.cs" />

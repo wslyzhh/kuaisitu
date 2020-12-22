@@ -31,6 +31,8 @@ namespace MettingSys.Web.admin.finance
             //ChkAdminLevel("sys_invoice", action); //检查权限
             if (action == DTEnums.ActionEnum.Add.ToString())
             {
+                ddlserviceName.Visible = true;
+                txtserviceName.Visible = false;
                 txtCusName.Text = cusName;
                 hCusId.Value = cid;
             }
@@ -129,20 +131,31 @@ namespace MettingSys.Web.admin.finance
                         break;
                     }
                 }
-                Dictionary<byte?, string> sname = Common.BusinessDict.serviceName(_type);
-                ddlserviceName.DataSource = sname;
-                ddlserviceName.DataTextField = "value";
-                ddlserviceName.DataValueField = "key";
-                ddlserviceName.DataBind();
-                ddlserviceName.Items.Insert(0, new ListItem("请选择", ""));
-                foreach (var item in sname.Keys)
+                if (_type == 4)
                 {
-                    if (sname[item].ToString() == dr["inv_serviceName"].ToString())
-                    {
-                        ddlserviceName.SelectedValue = item.ToString();
-                        break;
-                    }
+                    ddlserviceName.Visible = false;
+                    txtserviceName.Visible = true;
+                    txtserviceName.Text = dr["inv_serviceName"].ToString();
                 }
+                else
+                {
+                    ddlserviceName.Visible = true;
+                    txtserviceName.Visible = false;
+                    Dictionary<byte?, string> sname = Common.BusinessDict.serviceName(_type);
+                    ddlserviceName.DataSource = sname;
+                    ddlserviceName.DataTextField = "value";
+                    ddlserviceName.DataValueField = "key";
+                    ddlserviceName.DataBind();
+                    ddlserviceName.Items.Insert(0, new ListItem("请选择", ""));
+                    foreach (var item in sname.Keys)
+                    {
+                        if (sname[item].ToString() == dr["inv_serviceName"].ToString())
+                        {
+                            ddlserviceName.SelectedValue = item.ToString();
+                            break;
+                        }
+                    }
+                }                
                 Dictionary<byte?, string> smethod = Common.BusinessDict.sentMethod();
                 foreach (var item in smethod.Keys)
                 {
@@ -231,7 +244,14 @@ namespace MettingSys.Web.admin.finance
             model.inv_purchaserBank = txtpurchaserBank.Text.Trim();
             model.inv_purchaserBankNum = txtpurchaserBankNum.Text.Trim();
             model.inv_serviceType = ddlserviceType.SelectedItem.Text;
-            model.inv_serviceName = ddlserviceName.SelectedItem.Text;
+            if (ddlserviceType.SelectedValue == "4")
+            {
+                model.inv_serviceName = txtserviceName.Text;
+            }
+            else
+            {
+                model.inv_serviceName = ddlserviceName.SelectedItem.Text;
+            }
             model.inv_money = Utils.StrToDecimal(txtmoney.Text.Trim(), 0);
             model.inv_sentWay = ddlsentWay.SelectedItem.Text;
             model.inv_farea = manager.area;
@@ -293,11 +313,23 @@ namespace MettingSys.Web.admin.finance
                 _content += "应税劳务：" + model.inv_serviceType + "→<font color='red'>" + ddlserviceType.SelectedItem.Text + "</font><br/>";
             }
             model.inv_serviceType = ddlserviceType.SelectedItem.Text;
-            if (model.inv_serviceName != ddlserviceName.SelectedItem.Text)
+            if (ddlserviceType.SelectedValue == "4")
             {
-                _content += "服务名称：" + model.inv_serviceName + "→<font color='red'>" + ddlserviceName.SelectedItem.Text + "</font><br/>";
+                if (model.inv_serviceName != txtserviceName.Text)
+                {
+                    _content += "服务名称：" + model.inv_serviceName + "→<font color='red'>" + txtserviceName.Text + "</font><br/>";
+                }
+                model.inv_serviceName = txtserviceName.Text;
             }
-            model.inv_serviceName = ddlserviceName.SelectedItem.Text;
+            else
+            {
+                if (model.inv_serviceName != ddlserviceName.SelectedItem.Text)
+                {
+                    _content += "服务名称：" + model.inv_serviceName + "→<font color='red'>" + ddlserviceName.SelectedItem.Text + "</font><br/>";
+                }
+                model.inv_serviceName = ddlserviceName.SelectedItem.Text;
+            }            
+            
             if (string.IsNullOrEmpty(ddlinvType.SelectedValue))
             {
                 return "请选择专普票类型";
@@ -397,6 +429,16 @@ namespace MettingSys.Web.admin.finance
             DropDownList ddl = (DropDownList)sender;
             if (!string.IsNullOrEmpty(ddl.SelectedValue))
             {
+                if (ddl.SelectedValue == "4")
+                {
+                    ddlserviceName.Visible = false;
+                    txtserviceName.Visible = true;
+                }
+                else 
+                {
+                    ddlserviceName.Visible = true;
+                    txtserviceName.Visible = false;
+                }
                 ddlserviceName.DataSource = Common.BusinessDict.serviceName(Utils.ObjToByte(ddl.SelectedValue));
                 ddlserviceName.DataTextField = "value";
                 ddlserviceName.DataValueField = "key";

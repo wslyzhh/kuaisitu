@@ -202,7 +202,12 @@
                             <asp:ListItem Value="">请选择</asp:ListItem>
                         </asp:DropDownList>
                     </div>
-                    &nbsp;&nbsp;&nbsp;&nbsp;专普票
+                    <asp:TextBox ID="txtserviceName" runat="server" CssClass="input normal"></asp:TextBox>
+                </dd>
+            </dl>
+            <dl>
+                <dt>专普票</dt>
+                <dd>
                     <div class="rule-single-select">
                         <asp:DropDownList ID="ddlinvType" runat="server">
                             <asp:ListItem Value="">请选择</asp:ListItem>

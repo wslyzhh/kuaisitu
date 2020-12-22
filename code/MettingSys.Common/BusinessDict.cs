@@ -197,6 +197,7 @@ namespace MettingSys.Common
             dict.Add(1, "会展服务");
             dict.Add(2, "设计服务");
             dict.Add(3, "代订服务");
+            dict.Add(4, "其他");
             return dict;
         }
         #endregion
