@@ -31,17 +31,73 @@ namespace MettingSys.BLL
         /// <summary>
         /// 增加一条数据
         /// </summary>
-        public int Add(Model.invoiceUnit model)
+        public string Add(Model.invoiceUnit model, Model.manager manager)
         {
-            return dal.Add(model);
+            if (string.IsNullOrEmpty(model.invU_area))
+            {
+                return "请选择所属区域";
+            }
+            if (string.IsNullOrEmpty(model.invU_name))
+            {
+                return "请填写开票单位";
+            }
+            if (Exists(model.invU_area,model.invU_name))
+            {
+                return "该区域下已存在相同的开票单位，请检查";
+            }
+            int ret = dal.Add(model);
+            if (ret > 0)
+            {
+                StringBuilder content = new StringBuilder();
+                content.Append("所属区域：" + model.invU_area + "<br/>");
+                content.Append("开票单位：" + model.invU_name + "<br/>");
+                content.Append("联系人：" + model.invU_contact + "<br/>");
+                content.Append("联系电话：" + model.invU_contactPhone + "<br/>");
+                content.Append("启用状态：" + (model.invU_flag.Value ? "启用" : "禁用") + "");
+
+                Model.business_log logmodel = new Model.business_log();
+                logmodel.ol_relateID = ret;
+                logmodel.ol_title = "添加开票单位";
+                logmodel.ol_content = content.ToString();
+                logmodel.ol_operateDate = DateTime.Now;
+                new business_log().Add(DTEnums.ActionEnum.Add.ToString(), logmodel, manager.user_name, manager.real_name); //记录日志
+                return "";
+            }
+            return "添加失败";
         }
 
         /// <summary>
         /// 更新一条数据
         /// </summary>
-        public bool Update(Model.invoiceUnit model)
+        public string Update(Model.invoiceUnit model,string content,Model.manager manager)
         {
-            return dal.Update(model);
+            if (model == null)
+            {
+                return "数据不存在";
+            }
+            if (string.IsNullOrEmpty(model.invU_area))
+            {
+                return "请选择所属区域";
+            }
+            if (string.IsNullOrEmpty(model.invU_name))
+            {
+                return "请填写开票单位";
+            }
+            if (Exists(model.invU_area, model.invU_name,model.invU_id.Value))
+            {
+                return "该区域下已存在相同的开票单位，请检查";
+            }
+            if (dal.Update(model))
+            {
+                Model.business_log logmodel = new Model.business_log();
+                logmodel.ol_relateID = model.invU_id.Value;
+                logmodel.ol_title = "编辑开票单位";
+                logmodel.ol_content = content;
+                logmodel.ol_operateDate = DateTime.Now;
+                new business_log().Add(DTEnums.ActionEnum.Add.ToString(), logmodel, manager.user_name, manager.real_name); //记录日志
+                return "";
+            }
+            return "更新失败";
         }
 
         /// <summary>
@@ -102,9 +158,9 @@ namespace MettingSys.BLL
         /// <summary>
         /// 是否存在该记录
         /// </summary>
-        public bool Exists(string title, int id = 0)
+        public bool Exists(string area,string unit, int id = 0)
         {
-            return dal.Exists(title, id);
+            return dal.Exists(area, unit, id);
         }
         #endregion
     }

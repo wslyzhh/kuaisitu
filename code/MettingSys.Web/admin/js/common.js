@@ -47,7 +47,7 @@ function showTip(obj,content,width) {
 
 //返回区域中文
 function getareaText(area) {
-    var list = { "HQ": "集团", "SY": "三亚", "GZ": "广州", "YN": "云南", "BJ": "北京", "SH": "上海" };
+    var list = { "HQ": "集团", "SY": "三亚", "GZ": "广州", "YN": "云南", "BJ": "北京", "SH": "上海", "HJ": "会奖旅行社", "FL": "飞立洋" };
     return list[area];
 }
 //===========================工具类函数============================

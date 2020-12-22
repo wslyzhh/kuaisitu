@@ -24,8 +24,8 @@ namespace MettingSys.Web.admin.baseData
             pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
             {
-                ChkAdminLevel("pub_paymethod", DTEnums.ActionEnum.View.ToString()); //检查权限
-                RptBind("pm_id>0" + CombSqlTxt(), "pm_sort asc,pm_id desc");
+                ChkAdminLevel("pub_invUnit", DTEnums.ActionEnum.View.ToString()); //检查权限
+                RptBind("invU_id>0" + CombSqlTxt(), "invU_name asc,invU_id desc");
             }
             txtKeywords.Text = keywords;
             ddlIsUse.SelectedValue = _isUse;
@@ -36,13 +36,13 @@ namespace MettingSys.Web.admin.baseData
         {
             this.page = DTRequest.GetQueryInt("page", 1);
             this.txtKeywords.Text = this.keywords;
-            BLL.payMethod bll = new BLL.payMethod();
+            BLL.invoiceUnit bll = new BLL.invoiceUnit();
             this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
             this.rptList.DataBind();
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("payMethod_list.aspx", "txtKeywords={0}&page={1}&ddlIsUse={2}", this.keywords, "__id__", _isUse);
+            string pageUrl = backUrl();
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
         }
         #endregion
@@ -53,11 +53,11 @@ namespace MettingSys.Web.admin.baseData
             StringBuilder strTemp = new StringBuilder();
             if (!string.IsNullOrEmpty(keywords))
             {
-                strTemp.Append(" and pm_name like  '%" + keywords + "%'");
+                strTemp.Append(" and invUnit_name like  '%" + keywords + "%'");
             }
             if (!string.IsNullOrEmpty(_isUse))
             {
-                strTemp.Append(" and pm_isUse='" + _isUse + "'");
+                strTemp.Append(" and invU_flag='" + _isUse + "'");
             }
             return strTemp.ToString();
         }
@@ -67,7 +67,7 @@ namespace MettingSys.Web.admin.baseData
         private int GetPageSize(int _default_size)
         {
             int _pagesize;
-            if (int.TryParse(Utils.GetCookie("payMethod_page_size", "DTcmsPage"), out _pagesize))
+            if (int.TryParse(Utils.GetCookie("invUnit_page_size", "DTcmsPage"), out _pagesize))
             {
                 if (_pagesize > 0)
                 {
@@ -83,7 +83,7 @@ namespace MettingSys.Web.admin.baseData
         {
             keywords = DTRequest.GetFormString("txtKeywords");
             _isUse = DTRequest.GetFormString("ddlIsUse");
-            RptBind("pm_id>0" + CombSqlTxt(), "pm_sort asc,pm_id desc");
+            RptBind("invU_id>0" + CombSqlTxt(), "invU_name asc,invU_id desc");
             txtKeywords.Text = keywords;
             ddlIsUse.SelectedValue = _isUse;
         }
@@ -96,36 +96,21 @@ namespace MettingSys.Web.admin.baseData
             {
                 if (_pagesize > 0)
                 {
-                    Utils.WriteCookie("payMethod_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
+                    Utils.WriteCookie("invUnit_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("payMethod_list.aspx", "txtKeywords={0}&page={1}&ddlIsUse={2}", this.keywords, "__id__", _isUse));
+            Response.Redirect(backUrl());
         }
-
-        //保存排序
-        protected void btnSave_Click(object sender, EventArgs e)
+        private string backUrl()
         {
-            ChkAdminLevel("pub_paymethod", DTEnums.ActionEnum.Edit.ToString()); //检查权限
-            BLL.payMethod bll = new BLL.payMethod();
-            for (int i = 0; i < rptList.Items.Count; i++)
-            {
-                int id = Convert.ToInt32(((HiddenField)rptList.Items[i].FindControl("hidId")).Value);
-                int sortId;
-                if (!int.TryParse(((TextBox)rptList.Items[i].FindControl("txtSortId")).Text.Trim(), out sortId))
-                {
-                    sortId = 99;
-                }
-                bll.UpdateSort(id, sortId);
-            }
-            JscriptMsg("保存排序成功！", Utils.CombUrlTxt("payMethod_list.aspx", "txtKeywords={0}&page={1}&ddlIsUse={2}", this.keywords, "__id__", _isUse));
+            return Utils.CombUrlTxt("invUnit_list.aspx", "txtKeywords={0}&page={1}&ddlIsUse={2}", this.keywords, "__id__", _isUse);
         }
-
         //批量删除
         protected void btnDelete_Click(object sender, EventArgs e)
         {
             PrintLoad();
-            ChkAdminLevel("pub_paymethod", DTEnums.ActionEnum.Delete.ToString()); //检查权限
-            BLL.payMethod bll = new BLL.payMethod();
+            ChkAdminLevel("pub_invUnit", DTEnums.ActionEnum.Delete.ToString()); //检查权限
+            BLL.invoiceUnit bll = new BLL.invoiceUnit();
 
             string result = "";
             int success = 0, error = 0;
@@ -149,7 +134,7 @@ namespace MettingSys.Web.admin.baseData
                     }
                 }
             }
-            JscriptMsg("共选择" + (success + error) + "条记录，成功" + success + "条，失败" + error + "条<br/>" + sb.ToString(), Utils.CombUrlTxt("payMethod_list.aspx", "txtKeywords={0}&page={1}&ddlIsUse={2}", this.keywords, "__id__", _isUse));
+            JscriptMsg("共选择" + (success + error) + "条记录，成功" + success + "条，失败" + error + "条<br/>" + sb.ToString(), Utils.CombUrlTxt("invUnit_list.aspx", "txtKeywords={0}&page={1}&ddlIsUse={2}", this.keywords, "__id__", _isUse));
         }
     }
 }

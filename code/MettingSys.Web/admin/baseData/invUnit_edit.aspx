@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="invUnit_edit.aspx.cs" Inherits="MettingSys.Web.admin.baseData.invUnit_edit" %>
-
+<%@ Import namespace="MettingSys.Common" %>
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -26,16 +26,16 @@
         });
     </script>
 </head>
-<body>
+<body class="mainbody">
     <form id="form1" runat="server">
         <!--导航栏-->
         <div class="location">
             <a href="payMethod_list.aspx" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
             <a href="../center.aspx"><i class="iconfont icon-home"></i><span>首页</span></a>
             <i class="arrow iconfont icon-arrow-right"></i>
-            <a href="payMethod_list.aspx"><span>收付款方式列表</span></a>
+            <a href="invUnit_list.aspx"><span>开票单位列表</span></a>
             <i class="arrow iconfont icon-arrow-right"></i>
-            <span><%=action==DTEnums.ActionEnum.Add.ToString()?"添加":"编辑" %>收付款方式</span>
+            <span><%=action==DTEnums.ActionEnum.Add.ToString()?"添加":"编辑" %>开票单位</span>
         </div>
         <div class="line10"></div>
         <!--/导航栏-->
@@ -45,7 +45,7 @@
             <div class="content-tab">
                 <div class="content-tab-ul-wrap">
                     <ul>
-                        <li><a class="selected" href="javascript:;">收付款方式</a></li>
+                        <li><a class="selected" href="javascript:;">开票单位</a></li>
                     </ul>
                 </div>
             </div>
@@ -53,20 +53,30 @@
 
         <div class="tab-content">
             <dl>
-                <dt>收付款方式</dt>
+                <dt>所属区域</dt>
                 <dd>
-                    <asp:TextBox ID="txtTitle" runat="server" CssClass="input normal" datatype="*2-100" sucmsg=" "></asp:TextBox>
+                    <div class="rule-single-select">
+                        <asp:DropDownList ID="ddlarea" runat="server"></asp:DropDownList>
+                    </div>
+                </dd>
+            </dl>
+            <dl>
+                <dt>开票单位</dt>
+                <dd>
+                    <asp:TextBox ID="txtUnit" runat="server" CssClass="input normal" datatype="*2-100" sucmsg=" "></asp:TextBox>
                     <span class="Validform_checktip">*</span>
                 </dd>
             </dl>
-
             <dl>
-                <dt>仅限财务使用</dt>
+                <dt>联系人</dt>
                 <dd>
-                    <div class="rule-single-checkbox">
-                        <asp:CheckBox ID="cbIsType" runat="server" />
-                    </div>
-                    <span class="Validform_checktip"></span>
+                    <asp:TextBox ID="txtContact" runat="server" CssClass="input normal"></asp:TextBox>
+                </dd>
+            </dl>
+            <dl>
+                <dt>联系电话</dt>
+                <dd>
+                    <asp:TextBox ID="txtPhone" runat="server" CssClass="input normal" ></asp:TextBox>
                 </dd>
             </dl>
             <dl>
@@ -76,13 +86,6 @@
                         <asp:CheckBox ID="cbIsUse" runat="server" Checked="true" />
                     </div>
                     <span class="Validform_checktip"></span>
-                </dd>
-            </dl>
-            <dl>
-                <dt>排序数字</dt>
-                <dd>
-                    <asp:TextBox ID="txtSortId" runat="server" CssClass="input small">0</asp:TextBox>
-                    <span class="Validform_checktip">数字，越小越向前</span>
                 </dd>
             </dl>
         </div>

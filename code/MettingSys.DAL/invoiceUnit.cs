@@ -25,7 +25,7 @@ namespace MettingSys.DAL
         public bool Exists(int id)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select count(1) from  invoiceUnit");
+            strSql.Append("select count(1) from  MS_invoiceUnit");
             strSql.Append(" where ");
             strSql.Append(" invU_id = @id  ");
             SqlParameter[] parameters = {
@@ -46,7 +46,7 @@ namespace MettingSys.DAL
             //利用反射获得属性的所有公共属性
             PropertyInfo[] pros = model.GetType().GetProperties();
             List<SqlParameter> paras = new List<SqlParameter>();
-            strSql.Append("insert into invoiceUnit(");
+            strSql.Append("insert into MS_invoiceUnit(");
             foreach (PropertyInfo pi in pros)
             {
                 //如果不是主键则追加sql字符串
@@ -87,7 +87,7 @@ namespace MettingSys.DAL
             //利用反射获得属性的所有公共属性
             PropertyInfo[] pros = model.GetType().GetProperties();
             List<SqlParameter> paras = new List<SqlParameter>();
-            strSql.Append("update invoiceUnit set ");
+            strSql.Append("update MS_invoiceUnit set ");
             foreach (PropertyInfo pi in pros)
             {
                 //如果不是主键则追加sql字符串
@@ -113,7 +113,7 @@ namespace MettingSys.DAL
         public bool Delete(int id)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("delete from  invoiceUnit ");
+            strSql.Append("delete from  MS_invoiceUnit ");
             strSql.Append(" where invU_id=@id");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.Int,4)};
@@ -125,7 +125,7 @@ namespace MettingSys.DAL
         public bool isUse(int id)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select count(*) from invoices ");
+            strSql.Append("select count(*) from MS_invoices ");
             strSql.Append(" where inv_unit=@id ");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.Int,4)};
@@ -148,7 +148,7 @@ namespace MettingSys.DAL
                 str1.Append(p.Name + ",");//拼接字段
             }
             strSql.Append("select top 1 " + str1.ToString().Trim(','));
-            strSql.Append(" from invoiceUnit");
+            strSql.Append(" from MS_invoiceUnit");
             strSql.Append(" where invU_id=@id");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.Int,4)};
@@ -177,7 +177,7 @@ namespace MettingSys.DAL
                 strSql.Append(" top " + Top.ToString());
             }
             strSql.Append(" * ");
-            strSql.Append(" FROM  invoiceUnit ");
+            strSql.Append(" FROM  MS_invoiceUnit ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
@@ -195,7 +195,7 @@ namespace MettingSys.DAL
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select * FROM invoiceUnit");
+            strSql.Append("select * FROM MS_invoiceUnit");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
@@ -209,21 +209,23 @@ namespace MettingSys.DAL
         /// <summary>
         /// 是否存在该记录
         /// </summary>
-        public bool Exists(string name, int id = 0)
+        public bool Exists(string area,string unit, int id = 0)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select count(0) from invoiceUnit");
-            strSql.Append(" where invU_name=@name");
+            strSql.Append("select count(0) from MS_invoiceUnit");
+            strSql.Append(" where invU_area=@area and invU_name=@name");
             if (id > 0)
             {
                 strSql.Append(" and invU_id<>@id");
             }
             SqlParameter[] parameters = {
+                   new SqlParameter("@area", SqlDbType.NVarChar,100),
                    new SqlParameter("@name", SqlDbType.NVarChar,100),
                    new SqlParameter("@id", SqlDbType.Int,4)
             };
-            parameters[0].Value = name;
-            parameters[1].Value = id;
+            parameters[0].Value = area;
+            parameters[1].Value = unit;
+            parameters[2].Value = id;
 
             return DbHelperSQL.Exists(strSql.ToString(), parameters);
         }
@@ -257,7 +259,7 @@ namespace MettingSys.DAL
         public bool UpdateField(int id, string strValue)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("update invoiceUnit set " + strValue);
+            strSql.Append("update MS_invoiceUnit set " + strValue);
             strSql.Append(" where invU_id=" + id);
             return DbHelperSQL.ExecuteSql(strSql.ToString()) > 0;
         }
