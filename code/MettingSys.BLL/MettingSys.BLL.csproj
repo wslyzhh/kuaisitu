@@ -91,6 +91,7 @@
     <Compile Include="Order.cs" />
     <Compile Include="order_config.cs" />
     <Compile Include="payment.cs" />
+    <Compile Include="invoiceUnit.cs" />
     <Compile Include="payMethod.cs" />
     <Compile Include="payPic.cs" />
     <Compile Include="permission.cs" />

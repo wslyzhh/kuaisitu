@@ -197,6 +197,7 @@ namespace MettingSys.Common
             dict.Add(1, "会展服务");
             dict.Add(2, "设计服务");
             dict.Add(3, "代订服务");
+            dict.Add(4, "其他");
             return dict;
         }
         #endregion
@@ -311,21 +312,21 @@ namespace MettingSys.Common
         public static Dictionary<string, string> ContractPriceType()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
-            dict.Add("50万以下", "普通活动");
-            dict.Add("50万-100万", "重大活动");
-            dict.Add("100万以上", "特大活动");
+            //dict.Add("50万以下", "普通活动");
+            //dict.Add("50万-100万", "重大活动");
+            //dict.Add("100万以上", "特大活动");
 
-            //dict.Add("10万以下", "10万以下");
-            //dict.Add("10万-20万", "10万-20万");
-            //dict.Add("20万-30万", "20万-30万");
-            //dict.Add("30万-40万", "30万-40万");
-            //dict.Add("40万-50万", "40万-50万");
-            //dict.Add("50万-60万", "50万-60万");
-            //dict.Add("60万-70万", "60万-70万");
-            //dict.Add("70万-80万", "70万-80万");
-            //dict.Add("80万-90万", "80万-90万");
-            //dict.Add("90万-100万", "90万-100万");
-            //dict.Add("100万以上", "100万以上");
+            dict.Add("10万以下", "10万以下");
+            dict.Add("10万-20万", "10万-20万");
+            dict.Add("20万-30万", "20万-30万");
+            dict.Add("30万-40万", "30万-40万");
+            dict.Add("40万-50万", "40万-50万");
+            dict.Add("50万-60万", "50万-60万");
+            dict.Add("60万-70万", "60万-70万");
+            dict.Add("70万-80万", "70万-80万");
+            dict.Add("80万-90万", "80万-90万");
+            dict.Add("90万-100万", "90万-100万");
+            dict.Add("100万以上", "100万以上");
             return dict;
         }
         #endregion 

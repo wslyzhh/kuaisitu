@@ -133,6 +133,8 @@
     <Content Include="admin\baseData\businessNature_list.aspx" />
     <Content Include="admin\baseData\business_log.aspx" />
     <Content Include="admin\baseData\editinfo.aspx" />
+    <Content Include="admin\baseData\invUnit_edit.aspx" />
+    <Content Include="admin\baseData\invUnit_list.aspx" />
     <Content Include="admin\baseData\payMethod_edit.aspx" />
     <Content Include="admin\baseData\payMethod_list.aspx" />
     <Content Include="admin\center.aspx" />
@@ -1048,6 +1050,20 @@
     </Compile>
     <Compile Include="admin\baseData\editinfo.aspx.designer.cs">
       <DependentUpon>editinfo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\baseData\invUnit_edit.aspx.cs">
+      <DependentUpon>invUnit_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\baseData\invUnit_edit.aspx.designer.cs">
+      <DependentUpon>invUnit_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\baseData\invUnit_list.aspx.cs">
+      <DependentUpon>invUnit_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\baseData\invUnit_list.aspx.designer.cs">
+      <DependentUpon>invUnit_list.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\baseData\payMethod_edit.aspx.cs">
       <DependentUpon>payMethod_edit.aspx</DependentUpon>

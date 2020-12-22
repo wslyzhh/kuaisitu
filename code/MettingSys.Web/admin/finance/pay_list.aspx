@@ -553,6 +553,8 @@
                                 <asp:ListItem Value="False">非预付款</asp:ListItem>
                             </asp:DropDownList>
                         </div>
+            申请人：
+                            <asp:TextBox ID="txtAddPerson" runat="server" Width="100px" CssClass="input" />
             <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
             <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
         </div>

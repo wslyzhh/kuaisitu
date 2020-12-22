@@ -225,6 +225,23 @@
                                 <asp:ListItem Value="2">接单(业务设计)</asp:ListItem>
                             </asp:DropDownList>
                         </div>
+                <%--排序：
+                        <div class="rule-single-select">
+                            <asp:DropDownList ID="ddlOrderName" runat="server">
+                                <asp:ListItem Value="">不限</asp:ListItem>
+                                <asp:ListItem Value="1">工号</asp:ListItem>
+                                <asp:ListItem Value="2">应收</asp:ListItem>
+                                <asp:ListItem Value="3">业绩利润</asp:ListItem>
+                                <asp:ListItem Value="4">利润率</asp:ListItem>
+                            </asp:DropDownList>
+                        </div>
+                        <div class="rule-single-select">
+                            <asp:DropDownList ID="ddlOrderValue" runat="server">
+                                <asp:ListItem Value="">不限</asp:ListItem>
+                                <asp:ListItem Value="1">从大到小</asp:ListItem>
+                                <asp:ListItem Value="2">从小到大</asp:ListItem>
+                            </asp:DropDownList>
+                        </div>--%>
                 <input type="hidden" name="action" value="Search" />
                 <input type="hidden" name="self" value="<%=_self %>" />
                 <input <%--id="btnSave"--%> type="submit" class="btn" value="查询" />
