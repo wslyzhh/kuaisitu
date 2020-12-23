@@ -51,6 +51,12 @@
     <File Include="admin/baseData/editinfo.aspx">
       <publishTime>05/28/2019 00:27:06</publishTime>
     </File>
+    <File Include="admin/baseData/invUnit_edit.aspx">
+      <publishTime>12/22/2020 23:12:26</publishTime>
+    </File>
+    <File Include="admin/baseData/invUnit_list.aspx">
+      <publishTime>12/22/2020 23:52:47</publishTime>
+    </File>
     <File Include="admin/baseData/payMethod_edit.aspx">
       <publishTime>06/15/2019 00:07:10</publishTime>
     </File>
@@ -166,10 +172,10 @@
       <publishTime>05/16/2020 12:46:04</publishTime>
     </File>
     <File Include="admin/finance/invoice_edit.aspx">
-      <publishTime>12/28/2019 13:33:30</publishTime>
+      <publishTime>12/23/2020 23:05:08</publishTime>
     </File>
     <File Include="admin/finance/invoice_list.aspx">
-      <publishTime>05/23/2020 17:00:17</publishTime>
+      <publishTime>12/23/2020 23:37:12</publishTime>
     </File>
     <File Include="admin/finance/orderApproval_list.aspx">
       <publishTime>09/01/2020 22:59:14</publishTime>
@@ -190,10 +196,10 @@
       <publishTime>12/05/2020 14:39:48</publishTime>
     </File>
     <File Include="admin/finance/pay_list.aspx">
-      <publishTime>09/10/2020 07:01:52</publishTime>
+      <publishTime>12/22/2020 22:40:24</publishTime>
     </File>
     <File Include="admin/finance/receiptdetail_edit.aspx">
-      <publishTime>09/05/2020 07:13:26</publishTime>
+      <publishTime>12/23/2020 22:33:32</publishTime>
     </File>
     <File Include="admin/finance/receiptdetail_list.aspx">
       <publishTime>05/30/2020 07:41:12</publishTime>
@@ -244,11 +250,7 @@
       <publishTime>04/19/2020 16:44:13</publishTime>
     </File>
     <File Include="admin/js/common.js">
-<<<<<<< HEAD
-      <publishTime>12/15/2020 21:38:12</publishTime>
-=======
-      <publishTime>12/15/2020 21:14:33</publishTime>
->>>>>>> 0a1cfc3ce18539c38c4eb3ea78a00aa2b4335554
+      <publishTime>12/22/2020 22:49:13</publishTime>
     </File>
     <File Include="admin/js/layindex.js">
       <publishTime>04/15/2019 08:34:38</publishTime>
@@ -323,11 +325,7 @@
       <publishTime>07/17/2019 09:06:01</publishTime>
     </File>
     <File Include="admin/order/order_edit.aspx">
-<<<<<<< HEAD
       <publishTime>12/15/2020 21:17:19</publishTime>
-=======
-      <publishTime>12/15/2020 21:10:45</publishTime>
->>>>>>> 0a1cfc3ce18539c38c4eb3ea78a00aa2b4335554
     </File>
     <File Include="admin/order/order_list.aspx">
       <publishTime>10/20/2020 23:19:29</publishTime>
@@ -335,15 +333,8 @@
     <File Include="admin/order/order_place.aspx">
       <publishTime>05/28/2019 00:22:13</publishTime>
     </File>
-    <File Include="admin/order/order_status.aspx">
-      <publishTime>05/23/2019 16:47:59</publishTime>
-    </File>
     <File Include="admin/selectEmployee.aspx">
-<<<<<<< HEAD
       <publishTime>12/15/2020 21:28:01</publishTime>
-=======
-      <publishTime>12/15/2020 20:47:38</publishTime>
->>>>>>> 0a1cfc3ce18539c38c4eb3ea78a00aa2b4335554
     </File>
     <File Include="admin/self/selfFinance_list.aspx">
       <publishTime>04/22/2020 21:18:38</publishTime>
@@ -445,7 +436,7 @@
       <publishTime>04/15/2019 08:34:37</publishTime>
     </File>
     <File Include="admin/statistic/AchievementStatistic_list.aspx">
-      <publishTime>03/17/2020 00:14:41</publishTime>
+      <publishTime>12/22/2020 22:40:24</publishTime>
     </File>
     <File Include="admin/statistic/AreaAchievementStatistic_list.aspx">
       <publishTime>03/18/2020 19:39:57</publishTime>
@@ -585,118 +576,56 @@
     <File Include="bin/Aliyun.OSS.dll">
       <publishTime>04/15/2019 08:34:21</publishTime>
     </File>
-    <File Include="bin/App_global.asax.compiled">
-<<<<<<< HEAD
-      <publishTime>12/16/2020 22:11:21</publishTime>
-    </File>
-    <File Include="bin/App_global.asax.dll">
-      <publishTime>12/16/2020 22:11:21</publishTime>
-=======
-      <publishTime>12/18/2020 10:06:39</publishTime>
-    </File>
-    <File Include="bin/App_global.asax.dll">
-      <publishTime>12/18/2020 10:06:39</publishTime>
->>>>>>> 0a1cfc3ce18539c38c4eb3ea78a00aa2b4335554
-    </File>
     <File Include="bin/ICSharpCode.SharpZipLib.dll">
       <publishTime>08/15/2018 17:16:34</publishTime>
     </File>
     <File Include="bin/MettingSys.API.dll">
-<<<<<<< HEAD
-      <publishTime>12/16/2020 22:11:13</publishTime>
+      <publishTime>12/24/2020 00:25:11</publishTime>
     </File>
     <File Include="bin/MettingSys.API.pdb">
-      <publishTime>12/16/2020 22:11:13</publishTime>
+      <publishTime>12/24/2020 00:25:11</publishTime>
     </File>
     <File Include="bin/MettingSys.BLL.dll">
-      <publishTime>12/16/2020 22:11:13</publishTime>
+      <publishTime>12/24/2020 00:25:11</publishTime>
     </File>
     <File Include="bin/MettingSys.BLL.pdb">
-      <publishTime>12/16/2020 22:11:13</publishTime>
+      <publishTime>12/24/2020 00:25:11</publishTime>
     </File>
     <File Include="bin/MettingSys.Common.dll">
-      <publishTime>12/16/2020 22:11:12</publishTime>
+      <publishTime>12/24/2020 00:25:10</publishTime>
     </File>
     <File Include="bin/MettingSys.Common.pdb">
-      <publishTime>12/16/2020 22:11:12</publishTime>
+      <publishTime>12/24/2020 00:25:10</publishTime>
     </File>
     <File Include="bin/MettingSys.DAL.dll">
-      <publishTime>12/16/2020 22:11:13</publishTime>
+      <publishTime>12/24/2020 00:25:11</publishTime>
     </File>
     <File Include="bin/MettingSys.DAL.pdb">
-      <publishTime>12/16/2020 22:11:13</publishTime>
+      <publishTime>12/24/2020 00:25:11</publishTime>
     </File>
     <File Include="bin/MettingSys.DBUtility.dll">
-      <publishTime>12/16/2020 22:11:12</publishTime>
+      <publishTime>12/24/2020 00:25:11</publishTime>
     </File>
     <File Include="bin/MettingSys.DBUtility.pdb">
-      <publishTime>12/16/2020 22:11:12</publishTime>
+      <publishTime>12/24/2020 00:25:11</publishTime>
     </File>
     <File Include="bin/MettingSys.Model.dll">
-      <publishTime>12/16/2020 22:11:12</publishTime>
+      <publishTime>12/24/2020 00:25:11</publishTime>
     </File>
     <File Include="bin/MettingSys.Model.pdb">
-      <publishTime>12/16/2020 22:11:12</publishTime>
+      <publishTime>12/24/2020 00:25:11</publishTime>
     </File>
     <File Include="bin/MettingSys.Web.dll">
-      <publishTime>12/16/2020 22:11:14</publishTime>
+      <publishTime>12/24/2020 00:25:12</publishTime>
     </File>
     <File Include="bin/MettingSys.Web.pdb">
-      <publishTime>12/16/2020 22:11:14</publishTime>
+      <publishTime>12/24/2020 00:25:12</publishTime>
     </File>
     <File Include="bin/MettingSys.Web.UI.dll">
-      <publishTime>12/16/2020 22:11:13</publishTime>
+      <publishTime>12/24/2020 00:25:12</publishTime>
     </File>
     <File Include="bin/MettingSys.Web.UI.pdb">
-      <publishTime>12/16/2020 22:11:13</publishTime>
-=======
-      <publishTime>12/18/2020 10:06:12</publishTime>
-    </File>
-    <File Include="bin/MettingSys.API.pdb">
-      <publishTime>12/18/2020 10:06:12</publishTime>
-    </File>
-    <File Include="bin/MettingSys.BLL.dll">
-      <publishTime>12/18/2020 10:06:12</publishTime>
-    </File>
-    <File Include="bin/MettingSys.BLL.pdb">
-      <publishTime>12/18/2020 10:06:12</publishTime>
-    </File>
-    <File Include="bin/MettingSys.Common.dll">
-      <publishTime>12/18/2020 10:06:10</publishTime>
-    </File>
-    <File Include="bin/MettingSys.Common.pdb">
-      <publishTime>12/18/2020 10:06:10</publishTime>
-    </File>
-    <File Include="bin/MettingSys.DAL.dll">
-      <publishTime>12/18/2020 10:06:12</publishTime>
-    </File>
-    <File Include="bin/MettingSys.DAL.pdb">
-      <publishTime>12/18/2020 10:06:12</publishTime>
-    </File>
-    <File Include="bin/MettingSys.DBUtility.dll">
-      <publishTime>12/18/2020 10:06:11</publishTime>
-    </File>
-    <File Include="bin/MettingSys.DBUtility.pdb">
-      <publishTime>12/18/2020 10:06:11</publishTime>
-    </File>
-    <File Include="bin/MettingSys.Model.dll">
-      <publishTime>12/18/2020 10:06:11</publishTime>
-    </File>
-    <File Include="bin/MettingSys.Model.pdb">
-      <publishTime>12/18/2020 10:06:11</publishTime>
-    </File>
-    <File Include="bin/MettingSys.Web.dll">
-      <publishTime>12/18/2020 10:06:14</publishTime>
-    </File>
-    <File Include="bin/MettingSys.Web.pdb">
-      <publishTime>12/18/2020 10:06:14</publishTime>
-    </File>
-    <File Include="bin/MettingSys.Web.UI.dll">
-      <publishTime>12/18/2020 10:06:13</publishTime>
-    </File>
-    <File Include="bin/MettingSys.Web.UI.pdb">
-      <publishTime>12/18/2020 10:06:13</publishTime>
->>>>>>> 0a1cfc3ce18539c38c4eb3ea78a00aa2b4335554
+      <publishTime>12/24/2020 00:25:12</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.SignalR.Core.dll">
       <publishTime>04/03/2019 00:30:56</publishTime>
@@ -826,9 +755,6 @@
     </File>
     <File Include="default.aspx">
       <publishTime>05/30/2019 09:03:56</publishTime>
-    </File>
-    <File Include="dingtalk/default.aspx">
-      <publishTime>07/01/2019 08:56:46</publishTime>
     </File>
     <File Include="editor/dialogs/anchor/anchor.html">
       <publishTime>04/15/2019 08:34:29</publishTime>
@@ -2198,13 +2124,6 @@
     <File Include="plugins/Lodop/npActiveX0712SFx31.xpi">
       <publishTime>12/17/2019 20:26:18</publishTime>
     </File>
-    <File Include="PrecompiledApp.config">
-<<<<<<< HEAD
-      <publishTime>12/16/2020 22:11:17</publishTime>
-=======
-      <publishTime>12/18/2020 10:06:36</publishTime>
->>>>>>> 0a1cfc3ce18539c38c4eb3ea78a00aa2b4335554
-    </File>
     <File Include="scripts/artdialog/dialog-min.js">
       <publishTime>04/15/2019 08:34:34</publishTime>
     </File>
@@ -2685,24 +2604,11 @@
     <File Include="tools/verify_code.ashx">
       <publishTime>04/15/2019 08:34:38</publishTime>
     </File>
-    <File Include="uploadPay/1/201905/11/logo.png">
-      <publishTime>05/30/2019 17:57:56</publishTime>
-    </File>
-    <File Include="uploadPay/1/201905/11/thumb_logo.png">
-      <publishTime>05/30/2019 17:57:56</publishTime>
-    </File>
-    <File Include="uploadPay/1/201905/15/logo.png">
-      <publishTime>05/30/2019 21:40:02</publishTime>
-    </File>
     <File Include="watermark.png">
       <publishTime>04/15/2019 08:34:21</publishTime>
     </File>
     <File Include="Web.config">
-<<<<<<< HEAD
-      <publishTime>12/16/2020 22:11:15</publishTime>
-=======
-      <publishTime>12/18/2020 10:06:31</publishTime>
->>>>>>> 0a1cfc3ce18539c38c4eb3ea78a00aa2b4335554
+      <publishTime>12/24/2020 00:25:33</publishTime>
     </File>
     <File Include="xmlconfig/order.config">
       <publishTime>04/15/2019 08:34:21</publishTime>
