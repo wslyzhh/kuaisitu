@@ -15,6 +15,7 @@
     <link type="text/css" href="../js/antocomplete/autocomplete.css?v=<%=DateTime.Now.ToString("yyyyMMddHHssmm") %>" rel="stylesheet" />
     <script type="text/javascript" charset="utf-8" src="../../scripts/jquery/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../scripts/layer/layer.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../scripts/jquery/jquery.form.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="../js/antocomplete/jquery.autocomplete.js?v=<%=DateTime.Now.ToString("yyyyMMddHHssmm") %>"></script>
     <script type="text/javascript" charset="utf-8" src="../../scripts/jquery/Validform_v5.3.2_min.js"></script>
     <script type="text/javascript" src="../../scripts/datepicker/WdatePicker.js"></script>
@@ -89,6 +90,36 @@
                     $("#dlBank").show();
                 }
             }
+
+            var ajaxFormOption = {
+                dataType: "json", //数据类型  
+                success: function (data) { //提交成功的回调函数  
+                    if (data.status == 0) {
+                        var d = top.dialog({ content: data.msg }).show();
+                        setTimeout(function () {
+                            d.close().remove();
+                            if (data.fromOrder == true) {
+                                parent.location.reload();
+                            } else {
+                                location.href = 'receiptdetail_list.aspx';
+                            }
+                        }, 1500);
+                    } else {
+                        top.dialog({
+                            title: '提示',
+                            content: data.msg,
+                            okValue: '确定',
+                            ok: function () {
+
+                            }
+                        }).showModal();
+                    }
+                }
+            };
+            //提交
+            $("#btnSave").click(function () {
+                $("#form1").ajaxSubmit(ajaxFormOption);
+            });
         });
         function showBank(cid) {
             var postData = { "cid": cid, "field": "1" };
@@ -136,7 +167,7 @@
 </head>
 
 <body class="mainbody">
-    <form id="form1" runat="server">
+    <form id="form1" runat="server" action="../../tools/business_ajax.ashx?action=AddReceiptDetails" method="post" enctype="multipart/form-data">
         <!--导航栏-->
         <div class="location"  style="<%=fromOrder=="true"?"display:none;":"" %>">
             <a href="receiptdetail_list.aspx" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
@@ -218,7 +249,10 @@
         <!--工具栏-->
         <div class="page-footer">
             <div class="btn-wrap" style="<%=fromOrder=="true"?"text-align:center;":"" %>">
-                <asp:Button ID="btnSubmit" runat="server" Text="提交保存" CssClass="btn" OnClick="btnSubmit_Click" />
+                <input type="hidden" id="rpdID" name="rpdID" value="<%=id %>"/>
+                <input type="hidden" id="oID" name="oID" value="<%=oID %>"/>
+                <input type="hidden" id="fromOrder" name="fromOrder" value="<%=fromOrder %>"/>
+                <input id="btnSave" runat="server" type="button" value="提交保存" class="btn" />
                 <input id="btnReturn" type="button" value="返回上一页" class="btn yellow" style="<%=fromOrder=="true"?"display:none;":"" %>" onclick="javascript: history.back(-1);" />
             </div>
         </div>

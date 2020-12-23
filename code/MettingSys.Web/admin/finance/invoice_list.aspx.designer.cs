@@ -148,6 +148,15 @@ namespace MettingSys.Web.admin.finance {
         protected global::System.Web.UI.WebControls.DropDownList ddldarea;
         
         /// <summary>
+        /// txtUnit 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtUnit;
+        
+        /// <summary>
         /// ddlcheck1 控件。
         /// </summary>
         /// <remarks>
@@ -166,24 +175,6 @@ namespace MettingSys.Web.admin.finance {
         protected global::System.Web.UI.WebControls.DropDownList ddlcheck2;
         
         /// <summary>
-        /// ddlcheck3 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlcheck3;
-        
-        /// <summary>
-        /// ddlisConfirm 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlisConfirm;
-        
-        /// <summary>
         /// btnSearch 控件。
         /// </summary>
         /// <remarks>
@@ -200,6 +191,24 @@ namespace MettingSys.Web.admin.finance {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnExcel;
+        
+        /// <summary>
+        /// ddlcheck3 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlcheck3;
+        
+        /// <summary>
+        /// ddlisConfirm 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlisConfirm;
         
         /// <summary>
         /// ddlsign 控件。

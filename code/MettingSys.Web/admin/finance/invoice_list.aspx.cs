@@ -21,7 +21,7 @@ namespace MettingSys.Web.admin.finance
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _cusName = "", _cid = "", _check1 = string.Empty, _check2 = string.Empty, _check3 = string.Empty, _isconfirm = string.Empty, _oid = string.Empty, _sign = "", _money = "", _sdate = "", _edate = "", _farea = "", _darea = "",_invType="";
+        protected string _cusName = "", _cid = "", _check1 = string.Empty, _check2 = string.Empty, _check3 = string.Empty, _isconfirm = string.Empty, _oid = string.Empty, _sign = "", _money = "", _sdate = "", _edate = "", _farea = "", _darea = "", _invType = "", _unit = "";
         protected string _self = string.Empty, _check = "", _name = "", orderby = "inv_addDate desc,inv_id desc";
         protected Model.manager manager = null;
         decimal _tmoney = 0;
@@ -47,6 +47,7 @@ namespace MettingSys.Web.admin.finance
             _darea = DTRequest.GetString("ddldarea");
             _invType = DTRequest.GetString("ddlinvType");
             _name = DTRequest.GetString("txtName");
+            _unit = DTRequest.GetString("txtUnit");
             _self = DTRequest.GetQueryString("self");//self=1表示个人页面
             switch (this._check)
             {
@@ -96,22 +97,7 @@ namespace MettingSys.Web.admin.finance
                 }
                 RptBind("inv_id>0" + CombSqlTxt(), orderby);
             }
-            txtCusName.Text = _cusName;
-            hCusId.Value = _cid;
-            ddlchecktype.SelectedValue = this._check;
-            ddlcheck1.SelectedValue = _check1;
-            ddlcheck2.SelectedValue = _check2;
-            ddlcheck3.SelectedValue = _check3;
-            ddlisConfirm.SelectedValue = _isconfirm;
-            txtOid.Text = _oid;
-            ddlsign.SelectedValue = _sign;
-            txtMoney.Text = _money;
-            txtsDate.Text = _sdate;
-            txteDate.Text = _edate;
-            ddlfarea.SelectedValue = _farea;
-            ddldarea.SelectedValue = _darea;
-            ddlinvType.SelectedValue = _invType;
-            txtName.Text = _name;
+            
         }
         #region 初始化数据=================================
         private void InitData()
@@ -206,6 +192,24 @@ namespace MettingSys.Web.admin.finance
             pMoney.Text = _pmoney.ToString();
             tCount.Text = totalCount.ToString();
             tMoney.Text = _tmoney.ToString();
+
+            txtCusName.Text = _cusName;
+            hCusId.Value = _cid;
+            ddlchecktype.SelectedValue = this._check;
+            ddlcheck1.SelectedValue = _check1;
+            ddlcheck2.SelectedValue = _check2;
+            ddlcheck3.SelectedValue = _check3;
+            ddlisConfirm.SelectedValue = _isconfirm;
+            txtOid.Text = _oid;
+            ddlsign.SelectedValue = _sign;
+            txtMoney.Text = _money;
+            txtsDate.Text = _sdate;
+            txteDate.Text = _edate;
+            ddlfarea.SelectedValue = _farea;
+            ddldarea.SelectedValue = _darea;
+            ddlinvType.SelectedValue = _invType;
+            txtName.Text = _name;
+            txtUnit.Text = _unit;
         }
         #endregion
 
@@ -297,6 +301,11 @@ namespace MettingSys.Web.admin.finance
                 }
             }
 
+            if (!string.IsNullOrEmpty(_unit))
+            {
+                strTemp.Append(" and invU_name like  '%" + _unit + "%'");
+            }
+
             return strTemp.ToString();
         }
         #endregion
@@ -335,23 +344,10 @@ namespace MettingSys.Web.admin.finance
             _darea = DTRequest.GetFormString("ddldarea");
             _invType = DTRequest.GetFormString("ddlinvType");
             _name = DTRequest.GetFormString("txtName");
+            _unit = DTRequest.GetFormString("txtUnit");
             _self = DTRequest.GetFormString("self");//self=1表示个人页面
             RptBind("inv_id>0" + CombSqlTxt(), orderby);
-            txtCusName.Text = _cusName;
-            hCusId.Value = _cid;
-            ddlcheck1.SelectedValue = _check1;
-            ddlcheck2.SelectedValue = _check2;
-            ddlcheck3.SelectedValue = _check3;
-            ddlisConfirm.SelectedValue = _isconfirm;
-            txtOid.Text = _oid;
-            ddlsign.SelectedValue = _sign;
-            txtMoney.Text = _money;
-            txtsDate.Text = _sdate;
-            txteDate.Text = _edate;
-            ddlfarea.SelectedValue = _farea;
-            ddldarea.SelectedValue = _darea;
-            ddlinvType.SelectedValue = _invType;
-            txtName.Text = _name;
+            
         }
 
         //设置分页数量
@@ -369,7 +365,7 @@ namespace MettingSys.Web.admin.finance
         }
         private string backUrl()
         {
-            return Utils.CombUrlTxt("invoice_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlcheck1={3}&ddlcheck2={4}&ddlcheck3={5}&ddlisConfirm={6}&txtOid={7}&self={8}&ddlsign={9}&txtMoney={10}&txtsDate={11}&txteDate={12}&ddlfarea={13}&ddldarea={14}&ddlinvType={15}&txtName={16}&check={17}", "__id__", _cusName, _cid, _check1, _check2, _check3, _isconfirm, _oid, _self, _sign, _money, _sdate, _edate, _farea, _darea, _invType, _name, _check);
+            return Utils.CombUrlTxt("invoice_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlcheck1={3}&ddlcheck2={4}&ddlcheck3={5}&ddlisConfirm={6}&txtOid={7}&self={8}&ddlsign={9}&txtMoney={10}&txtsDate={11}&txteDate={12}&ddlfarea={13}&ddldarea={14}&ddlinvType={15}&txtName={16}&check={17}&txtUnit={18}", "__id__", _cusName, _cid, _check1, _check2, _check3, _isconfirm, _oid, _self, _sign, _money, _sdate, _edate, _farea, _darea, _invType, _name, _check, _unit);
         }
         protected void btnExcel_Click(object sender, EventArgs e)
         {
@@ -388,6 +384,7 @@ namespace MettingSys.Web.admin.finance
             _darea = DTRequest.GetFormString("ddldarea");
             _invType = DTRequest.GetFormString("ddlinvType");
             _name = DTRequest.GetFormString("txtName");
+            _unit = DTRequest.GetFormString("txtUnit");
             _self = DTRequest.GetFormString("self");//self=1表示个人页面
             BLL.invoices bll = new BLL.invoices();
             DataTable dt = bll.GetList(this.pageSize, this.page, "inv_id>0" + CombSqlTxt(), "inv_addDate desc,inv_id desc", manager, out this.totalCount,out _tmoney, false).Tables[0];

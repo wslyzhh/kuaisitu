@@ -48,7 +48,7 @@ namespace MettingSys.Web.admin.finance
             {
                 this.action = DTEnums.ActionEnum.View.ToString();//修改类型
                 this.id = DTRequest.GetQueryInt("id");
-                btnSubmit.Visible = false;
+                btnSave.Visible = false;
             }
             if (!Page.IsPostBack)
             {

@@ -122,6 +122,21 @@ namespace MettingSys.DAL
             return DbHelperSQL.ExecuteSql(strSql.ToString(), parameters) > 0;
         }
 
+        /// <summary>
+        /// 根据区域获取开票单位
+        /// </summary>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        public DataTable getUnitbyArea(string area)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select invU_id,invU_name FROM  MS_invoiceUnit where invU_area=@area and invU_flag=1");
+            SqlParameter[] parameters = {
+                    new SqlParameter("@area", SqlDbType.Char,2)};
+            parameters[0].Value = area;
+            return DbHelperSQL.Query(strSql.ToString(),parameters).Tables[0];
+        }
+
         public bool isUse(int id)
         {
             StringBuilder strSql = new StringBuilder();

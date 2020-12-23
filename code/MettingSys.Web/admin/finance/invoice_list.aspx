@@ -259,6 +259,8 @@
                                 <div class="rule-single-select">
                                     <asp:DropDownList ID="ddldarea" runat="server"></asp:DropDownList>
                                 </div>
+            开票单位：
+                            <asp:TextBox ID="txtUnit" runat="server" CssClass="input"  />
             申请区域审批：
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlcheck1" runat="server"></asp:DropDownList>
@@ -267,6 +269,13 @@
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlcheck2" runat="server"></asp:DropDownList>
                             </div>
+            
+            
+            <input type="hidden" name="self" value="<%=_self %>" />
+            <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
+                <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
+        </div>
+        <div class="searchbar">
             财务审批：
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlcheck3" runat="server"></asp:DropDownList>
@@ -275,12 +284,6 @@
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlisConfirm" runat="server"></asp:DropDownList>
                             </div>
-            
-            <input type="hidden" name="self" value="<%=_self %>" />
-            <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
-                <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
-        </div>
-        <div class="searchbar">
             开票金额：
                         <div class="rule-single-select myRuleSelect">
                             <asp:DropDownList ID="ddlsign" runat="server" Width="50">
@@ -321,6 +324,7 @@
                             <th align="left" width="6%">申请时超开</th>
                             <th align="left" width="6%">送票方式</th>
                             <th align="left" width="6%">开票区域</th>
+                            <th align="left" width="6%">开票单位</th>
                             <th align="left" width="6%">申请人</th>
                             <th align="left" width="6%">审批</th>
                             <th align="left" width="6%">开票状态</th>
@@ -343,6 +347,7 @@
                         <td><%#Utils.StrToDecimal(Eval("inv_overmoney").ToString(),0)==0?"0":"<font color='red'>"+Eval("inv_overmoney")+"</font>"%></td>
                         <td><%#Eval("inv_sentWay")%></td>
                         <td><%#Eval("de_subname")%></td>
+                        <td><%#Eval("invU_name")%></td>
                         <td title="申请工号：<%#Eval("inv_personNum")%>&#10;申请时间：<%#Eval("inv_addDate")%>"><%#Eval("inv_personName")%></td>
                         <td class="checkTd">
                             <span onmouseover="tip_index=layer.tips('申请区域审批<br/>审批人：<%#Eval("inv_checkNum1")%>-<%#Eval("inv_checkName1")%><br/>审批备注：<%#Eval("inv_checkRemark1").ToString().Replace("\r\n","").Replace("\r","").Replace("\n","")%><br/>审批时间：<%#Eval("inv_checkTime1")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Eval("inv_flag1")%>"></span>
@@ -360,7 +365,7 @@
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"15\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"16\">暂无记录</td></tr>" : ""%>
   </table>
                 </FooterTemplate>
             </asp:Repeater>

@@ -130,6 +130,20 @@ namespace MettingSys.BLL
         }
 
         /// <summary>
+        /// 根据区域获取开票单位
+        /// </summary>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        public DataTable getUnitbyArea(string area)
+        {
+            if (string.IsNullOrEmpty(area))
+            {
+                return null;
+            }
+            return dal.getUnitbyArea(area);
+        }
+
+        /// <summary>
         /// 得到一个对象实体
         /// </summary>
         public Model.invoiceUnit GetModel(int id)

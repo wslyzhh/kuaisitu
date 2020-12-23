@@ -94,6 +94,10 @@ namespace MettingSys.BLL
             {
                 return "请选择开票区域";
             }
+            if (model.inv_unit == 0)
+            {
+                return "请选择开票单位";
+            }
             #endregion
             //验证权限：财务，订单的业务员、报账人员、执行人员，才能添加应收应付
             Model.Order order = new BLL.Order().GetModel(model.inv_oid);
@@ -122,6 +126,7 @@ namespace MettingSys.BLL
                 content.Append("应税劳务、服务名称：" + model.inv_serviceType + "，" + model.inv_serviceName + "<br/>");
                 content.Append("送票方式：" + model.inv_sentWay + "<br/>");
                 content.Append("开票区域：" + model.inv_darea + "<br/>");
+                content.Append("开票单位：" + model.inv_unit + "<br/>");
 
                 Model.business_log logmodel = new Model.business_log();
                 logmodel.ol_relateID = ret;
@@ -241,6 +246,10 @@ namespace MettingSys.BLL
             if (string.IsNullOrEmpty(model.inv_darea))
             {
                 return "请选择开票区域";
+            }
+            if (model.inv_unit == 0)
+            {
+                return "请选择开票单位";
             }
             #endregion
             if (model.inv_flag1 == 1 || model.inv_flag2 == 1 || model.inv_flag3 == 1)

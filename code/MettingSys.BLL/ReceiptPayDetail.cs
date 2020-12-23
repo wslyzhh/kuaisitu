@@ -132,6 +132,13 @@ namespace MettingSys.BLL
                 rp.rp_adddate = model.rpd_adddate;
                 rp.rp_area = model.rpd_area;
                 rp.rp_cbid = model.rpd_cbid;
+                if (model.rpd_money<0)
+                {
+                    if (model.rpd_cbid == 0)
+                    {
+                        return "请选择客户银行账号";
+                    }
+                }
             }
             else
             {

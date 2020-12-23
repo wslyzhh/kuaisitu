@@ -166,6 +166,8 @@ namespace MettingSys.Web.admin.finance
                     }
                 }
                 ddldarea.SelectedValue = dr["inv_darea"].ToString();
+                BindUnit(ddldarea.SelectedValue);
+                ddlunit.SelectedValue = dr["inv_unit"].ToString();
                 ddlinvType.SelectedValue = dr["inv_type"].ToString();
 
                 if (((manager.area==dr["inv_farea"].ToString() || manager.area==dr["inv_darea"].ToString()) && new MettingSys.BLL.permission().checkHasPermission(manager, "0603")) || new MettingSys.BLL.permission().checkHasPermission(manager, "0402"))
@@ -256,6 +258,7 @@ namespace MettingSys.Web.admin.finance
             model.inv_sentWay = ddlsentWay.SelectedItem.Text;
             model.inv_farea = manager.area;
             model.inv_darea = ddldarea.SelectedValue;
+            model.inv_unit = Utils.StrToInt(ddlunit.SelectedValue, 0);
             model.inv_receiveName = txtreceiveName.Text.Trim();
             model.inv_receivePhone = txtreceivePhone.Text.Trim();
             model.inv_receiveAddress = txtreceiveAddress.Text.Trim();
@@ -270,7 +273,6 @@ namespace MettingSys.Web.admin.finance
             return bll.Add(model, manager);
         }
         #endregion
-
         #region 修改操作=================================
         private string DoEdit(int _id)
         {
@@ -359,6 +361,11 @@ namespace MettingSys.Web.admin.finance
                 _content += "开票区域：" + model.inv_darea + "→<font color='red'>" + ddldarea.SelectedValue + "</font><br/>";
             }
             model.inv_darea = ddldarea.SelectedValue;
+            if (model.inv_unit != Utils.StrToInt(ddlunit.SelectedValue,0))
+            {
+                _content += "开票单位：" + model.inv_unit + "→<font color='red'>" + ddlunit.SelectedValue + "</font><br/>";
+            }
+            model.inv_unit = Utils.StrToInt(ddlunit.SelectedValue, 0);
             if (model.inv_receiveName != txtreceiveName.Text.Trim())
             {
                 _content += "收票人名称：" + model.inv_receiveName + "→<font color='red'>" + txtreceiveName.Text.Trim() + "</font><br/>";
@@ -381,6 +388,8 @@ namespace MettingSys.Web.admin.finance
             model.inv_remark = txtremark.Text.Trim();
             return bll.Update(model, _content, manager);
         }
+
+        
         #endregion
 
         //保存
@@ -424,6 +433,8 @@ namespace MettingSys.Web.admin.finance
                 }
             }
         }
+
+
         protected void ddlserviceType_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
@@ -445,6 +456,25 @@ namespace MettingSys.Web.admin.finance
                 ddlserviceName.DataBind();
                 ddlserviceName.Items.Insert(0, new ListItem("请选择", ""));
             }
+        }
+
+        protected void ddldarea_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddl = (DropDownList)sender;
+            if (!string.IsNullOrEmpty(ddl.SelectedValue))
+            {
+                BindUnit(ddl.SelectedValue);
+            }
+        }
+
+        private void BindUnit(string area)
+        {
+            DataTable dt = new BLL.invoiceUnit().getUnitbyArea(area);
+            ddlunit.DataSource = dt;
+            ddlunit.DataTextField = "invU_name";
+            ddlunit.DataValueField = "invU_id";
+            ddlunit.DataBind();
+            ddlunit.Items.Insert(0, new ListItem("请选择", ""));
         }
     }
 }

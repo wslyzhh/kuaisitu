@@ -236,7 +236,12 @@
                 <dt>开票区域</dt>
                 <dd>
                     <div class="rule-single-select">
-                        <asp:DropDownList ID="ddldarea" runat="server"></asp:DropDownList>
+                        <asp:DropDownList ID="ddldarea" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddldarea_SelectedIndexChanged"></asp:DropDownList>
+                    </div>
+                    &nbsp;&nbsp;&nbsp;
+                    开票单位
+                    <div class="rule-single-select">
+                        <asp:DropDownList ID="ddlunit" runat="server"></asp:DropDownList>
                     </div>
                 </dd>
             </dl>
