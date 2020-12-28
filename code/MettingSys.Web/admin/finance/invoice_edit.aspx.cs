@@ -238,7 +238,7 @@ namespace MettingSys.Web.admin.finance
             {
                 return "请选择专普票类型";
             }
-            model.inv_type = Utils.StrToBool(ddlinvType.SelectedValue, false);
+            model.inv_type = ddlinvType.SelectedValue;
             model.inv_purchaserName = txtpurchaserName.Text.Trim();
             model.inv_purchaserNum = txtpurchaserNum.Text.Trim();
             model.inv_purchaserAddress = txtpurchaserAddress.Text.Trim();
@@ -334,13 +334,13 @@ namespace MettingSys.Web.admin.finance
             
             if (string.IsNullOrEmpty(ddlinvType.SelectedValue))
             {
-                return "请选择专普票类型";
+                return "请选择发票类型";
             }
-            if (model.inv_type != Utils.StrToBool(ddlinvType.SelectedValue, false))
+            if (model.inv_type != ddlinvType.SelectedValue)
             {
-                _content += "专普票：" + BusinessDict.invType()[model.inv_type] + "→<font color='red'>" + BusinessDict.invType()[Utils.StrToBool(ddlinvType.SelectedValue, false)] + "</font><br/>";
+                _content += "发票类型：" + model.inv_type + "→<font color='red'>" + ddlinvType.SelectedValue + "</font><br/>";
             }
-            model.inv_type = Utils.StrToBool(ddlinvType.SelectedValue, false);
+            model.inv_type = ddlinvType.SelectedValue;
             decimal _money = 0;
             if (!decimal.TryParse(txtmoney.Text.Trim(), out _money))
             {

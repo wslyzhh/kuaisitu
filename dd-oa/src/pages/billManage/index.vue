@@ -13,7 +13,7 @@
                         <section class="flex flex_a_c">
                             <!-- <img class="icon" :src="isIocn[item.c_flag]" alt=""> -->
                             <router-link tag="span" :to="{path:'/billDetails',query:{id:item.inv_id}}"><h2 class="name">{{item.c_name}}</h2></router-link>
-                            <input type="button" :class="{blue:item.inv_type}" :value="item.inv_type==null?'':item.inv_type==false ? '普票' : '专票'">
+                            <input type="button" :class="{blue:item.inv_type}" :value="item.inv_type">
                             <input type="button" :class="{blue:item.inv_isConfirm}" :value="item.inv_isConfirm==false ? '未开票' : '已开票'">
                         </section>
                     </div>

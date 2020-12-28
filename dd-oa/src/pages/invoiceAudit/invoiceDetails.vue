@@ -39,8 +39,8 @@
                 {{datails.inv_serviceType}} - {{datails.inv_serviceName}}
             </li>
             <li class="flex flex_a_c flex_s_b">
-                <label class="title"><span>专普票</span></label>
-                {{datails.inv_type==null?'':datails.inv_type==true?'专票':'普票'}}
+                <label class="title"><span>发票类型</span></label>
+                {{datails.inv_type}}
             </li>
             <li class="flex flex_a_c flex_s_b">
                 <label class="title"><span>开票金额</span></label>
@@ -57,6 +57,10 @@
             <li class="flex flex_a_c flex_s_b">
                 <label class="title"><span>开票区域</span></label>
                 {{datails.de_subname}}
+            </li>
+            <li class="flex flex_a_c flex_s_b">
+                <label class="title"><span>开票单位</span></label>
+                {{datails.invU_name}}
             </li>
             <li class="flex flex_a_c flex_s_b">
                 <label class="title"><span>收票人名称</span></label>

@@ -34,7 +34,10 @@ const actions = {
     },
     getInvoiceArea({commit},params){    //获取开票区域数据
         return ajax.post(api.invoiceArea,params)
-    }    
+    },
+    getInvoiceUnit({commit},params){    //获取开票单位数据
+        return ajax.post(api.invoiceUnit,params)
+    }   
 }
 
 export default {

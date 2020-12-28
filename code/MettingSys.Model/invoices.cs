@@ -51,7 +51,7 @@ namespace MettingSys.Model
         /// <param name="inv_isconfirm">inv_isConfirm</param>
         /// <param name="inv_confirmernum">inv_confirmerNum</param>
         /// <param name="inv_confirmername">inv_confirmerName</param>
-        public invoices(int? inv_id, string inv_oid, int? inv_cid,bool? inv_type, string inv_purchasername, string inv_purchasernum, string inv_purchaseraddress, string inv_purchaserphone, string inv_purchaserbank, string inv_purchaserbanknum, string inv_servicetype, string inv_servicename, decimal? inv_money,decimal? inv_overMoney, string inv_sentway, string inv_farea, string inv_darea, string inv_receivename, string inv_receivephone, string inv_receiveaddress, string inv_remark, string inv_personnum, string inv_personname, DateTime? inv_adddate, byte? inv_flag1, string inv_checknum1, string inv_checkname1, string inv_checkremark1, byte? inv_flag2, string inv_checknum2, string inv_checkname2, string inv_checkremark2, byte? inv_flag3, string inv_checknum3, string inv_checkname3, string inv_checkremark3, bool? inv_isconfirm,DateTime? inv_date, string inv_confirmernum, string inv_confirmername,int? inv_unit)
+        public invoices(int? inv_id, string inv_oid, int? inv_cid, string inv_type, string inv_purchasername, string inv_purchasernum, string inv_purchaseraddress, string inv_purchaserphone, string inv_purchaserbank, string inv_purchaserbanknum, string inv_servicetype, string inv_servicename, decimal? inv_money,decimal? inv_overMoney, string inv_sentway, string inv_farea, string inv_darea, string inv_receivename, string inv_receivephone, string inv_receiveaddress, string inv_remark, string inv_personnum, string inv_personname, DateTime? inv_adddate, byte? inv_flag1, string inv_checknum1, string inv_checkname1, string inv_checkremark1, byte? inv_flag2, string inv_checknum2, string inv_checkname2, string inv_checkremark2, byte? inv_flag3, string inv_checknum3, string inv_checkname3, string inv_checkremark3, bool? inv_isconfirm,DateTime? inv_date, string inv_confirmernum, string inv_confirmername,int? inv_unit)
         {
             this.inv_id = inv_id;
             this.inv_oid = inv_oid;
@@ -116,7 +116,7 @@ namespace MettingSys.Model
         /// <summary>
         /// inv_type
         /// </summary>
-        public bool? inv_type { get; set; }
+        public string inv_type { get; set; }
         /// <summary>
         /// inv_purchaserName
         /// </summary>

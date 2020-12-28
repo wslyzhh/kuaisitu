@@ -190,7 +190,7 @@ export default {
 		orderList(){
 			let _this = this
 			_this.searchData.pageIndex++
-			_this.searchData.managerid=14//_this.userInfo.id
+			_this.searchData.managerid=_this.userInfo.id
             _this.ddSet.showLoad()
 			this.getOrderList(this.searchData).then(function(res){                         
                 _this.ddSet.hideLoad()

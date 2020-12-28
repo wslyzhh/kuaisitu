@@ -25,7 +25,7 @@ namespace MettingSys.Web.admin.baseData
             if (!Page.IsPostBack)
             {
                 ChkAdminLevel("pub_invUnit", DTEnums.ActionEnum.View.ToString()); //检查权限
-                RptBind("invU_id>0" + CombSqlTxt(), "invU_name asc,invU_id desc");
+                RptBind("invU_id>0" + CombSqlTxt(), "invU_area asc,invU_name asc,invU_id desc");
             }
             txtKeywords.Text = keywords;
             ddlIsUse.SelectedValue = _isUse;
@@ -83,7 +83,7 @@ namespace MettingSys.Web.admin.baseData
         {
             keywords = DTRequest.GetFormString("txtKeywords");
             _isUse = DTRequest.GetFormString("ddlIsUse");
-            RptBind("invU_id>0" + CombSqlTxt(), "invU_name asc,invU_id desc");
+            RptBind("invU_id>0" + CombSqlTxt(), "invU_area asc,invU_name asc,invU_id desc");
             txtKeywords.Text = keywords;
             ddlIsUse.SelectedValue = _isUse;
         }

@@ -501,7 +501,7 @@ namespace MettingSys.Web.admin.finance
                     row.CreateCell(10).SetCellValue(dt.Rows[i]["inv_flag3"].ToString() == "0" ? "待审批" : dt.Rows[i]["inv_flag3"].ToString() == "1" ? "审批未通过" : "审批通过");
                     row.CreateCell(11).SetCellValue(Utils.StrToBool(Utils.ObjectToStr(dt.Rows[i]["inv_isConfirm"]), false) ? "已开票" : "未开票");
                     row.CreateCell(12).SetCellValue(ConvertHelper.toDate(dt.Rows[i]["inv_date"]) == null ? "" : ConvertHelper.toDate(dt.Rows[i]["inv_date"]).Value.ToString("yyyy-MM-dd"));
-                    row.CreateCell(13).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["inv_type"]) == "" ? "" : BusinessDict.invType()[Utils.StrToBool(Utils.ObjectToStr(dt.Rows[i]["inv_type"]), false)]);
+                    row.CreateCell(13).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["inv_type"]));
 
                     row.GetCell(0).CellStyle = cellStyle;
                     row.GetCell(1).CellStyle = cellStyle;
