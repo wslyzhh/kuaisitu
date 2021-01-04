@@ -306,6 +306,8 @@
                             </div>
             申请人：
                             <asp:TextBox ID="txtName" runat="server" CssClass="input" onkeyup="cToUpper(this)" />
+            购买方名称：
+                            <asp:TextBox ID="txtpurchaserName" runat="server" CssClass="input" />
         </div>
 
         <!--列表-->
