@@ -2,6 +2,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+code/MettingSys.Web/Properties/
 code/MettingSys.Web/bin/
 code/MettingSys.Web/obj/
 code/MettingSys.Web/upload/
