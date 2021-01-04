@@ -320,7 +320,7 @@ namespace MettingSys.DAL
                 strSql.Append(" top " + Top.ToString());
             }
             strSql.Append(" * ");
-            strSql.Append(" FROM  MS_invoices left join MS_customer on inv_cid=c_id left join MS_department on inv_darea = de_area and de_type=1");
+            strSql.Append(" FROM  MS_invoices left join MS_customer on inv_cid=c_id left join MS_department on inv_darea = de_area and de_type=1 left join MS_invoiceUnit on inv_unit=invU_id");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);

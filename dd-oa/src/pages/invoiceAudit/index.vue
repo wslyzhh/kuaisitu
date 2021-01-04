@@ -19,7 +19,7 @@
                                 <img class="icon" :src="isIocn[item.inv_flag3]" alt="33">
                             </div>
                             <h2 class="name">{{item.c_name}}</h2>
-                            <input type="button" :class="{blue:item.inv_type}" :value="item.inv_type==null?'':item.inv_type==false ? '普票' : '专票'">
+                            <input type="button" :class="{blue:item.inv_type}" :value="item.inv_type">
                             <input type="button" :class="{blue:item.inv_isConfirm}" :value="item.inv_isConfirm?'已开票':'未开票'" class="blueq">
                         </section>
 				        <section class="operation_icon flex">

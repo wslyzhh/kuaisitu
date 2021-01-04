@@ -253,6 +253,9 @@ namespace MettingSys.Web.tools
                 case "getInvoiceList"://获取订单发票申请汇总
                     get_InvoiceList(context);
                     break;
+                case "getInvoiceUnit"://获取开票单位
+                    get_InvoiceUnit(context);
+                    break;
                 case "getunBusinessList"://获取执行备用金借款明细
                     get_unBusinessList(context);
                     break;
@@ -2460,7 +2463,7 @@ namespace MettingSys.Web.tools
                 
                 model.inv_oid = jObject["inv_oid"].ToString();//订单号
                 model.inv_cid = inv_cid;
-                model.inv_type = Utils.StrToBool(Utils.ObjectToStr(jObject["inv_type"]), false);
+                model.inv_type = Utils.ObjectToStr(jObject["inv_type"]);
                 model.inv_purchaserName = jObject["inv_purchaserName"].ToString().Trim();
                 model.inv_purchaserNum = jObject["inv_purchaserNum"].ToString().Trim();
                 model.inv_purchaserAddress = jObject["inv_purchaserAddress"].ToString().Trim();
@@ -2491,6 +2494,7 @@ namespace MettingSys.Web.tools
                 model.inv_sentWay = jObject["inv_sentWay"] == null ? "" : jObject["inv_sentWay"].ToString();
                 model.inv_farea = managerModel.area;
                 model.inv_darea = jObject["inv_darea"] == null ? "" : jObject["inv_darea"].ToString();
+                model.inv_unit = jObject["inv_Unit"] == null ? 0 : Utils.StrToInt(jObject["inv_Unit"].ToString(),0);
                 model.inv_receiveName = jObject["inv_receiveName"] == null ? "" : jObject["inv_receiveName"].ToString().Trim();
                 model.inv_receivePhone = jObject["inv_receivePhone"] == null ? "" : jObject["inv_receivePhone"].ToString().Trim();
                 model.inv_receiveAddress = jObject["inv_receiveAddress"] == null ? "" : jObject["inv_receiveAddress"].ToString().Trim();
@@ -3136,6 +3140,32 @@ namespace MettingSys.Web.tools
                     }
                     leftInvMoney = new BLL.invoices().computeInvoiceLeftMoney(oid);
                     context.Response.Write("{\"status\": 1,\"requestMoney\": " + requestMoney + ",\"confirmMoney\": " + confirmMoney + ",\"leftInvMoney\": " + leftInvMoney + ",\"list\":" + JArray.FromObject(invoiceData) + "}");
+                    return;
+                }
+                context.Response.Write("{\"status\": 1,\"list\":[]}");
+                return;
+            }
+            catch (Exception ex)
+            {
+                context.Response.Write("{\"status\": 0, \"msg\": \"" + ex.Message + "\"}");
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 开票单位
+        /// </summary>
+        /// <param name="context"></param>
+        private void get_InvoiceUnit(HttpContext context)
+        {
+            try
+            {
+                get_params(context, out jObject);                
+                string area = Utils.ObjectToStr(jObject["area"]);
+                DataTable UnitData = new BLL.invoiceUnit().GetList(0, "invU_area='" + area + "' and invU_flag=1", "invU_name asc,invU_id desc").Tables[0];
+                if (UnitData != null && UnitData.Rows.Count > 0)
+                {
+                    context.Response.Write("{\"status\": 1,\"list\":" + JArray.FromObject(UnitData) + "}");
                     return;
                 }
                 context.Response.Write("{\"status\": 1,\"list\":[]}");

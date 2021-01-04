@@ -254,11 +254,15 @@ namespace MettingSys.Common
         /// 财务收付状态
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<bool?, string> invType()
+        public static Dictionary<string, string> invType()
         {
-            Dictionary<bool?, string> dict = new Dictionary<bool?, string>();
-            dict.Add(true, "专票");
-            dict.Add(false, "普票");
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            //dict.Add(true, "专票");
+            //dict.Add(false, "普票");
+
+            dict.Add("专票", "专票");
+            dict.Add("普票", "普票");
+            dict.Add("电子发票", "电子发票");
             return dict;
         }
         #endregion

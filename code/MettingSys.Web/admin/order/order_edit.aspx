@@ -1267,7 +1267,7 @@
                             <tr style="text-align: center;">
                                 <th width="8%">客户</th>
                                 <th>开票项目</th>
-                                <th width="6%">专普票</th>
+                                <th width="6%">发票类型</th>
                                 <th width="6%">开票金额</th>
                                 <th width="6%">申请时超开</th>
                                 <th width="6%">送票方式</th>
@@ -1283,7 +1283,7 @@
                         <tr style="text-align: center;">
                             <td><%#Eval("c_name")%></td>
                             <td style="text-align: left;"><%#Eval("inv_serviceType")%>/<%#Eval("inv_serviceName")%></td>
-                            <td><%# string.IsNullOrEmpty(Utils.ObjectToStr(Eval("inv_type")))?"":BusinessDict.invType()[Utils.StrToBool(Utils.ObjectToStr(Eval("inv_type")),false)] %></td>
+                            <td><%#Eval("inv_type")%></td>
                             <td><%#Eval("inv_money")%></td>
                             <td><%#Utils.StrToDecimal(Eval("inv_overmoney").ToString(),0)==0?"0":"<font color='red'>"+Eval("inv_overmoney")+"</font>"%></td>
                             <td><%#Eval("inv_sentWay")%></td>

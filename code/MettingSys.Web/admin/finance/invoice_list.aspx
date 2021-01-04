@@ -300,7 +300,7 @@
                         <asp:TextBox ID="txtsDate" runat="server" CssClass="input rule-date-input" Width="120px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate\')}'})"></asp:TextBox>
             -
                         <asp:TextBox ID="txteDate" runat="server" CssClass="input rule-date-input" Width="120px" onclick="WdatePicker({minDate:'#F{$dp.$D(\'txtsDate\')}'})"></asp:TextBox>
-            专普票
+            发票类型
             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlinvType" runat="server"></asp:DropDownList>
                             </div>
@@ -319,7 +319,7 @@
                             <th align="left" width="8%">客户</th>
                             <th align="left" width="8%">订单号</th>
                             <th align="left">开票项目</th>
-                            <th align="left" width="6%">专普票</th>
+                            <th align="left" width="6%">发票类型</th>
                             <th align="left" width="6%">开票金额</th>
                             <th align="left" width="6%">申请时超开</th>
                             <th align="left" width="6%">送票方式</th>
@@ -342,7 +342,7 @@
                         <td><%#Eval("c_name")%></td>
                         <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("inv_oid")%>"><span class="orderstatus_<%#Eval("o_status")%>"><%#Eval("inv_oid")%></span></a></td>
                         <td><%#Eval("inv_serviceType")%>/<%#Eval("inv_serviceName")%></td>
-                        <td><%# string.IsNullOrEmpty(Utils.ObjectToStr(Eval("inv_type")))?"":BusinessDict.invType()[Utils.StrToBool(Utils.ObjectToStr(Eval("inv_type")),false)] %></td>
+                        <td><%#Eval("inv_type")%></td>
                         <td class="moneyTd"><%#Eval("inv_money")%></td>
                         <td><%#Utils.StrToDecimal(Eval("inv_overmoney").ToString(),0)==0?"0":"<font color='red'>"+Eval("inv_overmoney")+"</font>"%></td>
                         <td><%#Eval("inv_sentWay")%></td>

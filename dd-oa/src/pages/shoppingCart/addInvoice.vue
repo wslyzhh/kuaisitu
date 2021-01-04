@@ -40,14 +40,18 @@
                 <input type="text" readonly v-model="addData.inv_serviceType" placeholder="请选择应税劳务">
                 <div class="icon_right arrows_right"></div>
             </li>
-            <li class="flex flex_a_c flex_s_b" @click="chosenServiceName(addData.inv_serviceType_text)">
+            <li v-show="addData.inv_serviceType!='其他'" class="flex flex_a_c flex_s_b" @click="chosenServiceName(addData.inv_serviceType_text)">
                 <label class="title"><span class="must">服务名称</span></label>
                 <input type="text" readonly v-model="addData.inv_serviceName" placeholder="请选择服务名称">
                 <div class="icon_right arrows_right"></div>
             </li>
+            <li v-show="addData.inv_serviceType=='其他'" class="flex flex_a_c flex_s_b">
+                <label class="title"><span class="must">服务名称</span></label>
+                <input type="text" v-model="addData.inv_serviceName" placeholder="请输入服务名称">
+            </li>
             <li class="flex flex_a_c flex_s_b" @click="changeType">
-                <label class="title newTitle"><span class="must">专普票</span></label>
-                <input type="text" readonly v-model="addData.inv_type" placeholder="请选择专普票">
+                <label class="title newTitle"><span class="must">发票类型</span></label>
+                <input type="text" readonly v-model="addData.inv_type" placeholder="请选择发票类型">
 			    <div class="icon_right arrows_right"></div>
             </li>
             <li class="flex flex_a_c flex_s_b">
@@ -62,6 +66,11 @@
             <li class="flex flex_a_c flex_s_b" @click="chosenDArea">
                 <label class="title"><span class="must">开票区域</span></label>
                 <input type="text" readonly v-model="addData.inv_darea_text" placeholder="请选择开票区域">
+                <div class="icon_right arrows_right"></div>
+            </li>
+            <li class="flex flex_a_c flex_s_b" @click="chosenUnit">
+                <label class="title"><span class="must">开票单位</span></label>
+                <input type="text" readonly v-model="addData.inv_Unit_text" placeholder="请选择开票单位">
                 <div class="icon_right arrows_right"></div>
             </li>
             <li class="flex flex_a_c flex_s_b">
@@ -104,11 +113,15 @@ export default {
             invTypeList:[
                 {
                     key:'专票',
-                    value:true
+                    value:'专票'
                 },
                 {
                     key:'普票',
-                    value:false
+                    value:'普票'
+                },
+                {
+                    key:'电子发票',
+                    value:'电子发票'
                 }]
             // type:'',
             // paytype:0,
@@ -131,7 +144,7 @@ export default {
         this.addData.inv_cid = cID
         this.clientId = cID
         this.clientName = cName
-        console.log(this.addData)
+        //console.log(this.addData)
     },
     mounted() {
         //console.log("1111111"+this.selectClientArray)
@@ -142,7 +155,8 @@ export default {
             'getServiceType',
             'getServiceName',
             'getSentMethod',
-            'getInvoiceArea',            
+            'getInvoiceArea',  
+            'getInvoiceUnit',           
             'getInvoiceAdd'
         ]),
         submit(item){ //提交
@@ -184,7 +198,7 @@ export default {
                 return
             }
             if(!_this.addData.inv_type){
-                _this.ddSet.setToast({text:'请您选择专普票'})
+                _this.ddSet.setToast({text:'请您选择发票类型'})
                 return
             }
             if(!_this.addData.inv_money){
@@ -199,6 +213,10 @@ export default {
                 _this.ddSet.setToast({text:'请您选择开票区域'})
                 return
             }
+            if(!_this.addData.inv_Unit){
+                _this.ddSet.setToast({text:'请您选择开票单位'})
+                return
+            }
             this.addData.uba_oid = this.oID
             _this.addData.managerid = _this.userInfo.id //测试ID            
             console.log(_this.addData)
@@ -211,6 +229,7 @@ export default {
                     })
                 }else{
                     _this.ddSet.setToast({text:res.data.msg})
+                    _this.ddSet.hideLoad()
                 }
             }).catch(err => {
                 _this.ddSet.hideLoad()
@@ -253,6 +272,7 @@ export default {
                 _this.ddSet.setChosen({source,selectedKey}).then(res => {
                     _this.$set(_this.addData,'inv_serviceType',res.key)
                     _this.$set(_this.addData,'inv_serviceType_text',res.value)
+                    _this.$set(_this.addData,'inv_serviceName',"")
                     _this.$set(_this.addData,'inv_serviceName_text',"")
                 })
             })
@@ -297,7 +317,7 @@ export default {
         },
         chosenDArea(){
             let _this = this
-            this.getInvoiceArea({ddkey:'dingzreafyvgzklylomj'}).then(res => {
+            _this.getInvoiceArea({ddkey:'dingzreafyvgzklylomj'}).then(res => {
                 //console.log(res)
                 let source = []
                 let selectedKey = _this.addData.inv_darea
@@ -311,6 +331,28 @@ export default {
                 _this.ddSet.setChosen({source,selectedKey}).then(res => {
                     _this.$set(_this.addData,'inv_darea',res.value)
                     _this.$set(_this.addData,'inv_darea_text',res.key)
+                })
+            })
+        },
+        chosenUnit(){
+            let _this = this
+            if(!_this.addData.inv_darea){
+                _this.ddSet.setToast({text:'请您选择开票区域'})
+                return
+            }
+            _this.getInvoiceUnit({area:_this.addData.inv_darea,ddkey:'dingzreafyvgzklylomj'}).then(res => {
+                let source = []
+                let selectedKey = _this.addData.inv_Unit
+                res.data.list.map((item,index) => {
+                    let obj = {
+                        key:item.invU_name,
+                        value:item.invU_id
+                    }
+                    source.push(obj)
+                })
+                _this.ddSet.setChosen({source,selectedKey}).then(res => {
+                    _this.$set(_this.addData,'inv_Unit',res.value)
+                    _this.$set(_this.addData,'inv_Unit_text',res.key)
                 })
             })
         },

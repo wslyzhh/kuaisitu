@@ -88,6 +88,9 @@ const api = {
     get invoiceArea(){   //获取开票区域数据
         return baseUrl+'/tools/dingtalk_ajax.ashx?action=init_invoicearea'
     },
+    get invoiceUnit(){   //获取开票单位数据
+        return baseUrl+'/tools/dingtalk_ajax.ashx?action=getInvoiceUnit'
+    },
     ///数据初始化 end--------------------------------------------------------
 
 

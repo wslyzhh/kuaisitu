@@ -206,7 +206,7 @@
                 </dd>
             </dl>
             <dl>
-                <dt>专普票</dt>
+                <dt>发票类型</dt>
                 <dd>
                     <div class="rule-single-select">
                         <asp:DropDownList ID="ddlinvType" runat="server">
