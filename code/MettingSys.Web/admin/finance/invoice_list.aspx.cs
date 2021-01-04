@@ -21,7 +21,7 @@ namespace MettingSys.Web.admin.finance
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _cusName = "", _cid = "", _check1 = string.Empty, _check2 = string.Empty, _check3 = string.Empty, _isconfirm = string.Empty, _oid = string.Empty, _sign = "", _money = "", _sdate = "", _edate = "", _farea = "", _darea = "", _invType = "", _unit = "";
+        protected string _cusName = "", _cid = "", _check1 = string.Empty, _check2 = string.Empty, _check3 = string.Empty, _isconfirm = string.Empty, _oid = string.Empty, _sign = "", _money = "", _sdate = "", _edate = "", _farea = "", _darea = "", _invType = "", _unit = "", _purchaserName;
         protected string _self = string.Empty, _check = "", _name = "", orderby = "inv_addDate desc,inv_id desc";
         protected Model.manager manager = null;
         decimal _tmoney = 0;
@@ -48,6 +48,7 @@ namespace MettingSys.Web.admin.finance
             _invType = DTRequest.GetString("ddlinvType");
             _name = DTRequest.GetString("txtName");
             _unit = DTRequest.GetString("txtUnit");
+            _purchaserName = DTRequest.GetString("txtpurchaserName");
             _self = DTRequest.GetQueryString("self");//self=1表示个人页面
             switch (this._check)
             {
@@ -210,6 +211,7 @@ namespace MettingSys.Web.admin.finance
             ddlinvType.SelectedValue = _invType;
             txtName.Text = _name;
             txtUnit.Text = _unit;
+            txtpurchaserName.Text = _purchaserName;
         }
         #endregion
 
@@ -306,6 +308,11 @@ namespace MettingSys.Web.admin.finance
                 strTemp.Append(" and invU_name like  '%" + _unit + "%'");
             }
 
+            if (!string.IsNullOrEmpty(_purchaserName))
+            {
+                strTemp.Append(" and inv_purchaserName like  '%" + _purchaserName + "%'");
+            }
+
             return strTemp.ToString();
         }
         #endregion
@@ -345,6 +352,7 @@ namespace MettingSys.Web.admin.finance
             _invType = DTRequest.GetFormString("ddlinvType");
             _name = DTRequest.GetFormString("txtName");
             _unit = DTRequest.GetFormString("txtUnit");
+            _purchaserName = DTRequest.GetFormString("txtpurchaserName");
             _self = DTRequest.GetFormString("self");//self=1表示个人页面
             RptBind("inv_id>0" + CombSqlTxt(), orderby);
             
@@ -365,7 +373,7 @@ namespace MettingSys.Web.admin.finance
         }
         private string backUrl()
         {
-            return Utils.CombUrlTxt("invoice_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlcheck1={3}&ddlcheck2={4}&ddlcheck3={5}&ddlisConfirm={6}&txtOid={7}&self={8}&ddlsign={9}&txtMoney={10}&txtsDate={11}&txteDate={12}&ddlfarea={13}&ddldarea={14}&ddlinvType={15}&txtName={16}&check={17}&txtUnit={18}", "__id__", _cusName, _cid, _check1, _check2, _check3, _isconfirm, _oid, _self, _sign, _money, _sdate, _edate, _farea, _darea, _invType, _name, _check, _unit);
+            return Utils.CombUrlTxt("invoice_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlcheck1={3}&ddlcheck2={4}&ddlcheck3={5}&ddlisConfirm={6}&txtOid={7}&self={8}&ddlsign={9}&txtMoney={10}&txtsDate={11}&txteDate={12}&ddlfarea={13}&ddldarea={14}&ddlinvType={15}&txtName={16}&check={17}&txtUnit={18}&txtpurchaserName={19}", "__id__", _cusName, _cid, _check1, _check2, _check3, _isconfirm, _oid, _self, _sign, _money, _sdate, _edate, _farea, _darea, _invType, _name, _check, _unit,_purchaserName);
         }
         protected void btnExcel_Click(object sender, EventArgs e)
         {
@@ -385,6 +393,7 @@ namespace MettingSys.Web.admin.finance
             _invType = DTRequest.GetFormString("ddlinvType");
             _name = DTRequest.GetFormString("txtName");
             _unit = DTRequest.GetFormString("txtUnit");
+            _purchaserName = DTRequest.GetFormString("txtpurchaserName");
             _self = DTRequest.GetFormString("self");//self=1表示个人页面
             BLL.invoices bll = new BLL.invoices();
             DataTable dt = bll.GetList(this.pageSize, this.page, "inv_id>0" + CombSqlTxt(), "inv_addDate desc,inv_id desc", manager, out this.totalCount,out _tmoney, false).Tables[0];
@@ -451,6 +460,8 @@ namespace MettingSys.Web.admin.finance
             headRow.CreateCell(11).SetCellValue("开票状态");
             headRow.CreateCell(12).SetCellValue("开票日期");
             headRow.CreateCell(13).SetCellValue("专普票");
+            headRow.CreateCell(14).SetCellValue("开票单位");
+            headRow.CreateCell(15).SetCellValue("购买方名称");
 
             headRow.GetCell(0).CellStyle = titleCellStyle;
             headRow.GetCell(1).CellStyle = titleCellStyle;
@@ -466,6 +477,8 @@ namespace MettingSys.Web.admin.finance
             headRow.GetCell(11).CellStyle = titleCellStyle;
             headRow.GetCell(12).CellStyle = titleCellStyle;
             headRow.GetCell(13).CellStyle = titleCellStyle;
+            headRow.GetCell(14).CellStyle = titleCellStyle;
+            headRow.GetCell(15).CellStyle = titleCellStyle;
 
             sheet.SetColumnWidth(0, 15 * 256);
             sheet.SetColumnWidth(1, 20 * 256);
@@ -481,6 +494,8 @@ namespace MettingSys.Web.admin.finance
             sheet.SetColumnWidth(11, 20 * 256);
             sheet.SetColumnWidth(12, 20 * 256);
             sheet.SetColumnWidth(13, 20 * 256);
+            sheet.SetColumnWidth(14, 20 * 256);
+            sheet.SetColumnWidth(15, 20 * 256);
 
             if (dt != null)
             {
@@ -502,6 +517,8 @@ namespace MettingSys.Web.admin.finance
                     row.CreateCell(11).SetCellValue(Utils.StrToBool(Utils.ObjectToStr(dt.Rows[i]["inv_isConfirm"]), false) ? "已开票" : "未开票");
                     row.CreateCell(12).SetCellValue(ConvertHelper.toDate(dt.Rows[i]["inv_date"]) == null ? "" : ConvertHelper.toDate(dt.Rows[i]["inv_date"]).Value.ToString("yyyy-MM-dd"));
                     row.CreateCell(13).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["inv_type"]));
+                    row.CreateCell(14).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["invU_name"]));
+                    row.CreateCell(15).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["inv_purchaserName"]));
 
                     row.GetCell(0).CellStyle = cellStyle;
                     row.GetCell(1).CellStyle = cellStyle;
@@ -517,6 +534,8 @@ namespace MettingSys.Web.admin.finance
                     row.GetCell(11).CellStyle = cellStyle;
                     row.GetCell(12).CellStyle = cellStyle;
                     row.GetCell(13).CellStyle = cellStyle;
+                    row.GetCell(14).CellStyle = cellStyle;
+                    row.GetCell(15).CellStyle = cellStyle;
                 }
             }
 

@@ -271,12 +271,13 @@
                 }
             });
 
+            
             //弹出对账明细
             $(".cusTip").on({                
                 mouseover: function () {
                     var finid = $(this).attr("data-finid");
                     var that = this;
-                    var postData = { "finid": finid };
+                    var postData = { "finid": finid };           
                     var _table = $("<table width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"0\"><tr><th style=\"width:50%;\">对账标识</th><th>对账金额</th></tr></table>");
                     //发送AJAX请求
                     $.ajax({
@@ -301,6 +302,7 @@
                 }
             });
 
+            
         });
         //获取联系人的联系号码
         function getContactPhone(obj) {
@@ -1232,7 +1234,7 @@
                                         <%#Eval("fin_personName") %>
                                     </td>
                                     <td>
-                                        <span class="cusTip" data-finid="<%#Eval("fin_id")%>"><%#Eval("chk")%></span>
+                                        <label class="cusTip" data-finid="<%#Eval("fin_id")%>"><%#Eval("chk")%></label>
                                     </td>
                                     <td><%#Eval("fin_month")%></td>
                                     <td>

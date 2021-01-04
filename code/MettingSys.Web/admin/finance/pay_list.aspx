@@ -79,6 +79,7 @@
                     });
                 }
             });
+
             $(".checkall input").change(function () {
                 computeSelect();
             });
@@ -586,7 +587,7 @@
                             <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Style="vertical-align: middle;" />
                             <asp:HiddenField ID="hidId" Value='<%#Eval("rp_id")%>' runat="server" />
                         </td>
-                        <td><span class="cusTip" data-cid="<%#Eval("rp_cid")%>"><%# Eval("c_name") %></span><%# bool.Parse(Eval("rp_isExpect").ToString())?"<font color='green'>[预]</font>":"" %></td>
+                        <td><label class="cusTip" data-cid="<%#Eval("rp_cid")%>"><%# Eval("c_name") %></label><%# bool.Parse(Eval("rp_isExpect").ToString())?"<font color='green'>[预]</font>":"" %></td>
                         <td class="numTd"><span onmouseover="tip_index=layer.tips('凭证日期：<%#Eval("ce_date").ToString()==""?"":Convert.ToDateTime(Eval("ce_date")).ToString("yyyy-MM-dd")%><br/>备注：<%# Eval("ce_remark") %>', this, { time: 0 });" onmouseout="layer.close(tip_index);"><%# Eval("ce_num") %></span></td>
                         <td><%# Eval("rp_content") %></td>
                         <td><%#Eval("cb_bankName")%><br /><%#Eval("cb_bankNum")%><br /><%#Eval("cb_bank")%></td>
