@@ -51,34 +51,20 @@
             });
             bingCertificate();
 
-            $(".cusTip").on({                
-                mouseover: function () {
-                    var cid = $(this).attr("data-cid");
-                    var that = this;
-                    var postData = { "cid": cid };
-                    var _table = $("<table width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"0\"><tr><th style=\"width:30%;\">账户名称</th><th>银行账号</th><th style=\"width:30%;\">开户行</th></tr></table>");
-                    //发送AJAX请求
-                    $.ajax({
-                        type: "post",
-                        url: "../../tools/Business_ajax.ashx?action=getCusBank",
-                        data: postData,
-                        dataType: "json",
-                        success: function (data) {
-                            var jlist = eval(data);
-                            var trlist = "";
-                            if (jlist.length > 0) {
-                                for (var i = 0; i < jlist.length; i++) {
-                                    var json = eval(jlist[i]);
-                                    var _tr = "<tr style=\"text-align:center;\"><td>" + json.cb_bankName + "</td><td>" + json.cb_bankNum + "</td><td>" + json.cb_bank + "</td></tr>";
-                                    trlist += _tr;
-                                }
-                            }
-                            _table.append(trlist);
-                            showTip(that,_table,600)
-                        }
-                    });
-                }
-            });
+            //弹出对账明细
+            $(".cusTip").click(function () {
+                var cid = $(this).attr("data-cid");
+                layer.open({
+                    type: 2,
+                    title: false,
+                    closeBtn: 0,
+                    area: ['500px', '300px'],
+                    //skin: 'layui-layer-nobg', //没有背景色
+                    shadeClose: true,
+                    content: 'bankDetails.aspx?cid=' + cid
+                });
+            });     
+
 
             $(".checkall input").change(function () {
                 computeSelect();
@@ -391,6 +377,9 @@
         }
     </script>
     <style type="text/css">
+        .cusTip {
+            cursor:pointer;
+        }
         .date-input {
             width: 110px;
         }

@@ -163,6 +163,7 @@
     <Content Include="admin\dialog\dialog_picture.aspx" />
     <Content Include="admin\dialog\dialog_rewrite.aspx" />
     <Content Include="admin\dialog\dialog_spec.aspx" />
+    <Content Include="admin\finance\bankDetails.aspx" />
     <Content Include="admin\finance\bank_edit.aspx" />
     <Content Include="admin\finance\bank_list.aspx" />
     <Content Include="admin\finance\certificate_edit.aspx" />
@@ -224,6 +225,7 @@
     <Content Include="admin\message.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="admin\order\chkDetails.aspx" />
     <Content Include="admin\order\mutliFinance.aspx" />
     <Content Include="admin\order\mutliSharing.aspx" />
     <Content Include="admin\order\order_edit.aspx" />
@@ -1246,6 +1248,13 @@
       <DependentUpon>dialog_spec.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="admin\finance\bankDetails.aspx.cs">
+      <DependentUpon>bankDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\finance\bankDetails.aspx.designer.cs">
+      <DependentUpon>bankDetails.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\finance\bank_edit.aspx.cs">
       <DependentUpon>bank_edit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1588,6 +1597,13 @@
     </Compile>
     <Compile Include="admin\manage\selectPermission.aspx.designer.cs">
       <DependentUpon>selectPermission.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\order\chkDetails.aspx.cs">
+      <DependentUpon>chkDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\order\chkDetails.aspx.designer.cs">
+      <DependentUpon>chkDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\order\mutliFinance.aspx.cs">
       <DependentUpon>mutliFinance.aspx</DependentUpon>

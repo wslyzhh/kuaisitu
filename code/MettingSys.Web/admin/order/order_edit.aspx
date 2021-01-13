@@ -15,7 +15,6 @@
     <link rel="stylesheet" type="text/css" href="../skin/default/style.css" />
     <link href="../../scripts/layer/layui.css" rel="stylesheet" />
     <link type="text/css" href="../js/antocomplete/autocomplete.css?v=<%=DateTime.Now.ToString("yyyyMMddHHssmm") %>" rel="stylesheet" />
-    <link href="../../scripts/tip/tip.css" rel="stylesheet" />
     <script type="text/javascript" charset="utf-8" src="../../scripts/jquery/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../scripts/layer/layer.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../scripts/jquery/jquery.form.min.js"></script>
@@ -24,7 +23,6 @@
     <script type="text/javascript" charset="utf-8" src="../../scripts/datepicker/WdatePicker.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../scripts/artdialog/dialog-plus-min.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../scripts/webuploader/webuploader.min.js"></script>
-    <script src="../../scripts/tip/tip.js"></script>
     <script type="text/javascript" charset="utf-8" src="../js/common.js?v=<%=DateTime.Now.ToString("yyyyMMddHHssmm") %>"></script>
     <script type="text/javascript" charset="utf-8" src="../js/newUploader.js?v=<%=DateTime.Now.ToString("yyyyMMddHHssmm") %>"></script>
     <script type="text/javascript" charset="utf-8" src="../js/laymain.js"></script>
@@ -273,35 +271,18 @@
 
             
             //弹出对账明细
-            $(".cusTip").on({                
-                mouseover: function () {
-                    var finid = $(this).attr("data-finid");
-                    var that = this;
-                    var postData = { "finid": finid };           
-                    var _table = $("<table width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"0\"><tr><th style=\"width:50%;\">对账标识</th><th>对账金额</th></tr></table>");
-                    //发送AJAX请求
-                    $.ajax({
-                        type: "post",
-                        url: "../../tools/Business_ajax.ashx?action=getChkDetail",
-                        data: postData,
-                        dataType: "json",
-                        success: function (data) {
-                            var jlist = eval(data);
-                            var trlist = "";
-                            if (jlist.length > 0) {
-                                for (var i = 0; i < jlist.length; i++) {
-                                    var json = eval(jlist[i]);
-                                    var _tr = "<tr style=\"text-align:center;\"><td>" + json.fc_num + "</td><td>" + json.fc_money + "</td></tr>";
-                                    trlist += _tr;
-                                }
-                            }
-                            _table.append(trlist);
-                            showTip(that,_table,200)
-                        }
-                    });
-                }
-            });
-
+            $(".cusTip").click(function () {
+                var finid = $(this).attr("data-finid");
+                layer.open({
+                    type: 2,
+                    title: false,
+                    closeBtn: 0,
+                    area: ['500px', '300px'],
+                    //skin: 'layui-layer-nobg', //没有背景色
+                    shadeClose: true,
+                    content: 'chkDetails.aspx?finid=' + finid
+                });
+            });     
             
         });
         //获取联系人的联系号码
@@ -746,6 +727,9 @@
         }
     </script>
     <style type="text/css">
+        .cusTip {
+            cursor:pointer;
+        }
         .tab-content dl dt {
             width: 100px;
         }
