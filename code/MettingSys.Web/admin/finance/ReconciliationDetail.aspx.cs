@@ -22,7 +22,7 @@ namespace MettingSys.Web.admin.finance
         protected int page; //当前页码
         protected int pageSize; //每页大小
         protected string trHtml = string.Empty;
-        protected string _cusName = "", _cid = "", _type = "", _sign = "", _money1 = "", _sign1 = "", _money2 = "", _nature = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _name = "", _address = "", _person1 = "", _person2 = "", _person3 = "", _person4 = "", _person5 = "", _oid = "", _chk = "", _sdate2 = "", _edate2 = "", _status = "", _lockstatus = "", _area = "", _self = "", _check = "";
+        protected string _cusName = "", _cid = "", _type = "", _sign = "", _money1 = "", _sign1 = "", _money2 = "", _nature = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _name = "", _address = "", _person1 = "", _person2 = "", _person3 = "", _person4 = "", _person5 = "", _oid = "", _chk = "", _sdate2 = "", _edate2 = "", _status = "", _lockstatus = "", _area = "", _self = "", _check = "",_detail="";
 
         decimal _p11 = 0, _p12 = 0, _p13 = 0, _p14 = 0;
         decimal _p21 = 0, _p22 = 0, _p23 = 0, _p24 = 0, _p25 = 0, _p26 = 0;
@@ -58,6 +58,7 @@ namespace MettingSys.Web.admin.finance
             _edate2 = DTRequest.GetString("txteDate2");
             _check = DTRequest.GetString("ddlcheck");
             _self = DTRequest.GetString("self");
+            _detail = DTRequest.GetString("txtDetails");
             manager = GetAdminInfo();
             if (_self == "1")
             {
@@ -155,6 +156,11 @@ namespace MettingSys.Web.admin.finance
             {
                 dict.Add("nature", _nature);
                 sqlWhere += " and fin_nature=" + _nature + "";
+            }
+            if (!string.IsNullOrEmpty(_detail))
+            {
+                dict.Add("detail", _detail);
+                sqlWhere += " and fin_detail like '%" + _detail + "%'";
             }
             if (!string.IsNullOrEmpty(_sdate))//订单开始日期
             {
@@ -397,13 +403,14 @@ namespace MettingSys.Web.admin.finance
             txtPerson4.Text = _person4;
             txtPerson5.Text = _person5;
             ddlcheck.SelectedValue = _check;
+            txtDetails.Text = _detail;
         }
         #endregion
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("ReconciliationDetail.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddltype={3}&ddlsign={4}&txtMoney1={5}&ddlnature={6}&txtsDate={7}&txteDate={8}&txtsDate1={9}&txteDate1={10}&txtName={11}&txtAddress={12}&ddlsign1={13}&txtMoney2={14}&txtPerson1={15}&txtPerson2={16}&txtPerson3={17}&txtPerson4={18}&txtPerson5={19}&txtOrderID={20}&txtChk={21}&ddlstatus={22}&ddllock={23}&ddlarea={24}&txtsDate2={25}&txteDate2={26}&self={27}&ddlcheck={28}",
-                "__id__", _cusName, _cid, _type, _sign, _money1, _nature, _sdate, _edate, _sdate1, _edate1, _name, _address, _sign1, _money2, _person1, _person2, _person3, _person4, _person5, _oid, _chk, _status, _lockstatus, _area, _sdate2, _edate2, _self,_check);
+            return Utils.CombUrlTxt("ReconciliationDetail.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddltype={3}&ddlsign={4}&txtMoney1={5}&ddlnature={6}&txtsDate={7}&txteDate={8}&txtsDate1={9}&txteDate1={10}&txtName={11}&txtAddress={12}&ddlsign1={13}&txtMoney2={14}&txtPerson1={15}&txtPerson2={16}&txtPerson3={17}&txtPerson4={18}&txtPerson5={19}&txtOrderID={20}&txtChk={21}&ddlstatus={22}&ddllock={23}&ddlarea={24}&txtsDate2={25}&txteDate2={26}&self={27}&ddlcheck={28}&txtDetails={29}",
+                "__id__", _cusName, _cid, _type, _sign, _money1, _nature, _sdate, _edate, _sdate1, _edate1, _name, _address, _sign1, _money2, _person1, _person2, _person3, _person4, _person5, _oid, _chk, _status, _lockstatus, _area, _sdate2, _edate2, _self,_check,_detail);
         }
 
         #region 返回每页数量=============================
@@ -453,6 +460,7 @@ namespace MettingSys.Web.admin.finance
             _edate2 = DTRequest.GetFormString("txteDate2");
             _check = DTRequest.GetFormString("ddlcheck");
             _self = DTRequest.GetFormString("self");
+            _detail = DTRequest.GetFormString("txtDetails");
             if (_self == "1")
             {
                 manager = GetAdminInfo();
@@ -514,6 +522,7 @@ namespace MettingSys.Web.admin.finance
             _edate2 = DTRequest.GetFormString("txteDate2");
             _check = DTRequest.GetFormString("ddlcheck");
             _self = DTRequest.GetFormString("self");
+            _detail = DTRequest.GetFormString("txtDetails");
             string _where = "";
             Dictionary<string, string> dict = getDict(out _where);
             DataTable dt = new BLL.finance().getReconciliationDetail(dict, this.pageSize, this.page, "o_id asc", out this.totalCount, out _p24, out _p25, out _p26, out _p13, out _p14, false).Tables[0];

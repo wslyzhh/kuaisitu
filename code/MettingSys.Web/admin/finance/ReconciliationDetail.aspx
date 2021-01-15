@@ -334,6 +334,8 @@
                         <div class="rule-single-select">
                             <asp:DropDownList ID="ddlnature" runat="server"></asp:DropDownList>
                         </div>
+                    业务明细：
+                    <asp:TextBox ID="txtDetails" runat="server" CssClass="input"></asp:TextBox>
                     活动开始日期：
                         <asp:TextBox ID="txtsDate" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate\')}'})"></asp:TextBox>
                     -
@@ -343,9 +345,7 @@
                     -
                         <asp:TextBox ID="txteDate1" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({minDate:'#F{$dp.$D(\'txtsDate1\')}'})"></asp:TextBox>
 
-                    <input type="hidden" name="self" value="<%=_self %>" />
-                    <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
-                    <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
+                    
                 </div>
                 <div class="menu-list" style="margin-bottom: 10px;">
                     活动名称：
@@ -374,6 +374,9 @@
                     <asp:TextBox ID="txtPerson5" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>
                     执行人员：
                     <asp:TextBox ID="txtPerson4" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>
+                    <input type="hidden" name="self" value="<%=_self %>" />
+                    <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
+                    <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
                 </div>
                 <div class="menu-list" style="margin-bottom: 10px;">
                     订单号：
@@ -401,6 +404,7 @@
                         <asp:TextBox ID="txtsDate2" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate2\')}'})"></asp:TextBox>
                     -
                         <asp:TextBox ID="txteDate2" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({minDate:'#F{$dp.$D(\'txtsDate2\')}'})"></asp:TextBox>
+                    
                     <%--业务开始日期：
                         <asp:TextBox ID="txtsDate2" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate2\')}'})"></asp:TextBox>
                     -

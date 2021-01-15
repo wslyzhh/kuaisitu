@@ -182,7 +182,13 @@
                                 <asp:ListItem Value="<="><=</asp:ListItem>
                             </asp:DropDownList>
                         </div>
-                    <asp:TextBox ID="txtMoney" runat="server" CssClass="input small"></asp:TextBox>                
+                    <asp:TextBox ID="txtMoney" runat="server" CssClass="input small"></asp:TextBox>     
+                业务性质：
+                        <div class="rule-single-select">
+                            <asp:DropDownList ID="ddlnature" runat="server"></asp:DropDownList>
+                        </div>
+                    业务明细：
+                    <asp:TextBox ID="txtDetails" runat="server" CssClass="input"></asp:TextBox>
             </div>
         </div>
 

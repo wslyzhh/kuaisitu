@@ -1,4 +1,5 @@
 ﻿using MettingSys.Common;
+using MettingSys.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -264,23 +265,28 @@ namespace MettingSys.BLL
             {
                 return "订单不存在";
             }
-            if (!new BLL.permission().checkHasPermission(manager, "0401"))//如果不是财务
+            IEnumerable<OrderPerson> list = order.personlist.Where(p => p.op_type == 1);
+            if (list.ToArray()[0].op_number != manager.user_name) //如果当前不是下单人
             {
-                //验证权限：在同一个订单里，业务员与业务报账员可以对未审核地接进行编辑与删除！执行人员只能对自己地址进行编辑与删除操作！
-                Model.businessNature na = new BLL.businessNature().GetModel(model.fin_nature.Value);
-                if (na.na_flag.Value) return "无权限删除";
-                if (model.fin_personNum != manager.user_name && order.personlist.Where(p => p.op_number == manager.user_name && p.op_type != 2).ToArray().Length == 0 && order.personlist.Where(p => p.op_number == manager.user_name && (p.op_type == 3 || p.op_type == 4)).ToArray().Length > 0)
+                if (!new BLL.permission().checkHasPermission(manager, "0401"))//如果不是财务
                 {
-                    return "无权限删除";
+                    //验证权限：在同一个订单里，业务员与业务报账员可以对未审核地接进行编辑与删除！执行人员只能对自己地址进行编辑与删除操作！
+                    Model.businessNature na = new BLL.businessNature().GetModel(model.fin_nature.Value);
+                    if (na.na_flag.Value) return "无权限删除";
+                    if (model.fin_personNum != manager.user_name && order.personlist.Where(p => p.op_number == manager.user_name && p.op_type != 2).ToArray().Length == 0 && order.personlist.Where(p => p.op_number == manager.user_name && (p.op_type == 3 || p.op_type == 4)).ToArray().Length > 0)
+                    {
+                        return "无权限删除";
+                    }
+                }
+                else
+                {
+                    if (model.fin_personNum != manager.user_name && !new BLL.permission().checkHasPermission(manager, "0403"))
+                    {
+                        return "无权限删除";
+                    }
                 }
             }
-            else
-            {
-                if (model.fin_personNum != manager.user_name && !new BLL.permission().checkHasPermission(manager, "0403"))
-                {
-                    return "无权限删除";
-                }
-            }
+            
             string typeText = "应收";
             if (!model.fin_type.Value)
             {

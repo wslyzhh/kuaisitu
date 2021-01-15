@@ -669,6 +669,10 @@ namespace MettingSys.DAL
                 {
                     strWhere1.Append(" and fin_nature=" + dict["nature"] + "");
                 }
+                if (dict.ContainsKey("detail"))
+                {
+                    strWhere1.Append(" and fin_detail like '%" + dict["detail"] + "%'");
+                }
                 if (dict.ContainsKey("sdate"))
                 {
                     strWhere3.Append(" and datediff(day,o_sdate,'" + dict["sdate"] + "')<=0");

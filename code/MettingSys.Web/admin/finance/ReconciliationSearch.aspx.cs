@@ -20,7 +20,7 @@ namespace MettingSys.Web.admin.finance
         protected int totalCount; //数据总记录数
         protected int page; //当前页码
         protected int pageSize; //每页大小
-        protected string _orderid = "", _cusName = "", _cid = "", _type = "", _num = "", _sdate = "", _edate = "", _cusName1 = "", _cid1 = "", _content = "", _sign = "", _money = "";
+        protected string _orderid = "", _cusName = "", _cid = "", _type = "", _num = "", _sdate = "", _edate = "", _cusName1 = "", _cid1 = "", _content = "", _sign = "", _money = "", _nature = "", _detail = "";
 
         decimal _pMoney = 0, _tMoney = 0;
 
@@ -38,6 +38,8 @@ namespace MettingSys.Web.admin.finance
             _content = DTRequest.GetString("txtContent");
             _sign = DTRequest.GetString("ddlsign");
             _money = DTRequest.GetString("txtMoney");
+            _nature = DTRequest.GetString("ddlnature");
+            _detail = DTRequest.GetString("txtDetails");
 
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
@@ -56,6 +58,12 @@ namespace MettingSys.Web.admin.finance
             ddltype.DataValueField = "key";
             ddltype.DataBind();
             ddltype.Items.Insert(0, new ListItem("不限", ""));
+
+            ddlnature.DataSource = new BLL.businessNature().GetList(0, "", "na_sort asc,na_id desc");
+            ddlnature.DataTextField = "na_name";
+            ddlnature.DataValueField = "na_id";
+            ddlnature.DataBind();
+            ddlnature.Items.Insert(0, new ListItem("不限", ""));
         }
         #endregion
 
@@ -157,6 +165,14 @@ namespace MettingSys.Web.admin.finance
             {
                 strTemp.Append(" and fc_money "+_sign+" " + _money + "");
             }
+            if (!string.IsNullOrEmpty(_nature))
+            {
+                strTemp.Append("  and fin_nature=" + _nature + "");
+            }
+            if (!string.IsNullOrEmpty(_detail))
+            {
+                strTemp.Append(" and fin_detail like '%" + _detail + "%'");
+            }
             return strTemp.ToString();
         }
         #endregion
@@ -192,12 +208,14 @@ namespace MettingSys.Web.admin.finance
             _content = DTRequest.GetFormString("txtContent");
             _sign = DTRequest.GetFormString("ddlsign");
             _money = DTRequest.GetFormString("txtMoney");
+            _nature = DTRequest.GetFormString("ddlnature");
+            _detail = DTRequest.GetFormString("txtDetails");
             RptBind("1=1" + CombSqlTxt(), "o_addDate desc,o_id desc");
         }
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("ReconciliationSearch.aspx", "page={0}&txtOrderID={1}&txtCusName={2}&hCusId={3}&ddltype={4}&txtNum={5}&txtsDate={6}&txteDate={7}&txtCusName1={8}&hCusId1={9}&txtContent={10}&ddlsign={11}&txtMoney={12}", "__id__", _orderid, _cusName, _cid, _type, _num, _sdate, _edate, _cusName1, _cid1, _content, _sign, _money);
+            return Utils.CombUrlTxt("ReconciliationSearch.aspx", "page={0}&txtOrderID={1}&txtCusName={2}&hCusId={3}&ddltype={4}&txtNum={5}&txtsDate={6}&txteDate={7}&txtCusName1={8}&hCusId1={9}&txtContent={10}&ddlsign={11}&txtMoney={12}&ddlnature={13}&txtDetails={14}", "__id__", _orderid, _cusName, _cid, _type, _num, _sdate, _edate, _cusName1, _cid1, _content, _sign, _money,_nature,_detail);
         }
 
         protected void btnExcel_Click(object sender, EventArgs e)
@@ -207,6 +225,20 @@ namespace MettingSys.Web.admin.finance
             //string[] strFields = { "o_id","c_name","cname", "o_sdate/o_edate", "o_address", "o_content",  "fin_type", "na_name", "fin_detail", "fc_num", "fc_money" };
             //DataTable dt = new BLL.finance_chk().GetList(0,0, "1=1" + CombSqlTxt(), "fc_addDate desc,fin_adddate desc", out totalCount, out _tMoney, false).Tables[0];
             //ExcelHelper.Write(HttpContext.Current, dt, fileName, fileName, strFields, strFieldsName, string.Format("{0}.xlsx", fileName));
+            _orderid = DTRequest.GetFormString("txtOrderID");
+            _cusName = DTRequest.GetFormString("txtCusName");
+            _cid = DTRequest.GetFormString("hCusId");
+            _type = DTRequest.GetFormString("ddltype");
+            _num = DTRequest.GetFormString("txtNum");
+            _sdate = DTRequest.GetFormString("txtsDate");
+            _edate = DTRequest.GetFormString("txteDate");
+            _cusName1 = DTRequest.GetFormString("txtCusName1");
+            _cid1 = DTRequest.GetFormString("hCusId1");
+            _content = DTRequest.GetFormString("txtContent");
+            _sign = DTRequest.GetFormString("ddlsign");
+            _money = DTRequest.GetFormString("txtMoney");
+            _nature = DTRequest.GetFormString("ddlnature");
+            _detail = DTRequest.GetFormString("txtDetails");
 
             DataTable dt = new BLL.finance_chk().GetList(0, 0, "1=1" + CombSqlTxt(), "fc_addDate desc,fin_adddate desc", out totalCount, out _tMoney, false).Tables[0];
 
