@@ -498,7 +498,7 @@
 
         isExactMatch: function (query) {
             var suggestions = this.suggestions;
-
+            console.log("1:"+suggestions);
             return (suggestions.length === 1 && suggestions[0].name.toLowerCase() === query.toLowerCase());
         },
 
@@ -665,18 +665,18 @@
 
                         return options.formatGroup(suggestion, category);
                     };
-
-            if (options.triggerSelectOnValidInput && that.isExactMatch(value)) {
-                that.select(0);
-                return;
-            }
+            //输入全部文字没有弹出下来框    2021-01-20
+            //if (options.triggerSelectOnValidInput && that.isExactMatch(value)) {
+            //    that.select(0);
+            //    return;
+            //}
 
             // Build suggestions inner HTML:
             $.each(that.suggestions, function (i, suggestion) {
                 if (groupBy){
                     html += formatGroup(suggestion, value, i);
                 }
-
+                console.log("v:" + value);
                 html += '<div class="' + className + '" data-index="' + i + '">' + formatResult(suggestion, value, i) + '</div>';
             });
 

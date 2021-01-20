@@ -619,7 +619,7 @@ namespace MettingSys.Web.tools
         private void get_AllCustomer(HttpContext context)
         {
             BLL.Customer bll = new BLL.Customer();
-            DataSet ds = bll.GetNameList("c_id as id,c_name as name,c_type as type", "c_id > 0", "c_isUse desc,c_addDate desc,c_id desc");
+            DataSet ds = bll.GetNameList("c_id as id,c_name as name,(case when c_type=1 then '客户' else case when c_type=2 then '管理用客户' else case when c_type=3 then '内部客户' else case when c_type=4 then '供应商' else '客户兼供应商' end end end end) as type", "c_id > 0 and c_isUse=1", "c_isUse desc,c_addDate desc,c_id desc");
             if (ds != null && ds.Tables.Count > 0)
             {
                 context.Response.Write(JArray.FromObject(ds.Tables[0]));
