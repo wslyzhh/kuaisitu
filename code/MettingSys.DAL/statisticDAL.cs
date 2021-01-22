@@ -1024,6 +1024,49 @@ namespace MettingSys.DAL
         }
 
         /// <summary>
+        /// 策划与设计
+        /// </summary>
+        /// <param name="pageSize"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="strWhere"></param>
+        /// <param name="filedOrder"></param>
+        /// <param name="recordCount"></param>
+        /// <returns></returns>
+        public DataSet getReceiveOrderAnalyzeData(int pageSize, int pageIndex, string strWhere, string filedOrder,out int tCount3,out int tCount5,out int tCount, out int recordCount, bool isPage = true)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select op_number,op_name,detaildepart,sum(case when op_type = 3 then 1 else 0 end) type3,sum(case when op_type = 5 then 1 else 0 end) type5,sum(case when op_type = 3 or op_type = 5 then 1 else 0 end) sumType  from MS_OrderPerson left join MS_Order on op_oid = o_id");
+            strSql.Append(" left join dt_manager on op_number = user_name");
+            strSql.Append(" where (op_type = 3 or op_type = 5) ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(strWhere);
+            }
+            strSql.Append(" group by op_number, op_name, detaildepart");
+            //recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
+            recordCount = 0;
+            tCount3 = 0;
+            tCount5 = 0;
+            tCount = 0;
+            if (isPage)
+            {
+                DataTable dt = DbHelperSQL.Query("select count(1) c,sum(type3) tCount3,sum(type5) tCount5,sum(sumType) tCount from(" + strSql.ToString() + ") t").Tables[0];
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    recordCount = Utils.ObjToInt(dt.Rows[0]["c"], 0);
+                    tCount3 = Utils.ObjToInt(dt.Rows[0]["tCount3"], 0);
+                    tCount5 = Utils.ObjToInt(dt.Rows[0]["tCount5"], 0);
+                    tCount = Utils.ObjToInt(dt.Rows[0]["tCount"], 0);
+                }
+                return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
+            }
+            else 
+            {
+                return DbHelperSQL.Query(strSql.ToString() + " order by  " + filedOrder);
+            }
+        }
+
+        /// <summary>
         /// 获得查询分页数据
         /// </summary>
         /// <param name="pageSize"></param>

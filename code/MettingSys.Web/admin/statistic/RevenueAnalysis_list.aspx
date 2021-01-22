@@ -120,7 +120,7 @@
 <body class="mainbody">
     <form id="ajaxForm" runat="server" action="RevenueAnalysis_list.aspx" method="post" enctype="multipart/form-data">
         <!--导航栏-->
-        <div class="location">
+        <div class="location" style="margin-bottom:10px;">
             <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
             <a href="../center.aspx" class="home"><i class="iconfont icon-home"></i><span>首页</span></a>
             <i class="arrow iconfont icon-arrow-right"></i>
@@ -128,7 +128,7 @@
         </div>
         <!--/导航栏-->
 
-
+        <div class="tab-content" style="padding-top: 0;">
         <div class="searchbar">
             <div class="menu-list" style="margin-bottom: 10px;">
                 区域：
@@ -487,9 +487,9 @@
             </asp:Repeater>
         </div>
         <!--/列表-->
-        <div style="font-size: 12px;">
-            <span style="float: left;">本页：<asp:Label ID="pCount" runat="server">0</asp:Label>条记录，合计应收金额：<asp:Label ID="pShou" runat="server">0</asp:Label>，应付金额：<asp:Label ID="pFu" runat="server">0</asp:Label>，业务毛利：<asp:Label ID="pProfit" runat="server">0</asp:Label></span>
-            <span style="float: right;">总计：<asp:Label ID="tCount" runat="server">0</asp:Label>条记录，总计应收金额：<asp:Label ID="tShou" runat="server">0</asp:Label>，应付金额：<asp:Label ID="tFu" runat="server">0</asp:Label>，业务毛利：<asp:Label ID="tProfit" runat="server">0</asp:Label></span>
+        <div style="font-size: 12px;line-height: 1.6em;">
+            <span style="display: block;">本页：<asp:Label ID="pCount" runat="server">0</asp:Label>条记录，合计应收金额：<asp:Label ID="pShou" runat="server">0</asp:Label>，应付金额：<asp:Label ID="pFu" runat="server">0</asp:Label>，业务毛利：<asp:Label ID="pProfit" runat="server">0</asp:Label></span>
+            <span style="display: block; float: left;">总计：<asp:Label ID="tCount" runat="server">0</asp:Label>条记录，总计应收金额：<asp:Label ID="tShou" runat="server">0</asp:Label>，应付金额：<asp:Label ID="tFu" runat="server">0</asp:Label>，业务毛利：<asp:Label ID="tProfit" runat="server">0</asp:Label></span>
         </div>
         <div class="dRemark">
             <p></p>
@@ -504,7 +504,7 @@
             <div id="PageContent" runat="server" class="default"></div>
         </div>
         <!--/内容底部-->
-
+        </div>
     </form>
 </body>
 </html>

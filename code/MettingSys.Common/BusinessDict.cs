@@ -389,6 +389,13 @@ namespace MettingSys.Common
                 dict.Add(1, "<font color='blue'>处理中</font>");
                 dict.Add(2, "<font color='green'>已完成</font>");
             }
+            else if (type == 3)
+            {
+                dict.Add(0, "待定");
+                dict.Add(1, "处理中");
+                dict.Add(2, "已完成");
+                dict.Add(5, "待定与处理中");
+            }
             else
             {
                 dict.Add(0, "待定");

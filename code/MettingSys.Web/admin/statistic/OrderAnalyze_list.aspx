@@ -265,10 +265,10 @@
                     </FooterTemplate>
                 </asp:Repeater>
             </div>
-        <div style="font-size: 12px;">
-            <span style="display:block;">本页：<asp:Label ID="pCount" runat="server">0</asp:Label>条记录，总计应收款：<asp:Label ID="pMoney1" runat="server">0</asp:Label>，未收款：<asp:Label ID="pMoney2" runat="server">0</asp:Label>，应付款：<asp:Label ID="pMoney3" runat="server">0</asp:Label>，未付款：<asp:Label ID="pMoney4" runat="server">0</asp:Label>，税费：<asp:Label ID="pMoney5" runat="server">0</asp:Label>，业绩利润：<asp:Label ID="pMoney6" runat="server">0</asp:Label></span>
-            <span style="display:block;float: left;">总计：<asp:Label ID="tCount" runat="server">0</asp:Label>条记录，总计应收款：<asp:Label ID="tMoney1" runat="server">0</asp:Label>，未收款：<asp:Label ID="tMoney2" runat="server">0</asp:Label>，应付款：<asp:Label ID="tMoney3" runat="server">0</asp:Label>，未付款：<asp:Label ID="tMoney4" runat="server">0</asp:Label>，税费：<asp:Label ID="tMoney5" runat="server">0</asp:Label>，业绩利润：<asp:Label ID="tMoney6" runat="server">0</asp:Label></span>
-        </div>
+            <div style="font-size: 12px;">
+                <span style="display:block;">本页：<asp:Label ID="pCount" runat="server">0</asp:Label>条记录，总计应收款：<asp:Label ID="pMoney1" runat="server">0</asp:Label>，未收款：<asp:Label ID="pMoney2" runat="server">0</asp:Label>，应付款：<asp:Label ID="pMoney3" runat="server">0</asp:Label>，未付款：<asp:Label ID="pMoney4" runat="server">0</asp:Label>，税费：<asp:Label ID="pMoney5" runat="server">0</asp:Label>，业绩利润：<asp:Label ID="pMoney6" runat="server">0</asp:Label></span>
+                <span style="display:block;float: left;">总计：<asp:Label ID="tCount" runat="server">0</asp:Label>条记录，总计应收款：<asp:Label ID="tMoney1" runat="server">0</asp:Label>，未收款：<asp:Label ID="tMoney2" runat="server">0</asp:Label>，应付款：<asp:Label ID="tMoney3" runat="server">0</asp:Label>，未付款：<asp:Label ID="tMoney4" runat="server">0</asp:Label>，税费：<asp:Label ID="tMoney5" runat="server">0</asp:Label>，业绩利润：<asp:Label ID="tMoney6" runat="server">0</asp:Label></span>
+            </div>
             <!--/列表-->
             <div class="dRemark">
                 <p></p>

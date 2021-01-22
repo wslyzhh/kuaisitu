@@ -121,6 +121,20 @@ namespace MettingSys.BLL
         }
 
         /// <summary>
+        /// 策划与设计
+        /// </summary>
+        /// <param name="pageSize"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="strWhere"></param>
+        /// <param name="filedOrder"></param>
+        /// <param name="recordCount"></param>
+        /// <returns></returns>
+        public DataSet getReceiveOrderAnalyzeData(int pageSize, int pageIndex, string strWhere, string filedOrder, out int tCount3, out int tCount5, out int tCount, out int recordCount, bool isPage = true)
+        {
+            return dal.getReceiveOrderAnalyzeData(pageSize, pageIndex, strWhere, filedOrder,out tCount3,out tCount5,out tCount, out recordCount,isPage);
+        }
+
+        /// <summary>
         /// 获得查询分页数据
         /// </summary>
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount, out decimal money1, out decimal money2, out decimal money3, out decimal money4, out decimal money5, out decimal money6, bool isPage=true)

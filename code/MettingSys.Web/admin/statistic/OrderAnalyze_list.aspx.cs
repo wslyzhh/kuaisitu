@@ -81,11 +81,13 @@ namespace MettingSys.Web.admin.statistic
                     }
                     else
                     {
-                        int day = DateTime.Now.Day;
-                        DateTime date = DateTime.Now.AddDays(-day + 1);
-                        _sdate1 = date.AddMonths(-1).ToString("yyyy-MM-dd");
-                        _edate1 = date.AddDays(-1).ToString("yyyy-MM-dd");
-
+                        if (string.IsNullOrEmpty(DTRequest.GetString("fromReceiveOrder")))//如果是从策划与设计页面过来的则跳过
+                        {
+                            int day = DateTime.Now.Day;
+                            DateTime date = DateTime.Now.AddDays(-day + 1);
+                            _sdate1 = date.AddMonths(-1).ToString("yyyy-MM-dd");
+                            _edate1 = date.AddDays(-1).ToString("yyyy-MM-dd");
+                        }
                     }
                     
                 }
