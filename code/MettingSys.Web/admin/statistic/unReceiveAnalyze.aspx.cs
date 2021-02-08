@@ -21,13 +21,12 @@ namespace MettingSys.Web.admin.statistic
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _type = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _status = "", _sign = "", _money1 = "", _tag = "", _self = "", _lockstatus = "", _area = "", _person1 = "";
+        protected string _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _status = "", _sign = "", _money1 = "", _tag = "", _self = "", _lockstatus = "", _area = "", _person1 = "";
         private Model.manager manager = null;
         decimal money1 = 0, money2 = 0, money3 = 0, money4 = 0, money5 = 0, money6 = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
             this.pageSize = GetPageSize(10); //每页数量
-            _type = DTRequest.GetString("ddltype");
             _sdate = DTRequest.GetString("txtsDate");
             _edate = DTRequest.GetString("txteDate");
             _sdate1 = DTRequest.GetString("txtsDate1");
@@ -35,25 +34,9 @@ namespace MettingSys.Web.admin.statistic
             _status = DTRequest.GetString("ddlstatus");
             _sign = DTRequest.GetString("ddlsign");
             _money1 = DTRequest.GetString("txtMoney1");
-            _tag = DTRequest.GetString("tag");
-            _self = DTRequest.GetString("self");
             _lockstatus = DTRequest.GetString("ddllock");
             _area = DTRequest.GetString("ddlarea");
             _person1 = DTRequest.GetString("txtPerson1").ToUpper();
-            if (_tag == "1")
-            {
-                _type = "True";
-                ddltype.Enabled = false;
-                _sign = ">";
-                _money1 = "0";
-            }
-            else if (_tag == "0")
-            {
-                _type = "False";
-                ddltype.Enabled = false;
-                _sign = "<";
-                _money1 = "0";
-            }
             manager = GetAdminInfo();
             if (!Page.IsPostBack)
             {
@@ -69,12 +52,6 @@ namespace MettingSys.Web.admin.statistic
         #region 初始化数据=================================
         private void InitData()
         {
-            ddltype.DataSource = Common.BusinessDict.financeType();
-            ddltype.DataTextField = "value";
-            ddltype.DataValueField = "key";
-            ddltype.DataBind();
-            ddltype.Items.Insert(0, new ListItem("不限", ""));
-
             ddlstatus.DataSource = Common.BusinessDict.fStatus(1);
             ddlstatus.DataTextField = "value";
             ddlstatus.DataValueField = "key";
@@ -115,7 +92,7 @@ namespace MettingSys.Web.admin.statistic
             }
             BLL.finance bll = new BLL.finance();
             DataTable dt = null;
-            dt = bll.getSettleCustomerDetailListByUser(this.pageSize, this.page, _type, "", "", _sdate, _edate, _sdate1, _edate1, "", "", _status, _sign, _money1, _self == "1" ? manager.user_name : "", _lockstatus, _area, _person1, "op_name asc", out this.totalCount, out money1, out money2, out money3).Tables[0];
+            dt = bll.getSettleCustomerDetailListByUser(this.pageSize, this.page, "True", "", "", _sdate, _edate, _sdate1, _edate1, "", "", _status, _sign, _money1, _self == "1" ? manager.user_name : "", _lockstatus, _area, _person1, "op_name asc", out this.totalCount, out money1, out money2, out money3).Tables[0];
             this.rptPersonList.DataSource = dt;
             this.rptPersonList.DataBind();
             //绑定页码
@@ -143,7 +120,6 @@ namespace MettingSys.Web.admin.statistic
             tMoney2.Text = money2.ToString();
             tMoney3.Text = money3.ToString();
 
-            ddltype.SelectedValue = _type;
             txtsDate.Text = _sdate;
             txteDate.Text = _edate;
             txtsDate1.Text = _sdate1;
@@ -161,10 +137,7 @@ namespace MettingSys.Web.admin.statistic
         protected string CombSqlTxt()
         {
             StringBuilder strTemp = new StringBuilder();
-            if (!string.IsNullOrEmpty(_type))
-            {
-                strTemp.Append(" and fin_type='" + _type + "'");
-            }
+            strTemp.Append(" and fin_type=1");
             return strTemp.ToString();
         }
         #endregion
@@ -188,7 +161,6 @@ namespace MettingSys.Web.admin.statistic
         protected void btnSearch_Click(object sender, EventArgs e)
         {
             this.isSearch = true;
-            _type = DTRequest.GetFormString("ddltype");
             _sdate = DTRequest.GetFormString("txtsDate");
             _edate = DTRequest.GetFormString("txteDate");
             _sdate1 = DTRequest.GetFormString("txtsDate1");
@@ -201,21 +173,10 @@ namespace MettingSys.Web.admin.statistic
             _lockstatus = DTRequest.GetFormString("ddllock");
             _area = DTRequest.GetFormString("ddlarea");
             _person1 = DTRequest.GetFormString("txtPerson1").ToUpper();
-            if (_tag == "1")
-            {
-                _type = "True";
-                ddltype.Enabled = false;
-            }
-            else if (_tag == "0")
-            {
-                _type = "False";
-                ddltype.Enabled = false;
-            }
             RptBind("1=1 " + CombSqlTxt(), "isnull(fin_type,rp_type) desc,c_name asc");
         }
         protected void btnExcel_Click(object sender, EventArgs e)
         {
-            _type = DTRequest.GetFormString("ddltype");
             _sdate = DTRequest.GetFormString("txtsDate");
             _edate = DTRequest.GetFormString("txteDate");
             _sdate1 = DTRequest.GetFormString("txtsDate1");
@@ -229,7 +190,7 @@ namespace MettingSys.Web.admin.statistic
             _area = DTRequest.GetFormString("ddlarea");
             _person1 = DTRequest.GetFormString("txtPerson1").ToUpper();
             BLL.finance bll = new BLL.finance();
-            DataTable dt = bll.getSettleCustomerDetailList(this.pageSize, this.page, _type, "", "", _sdate, _edate, _sdate1, _edate1, "", "", _status, _sign, _money1, _self == "1" ? manager.user_name : "", _lockstatus, _area, _person1, "isnull(fin_type,rp_type) desc,c_name asc", out this.totalCount, out money1, out money2, out money3, out money4, out money5, out money6, false).Tables[0];
+            DataTable dt = bll.getSettleCustomerDetailList(this.pageSize, this.page, "True", "", "", _sdate, _edate, _sdate1, _edate1, "", "", _status, _sign, _money1, _self == "1" ? manager.user_name : "", _lockstatus, _area, _person1, "isnull(fin_type,rp_type) desc,c_name asc", out this.totalCount, out money1, out money2, out money3, out money4, out money5, out money6, false).Tables[0];
 
             string filename = "往来客户明细列表.xlsx";
             if (_tag == "1")
@@ -351,7 +312,7 @@ namespace MettingSys.Web.admin.statistic
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("settleCustomerDetail.aspx", "page={0}&ddltype={1}&txtsDate={2}&txteDate={3}&txtsDate1={4}&txteDate1={5}&ddlstatus={6}&ddlsign={7}&txtMoney1={8}&tag={9}&self={10}&ddllock={11}&ddlarea={12}&txtPerson1={13}", "__id__", _type, _sdate, _edate, _sdate1, _edate1, _status, _sign, _money1, _tag, _self, _lockstatus, _area, _person1);
+            return Utils.CombUrlTxt("settleCustomerDetail.aspx", "page={0}&txtsDate={1}&txteDate={2}&txtsDate1={3}&txteDate1={4}&ddlstatus={5}&ddlsign={6}&txtMoney1={7}&tag={8}&self={9}&ddllock={10}&ddlarea={11}&txtPerson1={12}", "__id__",_sdate, _edate, _sdate1, _edate1, _status, _sign, _money1, _tag, _self, _lockstatus, _area, _person1);
         }
         //设置分页数量
         protected void txtPageNum_TextChanged(object sender, EventArgs e)

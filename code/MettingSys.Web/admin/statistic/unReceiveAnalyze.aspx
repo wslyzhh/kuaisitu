@@ -64,11 +64,7 @@
 
 
         <div class="searchbar">
-            <div class="menu-list" style="margin-bottom: 10px;">
-                收付类别：
-                        <div class="rule-single-select">
-                            <asp:DropDownList ID="ddltype" runat="server"></asp:DropDownList>
-                        </div>                
+            <div class="menu-list" style="margin-bottom: 10px;">                      
                 活动开始日期：
                         <asp:TextBox ID="txtsDate" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate\')}'})"></asp:TextBox>
                 -
@@ -109,8 +105,6 @@
                         </div>
                 业务员：
                     <asp:TextBox ID="txtPerson1" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>
-                <input type="hidden" name="tag" value="<%=_tag %>" />
-                <input type="hidden" name="self" value="<%=_self %>" />
                 <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
                 <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
             </div>
@@ -136,7 +130,7 @@
                         <td><%# Eval("orderFinMoney") %></td>
                         <td><%# Eval("orderRpdMoney") %></td>
                         <td><%# Eval("orderUnMoney")%></td>
-                        <td><a href="settleCustomerDetail.aspx?&ddltype=<%#Eval("fin_type")%>&txtsDate=<%=_sdate %>&txteDate=<%=_edate %>&txtsDate1=<%=_sdate1 %>&txteDate1=<%=_edate1 %>&ddlstatus=<%=_status %>&ddlsign=<%=_sign %>&txtMoney1=<%=_money1 %>&self=<%=_self %>&ddllock=<%=_lockstatus %>&ddlarea=<%=_area %>&txtPerson1=<%# Eval("op_number") %>">明细</a></td>
+                        <td><a href="../finance/settleCustomerDetail.aspx?&ddltype=<%#Eval("fin_type")%>&txtsDate=<%=_sdate %>&txteDate=<%=_edate %>&txtsDate1=<%=_sdate1 %>&txteDate1=<%=_edate1 %>&ddlstatus=<%=_status %>&ddlsign=<%=_sign %>&txtMoney1=<%=_money1 %>&self=<%=_self %>&ddllock=<%=_lockstatus %>&ddlarea=<%=_area %>&txtPerson1=<%# Eval("op_number") %>">明细</a></td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
