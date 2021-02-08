@@ -267,6 +267,7 @@
     <Content Include="admin\statistic\OrderAnalyze_list.aspx" />
     <Content Include="admin\statistic\ReceiveOrderAnalyzd_list.aspx" />
     <Content Include="admin\statistic\RevenueAnalysis_list.aspx" />
+    <Content Include="admin\statistic\unReceiveAnalyze.aspx" />
     <Content Include="admin\unBusiness\printCertificate.aspx" />
     <Content Include="admin\unBusiness\unBusinessPay_edit.aspx" />
     <Content Include="admin\unBusiness\unBusinessPay_list.aspx" />
@@ -1794,6 +1795,13 @@
     </Compile>
     <Compile Include="admin\statistic\RevenueAnalysis_list.aspx.designer.cs">
       <DependentUpon>RevenueAnalysis_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\statistic\unReceiveAnalyze.aspx.cs">
+      <DependentUpon>unReceiveAnalyze.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\statistic\unReceiveAnalyze.aspx.designer.cs">
+      <DependentUpon>unReceiveAnalyze.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\unBusiness\printCertificate.aspx.cs">
       <DependentUpon>printCertificate.aspx</DependentUpon>

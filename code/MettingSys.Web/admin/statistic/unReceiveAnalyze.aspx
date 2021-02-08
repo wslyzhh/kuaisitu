@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="settleCustomerDetail.aspx.cs" Inherits="MettingSys.Web.admin.finance.settleCustomerDetail" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="unReceiveAnalyze.aspx.cs" Inherits="MettingSys.Web.admin.statistic.unReceiveAnalyze" %>
 
 <%@ Import Namespace="MettingSys.Common" %>
 <!DOCTYPE html>
@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>明细列表</title>
+    <title>员工未收款统计</title>
     <link rel="stylesheet" type="text/css" href="../../scripts/artdialog/ui-dialog.css" />
     <link rel="stylesheet" type="text/css" href="../../css/pagination.css" />
     <link rel="stylesheet" type="text/css" href="../skin/icon/iconfont.css" />
@@ -58,9 +58,7 @@
             <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
             <a href="../center.aspx" class="home"><i class="iconfont icon-home"></i><span>首页</span></a>
             <i class="arrow iconfont icon-arrow-right"></i>
-            <a href="settleCustomer.aspx" class="home"><i class="iconfont icon-home"></i><span>往来客户</span></a>
-            <i class="arrow iconfont icon-arrow-right"></i>
-            <span>明细列表</span>
+            <span>员工未收款统计</span>
         </div>
         <!--/导航栏-->
 
@@ -70,10 +68,7 @@
                 收付类别：
                         <div class="rule-single-select">
                             <asp:DropDownList ID="ddltype" runat="server"></asp:DropDownList>
-                        </div>
-                应收付对象：
-                                <asp:TextBox ID="txtCusName" runat="server" CssClass="input" Width="150"></asp:TextBox>
-                <asp:HiddenField ID="hCusId" runat="server" />
+                        </div>                
                 活动开始日期：
                         <asp:TextBox ID="txtsDate" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate\')}'})"></asp:TextBox>
                 -
@@ -82,10 +77,6 @@
                         <asp:TextBox ID="txtsDate1" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate1\')}'})"></asp:TextBox>
                 -
                         <asp:TextBox ID="txteDate1" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({minDate:'#F{$dp.$D(\'txtsDate1\')}'})"></asp:TextBox>
-                到付日期：
-                        <asp:TextBox ID="txtsDate2" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate2\')}'})"></asp:TextBox>
-                -
-                        <asp:TextBox ID="txteDate2" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({minDate:'#F{$dp.$D(\'txtsDate2\')}'})"></asp:TextBox>
                 订单状态：
                                 <div class="rule-single-select">
                                     <asp:DropDownList ID="ddlstatus" runat="server"></asp:DropDownList>
@@ -118,13 +109,6 @@
                         </div>
                 业务员：
                     <asp:TextBox ID="txtPerson1" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>
-                分组显示：
-                    <div class="rule-single-select">
-                        <asp:DropDownList ID="ddlGroup" runat="server">
-                            <asp:ListItem Value="1">应收付对象</asp:ListItem>
-                            <asp:ListItem Value="2">业务员</asp:ListItem>
-                        </asp:DropDownList>
-                    </div>
                 <input type="hidden" name="tag" value="<%=_tag %>" />
                 <input type="hidden" name="self" value="<%=_self %>" />
                 <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
@@ -132,40 +116,7 @@
             </div>
         </div>
         <!--列表-->
-        <div class="table-container">
-            <asp:Repeater ID="rptList" runat="server">
-                <HeaderTemplate>
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
-                        <tr style="text-align: left;">
-                            <th width="15%">应收付对象</th>
-                            <th width="8%">收付类别</th>
-                            <th width="10%">应收付款</th>
-                            <th width="10%">订单已收付款</th>
-                            <th width="10%">未收付款</th>
-                            <th width="10%">已收付款</th>
-                            <th width="10%">已分配款</th>
-                            <th width="10%">未分配款</th>
-                            <th>操作</th>
-                        </tr>
-                </HeaderTemplate>
-                <ItemTemplate>
-                    <tr>
-                        <td><%# Eval("c_name") %></td>
-                        <td><%#Eval("fin_type").ToString()=="True"?"<font color='blue'>收</font>":"<font color='red'>付</font>"%></td>
-                        <td><%# Eval("orderFinMoney") %></td>
-                        <td><%# Eval("orderRpdMoney") %></td>
-                        <td><%# Eval("orderUnMoney")%></td>
-                        <td><%# Eval("rpmoney")%></td>
-                        <td><%# Eval("rpdmoney") %></td>
-                        <td><%# Eval("unmoney")%></td>
-                        <td><a href="ReconciliationDetail.aspx?hCusId=<%#Eval("fin_cid")%>&txtCusName=<%# Eval("c_name") %>&ddltype=<%#Eval("fin_type")%>&txtsDate=<%=_sdate %>&txteDate=<%=_edate %>&txtsDate1=<%=_sdate1 %>&txteDate1=<%=_edate1 %>&ddlstatus=<%=_status %>&ddlsign=<%=_sign %>&txtMoney1=<%=_money1 %>&self=<%=_self %>&ddllock=<%=_lockstatus %>&ddlarea=<%=_area %>&txtPerson1=<%=_person1 %>">明细</a></td>
-                    </tr>
-                </ItemTemplate>
-                <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"9\">暂无记录</td></tr>" : ""%>
-                </table>
-                </FooterTemplate>
-            </asp:Repeater>
+        <div class="table-container">            
             <asp:Repeater ID="rptPersonList" runat="server">
                 <HeaderTemplate>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
@@ -185,7 +136,7 @@
                         <td><%# Eval("orderFinMoney") %></td>
                         <td><%# Eval("orderRpdMoney") %></td>
                         <td><%# Eval("orderUnMoney")%></td>
-                        <td><a href="settleCustomerDetail.aspx?&ddltype=<%#Eval("fin_type")%>&txtsDate=<%=_sdate %>&txteDate=<%=_edate %>&txtsDate1=<%=_sdate1 %>&txteDate1=<%=_edate1 %>&ddlstatus=<%=_status %>&ddlsign=<%=_sign %>&txtMoney1=<%=_money1 %>&self=<%=_self %>&ddllock=<%=_lockstatus %>&ddlarea=<%=_area %>&txtPerson1=<%# Eval("op_number") %>&ddlGroup=1">明细</a></td>
+                        <td><a href="settleCustomerDetail.aspx?&ddltype=<%#Eval("fin_type")%>&txtsDate=<%=_sdate %>&txteDate=<%=_edate %>&txtsDate1=<%=_sdate1 %>&txteDate1=<%=_edate1 %>&ddlstatus=<%=_status %>&ddlsign=<%=_sign %>&txtMoney1=<%=_money1 %>&self=<%=_self %>&ddllock=<%=_lockstatus %>&ddlarea=<%=_area %>&txtPerson1=<%# Eval("op_number") %>">明细</a></td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
