@@ -203,7 +203,6 @@ export default {
 					_this.showOrderList = res.data.list;
 					_this.recordTotal = res.data.pageTotal
 					_this.pageTotal = Math.ceil(_this.recordTotal / _this.searchData.pageSize)
-					console.log(_this.pageTotal)
 				}
 				else{
 					_this.showOrderList = _this.showOrderList.concat(res.data.list);

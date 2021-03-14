@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="invoice_edit.aspx.cs" Inherits="MettingSys.Web.admin.finance.invoice_edit" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="invoice_edit.aspx.cs" MaintainScrollPositionOnPostback="true" Inherits="MettingSys.Web.admin.finance.invoice_edit" %>
 
 <%@ Import Namespace="MettingSys.Common" %>
 <!DOCTYPE html>
@@ -31,6 +31,10 @@
                     minChars: 1,
                     onSelect: function (suggestion) {
                         $('#hCusId').val(suggestion.id);
+                        //alert(suggestion.id + "-" + suggestion.name);
+                        sessionStorage.clear();
+                        sessionStorage.setItem("cid", suggestion.id);
+                        sessionStorage.setItem("cname", suggestion.name);
                     },
                     showNoSuggestionNotice: true,
                     noSuggestionNotice: '抱歉，没有匹配的选项',
@@ -40,6 +44,20 @@
             $("#txtCusName").change(function () {
                 $("#hCusId").val("");
             });
+
+            var _cid = sessionStorage.getItem("cid");
+            var _cname = sessionStorage.getItem("cname");
+            //alert(_cid + "-" + _cname);
+            if (_cid != null) {
+                $("#hCusId").val(_cid);
+            }
+            if (_cname != null) {
+                $("#txtCusName").val(_cname);
+            }
+            
+
+
+
             $("#txtmoney").blur(function () {
                 var _money = $(this).val();
                 if (_money != "" && _money != "0") {

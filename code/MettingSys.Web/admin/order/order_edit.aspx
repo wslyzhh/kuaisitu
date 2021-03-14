@@ -352,7 +352,10 @@
                 type: 2,
                 title: title,
                 area: ['650px', '650px'],
-                content: '../finance/invoice_edit.aspx?action=' + action + '&oID=' + oID + '&fromOrder=true&id=' + id + '&cid=' + $("#hCusId").val() + '&cusname='+$("#txtCusName").val()
+                content: '../finance/invoice_edit.aspx?action=' + action + '&oID=' + oID + '&fromOrder=true&id=' + id + '&cid=' + $("#hCusId").val() + '&cusname=' + $("#txtCusName").val(),
+                end: function () {
+                    sessionStorage.clear();
+                }
             });
         }
         //删除非业务支付申请

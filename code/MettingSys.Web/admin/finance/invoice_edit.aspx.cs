@@ -17,6 +17,8 @@ namespace MettingSys.Web.admin.finance
         protected string oID = "", cid = "", cusName = "";
         protected string fromOrder = "";//true时表示从订单页面添加
 
+        protected static string _hcid = "", _hcname = "";
+
         protected Model.business_log logmodel = null;
         protected Model.manager manager = null;
 
@@ -433,7 +435,6 @@ namespace MettingSys.Web.admin.finance
                 }
             }
         }
-
 
         protected void ddlserviceType_SelectedIndexChanged(object sender, EventArgs e)
         {

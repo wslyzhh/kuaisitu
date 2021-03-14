@@ -130,7 +130,7 @@
                         <td><%# Eval("orderFinMoney") %></td>
                         <td><%# Eval("orderRpdMoney") %></td>
                         <td><%# Eval("orderUnMoney")%></td>
-                        <td><a href="../finance/settleCustomerDetail.aspx?&ddltype=<%#Eval("fin_type")%>&txtsDate=<%=_sdate %>&txteDate=<%=_edate %>&txtsDate1=<%=_sdate1 %>&txteDate1=<%=_edate1 %>&ddlstatus=<%=_status %>&ddlsign=<%=_sign %>&txtMoney1=<%=_money1 %>&self=<%=_self %>&ddllock=<%=_lockstatus %>&ddlarea=<%=_area %>&txtPerson1=<%# Eval("op_number") %>">明细</a></td>
+                        <td><a href="OrderAnalyze_list.aspx?fromReceiveOrder=1&txtsDate=<%=_sdate %>&txteDate=<%=_edate %>&txtsDate1=<%=_sdate1 %>&txteDate1=<%=_edate1 %>&ddlstatus=<%=_status %>&ddllock=<%=_lockstatus %>&ddlarea=<%=_area %>&txtPerson1=<%# Eval("op_number") %>&ddlsign=<%=_sign %>&txtMoney=<%=_money1 %>">明细</a></td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>

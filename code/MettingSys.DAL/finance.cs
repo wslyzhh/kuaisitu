@@ -619,6 +619,99 @@ namespace MettingSys.DAL
         }
 
         /// <summary>
+        /// 员工未收款统计(按业务员分组)
+        /// </summary>
+        /// <returns></returns>
+        public DataSet getUnReceiveDetailListByUser(int pageSize, int pageIndex, string _sdate, string _edate, string _sdate1, string _edate1,string _status, string _sign, string _money1, string _lockstatus, string _area, string _person1, string filedOrder, out int recordCount, out decimal money1, out decimal money2, out decimal money3, bool isPage = true)
+        {
+            StringBuilder strTemp = new StringBuilder();
+            StringBuilder strTemp1 = new StringBuilder();
+            StringBuilder strTemp2 = new StringBuilder();
+            strTemp.Append(" and fin_type=1 ");            
+            if (!string.IsNullOrEmpty(_sdate))
+            {
+                strTemp1.Append(" and datediff(day,o_sdate,'" + _sdate + "')<=0");
+            }
+            if (!string.IsNullOrEmpty(_edate))
+            {
+                strTemp1.Append(" and datediff(day,o_sdate,'" + _edate + "')>=0");
+            }
+            if (!string.IsNullOrEmpty(_sdate1))
+            {
+                strTemp1.Append(" and datediff(day,o_edate,'" + _sdate1 + "')<=0");
+            }
+            if (!string.IsNullOrEmpty(_edate1))
+            {
+                strTemp1.Append(" and datediff(day,o_edate,'" + _edate1 + "')>=0");
+            }
+            if (!string.IsNullOrEmpty(_status))
+            {
+                switch (_status)
+                {
+                    case "3":
+                        strTemp1.Append(" and (o_status=1 or o_status=2)");
+                        break;
+                    default:
+                        strTemp1.Append(" and o_status=" + _status + "");
+                        break;
+                }
+            }
+            if (!string.IsNullOrEmpty(_lockstatus))
+            {
+                if (_lockstatus == "3")
+                {
+                    strTemp1.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
+                }
+                else
+                {
+                    strTemp1.Append(" and o_lockStatus=" + _lockstatus + "");
+                }
+            }
+            if (!string.IsNullOrEmpty(_area))
+            {
+                strTemp1.Append(" and op_area='" + _area + "'");
+            }
+            if (!string.IsNullOrEmpty(_person1))
+            {
+                strTemp.Append(" and (op_number like '%" + _person1 + "%' or op_name like '%" + _person1 + "%')");
+            }
+            if (!string.IsNullOrEmpty(_money1))
+            {
+                strTemp.Append(" and orderUnMoney " + _sign + " " + _money1 + "");
+            }
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select  op_number,op_name,fin_type,isnull(orderFinMoney,0) orderFinMoney,isnull(orderRpdMoney,0) orderRpdMoney,isnull(orderUnMoney,0) orderUnMoney from ");
+            strSql.Append(" (select op_number,op_name, fin_type, sum(finMoney) orderFinMoney, sum(rpdMoney) orderRpdMoney, (sum(finMoney) - sum(rpdMoney)) orderUnMoney  from");
+            strSql.Append(" (select isnull(fin_oid, rpd_oid) fin_oid,op_number,op_name, isnull(fin_cid, rpd_cid) fin_cid,c_name, isnull(fin_type, rpd_type) fin_type, isnull(finMoney, 0) finMoney, isnull(rpdMoney, 0) rpdMoney from ");
+            strSql.Append(" (select fin_oid, fin_cid, fin_type, sum(isnull(fin_money, 0)) finMoney from MS_finance where fin_flag <> 1 group by fin_oid, fin_cid, fin_type) t1 ");
+            strSql.Append(" full join(select rpd_oid, rpd_cid, rpd_type, sum(isnull(rpd_money, 0)) rpdMoney from MS_ReceiptPayDetail left join MS_ReceiptPay on rp_id = rpd_rpid where rp_isConfirm = 1 group by rpd_oid, rpd_cid, rpd_type) t3 ");
+            strSql.Append(" on t1.fin_oid = t3.rpd_oid and t1.fin_cid = t3.rpd_cid and t1.fin_type = t3.rpd_type ");
+            strSql.Append(" left join MS_Order on isnull(fin_oid, rpd_oid) = o_id left join MS_OrderPerson on o_id=op_oid and op_type=1 left join MS_Customer on fin_cid=c_id where 1=1  " + strTemp1 + "");
+            strSql.Append(" ) t group by op_number,op_name, fin_type) t2  where 1 = 1  " + strTemp + "");
+
+            SqlParameter[] param = { };
+            recordCount = 0; money1 = 0; money2 = 0; money3 = 0;
+            if (isPage)
+            {
+                //recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
+                DataTable dt = DbHelperSQL.Query("select count(*) c,sum(orderFinMoney) orderFinMoney,sum(orderRpdMoney) orderRpdMoney,sum(orderUnMoney) orderUnMoney from (" + strSql.ToString() + ") v1").Tables[0];
+                if (dt != null)
+                {
+                    recordCount = Utils.ObjToInt(dt.Rows[0]["c"], 0);
+                    money1 = Utils.ObjToDecimal(dt.Rows[0]["orderFinMoney"], 0);
+                    money2 = Utils.ObjToDecimal(dt.Rows[0]["orderRpdMoney"], 0);
+                    money3 = Utils.ObjToDecimal(dt.Rows[0]["orderUnMoney"], 0);
+                }
+                return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
+            }
+            else
+            {
+                return DbHelperSQL.Query(strSql.ToString() + " order by " + filedOrder);
+            }
+
+        }
+
+        /// <summary>
         /// 客户对账明细
         /// </summary>
         /// <param name="pageSize"></param>

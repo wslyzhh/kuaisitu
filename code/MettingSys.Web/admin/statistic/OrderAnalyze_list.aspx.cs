@@ -81,7 +81,7 @@ namespace MettingSys.Web.admin.statistic
                     }
                     else
                     {
-                        if (string.IsNullOrEmpty(DTRequest.GetString("fromReceiveOrder")))//如果是从策划与设计页面过来的则跳过
+                        if (string.IsNullOrEmpty(DTRequest.GetString("fromReceiveOrder")))//如果是从策划与设计页面或员工未收款统计页面过来的则跳过
                         {
                             int day = DateTime.Now.Day;
                             DateTime date = DateTime.Now.AddDays(-day + 1);

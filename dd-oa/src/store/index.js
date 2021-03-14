@@ -12,6 +12,7 @@ import unbusinessManage from './modules/unbusinessManage'
 import notAudit from './modules/notAudit'
 import expectPayAudit from './modules/expectPayAudit'
 import performanceStat from './modules/performanceStat'
+import unReceiveStat from './modules/unReceiveStat'
 import message from './modules/message'
 import refundAudit from './modules/refundAudit'
 
@@ -30,6 +31,7 @@ export default new Vuex.Store({
         notAudit,
         expectPayAudit,
         performanceStat,
+        unReceiveStat,
         message,
         refundAudit
     }

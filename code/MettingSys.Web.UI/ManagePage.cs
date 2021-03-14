@@ -150,7 +150,7 @@ namespace MettingSys.Web.UI
         /// <param name="url">返回地址</param>
         protected void JscriptMsg(string msgtitle, string url)
         {
-            string msbox = "parent.jsprint(\"" + msgtitle + "\", \"" + url + "\");";
+            string msbox = "parent.jsprint(\"" + msgtitle + "\", \"" + url + "\");sessionStorage.clear();";
             ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsPrint", msbox, true);
         }
         /// <summary>
@@ -177,7 +177,7 @@ namespace MettingSys.Web.UI
 
         protected void PrintMsg(string msgtitle)
         {
-            string msbox = "printMsg(\"" + msgtitle + "\");";
+            string msbox = "printMsg(\"" + msgtitle + "\");sessionStorage.clear();";
             ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsPrint", msbox, true);
         }
         protected void PrintJscriptMsg(string msgtitle, string url)

@@ -130,6 +130,11 @@ let list = [
                 link:'performanceStat',
                 name:'业绩统计'
             },
+            {
+                imgUrl:require('../img/nav_list/icon_statistics.png'),
+                link:'unReceiveStat',
+                name:'员工未收款'
+            },
         ]
     },
 ]

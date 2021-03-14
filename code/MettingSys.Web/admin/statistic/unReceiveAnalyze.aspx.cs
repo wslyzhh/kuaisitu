@@ -21,9 +21,9 @@ namespace MettingSys.Web.admin.statistic
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _status = "", _sign = "", _money1 = "", _tag = "", _self = "", _lockstatus = "", _area = "", _person1 = "";
+        protected string _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _status = "", _sign = "", _money1 = "", _lockstatus = "", _area = "", _person1 = "";
         private Model.manager manager = null;
-        decimal money1 = 0, money2 = 0, money3 = 0, money4 = 0, money5 = 0, money6 = 0;
+        decimal money1 = 0, money2 = 0, money3 = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
             this.pageSize = GetPageSize(10); //每页数量
@@ -40,11 +40,11 @@ namespace MettingSys.Web.admin.statistic
             manager = GetAdminInfo();
             if (!Page.IsPostBack)
             {
+                _status = "2";
+                _sign = ">";
+                _money1 = "0";
                 InitData();
-                if (_self != "1")
-                {
-                    ChkAdminLevel("sys_settlementCustomer", DTEnums.ActionEnum.View.ToString()); //检查权限
-                }
+                ChkAdminLevel("sys_settlementCustomer", DTEnums.ActionEnum.View.ToString()); //检查权限
                 RptBind("1=1 " + CombSqlTxt(), "isnull(fin_type,rp_type) desc,c_name asc");
             }
 
@@ -92,7 +92,7 @@ namespace MettingSys.Web.admin.statistic
             }
             BLL.finance bll = new BLL.finance();
             DataTable dt = null;
-            dt = bll.getSettleCustomerDetailListByUser(this.pageSize, this.page, "True", "", "", _sdate, _edate, _sdate1, _edate1, "", "", _status, _sign, _money1, _self == "1" ? manager.user_name : "", _lockstatus, _area, _person1, "op_name asc", out this.totalCount, out money1, out money2, out money3).Tables[0];
+            dt = bll.getUnReceiveDetailListByUser(this.pageSize, this.page, _sdate, _edate, _sdate1, _edate1,_status, _sign, _money1, _lockstatus, _area, _person1, "op_name asc", out this.totalCount, out money1, out money2, out money3).Tables[0];
             this.rptPersonList.DataSource = dt;
             this.rptPersonList.DataBind();
             //绑定页码
@@ -146,7 +146,7 @@ namespace MettingSys.Web.admin.statistic
         private int GetPageSize(int _default_size)
         {
             int _pagesize;
-            if (int.TryParse(Utils.GetCookie("settleCustomerDetail_page_size", "DTcmsPage"), out _pagesize))
+            if (int.TryParse(Utils.GetCookie("unReceiveAnalyze_page_size", "DTcmsPage"), out _pagesize))
             {
                 if (_pagesize > 0)
                 {
@@ -168,8 +168,6 @@ namespace MettingSys.Web.admin.statistic
             _status = DTRequest.GetFormString("ddlstatus");
             _sign = DTRequest.GetFormString("ddlsign");
             _money1 = DTRequest.GetFormString("txtMoney1");
-            _tag = DTRequest.GetFormString("tag");
-            _self = DTRequest.GetFormString("self");
             _lockstatus = DTRequest.GetFormString("ddllock");
             _area = DTRequest.GetFormString("ddlarea");
             _person1 = DTRequest.GetFormString("txtPerson1").ToUpper();
@@ -184,23 +182,13 @@ namespace MettingSys.Web.admin.statistic
             _status = DTRequest.GetFormString("ddlstatus");
             _sign = DTRequest.GetFormString("ddlsign");
             _money1 = DTRequest.GetFormString("txtMoney1");
-            _tag = DTRequest.GetFormString("tag");
-            _self = DTRequest.GetFormString("self");
             _lockstatus = DTRequest.GetFormString("ddllock");
             _area = DTRequest.GetFormString("ddlarea");
             _person1 = DTRequest.GetFormString("txtPerson1").ToUpper();
             BLL.finance bll = new BLL.finance();
-            DataTable dt = bll.getSettleCustomerDetailList(this.pageSize, this.page, "True", "", "", _sdate, _edate, _sdate1, _edate1, "", "", _status, _sign, _money1, _self == "1" ? manager.user_name : "", _lockstatus, _area, _person1, "isnull(fin_type,rp_type) desc,c_name asc", out this.totalCount, out money1, out money2, out money3, out money4, out money5, out money6, false).Tables[0];
+            DataTable dt = bll.getUnReceiveDetailListByUser(this.pageSize, this.page, _sdate, _edate, _sdate1, _edate1, _status, _sign, _money1,  _lockstatus, _area, _person1, "op_name asc", out this.totalCount, out money1, out money2, out money3).Tables[0];
 
-            string filename = "往来客户明细列表.xlsx";
-            if (_tag == "1")
-            {
-                filename = "未收款列表.xlsx";
-            }
-            if (_tag == "2")
-            {
-                filename = "多付款列表.xlsx";
-            }
+            string filename = "员工未收款统计.xlsx";
 
             HttpContext.Current.Response.Clear();
             HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=" + filename + ""); //HttpUtility.UrlEncode(fileName));
@@ -250,32 +238,23 @@ namespace MettingSys.Web.admin.statistic
             IRow headRow = sheet.CreateRow(0);
             headRow.HeightInPoints = 25;
 
-            headRow.CreateCell(0).SetCellValue("应收付对象");
+            headRow.CreateCell(0).SetCellValue("业务员");
             headRow.CreateCell(1).SetCellValue("收付类别");
             headRow.CreateCell(2).SetCellValue("应收付款");
             headRow.CreateCell(3).SetCellValue("订单已收付款");
             headRow.CreateCell(4).SetCellValue("未收付款");
-            headRow.CreateCell(5).SetCellValue("已收付款");
-            headRow.CreateCell(6).SetCellValue("已分配款");
-            headRow.CreateCell(7).SetCellValue("未分配款");
 
             headRow.GetCell(0).CellStyle = titleCellStyle;
             headRow.GetCell(1).CellStyle = titleCellStyle;
             headRow.GetCell(2).CellStyle = titleCellStyle;
             headRow.GetCell(3).CellStyle = titleCellStyle;
             headRow.GetCell(4).CellStyle = titleCellStyle;
-            headRow.GetCell(5).CellStyle = titleCellStyle;
-            headRow.GetCell(6).CellStyle = titleCellStyle;
-            headRow.GetCell(7).CellStyle = titleCellStyle;
 
             sheet.SetColumnWidth(0, 15 * 256);
             sheet.SetColumnWidth(1, 20 * 256);
             sheet.SetColumnWidth(2, 20 * 256);
             sheet.SetColumnWidth(3, 20 * 256);
             sheet.SetColumnWidth(4, 20 * 256);
-            sheet.SetColumnWidth(5, 15 * 256);
-            sheet.SetColumnWidth(6, 20 * 256);
-            sheet.SetColumnWidth(7, 20 * 256);
 
             if (dt != null)
             {
@@ -283,23 +262,17 @@ namespace MettingSys.Web.admin.statistic
                 {
                     IRow row = sheet.CreateRow(i + 1);
                     row.HeightInPoints = 22;
-                    row.CreateCell(0).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_name"]));
+                    row.CreateCell(0).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["op_number"]+"("+ dt.Rows[i]["op_name"] + ")"));
                     row.CreateCell(1).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fin_type"]) == "True" ? "收" : "付");
                     row.CreateCell(2).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["orderFinMoney"]));
                     row.CreateCell(3).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["orderRpdMoney"]));
                     row.CreateCell(4).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["orderUnMoney"]));
-                    row.CreateCell(5).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["rpmoney"]));
-                    row.CreateCell(6).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["rpdmoney"]));
-                    row.CreateCell(7).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["unmoney"]));
 
                     row.GetCell(0).CellStyle = cellStyle;
                     row.GetCell(1).CellStyle = cellStyle;
                     row.GetCell(2).CellStyle = cellStyle;
                     row.GetCell(3).CellStyle = cellStyle;
                     row.GetCell(4).CellStyle = cellStyle;
-                    row.GetCell(5).CellStyle = cellStyle;
-                    row.GetCell(6).CellStyle = cellStyle;
-                    row.GetCell(7).CellStyle = cellStyle;
                 }
             }
 
@@ -312,7 +285,7 @@ namespace MettingSys.Web.admin.statistic
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("settleCustomerDetail.aspx", "page={0}&txtsDate={1}&txteDate={2}&txtsDate1={3}&txteDate1={4}&ddlstatus={5}&ddlsign={6}&txtMoney1={7}&tag={8}&self={9}&ddllock={10}&ddlarea={11}&txtPerson1={12}", "__id__",_sdate, _edate, _sdate1, _edate1, _status, _sign, _money1, _tag, _self, _lockstatus, _area, _person1);
+            return Utils.CombUrlTxt("unReceiveAnalyze.aspx", "page={0}&txtsDate={1}&txteDate={2}&txtsDate1={3}&txteDate1={4}&ddlstatus={5}&ddlsign={6}&txtMoney1={7}&ddllock={8}&ddlarea={9}&txtPerson1={10}", "__id__",_sdate, _edate, _sdate1, _edate1, _status, _sign, _money1,_lockstatus, _area, _person1);
         }
         //设置分页数量
         protected void txtPageNum_TextChanged(object sender, EventArgs e)
@@ -322,7 +295,7 @@ namespace MettingSys.Web.admin.statistic
             {
                 if (_pagesize > 0)
                 {
-                    Utils.WriteCookie("settleCustomerDetail_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
+                    Utils.WriteCookie("unReceiveAnalyze_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
             Response.Redirect(backUrl());

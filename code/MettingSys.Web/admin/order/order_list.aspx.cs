@@ -439,10 +439,11 @@ namespace MettingSys.Web.admin.order
                         Response.Write("<script type=\"text/javascript\">" + msgbox + "</script>");
                         Response.End();
                     }
-                    if (manager.area != new BLL.department().getGroupArea())
-                    {
-                        strTemp.Append(" and op_area='" + manager.area + "'");
-                    }
+                    strTemp.Append(" and op_area='" + manager.area + "'");
+                    //if (manager.area != new BLL.department().getGroupArea())
+                    //{
+                    //    strTemp.Append(" and op_area='" + manager.area + "'");
+                    //}
                 }
                 else
                 {

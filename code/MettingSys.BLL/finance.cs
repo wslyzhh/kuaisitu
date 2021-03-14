@@ -414,6 +414,14 @@ namespace MettingSys.BLL
             return dal.getSettleCustomerDetailListByUser(pageSize, pageIndex, _type, _cid, _cname, _sdate, _edate, _sdate1, _edate1, _sdate2, _edate2, _status, _sign, _money1, username, _lockstatus, _area, _person1, filedOrder, out recordCount, out money1, out money2, out money3, isPage);
         }
         /// <summary>
+        /// 往来客户明细列表(按业务员分组)
+        /// </summary>
+        /// <returns></returns>
+        public DataSet getUnReceiveDetailListByUser(int pageSize, int pageIndex, string _sdate, string _edate, string _sdate1, string _edate1, string _status, string _sign, string _money1, string _lockstatus, string _area, string _person1, string filedOrder, out int recordCount, out decimal money1, out decimal money2, out decimal money3, bool isPage = true)
+        {
+            return dal.getUnReceiveDetailListByUser(pageSize, pageIndex,_sdate, _edate, _sdate1, _edate1, _status, _sign, _money1, _lockstatus, _area, _person1, filedOrder, out recordCount, out money1, out money2, out money3, isPage);
+        }
+        /// <summary>
         /// 客户对账明细
         /// </summary>
         /// <param name="pageSize"></param>

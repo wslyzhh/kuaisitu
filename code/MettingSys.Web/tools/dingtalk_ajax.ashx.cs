@@ -299,6 +299,12 @@ namespace MettingSys.Web.tools
                     break;
                 #endregion
 
+                #region 员工未收款
+                case "unReceiveStatistic":
+                    unReceiveStatistic(context);
+                    break;
+                #endregion
+
                 default:
                     {
                         context.Response.Write("{\"status\": 0, \"msg\": \"ActionIsNullOrError\"}");
@@ -1051,10 +1057,11 @@ namespace MettingSys.Web.tools
                             context.Response.Write("{\"status\": 0, \"msg\": \"您没有管理该页面的权限，请勿非法进入！\"}");
                             return;
                         }
-                        if (managerModel.area != new BLL.department().getGroupArea())
-                        {
-                            strTemp.Append(" and op_area='" + managerModel.area + "'");
-                        }
+                        strTemp.Append(" and op_area='" + managerModel.area + "'");
+                        //if (managerModel.area != new BLL.department().getGroupArea())
+                        //{
+                        //    strTemp.Append(" and op_area='" + managerModel.area + "'");
+                        //}
                     }
                     else
                     {
@@ -4901,6 +4908,54 @@ namespace MettingSys.Web.tools
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     context.Response.Write("{\"pageIndex\":" + pageIndex + ",\"pageSize\":" + pageSize + ",\"totalCount\":" + totalCount + ",\"list\":");
+                    context.Response.Write(JArray.FromObject(dt) + "}");
+                    return;
+                }
+                context.Response.Write("{\"pageIndex\":" + pageIndex + ",\"pageSize\":" + pageSize + ",\"totalCount\":" + totalCount + ",\"list\":[]}");
+                return;
+            }
+            catch (Exception ex)
+            {
+                context.Response.Write("{ \"msg\":\"" + ex.Message + "\", \"status\":0 }");
+                return;
+            }
+        }
+        #endregion
+
+        #region 员工未收款
+        private void unReceiveStatistic(HttpContext context)
+        {
+            try
+            {
+                get_params(context, out jObject);
+                if (jObject["managerid"] == null || string.IsNullOrWhiteSpace(jObject["managerid"].ToString()) || !int.TryParse(jObject["managerid"].ToString(), out int managerid) || !int.TryParse(jObject["pageSize"].ToString(), out int pageSize) || !int.TryParse(jObject["pageIndex"].ToString(), out int pageIndex))
+                {
+                    context.Response.Write("{\"status\": 0, \"msg\": \"KeyIsNullOrError\"}");
+                    return;
+                }
+                Model.manager managerModel = new BLL.manager().GetModel(managerid);
+                if (managerModel == null)
+                {
+                    context.Response.Write("{\"status\": 0, \"msg\": \"ManageridIsNullOrError\"}");
+                    return;
+                }
+                string _sdate = jObject["sMonth"] == null ? "" : Utils.ObjectToStr(jObject["sMonth"]);
+                string _edate = jObject["eMonth"] == null ? "" : Utils.ObjectToStr(jObject["eMonth"]);
+                string _sdate1 = jObject["sMonth1"] == null ? "" : Utils.ObjectToStr(jObject["sMonth1"]);
+                string _edate1 = jObject["eMonth1"] == null ? "" : Utils.ObjectToStr(jObject["eMonth1"]);
+                string _status = jObject["status"] == null ? "" : Utils.ObjectToStr(jObject["status"]);
+                string _sign = jObject["sign"] == null ? "" : Utils.ObjectToStr(jObject["sign"]);
+                string _money1 = jObject["money1"] == null ? "" : Utils.ObjectToStr(jObject["money1"]);
+                string _lockstatus = jObject["lockStatus"] == null ? "" : Utils.ObjectToStr(jObject["lockStatus"]);
+                string _area = jObject["area"] == null ? "" : Utils.ObjectToStr(jObject["area"]);
+                string _person1 = jObject["person1"] == null ? "" : Utils.ObjectToStr(jObject["person1"]);
+
+                BLL.finance bll = new BLL.finance();
+                decimal money3 = 0;
+                DataTable dt = bll.getUnReceiveDetailListByUser(pageSize, pageIndex, _sdate, _edate, _sdate1, _edate1, _status, _sign, _money1, _lockstatus, _area, _person1, "op_name asc", out int totalCount, out decimal money1, out decimal money2, out money3).Tables[0];
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    context.Response.Write("{\"pageIndex\":" + pageIndex + ",\"pageSize\":" + pageSize + ",\"totalCount\":" + totalCount + ",\"totalMoney\":" + money3 + ",\"list\":");
                     context.Response.Write(JArray.FromObject(dt) + "}");
                     return;
                 }

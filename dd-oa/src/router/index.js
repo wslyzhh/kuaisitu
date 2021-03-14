@@ -46,6 +46,8 @@ import performanceStat from './performanceStat'
 import selfMessage from './message'
 //业务退款审批
 import refundAudit from './refundAudit'
+//员工未收款
+import unReceiveStat from './unReceiveStat'
 
 let routes = [
     {
@@ -78,6 +80,7 @@ routes = routes.concat(
     unbusinessManage,
     unbusinessAudit,
     performanceStat,
+    unReceiveStat,
     selfMessage,
     refundAudit,
     [{

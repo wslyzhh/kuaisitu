@@ -270,6 +270,9 @@ const api = {
     get achievementStatistic(){ //业绩统计
         return baseUrl+'/tools/dingtalk_ajax.ashx?action=AchievementStatistic'
     },
+    get unReceiveStatistic(){ //员工未收款
+        return baseUrl+'/tools/dingtalk_ajax.ashx?action=unReceiveStatistic'
+    },
     ///业务统计分析 end--------------------------------------------------------
 
     ///公共方法管理模块 start--------------------------------------------------------    
