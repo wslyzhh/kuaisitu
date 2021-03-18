@@ -108,7 +108,7 @@ export default {
             status:2,
             lockstatus:null,
             sign:'>',
-            money:null,
+            money:'0',
             area:null,
             areaText:null
         };
@@ -191,7 +191,7 @@ export default {
             _this.startTime1=null
             _this.endTime1=null     
             _this.sign='>'
-            _this.money=null
+            _this.money='0'
             _this.area=null
             _this.areaText=null
             _this.newList()

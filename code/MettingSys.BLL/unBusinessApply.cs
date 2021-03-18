@@ -56,6 +56,18 @@ namespace MettingSys.BLL
             {
                 return "请选择或填写支付用途";
             }
+            if (string.IsNullOrWhiteSpace(model.uba_receiveBank))
+            {
+                return "请填写收款银行";
+            }
+            if (string.IsNullOrWhiteSpace(model.uba_receiveBankName))
+            {
+                return "请填写账户名称";
+            }
+            if (string.IsNullOrWhiteSpace(model.uba_receiveBankNum))
+            {
+                return "请填写收款账号";
+            }
             if (model.uba_foreDate == null)
             {
                 return "请选择预付日期";
@@ -149,6 +161,18 @@ namespace MettingSys.BLL
             if (string.IsNullOrWhiteSpace(model.uba_function))
             {
                 return "请选择或填写支付用途";
+            }
+            if (string.IsNullOrWhiteSpace(model.uba_receiveBank))
+            {
+                return "请填写收款银行";
+            }
+            if (string.IsNullOrWhiteSpace(model.uba_receiveBankName))
+            {
+                return "请填写账户名称";
+            }
+            if (string.IsNullOrWhiteSpace(model.uba_receiveBankNum))
+            {
+                return "请填写收款账号";
             }
             if (model.uba_foreDate == null)
             {

@@ -146,7 +146,7 @@
                         </asp:DropDownList>
                     </div>
                     <asp:TextBox ID="txtfunction" runat="server" TextMode="MultiLine" CssClass="input normal" datatype="*2-100" sucmsg=" "></asp:TextBox>
-                    <span class="Validform_checktip" id="tip0" runat="server">*</span>
+                    <span class="Validform_checktip" runat="server">*</span>
                 </dd>
             </dl>
             <dl>
@@ -158,19 +158,22 @@
             <dl>
                 <dt>收款银行</dt>
                 <dd>
-                    <asp:TextBox ID="txtbank" runat="server" CssClass="input normal"></asp:TextBox>
+                    <asp:TextBox ID="txtbank" runat="server" CssClass="input normal" datatype="*2-100" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip" runat="server">*</span>
                 </dd>
             </dl>
             <dl>
                 <dt>账户名称</dt>
                 <dd>
-                    <asp:TextBox ID="txtbankname" runat="server" CssClass="input normal"></asp:TextBox>
+                    <asp:TextBox ID="txtbankname" runat="server" CssClass="input normal" datatype="*2-100" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip" runat="server">*</span>
                 </dd>
             </dl>
             <dl>
                 <dt>收款账号</dt>
                 <dd>
-                    <asp:TextBox ID="txtbanknum" runat="server" CssClass="input normal"></asp:TextBox>
+                    <asp:TextBox ID="txtbanknum" runat="server" CssClass="input normal" datatype="*2-100" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip" runat="server">*</span>
                 </dd>
             </dl>
             <dl>

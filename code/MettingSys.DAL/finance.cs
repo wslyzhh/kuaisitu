@@ -677,7 +677,7 @@ namespace MettingSys.DAL
             }
             if (!string.IsNullOrEmpty(_money1))
             {
-                strTemp.Append(" and orderUnMoney " + _sign + " " + _money1 + "");
+                strTemp1.Append(" and isnull(finMoney, 0)-isnull(rpdMoney, 0) " + _sign + " " + _money1 + "");
             }
             StringBuilder strSql = new StringBuilder();
             strSql.Append("select  op_number,op_name,fin_type,isnull(orderFinMoney,0) orderFinMoney,isnull(orderRpdMoney,0) orderRpdMoney,isnull(orderUnMoney,0) orderUnMoney from ");

@@ -24,15 +24,15 @@
                 <textarea v-model="editData.uba_instruction" placeholder="请输入用途说明内容"></textarea>
             </li>
             <li class="flex flex_a_c flex_s_b">
-                <label class="title"><span>收款银行</span></label>
+                <label class="title"><span class="must">收款银行</span></label>
                 <input type="text" v-model="editData.uba_receiveBank" placeholder="请输入收款银行">
             </li>
             <li class="flex flex_a_c flex_s_b">
-                <label class="title"><span>账户名称</span></label>
+                <label class="title"><span class="must">账户名称</span></label>
                 <input type="text" v-model="editData.uba_receiveBankName" placeholder="请输入账户名称">
             </li>
             <li class="flex flex_a_c flex_s_b">
-                <label class="title"><span>收款账号</span></label>
+                <label class="title"><span class="must">收款账号</span></label>
                 <input type="text" v-model="editData.uba_receiveBankNum" placeholder="请输入收款账号">
             </li>
             <li class="flex flex_a_c flex_s_b">
@@ -181,6 +181,18 @@ export default {
             let _this = this
             if(!_this.editData.uba_function){
                 _this.ddSet.setToast({text:'支付用途不能为空'})
+                return
+            }
+            if(!_this.addData.uba_receiveBank){
+                _this.ddSet.setToast({text:'请填写收款银行'})
+                return
+            }
+            if(!_this.addData.uba_receiveBankName){
+                _this.ddSet.setToast({text:'请填写账户名称'})
+                return
+            }
+            if(!_this.addData.uba_receiveBankNum){
+                _this.ddSet.setToast({text:'请填写收款账号'})
                 return
             }
             if(!_this.editData.uba_money){
