@@ -329,7 +329,7 @@ namespace MettingSys.BLL
         /// <param name="username">操作人工号</param>
         /// <param name="realname">操作人姓名</param>
         /// <returns></returns>
-        public string checkStatus(int id, byte? type, byte? status, string remark, Model.manager adminModel)
+        public string checkStatus(int id, byte? type, byte? status,string checkMoney, string remark, Model.manager adminModel)
         {
             Model.unBusinessApply model = GetModel(id);
             if (model == null) return "记录不存在";
@@ -340,6 +340,27 @@ namespace MettingSys.BLL
                 if (order != null && order.o_lockStatus == 1)
                 {
                     return "订单已锁单，不能再审批";
+                }
+            }
+            //批复金额
+            decimal _checkmoney = 0;
+            string addremark = string.Empty;
+            if (!string.IsNullOrEmpty(checkMoney))
+            {
+                if (!decimal.TryParse(checkMoney, out _checkmoney))
+                {
+                    return "请正确填写批复金额";
+                }
+                else 
+                {
+                    if (_checkmoney <= 0 || _checkmoney > model.uba_money)
+                    {
+                        return "批复金额需大于0且小于等于申请金额(" + model.uba_money + ")";
+                    }
+                    else
+                    {
+                        addremark = "财务批复借款金额由原" + model.uba_money + "元改为" + model.uba_checkMoney + "元";
+                    }
                 }
             }
             string content = "";

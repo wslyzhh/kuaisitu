@@ -2004,7 +2004,7 @@ namespace MettingSys.Web.tools
                 }
 
                 BLL.unBusinessApply bll = new BLL.unBusinessApply();
-                string result = bll.checkStatus(uba_id, ctype, cstatus, jObject["remark"] == null ? "" : jObject["remark"].ToString(), managerModel);
+                string result = bll.checkStatus(uba_id, ctype, cstatus, jObject["checkMoney"] == null ? "" : jObject["checkMoney"].ToString(), jObject["remark"] == null ? "" : jObject["remark"].ToString(), managerModel);
                 if (string.IsNullOrEmpty(result))
                 {
                     context.Response.Write("{ \"msg\":\"success\", \"status\":1 }");

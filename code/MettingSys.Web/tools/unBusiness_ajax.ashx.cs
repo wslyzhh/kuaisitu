@@ -110,10 +110,11 @@ namespace MettingSys.Web.tools
             int id = DTRequest.GetFormInt("id");
             string ctype = DTRequest.GetFormString("ctype");
             string cstatus = DTRequest.GetFormString("cstatus");
+            string checkMoney = DTRequest.GetFormString("checkMoney");
             string remark = DTRequest.GetFormString("remark");
             BLL.unBusinessApply bll = new BLL.unBusinessApply();
             StringBuilder sb = new StringBuilder();
-            string reason = bll.checkStatus(id, Utils.ObjToByte(ctype), Utils.ObjToByte(cstatus), remark, adminModel);
+            string reason = bll.checkStatus(id, Utils.ObjToByte(ctype), Utils.ObjToByte(cstatus), checkMoney, remark, adminModel);
             if (string.IsNullOrEmpty(reason))
             {
                 context.Response.Write("{ \"msg\":\"操作成功\", \"status\":0 }");

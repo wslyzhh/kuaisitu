@@ -134,6 +134,8 @@
                             <div class="rule-single-select">
                                 <asp:DropDownList ID="ddlorderarea" runat="server"></asp:DropDownList>
                             </div>
+                    业务员：
+                    <asp:TextBox ID="txtPerson" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>
                 </div>
             </div>
 

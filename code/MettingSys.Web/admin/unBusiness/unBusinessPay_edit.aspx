@@ -54,7 +54,7 @@
                 jsprint("请选择审批状态");
                 return;
             }
-            var postData = { "id": <%=id%>, "ctype": $("#ddlchecktype").val(), "cstatus": $("#ddlflag").val(), "remark": $("#txtCheckRemark").val() };
+            var postData = { "id": <%=id%>, "ctype": $("#ddlchecktype").val(), "cstatus": $("#ddlflag").val(), "checkMoney": $("#txtCheckMoney").val(), "remark": $("#txtCheckRemark").val() };
             //发送AJAX请求
             $.ajax({
                 type: "post",
@@ -261,6 +261,12 @@
                             <asp:DropDownList ID="ddlflag" runat="server">
                             </asp:DropDownList>
                         </div>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt style="width: 100px;">批复金额</dt>
+                    <dd>
+                        <asp:TextBox ID="txtCheckMoney" runat="server" CssClass="input small"></asp:TextBox>
                     </dd>
                 </dl>
                 <dl>

@@ -20,7 +20,7 @@ namespace MettingSys.Web.admin.finance
         protected int totalCount; //数据总记录数
         protected int page; //当前页码
         protected int pageSize; //每页大小
-        protected string flag = "", _orderid = "", _cusName = "", _cid = "", _contractPrice = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _status = "", _dstatus = "", _pushstatus = "", _flag = "", _lockstatus = "", _oid = "", _area = "", _orderarea = "";
+        protected string flag = "", _orderid = "", _cusName = "", _cid = "", _contractPrice = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _status = "", _dstatus = "", _pushstatus = "", _flag = "", _lockstatus = "", _oid = "", _area = "", _orderarea = "",_person="";
 
 
         Model.manager manager = null;
@@ -42,6 +42,7 @@ namespace MettingSys.Web.admin.finance
             _oid = DTRequest.GetString("txtOrderID");
             _area = DTRequest.GetString("ddlarea");
             _orderarea = DTRequest.GetString("ddlorderarea");
+            _person = DTRequest.GetString("txtPerson");
             if (string.IsNullOrEmpty(flag))
             {
                 flag = "0";
@@ -157,12 +158,13 @@ namespace MettingSys.Web.admin.finance
             txtOrderID.Text = _oid;
             ddlarea.SelectedValue = _area;
             ddlorderarea.SelectedValue = _orderarea;
+            txtPerson.Text = _person;
         }
         #endregion
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("orderApproval_list.aspx", "page={0}&flag={1}&txtCusName={2}&hCusId={3}&ddlContractPrice={4}&txtsDate={5}&txteDate={6}&txtsDate1={7}&txteDate1={8}&ddlstatus={9}&ddldstatus={10}&ddlispush={11}&ddlflag={12}&ddllock={13}&ddlarea={14}&ddlorderarea={15}", "__id__", flag, _cusName, _cid, _contractPrice, _sdate, _edate, _sdate1, _edate1, _status, _dstatus, _pushstatus, _flag, _lockstatus, _area, _orderarea);
+            return Utils.CombUrlTxt("orderApproval_list.aspx", "page={0}&flag={1}&txtCusName={2}&hCusId={3}&ddlContractPrice={4}&txtsDate={5}&txteDate={6}&txtsDate1={7}&txteDate1={8}&ddlstatus={9}&ddldstatus={10}&ddlispush={11}&ddlflag={12}&ddllock={13}&ddlarea={14}&ddlorderarea={15}&txtPerson={16}", "__id__", flag, _cusName, _cid, _contractPrice, _sdate, _edate, _sdate1, _edate1, _status, _dstatus, _pushstatus, _flag, _lockstatus, _area, _orderarea,_person);
         }
 
         #region 组合SQL查询语句==========================
@@ -261,6 +263,10 @@ namespace MettingSys.Web.admin.finance
             {
                 strTemp.Append(" and op_area='"+ _orderarea + "'");
             }
+            if (!string.IsNullOrEmpty(_person))
+            {
+                strTemp.Append(" and (op_number like '%"+ _person + "%' or op_name like '%" + _person + "%')");
+            }
 
 
             if (flag == "0")
@@ -322,6 +328,7 @@ namespace MettingSys.Web.admin.finance
             _oid = DTRequest.GetFormString("txtOrderID");
             _area = DTRequest.GetFormString("ddlarea");
             _orderarea = DTRequest.GetFormString("ddlorderarea");
+            _person = DTRequest.GetFormString("txtPerson");
             RptBind("1=1" + CombSqlTxt(), "o_addDate desc,o_id desc");
 
         }
