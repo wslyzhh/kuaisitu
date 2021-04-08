@@ -297,21 +297,7 @@ namespace MettingSys.BLL
         /// 获得查询分页数据
         /// </summary>
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder,Model.manager manager, out int recordCount, out decimal tmoney, bool isPage = true)
-        {
-            //列表权限控制
-            if (manager.area != new BLL.department().getGroupArea())//如果不是总部的工号
-            {
-                if (new BLL.permission().checkHasPermission(manager, "0602"))
-                {
-                    //含有区域权限可以查看本区域添加的
-                    strWhere += " and uba_area='" + manager.area + "'";
-                }
-                else
-                {
-                    //只能
-                    strWhere += " and uba_PersonNum='" + manager.user_name + "'";
-                }
-            }
+        {            
             return dal.GetList(pageSize, pageIndex, strWhere, filedOrder, out recordCount,out tmoney,isPage);
         }
         #endregion
@@ -343,9 +329,11 @@ namespace MettingSys.BLL
                 }
             }
             //批复金额
-            decimal _checkmoney = 0;
-            string addremark = string.Empty;
-            if (!string.IsNullOrEmpty(checkMoney))
+            decimal _checkmoney = 0, _oldmoney = model.uba_money.Value;
+            string addremark = string.Empty, ubmlRemark = string.Empty;
+            Model.unBusinessMoneyLog mlog = null;
+            int ubmlID = 0;
+            if (model.uba_function == "业务活动执行备用金借款" && !string.IsNullOrEmpty(checkMoney) && status == 2)
             {
                 if (!decimal.TryParse(checkMoney, out _checkmoney))
                 {
@@ -353,13 +341,21 @@ namespace MettingSys.BLL
                 }
                 else 
                 {
-                    if (_checkmoney <= 0 || _checkmoney > model.uba_money)
+                    if (_checkmoney <= 0 || _checkmoney >= model.uba_money)
                     {
-                        return "批复金额需大于0且小于等于申请金额(" + model.uba_money + ")";
+                        return "批复金额需大于0且小于申请金额(" + model.uba_money + ")";
                     }
                     else
                     {
-                        addremark = "财务批复借款金额由原" + model.uba_money + "元改为" + model.uba_checkMoney + "元";
+                        mlog = new Model.unBusinessMoneyLog();
+                        mlog.ubml_ubaid = model.uba_id;
+                        mlog.ubml_newMoney = _checkmoney;
+                        mlog.ubml_oldMoney = model.uba_money;
+                        mlog.ubml_date = DateTime.Now;
+                        mlog.ubml_username = adminModel.user_name;
+                        mlog.ubml_realname = adminModel.real_name;
+                        addremark = "批复借款金额由原" + model.uba_money + "元改为" + _checkmoney + "元；";
+                        model.uba_money = _checkmoney;
                     }
                 }
             }
@@ -375,9 +371,24 @@ namespace MettingSys.BLL
                     {
                         return "无权限审批";
                     }
+
+                    content = "记录id：" + id + "，部门审批状态：" + Common.BusinessDict.checkStatus()[model.uba_flag1] + "→<font color='red'>" + Common.BusinessDict.checkStatus()[status] + "</font>";
+                    model.uba_flag1 = status;
+                    model.uba_checkNum1 = adminModel.user_name;
+                    model.uba_checkName1 = adminModel.real_name;
+                    model.uba_checkRemark1 = remark;
+                    model.uba_checkTime1 = DateTime.Now;
                     if (status == 2)
                     {
                         //由待审批、审批未通过→审批通过
+
+                        //存在批复金额
+                        if (mlog != null)
+                        {
+                            mlog.ubml_type = 1;
+                            mlog.ubml_remark = "部门审批" + addremark;
+                            model.uba_checkRemark1 = "部门审批" + addremark;
+                        }
                     }
                     else
                     {                        
@@ -386,13 +397,18 @@ namespace MettingSys.BLL
                         {
                             return "财务已经审批通过，不能做部门审批";
                         }
+                        //检查部门审批是否存在批复记录，存在则退回原来的金额
+                        ubmlID = getOldMoney(model, 1,out ubmlRemark);
+                        if (!string.IsNullOrEmpty(ubmlRemark))
+                        {
+                            model.uba_checkRemark1 = model.uba_checkRemark1.Replace(ubmlRemark, "");
+                        }
+                        else
+                        {
+                            model.uba_checkRemark1 = "";
+                        }
                     }
-                    content = "记录id：" + id + "，部门审批状态：" + Common.BusinessDict.checkStatus()[model.uba_flag1] + "→<font color='red'>" + Common.BusinessDict.checkStatus()[status] + "</font>";
-                    model.uba_flag1 = status;
-                    model.uba_checkNum1 = adminModel.user_name;
-                    model.uba_checkName1 = adminModel.real_name;
-                    model.uba_checkRemark1 = remark;
-                    model.uba_checkTime1 = DateTime.Now;
+                    
                     break;
                 case 2://财务审批
                     if (model.uba_flag2 == status) return "状态未改变";
@@ -400,12 +416,25 @@ namespace MettingSys.BLL
                     {
                         return "无权限审批";
                     }
+                    content = "记录id：" + id + "，财务审批状态：" + Common.BusinessDict.checkStatus()[model.uba_flag2] + "→<font color='red'>" + Common.BusinessDict.checkStatus()[status] + "</font>";
+                    model.uba_flag2 = status;
+                    model.uba_checkNum2 = adminModel.user_name;
+                    model.uba_checkName2 = adminModel.real_name;
+                    model.uba_checkRemark2 += remark;
+                    model.uba_checkTime2 = DateTime.Now;
                     if (status == 2)
                     {
                         //由待审批、审批未通过→审批通过：验证部门审批是否存在待审批或审批未通过的记录，存在则不能做财务审批
                         if (model.uba_flag1 != 2)
                         {
                             return "部门审批是待审批或审批未通过的，不能做财务审批";
+                        }
+                        //存在批复金额
+                        if (mlog != null)
+                        {
+                            mlog.ubml_type = 2;
+                            mlog.ubml_remark = "财务审批" + addremark;
+                            model.uba_checkRemark2 = "财务审批" + addremark;
                         }
                     }
                     else
@@ -415,13 +444,17 @@ namespace MettingSys.BLL
                         {
                             return "总经理已经审批通过，不能做财务审批";
                         }
+                        //检查部门审批是否存在批复记录，存在则退回原来的金额
+                        ubmlID = getOldMoney(model, 2,out ubmlRemark);
+                        if (!string.IsNullOrEmpty(ubmlRemark))
+                        {
+                            model.uba_checkRemark2 = model.uba_checkRemark2.Replace(ubmlRemark, "");
+                        }
+                        else
+                        {
+                            model.uba_checkRemark2 = "";
+                        }
                     }
-                    content = "记录id：" + id + "，财务审批状态：" + Common.BusinessDict.checkStatus()[model.uba_flag2] + "→<font color='red'>" + Common.BusinessDict.checkStatus()[status] + "</font>";
-                    model.uba_flag2 = status;
-                    model.uba_checkNum2 = adminModel.user_name;
-                    model.uba_checkName2 = adminModel.real_name;
-                    model.uba_checkRemark2 = remark;
-                    model.uba_checkTime2 = DateTime.Now;
                     break;
                 case 3://总经理审批
                     if (model.uba_flag3 == status) return "状态未改变";
@@ -429,12 +462,25 @@ namespace MettingSys.BLL
                     {
                         return "无权限审批";
                     }
+                    content = "记录id：" + id + "，总经理审批状态：" + Common.BusinessDict.checkStatus()[model.uba_flag3] + "→<font color='red'>" + Common.BusinessDict.checkStatus()[status] + "</font>";
+                    model.uba_flag3 = status;
+                    model.uba_checkNum3 = adminModel.user_name;
+                    model.uba_checkName3 = adminModel.real_name;
+                    model.uba_checkRemark3 += remark;
+                    model.uba_checkTime3 = DateTime.Now;
                     if (status == 2)
                     {
                         //由待审批、审批未通过→审批通过：验证财务审批是否存在待审批或审批未通过的记录，存在则不能做总经理审批
                         if (model.uba_flag2 != 2)
                         {
                             return "财务审批是待审批或审批未通过的，不能做总经理审批";
+                        }
+                        //存在批复金额
+                        if (mlog != null)
+                        {
+                            mlog.ubml_type = 3;
+                            mlog.ubml_remark = "总经理审批" + addremark;
+                            model.uba_checkRemark3 = "总经理审批" + addremark;
                         }
                     }
                     else
@@ -444,16 +490,19 @@ namespace MettingSys.BLL
                         {
                             return "已经确认支付，不能做总经理审批";
                         }
+                        //检查部门审批是否存在批复记录，存在则退回原来的金额
+                        ubmlID = getOldMoney(model, 3,out ubmlRemark);
+                        if (!string.IsNullOrEmpty(ubmlRemark))
+                        {
+                            model.uba_checkRemark3 = model.uba_checkRemark3.Replace(ubmlRemark, "");
+                        }
+                        else
+                        {
+                            model.uba_checkRemark3 = "";
+                        }
                     }
-                    content = "记录id：" + id + "，总经理审批状态：" + Common.BusinessDict.checkStatus()[model.uba_flag3] + "→<font color='red'>" + Common.BusinessDict.checkStatus()[status] + "</font>";
-                    model.uba_flag3 = status;
-                    model.uba_checkNum3 = adminModel.user_name;
-                    model.uba_checkName3 = adminModel.real_name;
-                    model.uba_checkRemark3 = remark;
-                    model.uba_checkTime3 = DateTime.Now;
                     break;
-            }
-            
+            }           
             if (dal.Update(model))
             {
                 //写日志
@@ -462,8 +511,19 @@ namespace MettingSys.BLL
                 log.ol_content = content;
                 new business_log().Add(DTEnums.ActionEnum.Audit.ToString(), log, adminModel.user_name, adminModel.real_name);
 
+                //插入批复金额记录
+                if (mlog != null)
+                {
+                    new unBusinessMoneyLog().Add(mlog);
+                }
 
-                //审批未通过、审批通过时通知
+                //删除已经批复的记录
+                if (ubmlID > 0)
+                {
+                    new unBusinessMoneyLog().Delete(ubmlID);
+                }
+
+                #region 审批未通过、审批通过时通知
                 if (status == 1 || status == 2)
                 {
                     string replaceUser1 = "";
@@ -530,10 +590,30 @@ namespace MettingSys.BLL
                         
                     }
                 }
+                #endregion
                 return "";
             }
 
             return "操作失败";
+        }
+
+        /// <summary>
+        /// 获取旧的申请金额
+        /// </summary>
+        /// <returns></returns>
+        public int getOldMoney(Model.unBusinessApply model,byte ? type,out string remark)
+        {
+            int ubmlID = 0;
+            remark = string.Empty;
+            DataSet ds = new unBusinessMoneyLog().GetList(1, " ubml_ubaid = " + model.uba_id + " and ubml_type=" + type + "", " ubml_date desc");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                DataRow dr = ds.Tables[0].Rows[0];
+                model.uba_money = Utils.ObjToDecimal(dr["ubml_oldMoney"], 0);
+                ubmlID = Utils.ObjToInt(dr["ubml_id"], 0);
+                remark = Utils.ObjectToStr(dr["ubml_remark"]);
+            }
+            return ubmlID;
         }
 
         /// <summary>

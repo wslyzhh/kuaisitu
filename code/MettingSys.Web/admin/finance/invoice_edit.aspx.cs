@@ -235,7 +235,7 @@ namespace MettingSys.Web.admin.finance
             
             manager = GetAdminInfo();
             model.inv_oid = oID;
-            model.inv_cid = Utils.StrToInt(hCusId.Value,0);
+            model.inv_cid = Utils.StrToInt(Request["hCusId"],0);
             if (string.IsNullOrEmpty(ddlinvType.SelectedValue))
             {
                 return "请选择专普票类型";

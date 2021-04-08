@@ -226,10 +226,47 @@ namespace MettingSys.Web.admin.unBusiness
         protected string CombSqlTxt()
         {
             StringBuilder strTemp = new StringBuilder();
-            //所有页签下保留可以看到！只是针对HQ工号中有部门审批权限的，他的部门审批页签里只看本区域的
-            if (_check == "1" && new BLL.permission().checkHasPermission(manager, "0603"))
+            //1.在部门审批页签中，如果是集团工号，有区域审批权(0603)的只能看到本区域的数据，没有区域审批权(0603)的可以看到全部数据；如果不是集团工号，有区域审批权(0603)的可以看到本区域的数据，否则只能看到自己添加的数据
+            //2.除部门审批页签外的其他页签，如果是集团工号，可以看到全部数据；如果不是集团工号，有区域审批(0602)的可以看到本区域的数据，否则只能看到自己添加的数据
+            if (_check == "1")//部门审批页签
             {
-                strTemp.Append(" and uba_area='" + manager.area + "'");
+                if (manager.area == new BLL.department().getGroupArea())
+                {
+                    if (new BLL.permission().checkHasPermission(manager, "0603"))
+                    {
+                        strTemp.Append(" and uba_area='" + manager.area + "'");
+                    }
+                }
+                else
+                {
+                    if (new BLL.permission().checkHasPermission(manager, "0603"))
+                    {
+                        //含有区域权限可以查看本区域添加的
+                        strTemp.Append(" and uba_area='" + manager.area + "'");
+                    }
+                    else
+                    {
+                        //只能
+                        strTemp.Append(" and uba_PersonNum='" + manager.user_name + "'");
+                    }
+                }
+            }
+            else
+            {
+                //列表权限控制
+                if (manager.area != new BLL.department().getGroupArea())//如果不是总部的工号
+                {
+                    if (new BLL.permission().checkHasPermission(manager, "0602"))
+                    {
+                        //含有区域权限可以查看本区域添加的
+                        strTemp.Append(" and uba_area='" + manager.area + "'");
+                    }
+                    else
+                    {
+                        //只能
+                        strTemp.Append(" and uba_PersonNum='" + manager.user_name + "'");
+                    }
+                }
             }
 
             if (!string.IsNullOrEmpty(_check1))
@@ -246,7 +283,14 @@ namespace MettingSys.Web.admin.unBusiness
             }
             if (!string.IsNullOrEmpty(_payStatus))
             {
-                strTemp.Append(" and uba_isConfirm='"+ _payStatus + "'");
+                if (_payStatus == "False")
+                {
+                    strTemp.Append(" and (uba_isConfirm='" + _payStatus + "' or uba_isConfirm is null)");
+                }
+                else
+                {
+                    strTemp.Append(" and uba_isConfirm='" + _payStatus + "'");
+                }
             }
             if (!string.IsNullOrEmpty(_sforedate))
             {
@@ -267,10 +311,6 @@ namespace MettingSys.Web.admin.unBusiness
             if (this._self == "1")
             {
                 strTemp.Append(" and uba_PersonNum='" + manager.user_name + "' and uba_personName='" + manager.real_name + "'");
-            }
-            if (!string.IsNullOrEmpty(_area))
-            {
-                strTemp.Append(" and uba_area='" + _area + "'");
             }
             if (!string.IsNullOrEmpty(_type))
             {

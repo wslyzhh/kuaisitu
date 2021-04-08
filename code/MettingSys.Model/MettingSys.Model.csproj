@@ -85,6 +85,7 @@
     <Compile Include="finance_chk.cs" />
     <Compile Include="payPic.cs" />
     <Compile Include="permission.cs" />
+    <Compile Include="unBusinessMoneyLog.cs" />
     <Compile Include="userRolePemission.cs" />
     <Compile Include="OrderPerson.cs" />
     <Compile Include="ReceiptPay.cs" />

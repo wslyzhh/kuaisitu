@@ -686,21 +686,7 @@ namespace MettingSys.BLL
         /// 获得查询分页数据
         /// </summary>
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder,Model.manager manager, out int recordCount, out decimal pmoney, bool isPage = true)
-        {
-            //列表权限控制
-            if (manager.area != new BLL.department().getGroupArea())//如果不是总部的工号
-            {
-                if (new BLL.permission().checkHasPermission(manager, "0602"))
-                {
-                    //含有区域权限可以查看本区域添加的
-                    strWhere += " and (inv_farea='" + manager.area + "' or inv_darea='" + manager.area + "')";
-                }
-                else
-                {
-                    //只能
-                    strWhere += " and inv_PersonNum='" + manager.user_name + "'";
-                }
-            }
+        {            
             return dal.GetList(pageSize, pageIndex, strWhere, filedOrder, out recordCount, out pmoney, isPage);
         }
         #endregion

@@ -186,6 +186,20 @@
                 cancel: function () { }
             }).showModal();
         }
+        //批复记录
+        function getMoneyLog(ubaid,obj) {
+            tip_index = 0;
+            var postData = { ubaID: ubaid };
+            $.ajax({
+                type: "post",
+                url: "../../tools/unBusiness_ajax.ashx?action=getMoneyLog",
+                data: postData,
+                dataType: "html",
+                success: function (data) {
+                    tip_index = layer.tips('批复记录：<br/>' + data, obj, { time: 0 });
+                }
+            });
+        }
         //打印凭证
         function printCerti(ubaid) {
             layer.open({
@@ -384,7 +398,9 @@
                             <td><%#Eval("uba_receiveBankName") %></td>
                             <td><%#Eval("uba_receiveBankNum") %></td>
                             <td><%#Eval("uba_receiveBank") %></td>
-                            <td class="moneyTd"><%#Eval("uba_money") %></td>
+                            <td class="moneyTd">
+                                <%#Eval("uba_function").ToString()=="业务活动执行备用金借款"?"<span onmouseover=\"getMoneyLog("+Eval("uba_id")+",this);\" onmouseout=\"layer.close(tip_index);\">"+Eval("uba_money")+"</span>":Eval("uba_money") %>
+                            </td>
                             <td><%#DateTime.Parse(Eval("uba_foreDate").ToString()).ToString("yyyy-MM-dd") %></td>
                             <td class="dateTd"><%#MettingSys.Common.ConvertHelper.toDate(Eval("uba_Date")) == null ? "" : DateTime.Parse(Eval("uba_Date").ToString()).ToString("yyyy-MM-dd") %></td>
                             <td class="methodTd"><%#Eval("pm_name") %></td>

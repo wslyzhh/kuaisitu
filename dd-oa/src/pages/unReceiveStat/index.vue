@@ -234,19 +234,20 @@ export default {
             let _this = this
             if(_this.userInfo.area == 'HQ'){
                 _this.area=''
-                _this.areaText='不限'                
+                _this.areaText='不限' 
+                _this.newList()               
             }
             else{
                 _this.getArea().then(res => {      
                     res.data.map((item,index) => {
                         if(_this.userInfo.area == item.key ){
                             _this.area=item.key
-                            _this.areaText=item.value
+                            _this.areaText=item.value                            
+                            _this.newList()
                         }
                     })                
                 })
             }
-            _this.newList()
         },
         changesign(){
             let _this = this

@@ -108,6 +108,7 @@
     <Compile Include="sms_template.cs" />
     <Compile Include="statisticBLL.cs" />
     <Compile Include="sys_config.cs" />
+    <Compile Include="unBusinessMoneylog.cs" />
     <Compile Include="unBusinessApply.cs" />
     <Compile Include="url_rewrite.cs" />
     <Compile Include="users.cs" />

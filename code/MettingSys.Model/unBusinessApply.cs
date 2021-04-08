@@ -43,7 +43,7 @@ namespace MettingSys.Model
         /// <param name="uba_personname">uba_personName</param>
         /// <param name="uba_adddate">uba_addDate</param>
         /// <param name="uba_area">uba_area</param>
-        public unBusinessApply(int? uba_id, byte? uba_type, string uba_function, string uba_oid, string uba_instruction, string uba_receivebank, string uba_receivebanknum, string uba_receivebankname, decimal? uba_money, decimal? uba_checkMoney, DateTime? uba_foredate, DateTime? uba_date, int? uba_paymethod, byte? uba_flag1, string uba_checknum1, string uba_checkname1, string uba_checkremark1,DateTime? uba_checkTime1, byte? uba_flag2, string uba_checknum2, string uba_checkname2, string uba_checkremark2, DateTime? uba_checkTime2, byte? uba_flag3, string uba_checknum3, string uba_checkname3, string uba_checkremark3, DateTime? uba_checkTime3, bool? uba_isconfirm, string uba_confirmernum, string uba_confirmername, string uba_personnum, string uba_personname, DateTime? uba_adddate, string uba_area, string uba_remark)
+        public unBusinessApply(int? uba_id, byte? uba_type, string uba_function, string uba_oid, string uba_instruction, string uba_receivebank, string uba_receivebanknum, string uba_receivebankname, decimal? uba_money, DateTime? uba_foredate, DateTime? uba_date, int? uba_paymethod, byte? uba_flag1, string uba_checknum1, string uba_checkname1, string uba_checkremark1,DateTime? uba_checkTime1, byte? uba_flag2, string uba_checknum2, string uba_checkname2, string uba_checkremark2, DateTime? uba_checkTime2, byte? uba_flag3, string uba_checknum3, string uba_checkname3, string uba_checkremark3, DateTime? uba_checkTime3, bool? uba_isconfirm, string uba_confirmernum, string uba_confirmername, string uba_personnum, string uba_personname, DateTime? uba_adddate, string uba_area, string uba_remark)
         {
             this.uba_id = uba_id;
             this.uba_type = uba_type;
@@ -54,7 +54,6 @@ namespace MettingSys.Model
             this.uba_receiveBankNum = uba_receivebanknum;
             this.uba_receiveBankName = uba_receivebankname;
             this.uba_money = uba_money;
-            this.uba_checkMoney = uba_checkMoney;
             this.uba_foreDate = uba_foredate;
             this.uba_date = uba_date;
             this.uba_payMethod = uba_paymethod;
@@ -129,11 +128,6 @@ namespace MettingSys.Model
         /// uba_money
         /// </summary>
         public decimal? uba_money { get; set; }
-
-        /// <summary>
-        /// uba_checkMoney
-        /// </summary>
-        public decimal? uba_checkMoney { get; set; }
 
         /// <summary>
         /// uba_foreDate
@@ -263,6 +257,7 @@ namespace MettingSys.Model
         /// uba_remark
         /// </summary>
         public string uba_remark { get; set; }
+
         #endregion
     }
 }

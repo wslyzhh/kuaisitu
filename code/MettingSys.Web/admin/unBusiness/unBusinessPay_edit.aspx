@@ -263,12 +263,14 @@
                         </div>
                     </dd>
                 </dl>
+                <%if (isShowCheckMoney){ %>
                 <dl>
                     <dt style="width: 100px;">批复金额</dt>
                     <dd>
                         <asp:TextBox ID="txtCheckMoney" runat="server" CssClass="input small"></asp:TextBox>
                     </dd>
                 </dl>
+                <%} %>
                 <dl>
                     <dt style="width: 100px;">备注</dt>
                     <dd>

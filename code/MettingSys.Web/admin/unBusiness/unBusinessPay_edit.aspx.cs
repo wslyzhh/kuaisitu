@@ -20,6 +20,7 @@ namespace MettingSys.Web.admin.unBusiness
         protected string oID = string.Empty, _functionText = string.Empty;
         protected Model.business_log log = null;
         protected Model.manager manager = null;
+        protected bool isShowCheckMoney = false;//是否显示批复金额
         protected void Page_Load(object sender, EventArgs e)
         {
             action = DTRequest.GetQueryString("action");
@@ -117,6 +118,7 @@ namespace MettingSys.Web.admin.unBusiness
                 ddlfunction.Visible = true;
                 if (model.uba_function == "业务活动执行备用金借款")
                 {
+                    isShowCheckMoney = true;
                     InitData(0);
                 }
                 else

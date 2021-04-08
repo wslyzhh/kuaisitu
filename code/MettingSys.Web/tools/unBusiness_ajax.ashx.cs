@@ -54,6 +54,9 @@ namespace MettingSys.Web.tools
                 case "saveRole":
                     save_Role(context);
                     break;
+                case "getMoneyLog":
+                    getMoney_Log(context);
+                    break;
                 default:
                     break;
             }
@@ -227,7 +230,27 @@ namespace MettingSys.Web.tools
             context.Response.End();
         }
         #endregion
-
+        #region 批复记录
+        private void getMoney_Log(HttpContext context)
+        {
+            int ubaID = DTRequest.GetFormInt("ubaID");
+            DataSet ds = new BLL.unBusinessMoneyLog().GetList(0,"ubml_ubaid="+ ubaID + ""," ubml_type asc");
+            string str = string.Empty;
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    str += (Utils.ObjToByte(dr["ubml_type"]) == 1 ? "部门批复" : Utils.ObjToByte(dr["ubml_type"]) == 2 ? "财务批复" : "总经理批复") + "：" + dr["ubml_oldMoney"] + "->" + dr["ubml_newMoney"] + "，" + dr["ubml_username"] + "(" + dr["ubml_realname"] + ")，" + Utils.ObjectToDateTime(dr["ubml_date"]) + "；</br>";
+                }
+            }
+            else
+            {
+                str = "无";
+            }
+            context.Response.Write(str);
+            context.Response.End();
+        }
+        #endregion
         public bool IsReusable
         {
             get

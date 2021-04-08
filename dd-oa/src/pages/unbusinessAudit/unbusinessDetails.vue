@@ -58,6 +58,10 @@
                 <input type="text" readonly :value="status_text">
 			    <div class="icon_right arrows_right"></div>
             </li>
+            <li v-show="datails.uba_function=='业务活动执行备用金借款'" class="flex flex_a_c flex_s_b">
+			    <label class="title newTitle"><span>批复金额</span></label>
+			    <input type="text" v-model="datails.checkMoney">
+			</li>
             <li class="li_auto flex">
                 <label class="title newTitle"><span>审批备注</span></label>
                 <textarea v-model="datails.remark"></textarea>
@@ -130,7 +134,7 @@ export default {
         let _this = this
         let {id,type} = _this.$route.query
         _this.ddSet.showLoad()
-        _this.getUnBusinessPayDetails({uba_id:id,type:type,managerid:this.userInfo.id}).then(res => {
+        _this.getUnBusinessPayDetails({uba_id:id,type:type,managerid:_this.userInfo.id}).then(res => {
             _this.ddSet.hideLoad()
             if (res.data.status==undefined) {
                 _this.datails = res.data
@@ -162,15 +166,13 @@ export default {
         submit(item){ //提交
             let _this=this
             if(!_this.status){
-                //console.log(this.flagName)
                 _this.ddSet.setToast({text:'请您选择审批状态'})
                 return
             }
             _this.datails.ctype = _this.datails.type
-            //console.log(this.addData.ctype)
             _this.datails.cstatus = _this.status
-            //console.log(this.flagId)
             _this.datails.managerid = _this.userInfo.id //测试ID
+            console.log(_this.datails)
             _this.ddSet.showLoad()
             _this.getUnBusinessPayAudit(_this.datails).then(res => {
                 _this.ddSet.hideLoad()

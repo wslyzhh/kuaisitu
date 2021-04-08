@@ -98,7 +98,7 @@ namespace MettingSys.Web.admin.finance
                 }
                 RptBind("inv_id>0" + CombSqlTxt(), orderby);
             }
-            
+
         }
         #region 初始化数据=================================
         private void InitData()
@@ -172,7 +172,7 @@ namespace MettingSys.Web.admin.finance
                 this.page = 1;
             }
             BLL.invoices bll = new BLL.invoices();
-            DataTable dt= bll.GetList(this.pageSize, this.page, _strWhere, _orderby, manager, out this.totalCount,out _tmoney).Tables[0];
+            DataTable dt = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, manager, out this.totalCount, out _tmoney).Tables[0];
             this.rptList.DataSource = dt;
             this.rptList.DataBind();
 
@@ -219,6 +219,72 @@ namespace MettingSys.Web.admin.finance
         protected string CombSqlTxt()
         {
             StringBuilder strTemp = new StringBuilder();
+            //1.在部门审批页签中，如果是集团工号，有区域审批权(0603)的只能看到本区域的数据，没有区域审批权(0603)的可以看到全部数据；如果不是集团工号，有区域审批权(0603)的可以看到本区域的数据，否则只能看到自己添加的数据
+            //2.除部门审批页签外的其他页签，如果是集团工号，可以看到全部数据；如果不是集团工号，有区域审批(0602)的可以看到本区域的数据，否则只能看到自己添加的数据
+            if (_check == "1")//部门审批页签
+            {
+                if (manager.area == new BLL.department().getGroupArea())
+                {
+                    if (new BLL.permission().checkHasPermission(manager, "0603"))
+                    {
+                        strTemp.Append(" and inv_farea='" + manager.area + "'");
+                    }
+                }
+                else
+                {
+                    if (new BLL.permission().checkHasPermission(manager, "0603"))
+                    {
+                        //含有区域权限可以查看本区域添加的
+                        strTemp.Append(" and (inv_farea='" + manager.area + "' or inv_darea='" + manager.area + "')");
+                    }
+                    else
+                    {
+                        //只能
+                        strTemp.Append(" and inv_personNum='" + manager.user_name + "'");
+                    }
+                }
+            }
+            else if (_check == "2")
+            {
+                if (manager.area == new BLL.department().getGroupArea())
+                {
+                    if (new BLL.permission().checkHasPermission(manager, "0603"))
+                    {
+                        strTemp.Append(" and inv_darea='" + manager.area + "'");
+                    }
+                }
+                else
+                {
+                    if (new BLL.permission().checkHasPermission(manager, "0603"))
+                    {
+                        //含有区域权限可以查看本区域添加的
+                        strTemp.Append(" and (inv_farea='" + manager.area + "' or inv_darea='" + manager.area + "')");
+                    }
+                    else
+                    {
+                        //只能
+                        strTemp.Append(" and inv_personNum='" + manager.user_name + "'");
+                    }
+                }
+            }
+            else
+            {
+                //列表权限控制
+                if (manager.area != new BLL.department().getGroupArea())//如果不是总部的工号
+                {
+                    if (new BLL.permission().checkHasPermission(manager, "0602"))
+                    {
+                        //含有区域权限可以查看本区域添加的
+                        strTemp.Append(" and (inv_farea='" + manager.area + "' or inv_darea='" + manager.area + "')");
+                    }
+                    else
+                    {
+                        //只能
+                        strTemp.Append(" and inv_personNum='" + manager.user_name + "'");
+                    }
+                }
+            }
+
             if (!string.IsNullOrEmpty(_cid) && _cid != "0")
             {
                 strTemp.Append(" and inv_cid = " + _cid + "");
@@ -275,34 +341,6 @@ namespace MettingSys.Web.admin.finance
             {
                 strTemp.Append(" and (inv_personNum='" + _name + "' or inv_personName like '%" + _name + "%')");
             }
-            //列表权限控制
-            if (manager.area != new BLL.department().getGroupArea())//如果不是总部的工号
-            {
-                if (new BLL.permission().checkHasPermission(manager, "0602"))
-                {
-                    //含有区域权限可以查看本区域添加的
-                    strTemp.Append(" and (inv_farea='" + manager.area + "' or inv_darea='"+ manager.area + "')");
-                }
-                else
-                {
-                    //只能
-                    strTemp.Append(" and inv_personNum='" + manager.user_name + "'");
-                }
-            }
-
-            //所有页签下保留可以看到！只是针对HQ工号中有部门审批权限的，他的部门审批页签里只看本区域的
-            if (new BLL.permission().checkHasPermission(manager, "0603"))
-            {
-                if (_check == "1")
-                {
-                    strTemp.Append(" and inv_farea='" + manager.area + "'");
-                }
-                else if (_check == "2")
-                {
-                    strTemp.Append(" and inv_darea='" + manager.area + "'");
-                }
-            }
-
             if (!string.IsNullOrEmpty(_unit))
             {
                 strTemp.Append(" and invU_name like  '%" + _unit + "%'");

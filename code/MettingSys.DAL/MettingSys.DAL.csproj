@@ -89,6 +89,7 @@
     <Compile Include="statisticDAL.cs" />
     <Compile Include="sys_config.cs" />
     <Compile Include="unBusinessApply.cs" />
+    <Compile Include="unBusinessMoneyLog.cs" />
     <Compile Include="url_rewrite.cs" />
     <Compile Include="users.cs" />
     <Compile Include="user_amount_log.cs" />

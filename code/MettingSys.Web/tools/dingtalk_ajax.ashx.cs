@@ -1071,7 +1071,7 @@ namespace MettingSys.Web.tools
                             if (new BLL.permission().checkHasPermission(managerModel, "0602"))
                             {
                                 //含有区域权限可以查看本区域添加的
-                                strTemp.Append(" and op_area='" + managerModel.area + "'");
+                                strTemp.Append(" and (op_area='" + managerModel.area + "' or o_place like '%" + managerModel.area + "%')");
                             }
                             else
                             {
@@ -1537,10 +1537,11 @@ namespace MettingSys.Web.tools
                 }
                 #endregion
 
-                #region 审核列表
+                
                 string checkType = "0";
                 if (_type == "check")
                 {
+                    #region 审核列表
                     if (new BLL.permission().checkHasPermission(managerModel, "0603"))//部门审批
                     {
                         checkType = "1";
@@ -1598,8 +1599,24 @@ namespace MettingSys.Web.tools
                         context.Response.Write("{ \"msg\":\"您无权限管理非业务支付申请\", \"status\":0 }");
                         return;
                     }
+                    #endregion
                 }
-                #endregion
+                else
+                {
+                    if (managerModel.area != new BLL.department().getGroupArea())//如果不是总部的工号
+                    {
+                        if (new BLL.permission().checkHasPermission(managerModel, "0602"))
+                        {
+                            //含有区域权限可以查看本区域添加的
+                            strTemp.Append(" and uba_area='" + managerModel.area + "'");
+                        }
+                        else
+                        {
+                            //只能
+                            strTemp.Append(" and uba_PersonNum='" + managerModel.user_name + "'");
+                        }
+                    }
+                }
 
                 string _strWhere = "uba_id>0" + strTemp.ToString();
 
@@ -3812,6 +3829,22 @@ namespace MettingSys.Web.tools
                 {
                     strTemp.Append(" and (inv_oid like '%" + keywords + "%' or c_name like '%" + keywords + "%')");
                 }
+
+                //列表权限控制
+                if (managerModel.area != new BLL.department().getGroupArea())//如果不是总部的工号
+                {
+                    if (new BLL.permission().checkHasPermission(managerModel, "0602"))
+                    {
+                        //含有区域权限可以查看本区域添加的
+                        strTemp.Append(" and (inv_farea='" + managerModel.area + "' or inv_darea='" + managerModel.area + "')");
+                    }
+                    else
+                    {
+                        //只能
+                        strTemp.Append(" and inv_PersonNum='" + managerModel.user_name + "'");
+                    }
+                }
+
                 #endregion
                 string _strWhere = "inv_id>0 and inv_personNum='" + managerModel.user_name + "'" + strTemp.ToString();
 
