@@ -108,8 +108,8 @@ namespace MettingSys.Web.admin.customer
                 result = DoEdit(this.id);
                 if (result != "")
                 {
-                    msbox = "parent.parent.jsdialog(\"提示\",\"" + result + "\", \"\");";
-                    ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsDialog", msbox, true);
+                    msbox = "parent.parent.jsprint(\"" + result + "\", \"\");";
+                    ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsPrint", msbox, true);
                     return;
                 }
                 msbox = "parent.parent.jsprint(\"修改联系人成功！\", \"customer_edit.aspx?action=Edit&id=" + this.cid + "\");";
@@ -121,8 +121,8 @@ namespace MettingSys.Web.admin.customer
                 result = DoAdd();
                 if (result != "")
                 {
-                    msbox = "parent.parent.jsdialog(\"提示\",\"" + result + "\", \"\");";
-                    ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsDialog", msbox, true);
+                    msbox = "parent.parent.jsprint(\"" + result + "\", \"\");";
+                    ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsPrint", msbox, true);
                     return;
                 }
                 msbox = "parent.parent.jsprint(\"添加联系人成功！\", \"customer_edit.aspx?action=Edit&id=" + this.cid + "\");";

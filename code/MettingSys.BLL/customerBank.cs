@@ -97,6 +97,20 @@ namespace MettingSys.BLL
             {
                 return "请填写开户地址";
             }
+            Model.Customer cu = new BLL.Customer().GetModel(model.cb_cid.Value);
+            if (cu == null)
+                return "客户不存在";
+            if (cu.c_flag == 2)
+            {
+                return "客户已经审批通过，不能编辑联系人";
+            }
+            if (cu.c_owner != manager.user_name && cu.c_ownerName != manager.real_name)
+            {
+                if (!new BLL.permission().checkHasPermission(manager, "0301"))
+                {
+                    return "不是客户所属人或无权限修改客户信息";
+                }
+            }
             if (dal.Update(model))
             {
                 Model.business_log log = new Model.business_log();
@@ -124,6 +138,20 @@ namespace MettingSys.BLL
             //{
             //    return "已被使用，不能删除";
             //}
+            Model.Customer cu = new BLL.Customer().GetModel(na.cb_cid.Value);
+            if (cu == null)
+                return "客户不存在";
+            if (cu.c_flag == 2)
+            {
+                return "客户已经审批通过，不能删除客户银行账号";
+            }
+            if (cu.c_owner != manager.user_name && cu.c_ownerName != manager.real_name)
+            {
+                if (!new BLL.permission().checkHasPermission(manager, "0301"))
+                {
+                    return "不是客户所属人或无权限修改客户信息，不能删除客户银行账号";
+                }
+            }
             if (dal.Delete(id))
             {
                 Model.business_log logmodel = new Model.business_log();

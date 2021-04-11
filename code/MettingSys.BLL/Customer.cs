@@ -112,11 +112,11 @@ namespace MettingSys.BLL
             {
                 return "已审核通过的客户不能再修改";
             }
-            if (model.c_owner != manager.user_name || model.c_ownerName != manager.real_name)
+            if (model.c_owner != manager.user_name && model.c_ownerName != manager.real_name)
             {
                 if (!new BLL.permission().checkHasPermission(manager, "0301"))
                 {
-                    return "无权限修改客户信息";
+                    return "不是客户所属人或者无权限修改客户信息";
                 }
                     
             }
@@ -190,14 +190,15 @@ namespace MettingSys.BLL
                 return "已审批通过的客户不能删除";
             }
             //判断是否含有删除客户的权限
-            if (!new BLL.permission().checkHasPermission(manager, "0301"))
+            if (model.c_owner != manager.user_name && model.c_ownerName != manager.real_name)
             {
-                //如果没有删除客户的权限，判断是不是本人的客户
-                if (model.c_owner != manager.user_name || model.c_ownerName != manager.real_name)
+                if (!new BLL.permission().checkHasPermission(manager, "0301"))
                 {
+                    //如果没有删除客户的权限，判断是不是本人的客户
                     return "没有客户管理权限0301，且不是客户所属人，不能删除客户信息";
                 }
             }
+            
             if (checkIsUse(id))
             {
                 return "该客户已被使用，不能删除";

@@ -92,7 +92,10 @@ namespace MettingSys.BLL
             }
             if (cu.c_owner != manager.user_name && cu.c_ownerName != manager.real_name)
             {
-                return "您不是该客户的所属人，不能编辑联系人";
+                if (!new BLL.permission().checkHasPermission(manager, "0301"))
+                {
+                    return "不是客户所属人或无权限修改客户信息";
+                }
             }
             if (cu.c_type != 2)
             {
@@ -134,13 +137,16 @@ namespace MettingSys.BLL
             {
                 return "客户已经审批通过，不能删除联系人";
             }
-            if (cu.c_owner != manager.user_name && cu.c_ownerName != manager.real_name)
-            {
-                return "您不是该客户的所属人，不能删除联系人";
-            }
             if (model.co_flag.Value)
             {
                 return "不能删除主要联系人";
+            }
+            if (cu.c_owner != manager.user_name && cu.c_ownerName != manager.real_name)
+            {
+                if (!new BLL.permission().checkHasPermission(manager, "0301"))
+                {
+                    return "不是客户所属人或无权限修改客户信息，不能删除联系人";
+                }
             }
             if (dal.Delete(id))
             {
