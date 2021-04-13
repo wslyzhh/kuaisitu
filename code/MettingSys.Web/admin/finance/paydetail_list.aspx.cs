@@ -21,7 +21,7 @@ namespace MettingSys.Web.admin.finance
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _cusName = "", _cid = "", _check1 = string.Empty, _check2 = string.Empty, _check3 = string.Empty, _foresdate = string.Empty, _foreedate = string.Empty, _collect="", _self = "", _person = "", _sign = "", _money = "", _oID = string.Empty, _area = string.Empty, _person1 = "",_sdate="",_edate="";
+        protected string _cusName = "", _cid = "", _check1 = string.Empty, _check2 = string.Empty, _check3 = string.Empty, _foresdate = string.Empty, _foreedate = string.Empty, _collect = "", _self = "", _person = "", _sign = "", _money = "", _oID = string.Empty, _area = string.Empty, _person1 = "", _sdate = "", _edate = "", _num = "";
         protected string _check = "", orderby = "rpd_adddate desc,rpd_id desc";
         protected Model.manager manager = null;
         protected void Page_Load(object sender, EventArgs e)
@@ -49,6 +49,7 @@ namespace MettingSys.Web.admin.finance
             _person1 = DTRequest.GetString("txtPerson1");
             _sdate = DTRequest.GetString("txtsdate");
             _edate = DTRequest.GetString("txtedate");
+            _num = DTRequest.GetString("txtnum");
             manager = GetAdminInfo();
             switch (this._check)
             {
@@ -273,6 +274,10 @@ namespace MettingSys.Web.admin.finance
             {
                 strTemp.Append(" and datediff(day,rp_date,'" + _sdate + "')>=0 ");
             }
+            if (!string.IsNullOrEmpty(_num))
+            {
+                strTemp.Append(" and rpd_num like '%" + _num + "%'");
+            }
             return strTemp.ToString();
         }
         #endregion
@@ -313,13 +318,14 @@ namespace MettingSys.Web.admin.finance
             _person1 = DTRequest.GetFormString("txtPerson1");
             _sdate = DTRequest.GetFormString("txtsdate");
             _edate = DTRequest.GetFormString("txtedate");
+            _num = DTRequest.GetFormString("txtnum");
             RptBind("rpd_type=0" + CombSqlTxt(), orderby);
             
         }
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("paydetail_list.aspx", "page={0}&ddlcheck1={1}&ddlcheck2={2}&ddlcheck3={3}&txtforesdate={4}&txtforeedate={5}&self={6}&txtCusName={7}&hCusId={8}&ddlcollect={9}&txtPerson={10}&ddlsign={11}&txtmoney={12}&txtorderid={13}&ddlarea={14}&txtPerson1={15}&txtsdate={16}&txtedate={17}&check={18}", "__id__", _check1, _check2, _check3, _foresdate, _foreedate, _self, _cusName, _cid, _collect, _person, _sign, _money, _oID, _area, _person1, _sdate, _edate,_check);
+            return Utils.CombUrlTxt("paydetail_list.aspx", "page={0}&ddlcheck1={1}&ddlcheck2={2}&ddlcheck3={3}&txtforesdate={4}&txtforeedate={5}&self={6}&txtCusName={7}&hCusId={8}&ddlcollect={9}&txtPerson={10}&ddlsign={11}&txtmoney={12}&txtorderid={13}&ddlarea={14}&txtPerson1={15}&txtsdate={16}&txtedate={17}&check={18}&txtnum={19}", "__id__", _check1, _check2, _check3, _foresdate, _foreedate, _self, _cusName, _cid, _collect, _person, _sign, _money, _oID, _area, _person1, _sdate, _edate,_check,_num);
         }
 
         //设置分页数量
@@ -393,6 +399,7 @@ namespace MettingSys.Web.admin.finance
             _person1 = DTRequest.GetFormString("txtPerson1");
             _sdate = DTRequest.GetFormString("txtsdate");
             _edate = DTRequest.GetFormString("txtedate");
+            _num = DTRequest.GetFormString("txtnum");
             BLL.ReceiptPayDetail bll = new BLL.ReceiptPayDetail();
             DataTable dt = bll.GetList(this.pageSize, this.page, "rpd_type=0" + CombSqlTxt(), "rpd_adddate desc,rpd_id desc", manager, out this.totalCount, out decimal _tmoney, true, false).Tables[0];
 
@@ -458,6 +465,7 @@ namespace MettingSys.Web.admin.finance
             headRow.CreateCell(11).SetCellValue("总经理审批");
             headRow.CreateCell(12).SetCellValue("付款人");
             headRow.CreateCell(13).SetCellValue("实付日期");
+            headRow.CreateCell(14).SetCellValue("对账标识");
 
             headRow.GetCell(0).CellStyle = titleCellStyle;
             headRow.GetCell(1).CellStyle = titleCellStyle;
@@ -473,6 +481,7 @@ namespace MettingSys.Web.admin.finance
             headRow.GetCell(11).CellStyle = titleCellStyle;
             headRow.GetCell(12).CellStyle = titleCellStyle;
             headRow.GetCell(13).CellStyle = titleCellStyle;
+            headRow.GetCell(14).CellStyle = titleCellStyle;
 
             sheet.SetColumnWidth(0, 15 * 256);
             sheet.SetColumnWidth(1, 20 * 256);
@@ -488,6 +497,7 @@ namespace MettingSys.Web.admin.finance
             sheet.SetColumnWidth(11, 20 * 256);
             sheet.SetColumnWidth(12, 20 * 256);
             sheet.SetColumnWidth(13, 20 * 256);
+            sheet.SetColumnWidth(14, 20 * 256);
 
             if (dt != null)
             {
@@ -509,6 +519,7 @@ namespace MettingSys.Web.admin.finance
                     row.CreateCell(11).SetCellValue(BusinessDict.checkStatus()[Utils.ObjToByte(dt.Rows[i]["rpd_flag3"].ToString())]);
                     row.CreateCell(12).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["rp_confirmerName"]));
                     row.CreateCell(13).SetCellValue(ConvertHelper.toDate(dt.Rows[i]["rp_date"]) == null ? "" : ConvertHelper.toDate(dt.Rows[i]["rp_date"]).Value.ToString("yyyy-MM-dd"));
+                    row.CreateCell(14).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["rpd_num"]));
 
                     row.GetCell(0).CellStyle = cellStyle;
                     row.GetCell(1).CellStyle = cellStyle;
@@ -524,6 +535,7 @@ namespace MettingSys.Web.admin.finance
                     row.GetCell(11).CellStyle = cellStyle;
                     row.GetCell(12).CellStyle = cellStyle;
                     row.GetCell(13).CellStyle = cellStyle;
+                    row.GetCell(14).CellStyle = cellStyle;
                 }
             }
 

@@ -1305,15 +1305,16 @@
                         </fieldset>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
                             <tr>
-                                <th align="left" width="10%">收付对象</th>
-                                <th align="left" width="6%">收付类别</th>
+                                <th align="left" width="8%">收付对象</th>
+                                <th align="left" width="4%">收付类别</th>
                                 <th align="left">收付内容</th>
                                 <th align="left" width="6%">收付金额</th>
-                                <th align="left" width="8%">本单分配</th>
-                                <th align="left" width="8%">预收付日期</th>
-                                <th align="left" width="8%">收付方式</th>
-                                <th align="left" width="8%">实收付日期</th>
-                                <th align="left" width="8%">申请人</th>
+                                <th align="left" width="6%">本单分配</th>
+                                <th align="left" width="6%">预收付日期</th>
+                                <th align="left" width="6%">收付方式</th>
+                                <th align="left" width="6%">实收付日期</th>
+                                <th align="left" width="6%">申请人</th>
+                                <th align="left" width="6%">对账标识</th>
                                 <th align="left" width="6%">凭证号</th>
                                 <th align="left" width="6%">审批</th>
                                 <th align="left" width="4%">确认收付款</th>
@@ -1330,7 +1331,8 @@
                             <td><%# Convert.ToDateTime(Eval("rpd_foredate")).ToString("yyyy-MM-dd") %></td>
                             <td><%# Eval("pm_name") %></td>
                             <td><%# ConvertHelper.toDate(Eval("rp_date"))==null?"":Convert.ToDateTime(Eval("rp_date")).ToString("yyyy-MM-dd") %></td>
-                            <td><%# Eval("rpd_personNum") %>-<%# Eval("rpd_personName") %></td>
+                            <td><%# Eval("rpd_personNum") %></br><%# Eval("rpd_personName") %></td>
+                            <td><%# Eval("rpd_num") %></td>
                             <td><span onmouseover="tip_index=layer.tips('凭证日期：<%#Eval("ce_date").ToString()==""?"":Convert.ToDateTime(Eval("ce_date")).ToString("yyyy-MM-dd")%><br/>备注：<%# Eval("ce_remark") %>', this, { time: 0 });" onmouseout="layer.close(tip_index);"><%# Eval("ce_num") %></span></td>
                             <td>
                                 <span onmouseover="tip_index=layer.tips('部门审批<br/>审批人：<%#Eval("rpd_checkNum1")%>-<%#Eval("rpd_checkName1")%><br/>审批备注：<%#Eval("rpd_checkRemark1")%><br/>审批时间：<%#Eval("rpd_checkTime1")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Eval("rpd_flag1")%>"></span>

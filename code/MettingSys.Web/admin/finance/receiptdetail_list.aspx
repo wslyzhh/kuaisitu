@@ -117,6 +117,8 @@
                         <asp:TextBox ID="txtedate" runat="server" CssClass="input rule-date-input" Width="110" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'txtsdate\')}'})" />            
             申请人：
                             <asp:TextBox ID="txtAddPerson" runat="server" Width="100px" CssClass="input" />
+            对账标识：
+                            <asp:TextBox ID="txtnum" runat="server" Width="100px" CssClass="input" />
         </div>
 
         <!--列表-->
@@ -125,18 +127,19 @@
                 <HeaderTemplate>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
-                            <th width="6%">选择</th>
+                            <th width="4%">选择</th>
                             <th align="left" width="8%">订单号</th>
                             <th align="left" width="10%">收款对象</th>
                             <th align="left">收款内容</th>
                             <th align="left" width="6%">收款金额</th>
-                            <th align="left" width="8%">预收日期</th>
-                            <th align="left" width="8%">收款方式</th>
-                            <th align="left" width="8%">申请人</th>
+                            <th align="left" width="6%">预收日期</th>
+                            <th align="left" width="6%">收款方式</th>
+                            <th align="left" width="6%">申请人</th>
                             <th align="left" width="4%">状态</th>                            
                             <th align="left" width="5%">收款人</th>
                             <th align="left" width="6%">实收日期</th>
-                            <th width="8%">操作</th>
+                            <th align="left" width="4%">对账标识</th>
+                            <th width="4%">操作</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
@@ -155,11 +158,12 @@
                         <td><span onmouseover="tip_index=layer.tips('审批人：<%#Eval("rpd_checkNum1")%>-<%#Eval("rpd_checkName1")%><br/>审批备注：<%#Eval("rpd_checkRemark1").ToString().Replace("\r\n","").Replace("\r","").Replace("\n","")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);" class="check_<%#Eval("rpd_flag1")%>"></span></td>
                         <td><%#Eval("rp_confirmerName")%></td>
                         <td><%# ConvertHelper.toDate(Eval("rp_date"))==null?"":Convert.ToDateTime(Eval("rp_date")).ToString("yyyy-MM-dd") %></td>
+                        <td><%# Eval("rpd_num") %></td>
                         <td align="center"><a href="receiptdetail_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("rpd_id")%>">修改</a></td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"12\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"13\">暂无记录</td></tr>" : ""%>
   </table>
                 </FooterTemplate>
             </asp:Repeater>

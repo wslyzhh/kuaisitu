@@ -347,6 +347,8 @@
                 <div class="rule-single-select">
                     <asp:DropDownList ID="ddlarea" runat="server"></asp:DropDownList>
                 </div>
+                对账标识：
+                            <asp:TextBox ID="txtnum" runat="server" Width="100px" CssClass="input" />
                 <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
                 <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
             </div>
@@ -362,14 +364,15 @@
                                 <th align="left" width="10%">客户银行账号</th>
                                 <th align="left">付款内容</th>
                                 <th align="left" width="6%">付款金额</th>
-                                <th align="left" width="8%">预付日期</th>
-                                <th align="left" width="8%">付款方式</th>
-                                <th align="left" width="8%">申请人</th>
+                                <th align="left" width="6%">预付日期</th>
+                                <th align="left" width="6%">付款方式</th>
+                                <th align="left" width="6%">申请人</th>
                                 <th align="left" width="5%">区域</th>
                                 <th align="left" width="5%">审批</th>                    
                                 <th align="left" width="5%">付款人</th>
                                 <th align="left" width="6%">实付日期</th>
-                                <th width="5%">操作</th>
+                                <th align="left" width="4%">对账标识</th>
+                                <th width="4%">操作</th>
                             </tr>
                     </HeaderTemplate>
                     <ItemTemplate>
@@ -394,6 +397,7 @@
                             </td>
                             <td><%#Eval("rp_confirmerName")%></td>
                             <td><%# ConvertHelper.toDate(Eval("rp_date"))==null?"":Convert.ToDateTime(Eval("rp_date")).ToString("yyyy-MM-dd") %></td>
+                            <td><%# Eval("rpd_num") %></td>
                             <td align="center">
                                 <!--存在审批失败的，或者部门审批是待审批的都可以编辑，其他情况只能查看-->
                                 <%#(Eval("rpd_flag1").ToString() == "1" ||Eval("rpd_flag2").ToString() == "1" ||Eval("rpd_flag3").ToString() == "1" ) || Eval("rpd_flag1").ToString() == "0" || Utils.ObjToDecimal(Eval("rpd_money"),0)<0 ?"<a href=\"paydetail_edit.aspx?action="+DTEnums.ActionEnum.Edit+"&id="+Eval("rpd_id")+"\">修改</a>":"<a href=\"paydetail_edit.aspx?action="+DTEnums.ActionEnum.View+"&id="+Eval("rpd_id")+"\">查看</a>"%>
@@ -404,7 +408,7 @@
                         </tr>
                     </ItemTemplate>
                     <FooterTemplate>
-                        <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"14\">暂无记录</td></tr>" : ""%>
+                        <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"15\">暂无记录</td></tr>" : ""%>
                 </table>
                     </FooterTemplate>
                 </asp:Repeater>
