@@ -682,11 +682,11 @@ namespace MettingSys.DAL
             StringBuilder strSql = new StringBuilder();
             strSql.Append("select  op_number,op_name,fin_type,isnull(orderFinMoney,0) orderFinMoney,isnull(orderRpdMoney,0) orderRpdMoney,isnull(orderUnMoney,0) orderUnMoney from ");
             strSql.Append(" (select op_number,op_name, fin_type, sum(finMoney) orderFinMoney, sum(rpdMoney) orderRpdMoney, (sum(finMoney) - sum(rpdMoney)) orderUnMoney  from");
-            strSql.Append(" (select isnull(fin_oid, rpd_oid) fin_oid,op_number,op_name, isnull(fin_cid, rpd_cid) fin_cid,c_name, isnull(fin_type, rpd_type) fin_type, isnull(finMoney, 0) finMoney, isnull(rpdMoney, 0) rpdMoney from ");
-            strSql.Append(" (select fin_oid, fin_cid, fin_type, sum(isnull(fin_money, 0)) finMoney from MS_finance where fin_flag <> 1 group by fin_oid, fin_cid, fin_type) t1 ");
-            strSql.Append(" full join(select rpd_oid, rpd_cid, rpd_type, sum(isnull(rpd_money, 0)) rpdMoney from MS_ReceiptPayDetail left join MS_ReceiptPay on rp_id = rpd_rpid where rp_isConfirm = 1 group by rpd_oid, rpd_cid, rpd_type) t3 ");
-            strSql.Append(" on t1.fin_oid = t3.rpd_oid and t1.fin_cid = t3.rpd_cid and t1.fin_type = t3.rpd_type ");
-            strSql.Append(" left join MS_Order on isnull(fin_oid, rpd_oid) = o_id left join MS_OrderPerson on o_id=op_oid and op_type=1 left join MS_Customer on fin_cid=c_id where 1=1  " + strTemp1 + "");
+            strSql.Append(" (select isnull(fin_oid, rpd_oid) fin_oid,op_number,op_name, isnull(fin_type, rpd_type) fin_type, isnull(finMoney, 0) finMoney, isnull(rpdMoney, 0) rpdMoney from ");
+            strSql.Append(" (select fin_oid, fin_type, sum(isnull(fin_money, 0)) finMoney from MS_finance where fin_flag <> 1 group by fin_oid, fin_type) t1 ");
+            strSql.Append(" full join(select rpd_oid, rpd_type, sum(isnull(rpd_money, 0)) rpdMoney from MS_ReceiptPayDetail left join MS_ReceiptPay on rp_id = rpd_rpid where rp_isConfirm = 1 group by rpd_oid, rpd_type) t3 ");
+            strSql.Append(" on t1.fin_oid = t3.rpd_oid and t1.fin_type = t3.rpd_type ");
+            strSql.Append(" left join MS_Order on isnull(fin_oid, rpd_oid) = o_id left join MS_OrderPerson on o_id=op_oid and op_type=1 where 1=1  " + strTemp1 + "");
             strSql.Append(" ) t group by op_number,op_name, fin_type) t2  where 1 = 1  " + strTemp + "");
 
             SqlParameter[] param = { };
