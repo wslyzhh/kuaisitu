@@ -398,7 +398,21 @@ namespace MettingSys.BLL
             {
                 return "付款方式未改变";
             }
-            return dal.mutliUpdateMethod(cid, method, oldmethod, sdate, edate, manager) > 0 ? "" : "失败";
+            string idStr = string.Empty;
+            int count = dal.mutliUpdateMethod(cid, method, oldmethod, sdate, edate, manager,out idStr);
+            if (count > 0)
+            {
+                Model.business_log logmodel = new Model.business_log();
+                logmodel.ol_oid = "";
+                logmodel.ol_relateID = 0;
+                logmodel.ol_cid = cid;
+                logmodel.ol_title = "批量更新付款方式";
+                logmodel.ol_content = "更新付款方式：" + oldmethod + "→<font color='red'>" + method + "</font><br/>记录ID为" + idStr;
+                logmodel.ol_operateDate = DateTime.Now;
+                new business_log().Add(DTEnums.ActionEnum.Edit.ToString(), logmodel, manager.user_name, manager.real_name); //记录日志
+                return "";
+            }
+            return "失败";
         }
 
 

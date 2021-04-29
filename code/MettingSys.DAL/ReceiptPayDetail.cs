@@ -169,15 +169,18 @@ namespace MettingSys.DAL
             return DbHelperSQL.ExecuteSql(strSql.ToString(), paras.ToArray()) > 0;
         }
 
-        public int mutliUpdateMethod(int cid, int method, int oldmethod, string sdate, string edate, Model.manager manager)
+        public int mutliUpdateMethod(int cid, int method, int oldmethod, string sdate, string edate, Model.manager manager,out string rpdidStr)
         {
+            string sql1 = "select rpd_id from MS_ReceiptPayDetail where rpd_type=0 and rpd_flag3=2 and rpd_flag2=2 and rpd_flag1=2 and isnull(rpd_rpid,0)=0 and rpd_cid=@cid and isnull(rpd_method,0)=@oldmethod";
             string sql = "update MS_ReceiptPayDetail set rpd_method=@method where rpd_type=0 and rpd_flag3=2 and rpd_flag2=2 and rpd_flag1=2 and isnull(rpd_rpid,0)=0 and rpd_cid=@cid and isnull(rpd_method,0)=@oldmethod";
             if (!string.IsNullOrEmpty(sdate))
             {
+                sql1 += " and datediff(d,rpd_foreDate,'" + sdate + "')<=0";
                 sql += " and datediff(d,rpd_foreDate,'" + sdate + "')<=0";
             }
             if (!string.IsNullOrEmpty(edate))
             {
+                sql1 += " and datediff(d,rpd_foreDate,'" + edate + "')>=0";
                 sql += " and datediff(d,rpd_foreDate,'" + edate + "')>=0";
             }
             SqlParameter[] parameters = {
@@ -188,6 +191,17 @@ namespace MettingSys.DAL
             parameters[0].Value = method;
             parameters[1].Value = cid;
             parameters[2].Value = oldmethod;
+
+            rpdidStr = "";
+            DataSet ds = DbHelperSQL.Query(sql1, parameters);
+            if (ds!=null)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    rpdidStr += dr["rpd_id"] + ",";
+                }
+            }
+            rpdidStr = rpdidStr.Trim(',');
 
             return DbHelperSQL.ExecuteSql(sql.ToString(), parameters);
 

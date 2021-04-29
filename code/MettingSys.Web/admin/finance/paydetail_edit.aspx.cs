@@ -91,6 +91,7 @@ namespace MettingSys.Web.admin.finance
                 DataRow dr = ds.Tables[0].Rows[0];
                 oID = dr["rpd_oid"].ToString();
                 txtCusName.Text = dr["c_name"].ToString();
+                txtCusName.Enabled = false;
                 hCusId.Value = dr["rpd_cid"].ToString();
                 txtBank.Text = dr["cb_bank"].ToString() + "("+ dr["cb_bankName"].ToString() + "/" + dr["cb_bankNum"].ToString() + ")";
                 hBankId.Value = dr["rpd_cbid"].ToString();
@@ -263,11 +264,11 @@ namespace MettingSys.Web.admin.finance
             Model.ReceiptPayDetail model = bll.GetModel(_id);
             manager = GetAdminInfo();
             string _content = string.Empty;
-            if (model.rpd_cid.ToString() != hCusId.Value)
-            {
-                _content += "付款对象ID：" + model.rpd_cid + "→<font color='red'>" + hCusId.Value + "</font><br/>";
-            }
-            model.rpd_cid = Utils.StrToInt(hCusId.Value, 0);
+            //if (model.rpd_cid.ToString() != hCusId.Value)
+            //{
+            //    _content += "付款对象ID：" + model.rpd_cid + "→<font color='red'>" + hCusId.Value + "</font><br/>";
+            //}
+            //model.rpd_cid = Utils.StrToInt(hCusId.Value, 0);
             bool updateMoney = false;
             if (model.rpd_money.ToString() != txtMoney.Text.Trim())
             {
