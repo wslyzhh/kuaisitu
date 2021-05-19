@@ -383,11 +383,11 @@ namespace MettingSys.BLL
                         //由待审批、审批未通过→审批通过
 
                         //存在批复金额
-                        if (mlog != null)
+                        if (model.uba_function == "业务活动执行备用金借款" && mlog != null)
                         {
                             mlog.ubml_type = 1;
                             mlog.ubml_remark = "部门审批" + addremark;
-                            model.uba_checkRemark1 = "部门审批" + addremark;
+                            model.uba_checkRemark1 += "部门审批" + addremark;
                         }
                     }
                     else
@@ -397,15 +397,14 @@ namespace MettingSys.BLL
                         {
                             return "财务已经审批通过，不能做部门审批";
                         }
-                        //检查部门审批是否存在批复记录，存在则退回原来的金额
-                        ubmlID = getOldMoney(model, 1,out ubmlRemark);
-                        if (!string.IsNullOrEmpty(ubmlRemark))
+                        if (model.uba_function == "业务活动执行备用金借款")
                         {
-                            model.uba_checkRemark1 = model.uba_checkRemark1.Replace(ubmlRemark, "");
-                        }
-                        else
-                        {
-                            model.uba_checkRemark1 = "";
+                            //检查部门审批是否存在批复记录，存在则退回原来的金额
+                            ubmlID = getOldMoney(model, 1, out ubmlRemark);
+                            if (!string.IsNullOrEmpty(ubmlRemark))
+                            {
+                                model.uba_checkRemark1 = model.uba_checkRemark1.Replace(ubmlRemark, "");
+                            }
                         }
                     }
                     
@@ -420,7 +419,7 @@ namespace MettingSys.BLL
                     model.uba_flag2 = status;
                     model.uba_checkNum2 = adminModel.user_name;
                     model.uba_checkName2 = adminModel.real_name;
-                    model.uba_checkRemark2 += remark;
+                    model.uba_checkRemark2 = remark;
                     model.uba_checkTime2 = DateTime.Now;
                     if (status == 2)
                     {
@@ -430,11 +429,11 @@ namespace MettingSys.BLL
                             return "部门审批是待审批或审批未通过的，不能做财务审批";
                         }
                         //存在批复金额
-                        if (mlog != null)
+                        if (model.uba_function == "业务活动执行备用金借款" && mlog != null)
                         {
                             mlog.ubml_type = 2;
                             mlog.ubml_remark = "财务审批" + addremark;
-                            model.uba_checkRemark2 = "财务审批" + addremark;
+                            model.uba_checkRemark2 += "财务审批" + addremark;
                         }
                     }
                     else
@@ -444,15 +443,14 @@ namespace MettingSys.BLL
                         {
                             return "总经理已经审批通过，不能做财务审批";
                         }
-                        //检查部门审批是否存在批复记录，存在则退回原来的金额
-                        ubmlID = getOldMoney(model, 2,out ubmlRemark);
-                        if (!string.IsNullOrEmpty(ubmlRemark))
+                        if (model.uba_function == "业务活动执行备用金借款")
                         {
-                            model.uba_checkRemark2 = model.uba_checkRemark2.Replace(ubmlRemark, "");
-                        }
-                        else
-                        {
-                            model.uba_checkRemark2 = "";
+                            //检查部门审批是否存在批复记录，存在则退回原来的金额
+                            ubmlID = getOldMoney(model, 2, out ubmlRemark);
+                            if (!string.IsNullOrEmpty(ubmlRemark))
+                            {
+                                model.uba_checkRemark2 = model.uba_checkRemark2.Replace(ubmlRemark, "");
+                            }
                         }
                     }
                     break;
@@ -466,7 +464,7 @@ namespace MettingSys.BLL
                     model.uba_flag3 = status;
                     model.uba_checkNum3 = adminModel.user_name;
                     model.uba_checkName3 = adminModel.real_name;
-                    model.uba_checkRemark3 += remark;
+                    model.uba_checkRemark3 = remark;
                     model.uba_checkTime3 = DateTime.Now;
                     if (status == 2)
                     {
@@ -476,11 +474,11 @@ namespace MettingSys.BLL
                             return "财务审批是待审批或审批未通过的，不能做总经理审批";
                         }
                         //存在批复金额
-                        if (mlog != null)
+                        if (model.uba_function == "业务活动执行备用金借款" && mlog != null)
                         {
                             mlog.ubml_type = 3;
                             mlog.ubml_remark = "总经理审批" + addremark;
-                            model.uba_checkRemark3 = "总经理审批" + addremark;
+                            model.uba_checkRemark3 += "总经理审批" + addremark;
                         }
                     }
                     else
@@ -490,15 +488,14 @@ namespace MettingSys.BLL
                         {
                             return "已经确认支付，不能做总经理审批";
                         }
-                        //检查部门审批是否存在批复记录，存在则退回原来的金额
-                        ubmlID = getOldMoney(model, 3,out ubmlRemark);
-                        if (!string.IsNullOrEmpty(ubmlRemark))
+                        if (model.uba_function == "业务活动执行备用金借款")
                         {
-                            model.uba_checkRemark3 = model.uba_checkRemark3.Replace(ubmlRemark, "");
-                        }
-                        else
-                        {
-                            model.uba_checkRemark3 = "";
+                            //检查部门审批是否存在批复记录，存在则退回原来的金额
+                            ubmlID = getOldMoney(model, 3, out ubmlRemark);
+                            if (!string.IsNullOrEmpty(ubmlRemark))
+                            {
+                                model.uba_checkRemark3 = model.uba_checkRemark3.Replace(ubmlRemark, "");
+                            }
                         }
                     }
                     break;

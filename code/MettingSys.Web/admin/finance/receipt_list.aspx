@@ -434,7 +434,7 @@
                             <asp:TextBox ID="txtNum" runat="server" Width="100px" CssClass="input" />
             凭证日期：
             <asp:TextBox ID="txtNumDate" runat="server" CssClass="input rule-date-input" Width="110" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
-            对账凭证：
+            对账标识：
                             <asp:TextBox ID="txtChk" runat="server" Width="100px" CssClass="input" />
             <div class="rule-single-select">
                             <asp:DropDownList ID="ddlmoneyType" runat="server">
