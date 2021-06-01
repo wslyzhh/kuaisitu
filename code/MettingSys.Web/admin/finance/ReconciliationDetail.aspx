@@ -23,6 +23,7 @@
     <script type="text/javascript" charset="utf-8" src="../js/common.js"></script>
     <script type="text/javascript">
         $(function () {
+            //应收付对象
             $.getJSON("../../tools/business_ajax.ashx?action=getAllCustomer", function (json) {
                 $('#txtCusName').devbridgeAutocomplete({
                     lookup: json,
@@ -34,9 +35,22 @@
                     noSuggestionNotice: '抱歉，没有匹配的选项',
                     groupBy: 'type'
                 });
+                $('#txtCustomer').devbridgeAutocomplete({
+                    lookup: json,
+                    minChars: 1,
+                    onSelect: function (suggestion) {
+                        $('#hCustomer').val(suggestion.id);
+                    },
+                    showNoSuggestionNotice: true,
+                    noSuggestionNotice: '抱歉，没有匹配的选项',
+                    groupBy: 'type'
+                });
             });
             $("#txtCusName").change(function () {
                 $("#hCusId").val("");
+            });            
+            $("#txtCustomer").change(function () {
+                $("#hCustomer").val("");
             });
 
             if ($("#ddltype").val() == "True") {
@@ -348,6 +362,9 @@
                     
                 </div>
                 <div class="menu-list" style="margin-bottom: 10px;">
+                    客源：
+                    <asp:TextBox ID="txtCustomer" runat="server" CssClass="input" Width="150"></asp:TextBox>
+                    <asp:HiddenField ID="hCustomer" runat="server" />
                     活动名称：
                     <asp:TextBox ID="txtName" runat="server" CssClass="input"></asp:TextBox>
                     活动地点：
@@ -374,9 +391,7 @@
                     <asp:TextBox ID="txtPerson5" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>
                     执行人员：
                     <asp:TextBox ID="txtPerson4" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>
-                    <input type="hidden" name="self" value="<%=_self %>" />
-                    <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
-                    <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
+                    
                 </div>
                 <div class="menu-list" style="margin-bottom: 10px;">
                     订单号：
@@ -404,7 +419,9 @@
                         <asp:TextBox ID="txtsDate2" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate2\')}'})"></asp:TextBox>
                     -
                         <asp:TextBox ID="txteDate2" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({minDate:'#F{$dp.$D(\'txtsDate2\')}'})"></asp:TextBox>
-                    
+                    <input type="hidden" name="self" value="<%=_self %>" />
+                    <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
+                    <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
                     <%--业务开始日期：
                         <asp:TextBox ID="txtsDate2" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate2\')}'})"></asp:TextBox>
                     -

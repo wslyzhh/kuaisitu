@@ -349,6 +349,10 @@
                 </div>
                 对账标识：
                             <asp:TextBox ID="txtnum" runat="server" Width="100px" CssClass="input" />
+                付款方式：
+                            <div class="rule-single-select">
+                                <asp:DropDownList ID="ddlmethod1" runat="server"></asp:DropDownList>
+                            </div> 
                 <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
                 <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
             </div>

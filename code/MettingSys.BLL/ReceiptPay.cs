@@ -824,7 +824,8 @@ namespace MettingSys.BLL
                     model = cemodel;
                 }
             }
-            else {
+            else 
+            {
                 ceid = model.ce_id.Value;
             }
             if (model.ce_flag == 2)
@@ -845,7 +846,18 @@ namespace MettingSys.BLL
             {
                 return "必须确认" + text + "后才能标记凭证";
             }
+            //如果已经存在凭证，且该凭证已经审核通过，则不能标记新凭证
+            if (rp.rp_ceid > 0)
+            {
+                Model.certificates oldcert = new BLL.certificates().GetModel(rp.rp_ceid.Value);
+                if (oldcert.ce_flag ==2)
+                {
+                    return "前面标记的凭证已经审核通过，不能再标记新的凭证";
+                }
+            }
+
             rp.rp_ceid = ceid;
+
             if (dal.Update(rp))
             {
                 Model.business_log logmodel = new Model.business_log();

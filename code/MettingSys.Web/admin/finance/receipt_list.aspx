@@ -425,9 +425,7 @@
             -
                             <asp:TextBox ID="txtedate" runat="server" CssClass="input rule-date-input" Width="110" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'txtsdate\')}'})" />
             
-            <input type="hidden" name="self" value="<%=_self %>" />
-            <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
-                <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
+            
         </div>
         <div class="searchbar" style="margin-top:10px;">
             凭证号：
@@ -463,6 +461,9 @@
                         </div>
             申请人：
                             <asp:TextBox ID="txtAddPerson" runat="server" Width="100px" CssClass="input" />
+            <input type="hidden" name="self" value="<%=_self %>" />
+            <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
+                <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
         </div>
         <!--列表-->
         <div class="table-container">

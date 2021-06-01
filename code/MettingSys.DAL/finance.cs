@@ -733,12 +733,12 @@ namespace MettingSys.DAL
                     strWhere1.Append(" and fin_type='" + dict["type"] + "'");
                     strWhere2.Append(" and rpd_type='" + dict["type"] + "'");
                 }
-                if (dict.ContainsKey("cid") && dict["cid"]!="0")
+                if (dict.ContainsKey("cid") && dict["cid"] != "0")
                 {
                     strWhere1.Append(" and fin_cid=" + dict["cid"] + "");
                     strWhere2.Append(" and rp_cid=" + dict["cid"] + "");
                     strWhere3.Append(" and (exists(select * from MS_finance f where f.fin_oid=o_id and fin_type='" + dict["type"] + "' and fin_cid=" + dict["cid"] + ") or exists(select * from MS_ReceiptPay left join MS_ReceiptPayDetail on rp_id=rpd_rpid where rpd_oid=o_id and rpd_type='" + dict["type"] + "' and rpd_cid=" + dict["cid"] + "))");
-                }
+                }                
                 if (dict.ContainsKey("money1"))
                 {
                     strWhere3.Append(" and isnull(t1.fin_money,0)-isnull(rpd_money,0) " + dict["sign"] + " " + dict["money1"] + "");
@@ -830,6 +830,17 @@ namespace MettingSys.DAL
                     else
                     {
                         strWhere3.Append(" and o_status=" + dict["status"] + "");
+                    }
+                }
+                if (dict.ContainsKey("hcustomer") && dict["hcustomer"] != "0")
+                {
+                    strWhere3.Append(" and o_cid=" + dict["hcustomer"] + "");
+                }
+                else
+                {
+                    if (dict.ContainsKey("customer"))
+                    {
+                        strWhere3.Append(" and c_name like '%" + dict["customer"] + "%'");
                     }
                 }
                 if (dict.ContainsKey("lockstatus"))

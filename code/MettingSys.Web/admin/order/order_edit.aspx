@@ -532,7 +532,7 @@
             var title = actionText + "收款明细";
             var _url = '../finance/receiptdetail_edit.aspx?action=' + action + '&oID=' + oID + '&fromOrder=true&id=' + id + '&cid=' + cid + '&cname=' + escape(cname) + '&contentText=' + escape(newtext);
             if (finType == "False") {
-                var title = actionText +"付款明细";
+                var title = actionText +"付款申请";
                 _url = '../finance/paydetail_edit.aspx?action=' + action + '&oID=' + oID + '&fromOrder=true&id=' + id + '&cid=' + cid + '&cname=' + escape(cname) + '&contentText=' + escape(newtext);
             }
             layer.open({

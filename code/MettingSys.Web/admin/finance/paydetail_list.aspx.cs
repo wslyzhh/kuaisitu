@@ -21,7 +21,7 @@ namespace MettingSys.Web.admin.finance
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _cusName = "", _cid = "", _check1 = string.Empty, _check2 = string.Empty, _check3 = string.Empty, _foresdate = string.Empty, _foreedate = string.Empty, _collect = "", _self = "", _person = "", _sign = "", _money = "", _oID = string.Empty, _area = string.Empty, _person1 = "", _sdate = "", _edate = "", _num = "";
+        protected string _cusName = "", _cid = "", _check1 = string.Empty, _check2 = string.Empty, _check3 = string.Empty, _foresdate = string.Empty, _foreedate = string.Empty, _collect = "", _self = "", _person = "", _sign = "", _money = "", _oID = string.Empty, _area = string.Empty, _person1 = "", _sdate = "", _edate = "", _num = "", _method1 = string.Empty;
         protected string _check = "", orderby = "rpd_adddate desc,rpd_id desc";
         protected Model.manager manager = null;
         protected void Page_Load(object sender, EventArgs e)
@@ -50,6 +50,7 @@ namespace MettingSys.Web.admin.finance
             _sdate = DTRequest.GetString("txtsdate");
             _edate = DTRequest.GetString("txtedate");
             _num = DTRequest.GetString("txtnum");
+            _method1 = DTRequest.GetString("ddlmethod1");
             manager = GetAdminInfo();
             switch (this._check)
             {
@@ -131,6 +132,12 @@ namespace MettingSys.Web.admin.finance
             ddlmethod.DataBind();
             ddlmethod.Items.Insert(0, new ListItem("请选择", ""));
 
+            ddlmethod1.DataSource = new BLL.payMethod().GetList(0, "pm_isUse=1 " + sqlwhere + "", "pm_sort asc,pm_id asc");
+            ddlmethod1.DataTextField = "pm_name";
+            ddlmethod1.DataValueField = "pm_id";
+            ddlmethod1.DataBind();
+            ddlmethod1.Items.Insert(0, new ListItem("不限", ""));
+
             ddlarea.DataSource = new BLL.department().getAreaDict();
             ddlarea.DataTextField = "value";
             ddlarea.DataValueField = "key";
@@ -190,6 +197,7 @@ namespace MettingSys.Web.admin.finance
             txtPerson1.Text = _person1;
             txtsdate.Text = _sdate;
             txtedate.Text = _edate;
+            ddlmethod1.SelectedValue = _method1;
         }
         #endregion
 
@@ -272,11 +280,15 @@ namespace MettingSys.Web.admin.finance
             }
             if (!string.IsNullOrEmpty(_edate))
             {
-                strTemp.Append(" and datediff(day,rp_date,'" + _sdate + "')>=0 ");
+                strTemp.Append(" and datediff(day,rp_date,'" + _edate + "')>=0 ");
             }
             if (!string.IsNullOrEmpty(_num))
             {
                 strTemp.Append(" and rpd_num like '%" + _num + "%'");
+            }
+            if (!string.IsNullOrEmpty(_method1))
+            {
+                strTemp.Append(" and rpd_method=" + _method1 + "");
             }
             return strTemp.ToString();
         }
@@ -319,13 +331,14 @@ namespace MettingSys.Web.admin.finance
             _sdate = DTRequest.GetFormString("txtsdate");
             _edate = DTRequest.GetFormString("txtedate");
             _num = DTRequest.GetFormString("txtnum");
+            _method1 = DTRequest.GetFormString("ddlmethod1");
             RptBind("rpd_type=0" + CombSqlTxt(), orderby);
             
         }
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("paydetail_list.aspx", "page={0}&ddlcheck1={1}&ddlcheck2={2}&ddlcheck3={3}&txtforesdate={4}&txtforeedate={5}&self={6}&txtCusName={7}&hCusId={8}&ddlcollect={9}&txtPerson={10}&ddlsign={11}&txtmoney={12}&txtorderid={13}&ddlarea={14}&txtPerson1={15}&txtsdate={16}&txtedate={17}&check={18}&txtnum={19}", "__id__", _check1, _check2, _check3, _foresdate, _foreedate, _self, _cusName, _cid, _collect, _person, _sign, _money, _oID, _area, _person1, _sdate, _edate,_check,_num);
+            return Utils.CombUrlTxt("paydetail_list.aspx", "page={0}&ddlcheck1={1}&ddlcheck2={2}&ddlcheck3={3}&txtforesdate={4}&txtforeedate={5}&self={6}&txtCusName={7}&hCusId={8}&ddlcollect={9}&txtPerson={10}&ddlsign={11}&txtmoney={12}&txtorderid={13}&ddlarea={14}&txtPerson1={15}&txtsdate={16}&txtedate={17}&check={18}&txtnum={19}&ddlmethod1={20}", "__id__", _check1, _check2, _check3, _foresdate, _foreedate, _self, _cusName, _cid, _collect, _person, _sign, _money, _oID, _area, _person1, _sdate, _edate,_check,_num,_method1);
         }
 
         //设置分页数量
@@ -400,6 +413,7 @@ namespace MettingSys.Web.admin.finance
             _sdate = DTRequest.GetFormString("txtsdate");
             _edate = DTRequest.GetFormString("txtedate");
             _num = DTRequest.GetFormString("txtnum");
+            _method1 = DTRequest.GetFormString("ddlmethod1");
             BLL.ReceiptPayDetail bll = new BLL.ReceiptPayDetail();
             DataTable dt = bll.GetList(this.pageSize, this.page, "rpd_type=0" + CombSqlTxt(), "rpd_adddate desc,rpd_id desc", manager, out this.totalCount, out decimal _tmoney, true, false).Tables[0];
 

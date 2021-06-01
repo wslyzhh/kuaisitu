@@ -22,7 +22,7 @@ namespace MettingSys.Web.admin.finance
         protected int page; //当前页码
         protected int pageSize; //每页大小
         protected string trHtml = string.Empty;
-        protected string _cusName = "", _cid = "", _type = "", _sign = "", _money1 = "", _sign1 = "", _money2 = "", _nature = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _name = "", _address = "", _person1 = "", _person2 = "", _person3 = "", _person4 = "", _person5 = "", _oid = "", _chk = "", _sdate2 = "", _edate2 = "", _status = "", _lockstatus = "", _area = "", _self = "", _check = "",_detail="";
+        protected string _cusName = "", _cid = "",_customer="",_hcustomer="", _type = "", _sign = "", _money1 = "", _sign1 = "", _money2 = "", _nature = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _name = "", _address = "", _person1 = "", _person2 = "", _person3 = "", _person4 = "", _person5 = "", _oid = "", _chk = "", _sdate2 = "", _edate2 = "", _status = "", _lockstatus = "", _area = "", _self = "", _check = "",_detail="";
 
         decimal _p11 = 0, _p12 = 0, _p13 = 0, _p14 = 0;
         decimal _p21 = 0, _p22 = 0, _p23 = 0, _p24 = 0, _p25 = 0, _p26 = 0;
@@ -32,6 +32,8 @@ namespace MettingSys.Web.admin.finance
             this.pageSize = GetPageSize(10); //每页数量
             _cusName = DTRequest.GetString("txtCusName");
             _cid = DTRequest.GetString("hCusId");
+            _customer = DTRequest.GetString("txtCustomer");
+            _hcustomer = DTRequest.GetString("hCustomer");
             _type = DTRequest.GetString("ddltype");
             _sign = DTRequest.GetString("ddlsign");
             _money1 = DTRequest.GetString("txtMoney1");
@@ -146,6 +148,17 @@ namespace MettingSys.Web.admin.finance
             {
                 dict.Add("cid", _cid);
                 sqlWhere += " and fin_cid=" + _cid + "";
+            }
+            if (!string.IsNullOrEmpty(_hcustomer))
+            {
+                dict.Add("hcustomer", _hcustomer);
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(_customer))
+                {
+                    dict.Add("customer", _customer);
+                }
             }
             dict.Add("sign", _sign);
             if (!string.IsNullOrEmpty(_money1))
@@ -377,6 +390,8 @@ namespace MettingSys.Web.admin.finance
             ddltype.SelectedValue = _type;
             txtCusName.Text = _cusName;
             hCusId.Value = _cid;
+            txtCustomer.Text = _customer;
+            hCustomer.Value = _hcustomer;
             txtsDate.Text = _sdate;
             txteDate.Text = _edate;
             txtsDate1.Text = _sdate1;
@@ -409,8 +424,8 @@ namespace MettingSys.Web.admin.finance
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("ReconciliationDetail.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddltype={3}&ddlsign={4}&txtMoney1={5}&ddlnature={6}&txtsDate={7}&txteDate={8}&txtsDate1={9}&txteDate1={10}&txtName={11}&txtAddress={12}&ddlsign1={13}&txtMoney2={14}&txtPerson1={15}&txtPerson2={16}&txtPerson3={17}&txtPerson4={18}&txtPerson5={19}&txtOrderID={20}&txtChk={21}&ddlstatus={22}&ddllock={23}&ddlarea={24}&txtsDate2={25}&txteDate2={26}&self={27}&ddlcheck={28}&txtDetails={29}",
-                "__id__", _cusName, _cid, _type, _sign, _money1, _nature, _sdate, _edate, _sdate1, _edate1, _name, _address, _sign1, _money2, _person1, _person2, _person3, _person4, _person5, _oid, _chk, _status, _lockstatus, _area, _sdate2, _edate2, _self,_check,_detail);
+            return Utils.CombUrlTxt("ReconciliationDetail.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddltype={3}&ddlsign={4}&txtMoney1={5}&ddlnature={6}&txtsDate={7}&txteDate={8}&txtsDate1={9}&txteDate1={10}&txtName={11}&txtAddress={12}&ddlsign1={13}&txtMoney2={14}&txtPerson1={15}&txtPerson2={16}&txtPerson3={17}&txtPerson4={18}&txtPerson5={19}&txtOrderID={20}&txtChk={21}&ddlstatus={22}&ddllock={23}&ddlarea={24}&txtsDate2={25}&txteDate2={26}&self={27}&ddlcheck={28}&txtDetails={29}&txtCustomer={30}&hCustomer={31}",
+                "__id__", _cusName, _cid, _type, _sign, _money1, _nature, _sdate, _edate, _sdate1, _edate1, _name, _address, _sign1, _money2, _person1, _person2, _person3, _person4, _person5, _oid, _chk, _status, _lockstatus, _area, _sdate2, _edate2, _self, _check, _detail, _customer, _hcustomer);
         }
 
         #region 返回每页数量=============================
@@ -434,6 +449,8 @@ namespace MettingSys.Web.admin.finance
             isSearch = true;
             _cusName = DTRequest.GetFormString("txtCusName");
             _cid = DTRequest.GetFormString("hCusId");
+            _customer = DTRequest.GetFormString("txtCustomer");
+            _hcustomer = DTRequest.GetFormString("hCustomer");
             _type = DTRequest.GetFormString("ddltype");
             _sign = DTRequest.GetFormString("ddlsign");
             _money1 = DTRequest.GetFormString("txtMoney1");
@@ -496,6 +513,8 @@ namespace MettingSys.Web.admin.finance
         {
             _cusName = DTRequest.GetFormString("txtCusName");
             _cid = DTRequest.GetFormString("hCusId");
+            _customer = DTRequest.GetFormString("txtCustomer");
+            _hcustomer = DTRequest.GetFormString("hCustomer");
             _type = DTRequest.GetFormString("ddltype");
             _sign = DTRequest.GetFormString("ddlsign");
             _money1 = DTRequest.GetFormString("txtMoney1");
