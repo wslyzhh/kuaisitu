@@ -93,7 +93,7 @@ namespace MettingSys.DAL
                         #region 插入人员表==========================
                         if (obj > 0)
                         {
-                            string sql = "insert into MS_OrderPerson(op_oid,op_type,op_number,op_name,op_area,op_dstatus,op_addTime) values(@oid,@type,@number,@name,@area,@status,@addtime)";
+                            string sql = "insert into MS_OrderPerson(op_oid,op_type,op_number,op_name,op_area,op_dstatus,op_ratio,op_addTime) values(@oid,@type,@number,@name,@area,@status,@ratio,@addtime)";
                             foreach (OrderPerson person in model.personlist)
                             {
                                 person.op_oid = model.o_id;
@@ -104,6 +104,7 @@ namespace MettingSys.DAL
                                     new SqlParameter("@name",SqlDbType.VarChar,20),
                                     new SqlParameter("@area",SqlDbType.VarChar,2),
                                     new SqlParameter("@status",SqlDbType.TinyInt,4),
+                                    new SqlParameter("@ratio",SqlDbType.TinyInt,4),
                                     new SqlParameter("@addtime",SqlDbType.DateTime,20)
                                 };
                                 meter[0].Value = person.op_oid;
@@ -112,13 +113,38 @@ namespace MettingSys.DAL
                                 meter[3].Value = person.op_name;
                                 meter[4].Value = person.op_area;
                                 meter[5].Value = person.op_dstatus;
-                                meter[6].Value = person.op_addTime;
+                                meter[6].Value = person.op_ratio;
+                                meter[7].Value = person.op_addTime;
+                                DbHelperSQL.ExecuteSql(conn, trans, sql, meter);
+                            }
+                        }
+                        #endregion
+
+                        #region 插入归属地==========================
+                        if (!string.IsNullOrEmpty(model.o_place))
+                        {
+                            string[] placelist = model.o_place.Split(',');
+                            string sql = "INSERT INTO MS_OrderPlace(p_oid,p_name,p_chnName,p_ratio,p_type) VALUES(@oid,@name,@chnName,@ratio,@type)";
+                            foreach (string item in placelist)
+                            {
+                                string[] list = item.Split('-');
+                                SqlParameter[] meter = new SqlParameter[] {
+                                    new SqlParameter("@oid",SqlDbType.VarChar,11),
+                                    new SqlParameter("@name",SqlDbType.Char,2),
+                                    new SqlParameter("@chnName",SqlDbType.VarChar,20),
+                                    new SqlParameter("@ratio",SqlDbType.Int,20),
+                                    new SqlParameter("@type",SqlDbType.BigInt,2)
+                                };
+                                meter[0].Value = model.o_id;
+                                meter[1].Value = list[0];
+                                meter[2].Value = list[1];
+                                meter[3].Value = Utils.ObjToInt(list[2]);
+                                meter[4].Value = Utils.ObjToByte(list[3]);
                                 DbHelperSQL.ExecuteSql(conn, trans, sql, meter);
                             }
                             trans.Commit();
                             result = true;
                         }
-
 
                         #endregion
                     }
@@ -180,7 +206,7 @@ namespace MettingSys.DAL
                         #region 更新人员表==========================
                         if (obj > 0)
                         {
-                            //先删除就的人员
+                            //先删除旧的数据
                             string sql = "delete from MS_OrderPerson where op_oid=@oid";
                             SqlParameter[] meter1 = new SqlParameter[] {
                                 new SqlParameter("@oid",SqlDbType.VarChar,11)
@@ -188,7 +214,7 @@ namespace MettingSys.DAL
                             meter1[0].Value = model.o_id;
                             DbHelperSQL.ExecuteSql(conn, trans, sql, meter1);
 
-                            sql = "insert into MS_OrderPerson(op_oid,op_type,op_number,op_name,op_area,op_dstatus,op_addTime) values(@oid,@type,@number,@name,@area,@status,@addtime)";
+                            sql = "insert into MS_OrderPerson(op_oid,op_type,op_number,op_name,op_area,op_dstatus,op_ratio,op_addTime) values(@oid,@type,@number,@name,@area,@status,@ratio,@addtime)";
                             foreach (OrderPerson person in model.personlist)
                             {
                                 person.op_oid = model.o_id;
@@ -199,6 +225,7 @@ namespace MettingSys.DAL
                                     new SqlParameter("@name",SqlDbType.VarChar,20),
                                     new SqlParameter("@area",SqlDbType.VarChar,2),
                                     new SqlParameter("@status",SqlDbType.TinyInt,4),
+                                    new SqlParameter("@ratio",SqlDbType.TinyInt,4),
                                     new SqlParameter("@addtime",SqlDbType.DateTime,20)
                                 };
                                 meter[0].Value = person.op_oid;
@@ -207,13 +234,49 @@ namespace MettingSys.DAL
                                 meter[3].Value = person.op_name;
                                 meter[4].Value = person.op_area;
                                 meter[5].Value = person.op_dstatus;
-                                meter[6].Value = person.op_addTime;
+                                meter[6].Value = person.op_ratio;
+                                meter[7].Value = person.op_addTime;
                                 DbHelperSQL.ExecuteSql(conn, trans, sql, meter);
-                            }                            
+                            }                           
 
+                        }
+                        #endregion
+
+                        #region 更新归属地==========================
+                        if (!string.IsNullOrEmpty(model.o_place))
+                        {
+                            //先删除旧的数据
+                            string sql = "delete from MS_OrderPlace where p_oid=@oid";
+                            SqlParameter[] meter1 = new SqlParameter[] {
+                                new SqlParameter("@oid",SqlDbType.VarChar,11)
+                            };
+                            meter1[0].Value = model.o_id;
+                            DbHelperSQL.ExecuteSql(conn, trans, sql, meter1);
+
+
+                            string[] placelist = model.o_place.Split(',');
+                            sql = "INSERT INTO MS_OrderPlace(p_oid,p_name,p_chnName,p_ratio,p_type) VALUES(@oid,@name,@chnName,@ratio,@type)";
+                            foreach (string item in placelist)
+                            {
+                                string[] list = item.Split('-');
+                                SqlParameter[] meter = new SqlParameter[] {
+                                    new SqlParameter("@oid",SqlDbType.VarChar,11),
+                                    new SqlParameter("@name",SqlDbType.Char,2),
+                                    new SqlParameter("@chnName",SqlDbType.VarChar,20),
+                                    new SqlParameter("@ratio",SqlDbType.Int,20),
+                                    new SqlParameter("@type",SqlDbType.BigInt,2)
+                                };
+                                meter[0].Value = model.o_id;
+                                meter[1].Value = list[0];
+                                meter[2].Value = list[1];
+                                meter[3].Value = Utils.ObjToInt(list[2]);
+                                meter[4].Value = Utils.ObjToByte(list[3]);
+                                DbHelperSQL.ExecuteSql(conn, trans, sql, meter);
+                            }
                             trans.Commit();
                             result = true;
                         }
+
                         #endregion
                     }
                     catch (Exception err)
@@ -254,21 +317,6 @@ namespace MettingSys.DAL
             strSql.Append(" where o_id=@id ");
             paras.Add(new SqlParameter("@id", model.o_id));
             return DbHelperSQL.ExecuteSql(strSql.ToString(), paras.ToArray()) > 0;
-        }
-
-        /// <summary>
-        /// 删除一条数据
-        /// </summary>
-        public bool Delete(string id)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("delete from  MS_Order ");
-            strSql.Append(" where o_id=@id");
-            SqlParameter[] parameters = {
-                    new SqlParameter("@id", SqlDbType.VarChar,11)};
-            parameters[0].Value = id;
-
-            return DbHelperSQL.ExecuteSql(strSql.ToString(), parameters) > 0;
         }
 
         /// <summary>
@@ -361,6 +409,14 @@ namespace MettingSys.DAL
                         if (obj > 0)
                         {
                             DbHelperSQL.ExecuteSql(conn, trans, sql, parameters);
+                        }
+                        #endregion
+
+                        sql = "delete from MS_OrderPlace where p_oid = @oid";
+                        #region 删除归属地区表==========================
+                        if (obj > 0)
+                        {
+                            DbHelperSQL.ExecuteSql(conn, trans, sql, parameters);
                             trans.Commit();
                             result = true;
                         }
@@ -375,7 +431,21 @@ namespace MettingSys.DAL
             }
             return result;
         }
-
+        /// <summary>
+        /// 获取订单的归属区域
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <returns></returns>
+        public DataTable getOrderPlace(string oid)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(" select p_name as area,p_chnName as areaText,p_ratio as ratio,p_type as [type] FROM MS_OrderPlace where 1=1 ");
+            if (oid.Trim() != "")
+            {
+                strSql.Append(" and p_oid ='" + oid + "'");
+            }
+            return DbHelperSQL.Query(strSql.ToString()).Tables[0];
+        }
         /// <summary>
         /// 获得前几行数据
         /// </summary>
@@ -594,8 +664,8 @@ namespace MettingSys.DAL
                 addTable = " left join ms_orderperson op2 on o_id=op2.op_oid and op2.op_type="+ orderType + " and op2.op_number='"+ currentUser + "' ";
             }
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select *,unMoney=finMoney - rpdMoney,profit=finMoney-finMoney1-isnull(o_financeCust,0) from (select o.*,c.*,co.*,op1.* "+addfield+ ",person2 = (SELECT op_name FROM MS_OrderPerson WHERE op_oid=o_id and op_type=2),person3 = isnull(STUFF((SELECT ',' + op_name+'('+(case when op_dstatus=0 then '待定' else case when op_dstatus=1 then '处理中' else case when op_dstatus=2 then '已完成' else '待定与处理中' end end end)+')' FROM MS_OrderPerson WHERE  op_oid=o_id and op_type=3 FOR XML PATH('')), 1, 1, ''),'无')");
-            strSql.Append(" , person4 = isnull(STUFF((SELECT ',' + op_name + '(' + (case when op_dstatus = 0 then '待定' else case when op_dstatus = 1 then '处理中' else case when op_dstatus=2 then '已完成' else '待定与处理中' end end end) + ')' FROM MS_OrderPerson WHERE  op_oid = o_id and op_type = 5 FOR XML PATH('')), 1, 1, ''),'无') ,finMoney=isnull((select sum(isnull(fin_money,0)) fin_money from MS_finance where fin_type=1 and fin_oid=o_id),0),finMoney1=isnull((select sum(isnull(fin_money,0)) fin_money from MS_finance where fin_type=0 and fin_oid=o_id),0),rpdMoney = isnull((select sum(isnull(rpd_money,0)) rpd_money from MS_ReceiptPayDetail left join MS_ReceiptPay on rp_id=rpd_rpid where rpd_type=1 and rp_isConfirm=1 and rpd_oid=o_id),0) FROM MS_Order o left join ms_customer c on o_cid=c_id left join ms_contacts co on o_coid=co_id left join ms_orderperson op1 on o_id=op_oid and op_type=1 " + addTable + ") t");
+            strSql.Append("select *,unMoney=finMoney - rpdMoney,profit=finMoney-finMoney1-isnull(o_financeCust,0) from (select o.*,c.*,co.*,op1.* "+addfield+ ",person2 = (SELECT op_name FROM MS_OrderPerson WHERE op_oid=o_id and op_type=2),person3 = isnull(STUFF((SELECT ',' + op_name+'('+(case when op_dstatus=0 then '待定' else case when op_dstatus=1 then '处理中' else case when op_dstatus=2 then '已完成' else '待定与处理中' end end end)+')' FROM MS_OrderPerson WHERE  op_oid=o_id and op_type=3 FOR XML PATH('')), 1, 1, ''),'无'),place=stuff((select ','+p_name from MS_OrderPlace where p_oid = o_id for xml path('')),1,1,'') ");
+            strSql.Append(" , person4 = isnull(STUFF((SELECT ',' + op_name + '(' + (case when op_dstatus = 0 then '待定' else case when op_dstatus = 1 then '处理中' else case when op_dstatus=2 then '已完成' else '待定与处理中' end end end) + ')' FROM MS_OrderPerson WHERE  op_oid = o_id and op_type = 5 FOR XML PATH('')), 1, 1, ''),'无') ,person6 = isnull(STUFF((SELECT ',' +op_name FROM MS_OrderPerson WHERE  op_oid=o_id and op_type=6 FOR XML PATH('')), 1, 1, ''),'无'),finMoney=isnull((select sum(isnull(fin_money,0)) fin_money from MS_finance where fin_type=1 and fin_oid=o_id),0),finMoney1=isnull((select sum(isnull(fin_money,0)) fin_money from MS_finance where fin_type=0 and fin_oid=o_id),0),rpdMoney = isnull((select sum(isnull(rpd_money,0)) rpd_money from MS_ReceiptPayDetail left join MS_ReceiptPay on rp_id=rpd_rpid where rpd_type=1 and rp_isConfirm=1 and rpd_oid=o_id),0) FROM MS_Order o left join ms_customer c on o_cid=c_id left join ms_contacts co on o_coid=co_id left join ms_orderperson op1 on o_id=op_oid and op_type=1 " + addTable + ") t");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
@@ -711,7 +781,32 @@ namespace MettingSys.DAL
             SqlParameter[] parameters = { };
             return Utils.ObjToInt(DbHelperSQL.GetSingle(strSql.ToString(), parameters));
         }
-
+        public void dealOldData()
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(" select o_id,o_place,op_area from MS_Order left join MS_OrderPerson on o_id=op_oid and op_type=1 ");
+            strSql.Append(" where not exists(select 1 from MS_OrderPlace where p_oid=o_id) and o_place like '%'+op_area+'%'");
+            DataTable dt = DbHelperSQL.Query(strSql.ToString()).Tables[0];
+            if (dt != null)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string[] arealist = dr["o_place"].ToString().Split(',');
+                    int m = 100 / arealist.Length;
+                    int m2 = 0;
+                    foreach (string area in arealist)
+                    {
+                        if (area != dr["op_area"].ToString())
+                        {
+                            m2 += m;
+                            DbHelperSQL.ExecuteSql("insert into MS_OrderPlace(p_oid,p_name,p_chnName,p_ratio,p_type) values('" + dr["o_id"] + "','" + area + "',''," + m + ",0)");
+                        }
+                    }
+                    DbHelperSQL.ExecuteSql("insert into MS_OrderPlace(p_oid,p_name,p_chnName,p_ratio,p_type) values('" + dr["o_id"] + "','" + dr["op_area"].ToString() + "',''," + (100-m2) + ",1)");
+                    
+                }
+            }
+        }
         /// <summary>
         /// 计算应收付地接全部审批通过的待处理订单数量
         /// </summary>
@@ -723,6 +818,58 @@ namespace MettingSys.DAL
             strSql.Append(" where o_lockStatus=2 ");
             SqlParameter[] parameters = { };
             return Utils.ObjToInt(DbHelperSQL.GetSingle(strSql.ToString(), parameters));
+        }
+
+        /// <summary>
+        /// 订单页面员工业绩
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <returns></returns>
+        public DataSet getOrderUserRatio(string oid)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(" select *,Convert(decimal(10,2),(yingshou-yingfu-shuifei+ticheng)) profit1,Convert(decimal(10,2),case when yingshou-feikaoheshouru<>0 then (yingshou-yingfu-shuifei+ticheng)*100/(yingshou-feikaoheshouru) else 0 end) profitRatio1");
+            strSql.Append(" , Convert(decimal(10, 2), (yingshou - yingfu - shuifei)) profit2, Convert(decimal(10, 2),case when yingshou - feikaoheshouru <> 0 then(yingshou - yingfu - shuifei) * 100 / (yingshou - feikaoheshouru) else 0 end) profitRatio2");
+            strSql.Append(" from(");
+            strSql.Append(" select (op_number+'('+op_name+')'+cast(op_ratio as varchar)+'%') name, Convert(decimal(10, 2), (t.yingshou * op.op_ratio / 100)) yingshou, Convert(decimal(10, 2), (t.feikaoheshouru * op.op_ratio / 100)) feikaoheshouru, Convert(decimal(10, 2), (t.yingfu * op.op_ratio / 100)) yingfu, Convert(decimal(10, 2), (t.feikaohezhichu * op.op_ratio / 100)) feikaohezhichu, Convert(decimal(10, 2), (t.ticheng * op.op_ratio / 100)) ticheng, Convert(decimal(10, 2), (isnull(o.o_financeCust, 0) * op.op_ratio / 100)) shuifei from(");
+            strSql.Append(" select fin_oid, sum(case when fin_type = 1 then fin_money else 0 end) yingshou,sum(case when fin_type = 1 and fin_detail = '代收代付' then fin_money else 0 end) feikaoheshouru,");
+            strSql.Append(" sum(case when fin_type = 0 then fin_money else 0 end) yingfu,sum(case when fin_type = 0 and fin_detail = '代收代付' then fin_money else 0 end) feikaohezhichu,");
+            strSql.Append(" sum(case when na_name like '%提成%' then fin_money else 0 end) ticheng");
+            strSql.Append(" from MS_finance left join MS_Nature on fin_nature = na_id");
+            strSql.Append(" where fin_oid = @oid group by fin_oid ) t");
+            strSql.Append(" left join MS_Order o on o_id = t.fin_oid left join MS_OrderPerson op on o_id = op_oid");
+            strSql.Append(" where o_id = @oid and(op_type = 1 or op_type = 6)) v");
+            
+            SqlParameter[] parameters = {
+                    new SqlParameter("@oid", SqlDbType.VarChar,11)};
+            parameters[0].Value = oid;
+            return DbHelperSQL.Query(strSql.ToString(), parameters);
+        }
+
+        /// <summary>
+        /// 订单页面区域业绩
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <returns></returns>
+        public DataSet getOrderAreaRatio(string oid)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(" select *,Convert(decimal(10,2),(yingshou-yingfu-shuifei+ticheng)) profit1,Convert(decimal(10,2),case when yingshou-feikaoheshouru<>0 then (yingshou-yingfu-shuifei+ticheng)*100/(yingshou-feikaoheshouru) else 0 end) profitRatio1");
+            strSql.Append(" , Convert(decimal(10, 2), (yingshou - yingfu - shuifei)) profit2, Convert(decimal(10, 2),case when yingshou - feikaoheshouru <> 0 then(yingshou - yingfu - shuifei) * 100 / (yingshou - feikaoheshouru) else 0 end) profitRatio2");
+            strSql.Append(" from(");
+            strSql.Append(" select (p_name+'('+p_chnName+')'+cast(p_ratio as varchar)+'%') name, Convert(decimal(10, 2), (t.yingshou * op.p_ratio / 100)) yingshou, Convert(decimal(10, 2), (t.feikaoheshouru * op.p_ratio / 100)) feikaoheshouru, Convert(decimal(10, 2), (t.yingfu * op.p_ratio / 100)) yingfu, Convert(decimal(10, 2), (t.feikaohezhichu * op.p_ratio / 100)) feikaohezhichu, Convert(decimal(10, 2), (t.ticheng * op.p_ratio / 100)) ticheng, Convert(decimal(10, 2), (isnull(o.o_financeCust, 0) * op.p_ratio / 100)) shuifei from(");
+            strSql.Append(" select fin_oid, sum(case when fin_type = 1 then fin_money else 0 end) yingshou,sum(case when fin_type = 1 and fin_detail = '代收代付' then fin_money else 0 end) feikaoheshouru,");
+            strSql.Append(" sum(case when fin_type = 0 then fin_money else 0 end) yingfu,sum(case when fin_type = 0 and fin_detail = '代收代付' then fin_money else 0 end) feikaohezhichu,");
+            strSql.Append(" sum(case when na_name like '%提成%' then fin_money else 0 end) ticheng");
+            strSql.Append(" from MS_finance left join MS_Nature on fin_nature = na_id");
+            strSql.Append(" where fin_oid = @oid group by fin_oid ) t");
+            strSql.Append(" left join MS_Order o on o_id = t.fin_oid left join MS_OrderPlace op on o_id = p_oid");
+            strSql.Append(" where o_id = @oid and p_ratio>0) v");
+
+            SqlParameter[] parameters = {
+                    new SqlParameter("@oid", SqlDbType.VarChar,11)};
+            parameters[0].Value = oid;
+            return DbHelperSQL.Query(strSql.ToString(), parameters);
         }
 
 

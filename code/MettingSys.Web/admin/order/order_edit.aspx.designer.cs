@@ -51,13 +51,22 @@ namespace MettingSys.Web.admin.order
         protected global::System.Web.UI.WebControls.Label labOwner;
 
         /// <summary>
-        /// labfinanceCost 控件。
+        /// rptEmployee6 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labfinanceCost;
+        protected global::System.Web.UI.WebControls.Repeater rptEmployee6;
+
+        /// <summary>
+        /// li1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl li1;
 
         /// <summary>
         /// txtCusName 控件。
@@ -366,6 +375,15 @@ namespace MettingSys.Web.admin.order
         protected global::System.Web.UI.WebControls.Repeater rptAlbumList2;
 
         /// <summary>
+        /// labfinanceCost 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label labfinanceCost;
+
+        /// <summary>
         /// btnSave 控件。
         /// </summary>
         /// <remarks>
@@ -465,6 +483,24 @@ namespace MettingSys.Web.admin.order
         protected global::System.Web.UI.WebControls.Repeater rptCollect;
 
         /// <summary>
+        /// userAchievement 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater userAchievement;
+
+        /// <summary>
+        /// areaAchievement 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater areaAchievement;
+
+        /// <summary>
         /// ddldstatus 控件。
         /// </summary>
         /// <remarks>
@@ -535,14 +571,5 @@ namespace MettingSys.Web.admin.order
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputButton btnInvoince;
-
-        /// <summary>
-        /// btnSharing 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputButton btnSharing;
     }
 }

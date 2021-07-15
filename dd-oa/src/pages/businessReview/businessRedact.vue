@@ -39,6 +39,14 @@
                 <input type="text" :value="placeText" readonly>
             </li>
             <li class="flex flex_a_c flex_s_b">
+                <label class="title"><span>业务员</span></label>
+                <input type="text" :value="employee0Text" readonly>
+            </li>
+            <li class="flex flex_a_c flex_s_b" @click="staffCommon()">
+                <label class="title" style="width: 1.7rem;"><span>共同业务员</span></label>
+                <input type="text" :value="employee6Text" readonly>
+            </li>
+            <li class="flex flex_a_c flex_s_b">
                 <label class="title"><span>报账人员</span></label>
                 <input type="text" :value="employee1Text" readonly>
             </li>
@@ -102,7 +110,6 @@
 		mapActions,
 		mapState
 	} from 'vuex'
-	import choose from '@/components/choose.vue'
 	import * as dd from 'dingtalk-jsapi'
 	import dayjs from 'dayjs'
 	
@@ -128,6 +135,7 @@ export default {
 				employee2:'',
 				employee3:'',
 				employee4:'',
+				employee6:'',
 				o_isPush:''
 			},
             clientList:[],
@@ -139,10 +147,12 @@ export default {
             date_range:'',
             chooseType:1,
             chooseEl:'',
+            employee0Text:'',
             employee1Text:'',
             employee2Text:'',
             employee3Text:'',
             employee4Text:'',
+            employee6Text:'',
 			employeeChoose:{
 				'employee1':[],
 				'employee2':[],
@@ -156,7 +166,7 @@ export default {
 			files2:[],
         };
     },
-    components: {choose},
+    components: {},
     computed: {...mapState(['addOrders'])},
     created(){
 		// this.ddSet.setTitleRight({title:'查看订单'}).then(res => {
@@ -167,7 +177,6 @@ export default {
     },
     mounted() {
 		orderId = this.$route.query.id;
-		console.log(orderId)
 		this.formData.orderID = orderId;
         this.getOneOrderData()
         
@@ -185,6 +194,7 @@ export default {
 				if(!res.data){
 					return;
 				}
+				console.log(res.data)
 				let tmpData = res.data;
 				for (var key in tmpData) { 
 					if('string' == typeof tmpData[key]){
@@ -199,18 +209,12 @@ export default {
 				
 				_this.clientName = tmpData.c_name
 				_this.clientId = tmpData.c_id
+				_this.employee0Text = tmpData.owner
 				
 				
 				// 处理归属地显示
 				let source = [];
-				_this.chooseEl = 'place';
-				for (var key in tmpData.arealist) { 
-					source.push({
-						key:key,
-						name:tmpData.arealist[key]
-					})
-				}
-				_this.activeChoose(source)
+				_this.activeChoose2(tmpData.arealist)
 				// 处理人员 1
 				source = [];
 				_this.chooseEl = 'employee1';
@@ -257,6 +261,8 @@ export default {
 					})
 				})
 				_this.activeChoose(source)
+				// 处理共同业务员
+				_this.activeChoose1(tmpData.Employee6)
 				
 				_this.$set(_this.formData,'fstatus',tmpData['o_status'])
 				_this.$set(_this.formData,'fstatus_text',tmpData['o_statusText'])
@@ -267,7 +273,6 @@ export default {
 				_this.files1 = tmpData['files1']
 				_this.files2 = tmpData['files2']
 				
-				console.log(_this.formData)
 			})
 		},
     	claerEmployee(){ // 清空人员
@@ -280,7 +285,6 @@ export default {
     	},
         activeChoose(items){
     		let _this = this
-    		console.log(items)
     		if(items.length < 1){
     			dd.device.notification.toast({
     				text: '请正确选择', //提示信息
@@ -290,18 +294,6 @@ export default {
     				onFail : function(err) {}
     			})
     			return;
-    		}
-            if('place' == _this.chooseEl){
-    			let tmpTexts = [];
-    			let tmpPlaces = [];
-    			items.map(function(item,index){
-    				tmpTexts.push(item.name)
-    				tmpPlaces.push(item.key)
-    			})
-    			_this.placeText = tmpTexts.join(',');
-    			_this.$set(_this.formData,'o_place',tmpPlaces.join(','))
-    			// 区域改变，清空人员
-    			_this.claerEmployee();
     		}
     		if('link_man' == _this.chooseEl){
     			if(items.length){
@@ -341,6 +333,35 @@ export default {
     			_this.$set(_this,_this.chooseEl + 'Text',tmpTexts.join(','))
     			_this.$set(_this.formData,_this.chooseEl,tmpEmployees.join(','))
     		}
+        },
+        activeChoose1(items){
+			let _this = this
+			let tmpTexts = [];
+            let tmpEmployees = [];
+            items.map(function(item,index){
+				console.log(item)
+                tmpTexts.push(item.de_name+item.ratio+'%')
+                tmpEmployees.push(item.de_name + '-'+item.de_subname+'-'+item.de_area+'-'+item.ratio)
+            })            
+            _this.$set(_this,'employee6Text',tmpTexts.join(','))
+            _this.$set(_this.formData,'employee6',tmpEmployees.join(','))
+        },
+		activeChoose2(items){
+            let _this = this
+            _this.arealist = items  
+            let tmpTexts = [];
+            let tmpEmployees = [];
+            _this.arealist.map(function(item,index){
+                if(item.ratio && item.ratio >=0){
+                    tmpTexts.push(item.value+item.ratio+'%')
+                    tmpEmployees.push(item.key + '-'+item.value+'-'+item.ratio+'-'+item.type)
+                }                
+            })          
+            _this.$set(_this,'placeText',tmpTexts.join(','))
+            _this.$set(_this.formData,'o_place',tmpEmployees.join(','))
+
+			// 区域改变，清空人员
+    		_this.claerEmployee();
         },
 		getIsPushText(_push){
 			if('True' == _push){

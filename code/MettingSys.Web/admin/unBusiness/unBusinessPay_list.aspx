@@ -29,7 +29,7 @@
             $("#sCount").text($(".checkall input:checked").size());
             var _smoney = 0;
             $(".checkall input:checked").each(function () {
-                _smoney += parseFloat($(this).parent().parent().parent().children(".moneyTd").html());
+                _smoney += parseFloat($(this).parent().parent().parent().children(".moneyTd").text());
             });
             $("#sMoney").text(_smoney.toFixed(2));
         }

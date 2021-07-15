@@ -21,10 +21,10 @@ namespace MettingSys.Web.admin.statistic
         protected int page; //当前页码
         protected int pageSize; //每页大小
         int _pOrderCount = 0, _tOrderCount = 0;
-        decimal _pOrderShou = 0, _pUnIncome = 0, _pOrderFu = 0, _pUnCost = 0, _pOrderProfit = 0, _pCust = 0, _pProfit = 0;
-        decimal _tOrderShou = 0, _tUnIncome = 0, _tOrderFu = 0, _tUnCost = 0, _tOrderProfit = 0, _tCust = 0, _tProfit = 0;
+        decimal _pOrderShou = 0, _pUnIncome = 0, _pOrderFu = 0, _pUnCost = 0, _pOrderTicheng = 0, _pCust = 0, _pProfit1 = 0, _pProfit2 = 0;
+        decimal _tOrderShou = 0, _tUnIncome = 0, _tOrderFu = 0, _tUnCost = 0, _tOrderTicheng = 0, _tCust = 0, _tProfit1 = 0, _tProfit2 = 0;
         Model.manager manager = null;
-        protected string action = "", _page = "", _sMonth = "", _eMonth = "", _status = "", _lockstatus = "", _area = "", _person = "", _isRemove = "", _isCust = "", _self = "",_type="0", _excel = "";
+        protected string action = "", _page = "", _sMonth = "", _eMonth = "", _status = "", _lockstatus = "", _area = "", _person = "", _isCust = "", _self = "", _type = "0", _excel = "", _ordertype = "", _order = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             this.pageSize = GetPageSize(10); //每页数量            
@@ -35,10 +35,19 @@ namespace MettingSys.Web.admin.statistic
             _lockstatus = DTRequest.GetString("ddllock");
             _area = DTRequest.GetString("hide_place");
             _person = DTRequest.GetString("hide_employee3");
-            _isRemove = DTRequest.GetString("cbIsRemove");
             _isCust = DTRequest.GetString("cbIsCust");
             action = DTRequest.GetString("action");
             _type = DTRequest.GetString("ddltype");
+            _ordertype = DTRequest.GetString("ddlorderType");
+            if (string.IsNullOrEmpty(_ordertype))
+            {
+                _ordertype = "(shou-fu-oCust)";
+            }
+            _order = DTRequest.GetString("ddlorder");
+            if (string.IsNullOrEmpty(_order))
+            {
+                _order = "Desc";
+            }
             _excel = DTRequest.GetString("Excel");
             if (_type == "")
                 _type = "0";
@@ -60,12 +69,12 @@ namespace MettingSys.Web.admin.statistic
                 _status = "3";
                 _lockstatus = "1";
                 _isCust = "on";
-                RptBind("1=1 " + CombSqlTxt(), _type == "0"?"p1.op_number asc": "p3.op_number asc");
+                RptBind("1=1 " + CombSqlTxt(), _ordertype + " " + _order);
             }
             InitData();
             if (action == "Search")
             {
-                RptBind("1=1 " + CombSqlTxt(), _type == "0" ? "p1.op_number asc" : "p3.op_number asc");
+                RptBind("1=1 " + CombSqlTxt(), _ordertype + " " + _order);
             }
             if (_excel == "on")
             {
@@ -77,8 +86,9 @@ namespace MettingSys.Web.admin.statistic
             ddlstatus.SelectedValue = _status;
             ddllock.SelectedValue = _lockstatus;
             ddltype.SelectedValue = _type;
+            ddlorderType.SelectedValue = _ordertype;
+            ddlorder.SelectedValue = _order;
             cbIsCust.Checked = _isCust == "on" ? true : false;
-            cbIsRemove.Checked = _isRemove == "on" ? true : false;
             string placeStr = _area;
             if (!string.IsNullOrEmpty(placeStr))
             {
@@ -178,26 +188,24 @@ namespace MettingSys.Web.admin.statistic
                 }
                 dict.Add("person", pStr.TrimEnd(','));
             }
-            dict.Add("isRemove", _isRemove.ToString());
             dict.Add("isCust", _isCust.ToString());
             dict.Add("type", _type.ToString());
             return dict;
         }
 
         #region 数据绑定=================================
-        private void RptBind(string _strWhere, string _orderby)
+        private void RptBind(string _strWhere,string _orderby)
         {
             this.page = DTRequest.GetQueryInt("page", 1);
             BLL.statisticBLL bll = new BLL.statisticBLL();
             string _where = "";
             Dictionary<string, string> dict = getDict();            
-            DataTable dt = bll.getAchievementStatisticData(dict, this.pageSize, this.page, _orderby, out this.totalCount, out _tOrderCount,out _tOrderShou,out _tUnIncome, out _tOrderFu,out _tUnCost, out _tOrderProfit, out _tCust, out _tProfit).Tables[0];
+            DataTable dt = bll.getAchievementStatisticData(dict, this.pageSize, this.page, _orderby, out this.totalCount, out _tOrderCount,out _tOrderShou,out _tUnIncome, out _tOrderFu,out _tUnCost, out _tOrderTicheng, out _tCust, out _tProfit1,out _tProfit2).Tables[0];
             rptList.DataSource = dt;
             rptList.DataBind();
-
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("AchievementStatistic_list.aspx", "page={0}&txtsDate={1}&txteDate={2}&ddlstatus={3}&ddllock={4}&hide_place={5}&hide_employee2={6}&cbIsRemove={7}&cbIsCust={8}&action={9}&ddltype={10}", "__id__",_sMonth,_eMonth,_status,_lockstatus,_area,_person,_isRemove,_isCust,action,_type);
+            string pageUrl = backUrl();
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
 
             if (dt != null)
@@ -209,9 +217,10 @@ namespace MettingSys.Web.admin.statistic
                     _pUnIncome += Utils.ObjToDecimal(dr["unIncome"], 0);
                     _pOrderFu += Utils.ObjToDecimal(dr["fu"], 0);
                     _pUnCost += Utils.ObjToDecimal(dr["unCost"], 0);
-                    _pOrderProfit += Utils.ObjToDecimal(dr["oProfit"], 0);
+                    _pOrderTicheng += Utils.ObjToDecimal(dr["ticheng"], 0);
                     _pCust += Utils.ObjToDecimal(dr["oCust"], 0);
-                    _pProfit += Utils.ObjToDecimal(dr["bProfit"], 0);
+                    _pProfit1 += Utils.ObjToDecimal(dr["profit1"], 0);
+                    _pProfit2 += Utils.ObjToDecimal(dr["profit2"], 0);
                 }
             }
 
@@ -221,9 +230,10 @@ namespace MettingSys.Web.admin.statistic
             pUnIncome.Text = _pUnIncome.ToString();
             pOrderFu.Text = _pOrderFu.ToString();
             pUnCost.Text = _pUnCost.ToString();
-            pOrderProfit.Text = _pOrderProfit.ToString();
+            pOrderTicheng.Text = _pOrderTicheng.ToString();
             pCust.Text = _pCust.ToString();
-            pProfit.Text = _pProfit.ToString();
+            pProfit1.Text = _pProfit1.ToString();
+            pProfit2.Text = _pProfit2.ToString();
 
             tCount.Text = totalCount.ToString();
             tOrderCount.Text = _tOrderCount.ToString();
@@ -231,9 +241,10 @@ namespace MettingSys.Web.admin.statistic
             tUnIncome.Text = _tUnIncome.ToString();
             tOrderFu.Text = _tOrderFu.ToString();
             tUnCost.Text = _tUnCost.ToString();
-            tOrderProfit.Text = _tOrderProfit.ToString();
+            tOrderTicheng.Text = _tOrderTicheng.ToString();
             tCust.Text = _tCust.ToString();
-            tProfit.Text = _tProfit.ToString();
+            tProfit1.Text = _tProfit1.ToString();
+            tProfit2.Text = _tProfit2.ToString();
         }
         #endregion
 
@@ -260,7 +271,12 @@ namespace MettingSys.Web.admin.statistic
             return _default_size;
         }
         #endregion
-        
+
+        private string backUrl()
+        {
+            return Utils.CombUrlTxt("AchievementStatistic_list.aspx", "page={0}&txtsDate={1}&txteDate={2}&ddlstatus={3}&ddllock={4}&hide_place={5}&hide_employee2={6}&cbIsCust={7}&action={8}&ddltype={9}&ddlorderType={10}&ddlorder={11}", "__id__", _sMonth, _eMonth, _status, _lockstatus, _area, _person, _isCust, action, _type,_ordertype,_order);
+        }
+
         //设置分页数量
         protected void txtPageNum_TextChanged(object sender, EventArgs e)
         {
@@ -272,13 +288,13 @@ namespace MettingSys.Web.admin.statistic
                     Utils.WriteCookie("AchievementStatistic_page_size", "DTcmsPage", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("AchievementStatistic_list.aspx", "page={0}&txtsDate={1}&txteDate={2}&ddlstatus={3}&ddllock={4}&hide_place={5}&hide_employee2={6}&cbIsRemove={7}&cbIsCust={8}&action={9}&ddltype={10}", "__id__", _sMonth, _eMonth, _status, _lockstatus, _area, _person, _isRemove, _isCust, action,_type));
+            Response.Redirect(backUrl());
         }
         protected void Excel()
         {
             BLL.statisticBLL bll = new BLL.statisticBLL();
             Dictionary<string, string> dict = getDict();            
-            DataTable dt = bll.getAchievementStatisticData(dict, this.pageSize, this.page, "op_number asc", out this.totalCount, out _tOrderCount, out _tOrderShou,out _tUnIncome, out _tOrderFu,out _tUnCost, out _tOrderProfit, out _tCust, out _tProfit,false).Tables[0];
+            DataTable dt = bll.getAchievementStatisticData(dict, this.pageSize, this.page,_ordertype + " " + _order, out this.totalCount, out _tOrderCount, out _tOrderShou,out _tUnIncome, out _tOrderFu,out _tUnCost, out _tOrderTicheng, out _tCust, out _tProfit1, out _tProfit2, false).Tables[0];
 
             string fileName = "员工业绩统计-下单";
             if (_type == "1")
@@ -337,7 +353,7 @@ namespace MettingSys.Web.admin.statistic
             //表头
             IRow headRow = sheet.CreateRow(0);
             headRow.HeightInPoints = 25;
-
+            
             headRow.CreateCell(0).SetCellValue("员工");
             headRow.CreateCell(1).SetCellValue("区域");
             headRow.CreateCell(2).SetCellValue("订单数量");
@@ -345,9 +361,12 @@ namespace MettingSys.Web.admin.statistic
             headRow.CreateCell(4).SetCellValue("非考核收入");
             headRow.CreateCell(5).SetCellValue("应付");
             headRow.CreateCell(6).SetCellValue("非考核成本");
-            headRow.CreateCell(7).SetCellValue("订单利润");
-            headRow.CreateCell(8).SetCellValue("订单税费");
-            headRow.CreateCell(9).SetCellValue("业绩利润");
+            headRow.CreateCell(7).SetCellValue("提成");
+            headRow.CreateCell(8).SetCellValue("税费");
+            headRow.CreateCell(9).SetCellValue("提成前业绩");
+            headRow.CreateCell(10).SetCellValue("提成前业绩率");
+            headRow.CreateCell(11).SetCellValue("提成后业绩");
+            headRow.CreateCell(12).SetCellValue("提成后业绩率");
 
             headRow.GetCell(0).CellStyle = titleCellStyle;
             headRow.GetCell(1).CellStyle = titleCellStyle;
@@ -359,6 +378,9 @@ namespace MettingSys.Web.admin.statistic
             headRow.GetCell(7).CellStyle = titleCellStyle;
             headRow.GetCell(8).CellStyle = titleCellStyle;
             headRow.GetCell(9).CellStyle = titleCellStyle;
+            headRow.GetCell(10).CellStyle = titleCellStyle;
+            headRow.GetCell(11).CellStyle = titleCellStyle;
+            headRow.GetCell(12).CellStyle = titleCellStyle;
 
             sheet.SetColumnWidth(0, 15 * 256);
             sheet.SetColumnWidth(1, 20 * 256);
@@ -370,6 +392,9 @@ namespace MettingSys.Web.admin.statistic
             sheet.SetColumnWidth(7, 20 * 256);
             sheet.SetColumnWidth(8, 20 * 256);
             sheet.SetColumnWidth(9, 20 * 256);
+            sheet.SetColumnWidth(10, 20 * 256);
+            sheet.SetColumnWidth(11, 20 * 256);
+            sheet.SetColumnWidth(12, 20 * 256);
 
             if (dt != null)
             {
@@ -384,9 +409,12 @@ namespace MettingSys.Web.admin.statistic
                     row.CreateCell(4).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["unIncome"]));
                     row.CreateCell(5).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["fu"]));
                     row.CreateCell(6).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["unCost"]));
-                    row.CreateCell(7).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["oProfit"]));
+                    row.CreateCell(7).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["ticheng"]));
                     row.CreateCell(8).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["oCust"]));
-                    row.CreateCell(9).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["bProfit"]));
+                    row.CreateCell(9).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["profit1"]));
+                    row.CreateCell(10).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["profitRatio1"]) + "%");
+                    row.CreateCell(11).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["profit2"]));
+                    row.CreateCell(12).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["profitRatio2"]) + "%");
 
                     row.GetCell(0).CellStyle = cellStyle;
                     row.GetCell(1).CellStyle = cellStyle;
@@ -398,6 +426,9 @@ namespace MettingSys.Web.admin.statistic
                     row.GetCell(7).CellStyle = cellStyle;
                     row.GetCell(8).CellStyle = cellStyle;
                     row.GetCell(9).CellStyle = cellStyle;
+                    row.GetCell(10).CellStyle = cellStyle;
+                    row.GetCell(11).CellStyle = cellStyle;
+                    row.GetCell(12).CellStyle = cellStyle;
                 }
             }
 

@@ -261,7 +261,7 @@ namespace MettingSys.Web.admin.finance
             }
             if (!string.IsNullOrEmpty(_person1))
             {
-                strTemp.Append(" and (op_number like '%" + _person1 + "%' or op_name like '%" + _person1 + "%')");
+                strTemp.Append(" and (op_number='" + _person1 + "' or op_name='" + _person1 + "' or exists(select * from MS_OrderPerson where op_oid=o_id and op_type =6 and (op_number ='" + _person1 + "' or op_name ='" + _person1 + "')))");
             }
             if (!string.IsNullOrEmpty(_person3))
             {

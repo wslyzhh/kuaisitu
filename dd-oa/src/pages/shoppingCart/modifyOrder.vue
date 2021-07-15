@@ -43,6 +43,15 @@
                 <input type="text" :value="placeText" readonly>
                 <div class="icon_right arrows_right"></div>
             </li>
+            <li class="flex flex_a_c flex_s_b">
+                <label class="title"><span>业务员</span></label>
+                <input type="text" :value="employee0Text" readonly>
+            </li>
+            <li class="flex flex_a_c flex_s_b" @click="staffCommon()">
+                <label class="title" style="width: 1.7rem;"><span>共同业务员</span></label>
+                <input type="text" :value="employee6Text" readonly>
+                <div class="icon_right add"></div>
+            </li>
             <li class="flex flex_a_c flex_s_b" @click="staff(1,'employee1')">
                 <label class="title"><span>报账人员</span></label>
                 <input type="text" :value="employee1Text" readonly>
@@ -116,6 +125,8 @@
 			<router-link tag="li" :to="{path:'/unBusiness',query:{oID:formData.orderID}}" style="background-color:#008265;">执行备用金借款明细</router-link>
 		</ul>
 		<choose :show.sync="showChoose" :showNum="showNum"  :type="chooseType" :list="chooseList" @on-affirm="activeChoose"></choose>
+        <chooseCommon :show.sync="showChoose1" :list="chooseList" @on-affirm="activeChoose1"></chooseCommon>
+        <areachoose :show.sync="showChoose2" :list="chooseList" @on-affirm="activeChoose2"></areachoose>
 		<ul class="looK_button_list c_flex">
             <router-link tag="li" :to="{path:'/UnBusinessPayAdd',query:{oID:formData.orderID,paytype:0,payfunction:0,type:'add'}}" style="background-color:#3395fa;">非业务申请</router-link>
             <router-link tag="li" :to="{path:'/adviceOfReceipt',query:{oID:formData.orderID,type:'add'}}" style="background-color:#47a21f;">收款通知</router-link>
@@ -132,6 +143,8 @@
 		mapState
 	} from 'vuex'
 	import choose from '@/components/choose.vue'
+	import areachoose from '@/components/areachoose.vue'
+	import chooseCommon from '@/components/chooseCommon.vue'
 	import dayjs from 'dayjs'
 	
 	let orderId = '';
@@ -156,6 +169,7 @@ export default {
 				employee2:'',
 				employee3:'',
 				employee4:'',
+				employee6:'',
 				o_isPush:'',
 				managerid:0   // TODO:测试当前登录人ID
 			},
@@ -165,14 +179,18 @@ export default {
             loginName:'登录人姓名',
             placeText:'',
             showChoose:false,
+            showChoose1:false,
+            showChoose2:false,
             date_range:'',
             showNum:false,
             chooseType:1,
             chooseEl:'',
+            employee0Text:'',
             employee1Text:'',
             employee2Text:'',
             employee3Text:'',
             employee4Text:'',
+            employee6Text:'',
 			employeeChoose:{
 				'employee1':[],
 				'employee2':[],
@@ -184,9 +202,10 @@ export default {
 			defaultEnd:0,
 			files1:[],
 			files2:[],
+            arealist:[]
         };
     },
-    components: {choose},
+    components: {choose,chooseCommon, areachoose},
 	computed: {	
         ...mapState({
 			selectClientArray:status=>status.addOrders.selectClientArray,
@@ -204,7 +223,6 @@ export default {
     },
     mounted() {
 		orderId = this.$route.query.id;
-		console.log(orderId)
 		this.formData.orderID = orderId;
 		this.getOneOrderData()
 		this.clientCallBack(this.selectClientArray)
@@ -230,13 +248,14 @@ export default {
 				if(!res.data){
 					return;
 				}
-				let tmpData = res.data;
+				let tmpData = res.data
+				console.log(res.data)
 				for (var key in tmpData) { 
 					if('string' == typeof tmpData[key]){
 						_this.$set(_this.formData,key,tmpData[key])
 					}
 				}
-				_this.formData.co_id = tmpData.o_coid;
+				_this.formData.co_id = tmpData.o_coid
 				
 				_this.date_range = tmpData.o_sdate + '至' + tmpData.o_edate
 				_this.defaultStart = dayjs(tmpData.o_sdate).valueOf()
@@ -246,25 +265,19 @@ export default {
 				_this.clientId = tmpData.c_id
 				
 				_this.loginName = _this.getOwnerByIndex(tmpData.owner,2);
-				
+				_this.employee0Text = tmpData.owner
+
 				// 处理归属地显示
 				let source = [];
-				_this.chooseEl = 'place';
-				for (var key in tmpData.arealist) { 
-					source.push({
-						key:key,
-						name:tmpData.arealist[key]
-					})
-				}
-				_this.activeChoose(source)
+				_this.activeChoose2(tmpData.arealist)
 				// 处理人员 1
 				source = [];
 				_this.chooseEl = 'employee1';
 				tmpData.Employee1.map(function(item,index){
 					source.push({
-						de_subname:item.op_number,
-						de_area:item.op_area,
-						de_name:item.op_name,
+						de_subname:item.de_subname,
+						de_area:item.de_area,
+						de_name:item.de_name
 					})
     			})
 				_this.activeChoose(source)
@@ -273,9 +286,9 @@ export default {
 				_this.chooseEl = 'employee3';
 				tmpData.Employee3.map(function(item,index){
 					source.push({
-						de_subname:item.op_number,
-						de_area:item.op_area,
-						de_name:item.op_name,
+						de_subname:item.de_subname,
+						de_area:item.de_area,
+						de_name:item.de_name
 					})
 				})
 				_this.activeChoose(source)
@@ -284,9 +297,9 @@ export default {
 				_this.chooseEl = 'employee2';
 				tmpData.Employee2.map(function(item,index){
 					source.push({
-						de_subname:item.op_number,
-						de_area:item.op_area,
-						de_name:item.op_name,
+						de_subname:item.de_subname,
+						de_area:item.de_area,
+						de_name:item.de_name,
 						dstatus:item.op_dstatus,
 					})
 				})
@@ -296,13 +309,15 @@ export default {
 				_this.chooseEl = 'employee4';
 				tmpData.Employee4.map(function(item,index){
 					source.push({
-						de_subname:item.op_number,
-						de_area:item.op_area,
-						de_name:item.op_name,
+						de_subname:item.de_subname,
+						de_area:item.de_area,
+						de_name:item.de_name,
 						dstatus:item.op_dstatus,
 					})
 				})
 				_this.activeChoose(source)
+				// 处理共同业务员
+				_this.activeChoose1(tmpData.Employee6)
 				
 				_this.$set(_this.formData,'fstatus',tmpData['o_status'])
 				_this.$set(_this.formData,'fstatus_text',tmpData['o_statusText'])
@@ -313,19 +328,18 @@ export default {
 				_this.files1 = tmpData['files1']
 				_this.files2 = tmpData['files2']
 				
-				console.log(_this.formData)
 			})
 		},
         submit(){   //提交
     		let _this = this
     		// 判断必填
     		if('True' == _this.formData.o_lockStatus){
-				this.ddSet.setToast({text:'已锁单，不能再编辑订单信息'})
+				_this.ddSet.setToast({text:'已锁单，不能再编辑订单信息'})
 				return
 			}
     		
-    		this.formData.c_id = this.clientId;
-			console.log(this.formData)
+    		_this.formData.c_id = _this.clientId;
+			_this.formData.managerid = _this.userInfo.id
     		_this.submitOrder(this.formData).then(function(res){
     			if(res.data.status){
 					_this.ddSet.setToast({text:'编辑订单成功'})
@@ -348,19 +362,7 @@ export default {
     		// if(items.length < 1){
 			// 	this.ddSet.setToast({text:'请正确选择'})
     		// 	return;
-    		// }
-            if('place' == _this.chooseEl){
-    			let tmpTexts = [];
-    			let tmpPlaces = [];
-    			items.map(function(item,index){
-    				tmpTexts.push(item.name)
-    				tmpPlaces.push(item.key)
-    			})
-    			_this.placeText = tmpTexts.join(',');
-    			_this.$set(_this.formData,'o_place',tmpPlaces.join(','))
-    			// 区域改变，清空人员
-    			_this.claerEmployee();
-    		}
+    		// }            
     		if('link_man' == _this.chooseEl){
     			if(items.length){
     				_this.$set(_this.formData,'co_name',items[0].co_name)
@@ -416,7 +418,12 @@ export default {
                     _this.ddSet.setToast({text:'请先选择活动归属地'})
                     return
                 }
-                _arealist = _this.formData.o_place
+				let placelist = _this.formData.o_place.split(',')
+                let tmpplace=[]
+                placelist.map((e,i)=>{
+                    tmpplace.push(e.split('-')[0])
+                })
+                _arealist = tmpplace.join(',')
             }
             _this.getEmployeebyarea({arealist:_arealist,isShowNum:_isShowNum,hasOrder:orderId}).then(res => {
 				_this.chooseType = _type;
@@ -442,27 +449,72 @@ export default {
                 _this.showChoose = true
             })
         },
+        activeChoose1(items){
+			let _this = this
+			let tmpTexts = [];
+            let tmpEmployees = [];
+            items.map(function(item,index){
+				console.log(item)
+                tmpTexts.push(item.de_name+item.ratio+'%')
+                tmpEmployees.push(item.de_name + '-'+item.de_subname+'-'+item.de_area+'-'+item.ratio)
+            })            
+            _this.$set(_this,'employee6Text',tmpTexts.join(','))
+            _this.$set(_this.formData,'employee6',tmpEmployees.join(','))
+        },
+        staffCommon(){
+            let _this = this
+            _this.getEmployeebyarea({}).then(res => {
+				let source = []
+                res.data.map((item,index) => {
+					if(4 == item.de_type){		
+                        let _chooselist = _this.formData.employee6.split(',')
+                        _chooselist.map((l,i)=>{
+                            let u = l.split('-')
+                            if(u[1]==item.de_subname){
+                                item['ratio'] = u[3]
+                            }
+                        })				
+                        source.push(item)
+					}
+                })
+				_this.chooseList = source;
+                _this.showChoose1 = true
+            })
+        },
         changeArea(){    //归属地
             let _this = this
+    		let tmpPlaces = _this.arealist
             _this.getArea().then(res => {
-    			_this.chooseType = 2;
-    			_this.chooseEl = 'place';
-                let source = []
-    			let tmpPlaces = []
-    			if(_this.formData.o_place){
-    				tmpPlaces = _this.formData.o_place.split(',')
-    			}
                 res.data.map((item,index) => {
-                    source.push({
-    					isChecked:tmpPlaces.includes(item.key),
-    					key:item.key,
-    					value:item.value,
-    					name:item.value,
-    				})
+					item.type = '0'
+					tmpPlaces.map((e,i)=>{
+						if(item.key == e.key){
+							item.ratio = e.ratio
+							item.type = e.type
+						}
+					})                    
                 })
-    			_this.chooseList = source;
-    			_this.showChoose = true
+				_this.arealist = res.data
+    			_this.chooseList = _this.arealist;
+    			_this.showChoose2 = true
             })
+        },
+        activeChoose2(items){
+            let _this = this
+            _this.arealist = items  
+            let tmpTexts = [];
+            let tmpEmployees = [];
+            _this.arealist.map(function(item,index){
+                if(item.ratio && item.ratio >=0){
+                    tmpTexts.push(item.value+item.ratio+'%')
+                    tmpEmployees.push(item.key + '-'+item.value+'-'+item.ratio+'-'+item.type)
+                }                
+            })          
+            _this.$set(_this,'placeText',tmpTexts.join(','))
+            _this.$set(_this.formData,'o_place',tmpEmployees.join(','))
+
+			// 区域改变，清空人员
+    		_this.claerEmployee();
         },
         upFile(e,_type){
 			let _this = this;
@@ -603,7 +655,6 @@ export default {
     			return
     		}
     		_this.getContactsbycid({c_id:_this.clientId}).then(res => {
-				console.log(res)
     			_this.chooseType = 1;
     			_this.chooseEl = 'link_man';
     			let source = []

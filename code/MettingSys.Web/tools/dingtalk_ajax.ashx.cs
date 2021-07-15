@@ -1163,6 +1163,7 @@ namespace MettingSys.Web.tools
                 string employee2 = jObject["employee2"] == null ? "" : jObject["employee2"].ToString();//业务策划人员
                 string employee3 = jObject["employee3"] == null ? "" : jObject["employee3"].ToString();//业务设计人员
                 string employee4 = jObject["employee4"] == null ? "" : jObject["employee4"].ToString();//业务执行人员
+                string employee6 = jObject["employee6"] == null ? "" : jObject["employee6"].ToString();//共同业务员
                 string pushStatus = jObject["o_isPush"] == null ? "" : jObject["o_isPush"].ToString();//推送上级审批
 
                 Model.Order order = new Model.Order();
@@ -1181,13 +1182,6 @@ namespace MettingSys.Web.tools
                 order.o_remarks = remark;
                 string[] list = new string[] { }, pli = new string[] { };
 
-                #region 业务员
-                if (!string.IsNullOrEmpty(employee0))
-                {
-                    pli = employee0.Split('|');
-                    order.personlist.Add(new Model.OrderPerson() { op_type = 1, op_name = pli[0], op_number = pli[1], op_area = pli[2] });
-                }
-                #endregion
 
                 #region 业务报账员
                 if (!string.IsNullOrEmpty(employee1))
@@ -1234,6 +1228,29 @@ namespace MettingSys.Web.tools
                         pli = item.Split('|');
                         order.personlist.Add(new Model.OrderPerson() { op_type = 5, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_dstatus = Utils.ObjToByte(pli[3]) });
                     }
+                }
+                #endregion
+
+                #region 公共业务人员
+                int totalRatio = 0;
+                if (!string.IsNullOrEmpty(employee6))
+                {
+                    pli = new string[] { };
+                    list = employee6.Split(',');
+                    foreach (string item in list)
+                    {
+                        pli = item.Split('-');
+                        order.personlist.Add(new Model.OrderPerson() { op_type = 6, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_ratio = Utils.ObjToInt(pli[3]), op_addTime = DateTime.Now });
+                        totalRatio += Utils.ObjToInt(pli[3]);
+                    }
+                }
+                #endregion
+
+                #region 业务员
+                if (!string.IsNullOrEmpty(employee0))
+                {
+                    pli = employee0.Split('|');
+                    order.personlist.Add(new Model.OrderPerson() { op_type = 1, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_ratio = 100 - totalRatio, op_addTime = DateTime.Now });
                 }
                 #endregion
 
@@ -1324,22 +1341,21 @@ namespace MettingSys.Web.tools
                 _object.Add("o_lockStatus", dr["o_lockStatus"].ToString());//锁单状态
 
                 #region 归属地
-                string placeStr = dr["o_place"].ToString();
-                JArray ja = new JArray();
-                if (!string.IsNullOrEmpty(placeStr))
+                DataTable areaDt = new BLL.Order().getOrderPlace(_oid);
+                JArray aja = new JArray();
+                if (areaDt != null)
                 {
-                    Dictionary<string, string> areaDic = new BLL.department().getAreaDict();
-                    Dictionary<string, string> orderAreaDic = new Dictionary<string, string>();
-                    string[] list = placeStr.Split(',');
-                    foreach (string item in list)
+                    foreach (DataRow adr in areaDt.Rows)
                     {
-                        if (areaDic.ContainsKey(item))
-                        {
-                            orderAreaDic.Add(item, areaDic[item]);
-                        }
+                        JObject ajo = new JObject();
+                        ajo.Add("key", adr["area"].ToString());
+                        ajo.Add("value", adr["areaText"].ToString());
+                        ajo.Add("ratio", adr["ratio"].ToString());
+                        ajo.Add("type", adr["type"].ToString());
+                        aja.Add(ajo);
                     }
-                    _object.Add("arealist", JObject.FromObject(orderAreaDic));//活动归属地
                 }
+                _object.Add("arealist", aja);//活动归属地
                 #endregion
 
                 #region 人员
@@ -1347,7 +1363,7 @@ namespace MettingSys.Web.tools
                 if (pdt != null)
                 {
                     DataRow[] plist = null;
-                    for (int i = 2; i < 6; i++)
+                    for (int i = 2; i < 7; i++)
                     {
                         JArray pja = new JArray();
                         plist = pdt.Select("op_type=" + i + "");
@@ -1357,10 +1373,11 @@ namespace MettingSys.Web.tools
                             pjo.Add("op_id", Utils.ObjToInt(pdr["op_id"]));
                             pjo.Add("op_oid", Utils.ObjectToStr(pdr["op_oid"]));
                             pjo.Add("op_type", Utils.ObjToInt(pdr["op_type"]));
-                            pjo.Add("op_number", Utils.ObjectToStr(pdr["op_number"]));
-                            pjo.Add("op_name", Utils.ObjectToStr(pdr["op_name"]));
-                            pjo.Add("op_area", Utils.ObjectToStr(pdr["op_area"]));
+                            pjo.Add("de_subname", Utils.ObjectToStr(pdr["op_number"]));
+                            pjo.Add("de_name", Utils.ObjectToStr(pdr["op_name"]));
+                            pjo.Add("de_area", Utils.ObjectToStr(pdr["op_area"]));
                             pjo.Add("op_dstatus", Utils.ObjToInt(pdr["op_dstatus"]));
+                            pjo.Add("ratio", Utils.ObjectToStr(pdr["op_ratio"]));
                             pja.Add(pjo);
                         }
                         if (i == 2)
@@ -1375,8 +1392,13 @@ namespace MettingSys.Web.tools
                         {
                             _object.Add("Employee3", pja);//业务执行人员
                         }
-                        else {
+                        else if (i == 5)
+                        {
                             _object.Add("Employee4", pja);//业务设计人员
+                        }
+                        else if (i == 6)
+                        {
+                            _object.Add("Employee6", pja);//共同业务员
                         }
                     }                    
                 }
@@ -4900,7 +4922,6 @@ namespace MettingSys.Web.tools
                 string eMonth = jObject["eMonth"] == null ? "" : Utils.ObjectToStr(jObject["eMonth"]);
                 string status = jObject["status"] == null ? "" : Utils.ObjectToStr(jObject["status"]);
                 string lockStatus = jObject["lockStatus"] == null ? "" : Utils.ObjectToStr(jObject["lockStatus"]);
-                string isRemove = jObject["isRemove"] == null ? "" : Utils.ObjectToStr(jObject["isRemove"]);
                 string isCust = jObject["isCust"] == null ? "" : Utils.ObjectToStr(jObject["isCust"]);
                 Dictionary<string, string> dict = new Dictionary<string, string>();
                 dict.Add("type", type);
@@ -4908,9 +4929,9 @@ namespace MettingSys.Web.tools
                 {
                     dict.Add("smonth", sMonth);
                 }
-                if (!string.IsNullOrEmpty(sMonth))
+                if (!string.IsNullOrEmpty(eMonth))
                 {
-                    dict.Add("emonth", sMonth);
+                    dict.Add("emonth", eMonth);
                 }
                 if (!string.IsNullOrEmpty(status))
                 {
@@ -4920,7 +4941,6 @@ namespace MettingSys.Web.tools
                 {
                     dict.Add("lockstatus", lockStatus);
                 }                
-                dict.Add("isRemove", isRemove);
                 dict.Add("isCust", isCust);
                 //权限控制
                 if (managerModel.area != new BLL.department().getGroupArea())//如果不是总部的工号
@@ -4937,7 +4957,7 @@ namespace MettingSys.Web.tools
                     }
                 }
                 BLL.statisticBLL bll = new BLL.statisticBLL();
-                DataTable dt = bll.getAchievementStatisticData(dict, pageSize, pageIndex, type == "0" ? "p1.op_number asc" : "p3.op_number asc", out int totalCount, out int _tOrderCount,out decimal _tOrderShou,out decimal _tUnincome,out decimal _tOrderFu,out decimal _tUncost, out decimal _tOrderProfit, out decimal _tCust, out decimal _tProfit).Tables[0];
+                DataTable dt = bll.getAchievementStatisticData(dict, pageSize, pageIndex, "(shou-fu-oCust) desc", out int totalCount, out int _tOrderCount,out decimal _tOrderShou,out decimal _tUnincome,out decimal _tOrderFu,out decimal _tUncost, out decimal _tOrderTicheng, out decimal _tCust, out decimal _tProfit1, out decimal _tProfit2).Tables[0];
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     context.Response.Write("{\"pageIndex\":" + pageIndex + ",\"pageSize\":" + pageSize + ",\"totalCount\":" + totalCount + ",\"list\":");

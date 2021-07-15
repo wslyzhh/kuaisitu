@@ -213,9 +213,20 @@ namespace MettingSys.Web.admin.order
 
             //默认生成下单人的活动归属地
             Dictionary<string, string> areaDic = new BLL.department().getAreaDict();
-            Dictionary<string, string> orderAreaDic = new Dictionary<string, string>();
-            orderAreaDic.Add(manager.area, areaDic[manager.area]);
-            rptAreaList.DataSource = orderAreaDic;
+            //Dictionary<string, string> orderAreaDic = new Dictionary<string, string>();
+            DataTable areaDT = new DataTable();
+            areaDT.Columns.Add("area");
+            areaDT.Columns.Add("areaText");
+            areaDT.Columns.Add("ratio");
+            areaDT.Columns.Add("type");
+            DataRow dr = areaDT.NewRow();
+            dr["area"] = manager.area;
+            dr["areaText"] = areaDic[manager.area];
+            dr["ratio"] = "100";
+            dr["type"] = "1";
+            areaDT.Rows.Add(dr);
+            //orderAreaDic.Add(manager.area, areaDic[manager.area]);
+            rptAreaList.DataSource = areaDT;
             rptAreaList.DataBind();
 
             //默认下单人
@@ -245,7 +256,7 @@ namespace MettingSys.Web.admin.order
                 return;
             }
             DataRow dr = ds.Tables[0].Rows[0];
-            labOwner.Text = new MettingSys.BLL.department().getAreaText(dr["op_area"].ToString()) + "," + dr["op_number"] + "," + dr["op_name"];
+            labOwner.Text = new MettingSys.BLL.department().getAreaText(dr["op_area"].ToString()) + "," + dr["op_number"] + "," + dr["op_name"]+"("+dr["op_ratio"]+"%)";
             txtCusName.Text = dr["c_name"].ToString();
             hCusId.Value = dr["c_id"].ToString();
             List<Model.Contacts> contactlist = new BLL.Contacts().getList("co_cid="+ hCusId.Value + "", " co_flag desc,co_id asc");
@@ -280,22 +291,13 @@ namespace MettingSys.Web.admin.order
             labStatusTime.Text = Utils.ObjectToStr(dr["o_statusTime"]) == "" ? "" : Utils.StrToDateTime(Utils.ObjectToStr(dr["o_statusTime"])).ToString("yyyy-MM-dd HH:mm:ss");
 
             #region 归属地
-            string placeStr = dr["o_place"].ToString();
-            if (!string.IsNullOrEmpty(placeStr))
+            DataTable areaDt = new BLL.Order().getOrderPlace(_oid);
+            if (areaDt != null)
             {
-                Dictionary<string, string> areaDic = new BLL.department().getAreaDict();
-                Dictionary<string, string> orderAreaDic = new Dictionary<string, string>();
-                string[] list = placeStr.Split(',');
-                foreach (string item in list)
-                {
-                    if (areaDic.ContainsKey(item))
-                    {
-                        orderAreaDic.Add(item, areaDic[item]);
-                    }
-                }
-                rptAreaList.DataSource = orderAreaDic;
+                rptAreaList.DataSource = areaDt;
                 rptAreaList.DataBind();
             }
+
             #endregion
 
             #region 人员
@@ -313,6 +315,9 @@ namespace MettingSys.Web.admin.order
 
                 rptEmployee4.DataSource = pdt.Select("op_type=5");
                 rptEmployee4.DataBind();
+
+                rptEmployee6.DataSource = pdt.Select("op_type=6");
+                rptEmployee6.DataBind();
 
                 liplace.Visible = false;
                 liemployee1.Visible = false;
@@ -332,10 +337,9 @@ namespace MettingSys.Web.admin.order
                 //btnPay.Visible = false;
                 btnInvoince.Visible = false;
                 //btnExcelIn.Visible = false;
-                btnSharing.Visible = false;
                 trFile.Visible = false;
                 #region 根据当前登录账户显示不同按钮
-                DataRow[] drs1 = pdt.Select("op_type=1 and op_number='" + manager.user_name + "'");//业务员
+                DataRow[] drs1 = pdt.Select("(op_type=1 or op_type=6) and op_number='" + manager.user_name + "'");//业务员
                 DataRow[] drs2 = pdt.Select("op_type=2 and op_number='" + manager.user_name + "'");//业务报账人员
                 DataRow[] drs3 = pdt.Select("op_type=3 and op_number='" + manager.user_name + "'");//业务策划人员
                 DataRow[] drs4 = pdt.Select("op_type=4 and op_number='" + manager.user_name + "'");//业务执行人员
@@ -406,7 +410,7 @@ namespace MettingSys.Web.admin.order
                     //btnExcelIn.Visible = true;
                     trFile.Visible = true;
                 }
-                DataRow[] drs5 = pdt.Select("op_type=1");
+                DataRow[] drs5 = pdt.Select("op_type=1 or op_type=6");
                 //判断是否含有查看本区域数据的权限
                 if (new BLL.permission().checkHasPermission(manager, "0602") && (drs5[0]["op_area"].ToString() == manager.area || Utils.ObjectToStr(dr["o_place"]).IndexOf(manager.area)>-1))
                 {
@@ -452,11 +456,7 @@ namespace MettingSys.Web.admin.order
                 }
                 if (new BLL.permission().checkHasPermission(manager, "0401"))
                 {
-                    btnFinRemark.Visible = true;
-                    if (!Utils.StrToBool(dr["o_lockStatus"].ToString(), false))
-                    {
-                        btnSharing.Visible = true;
-                    }
+                    btnFinRemark.Visible = true;                    
                 }
                 //以上都没有权限的，不能查看订单详细
                 if (!showDetail)
@@ -502,6 +502,104 @@ namespace MettingSys.Web.admin.order
             #endregion
 
             string sqlwhere = "";
+
+            decimal yingshou = 0, feikaoheshouru = 0, yingfu = 0, feikaohezhichu = 0, shuifei = 0, ticheng = 0, profit1 = 0, profit2 = 0;
+            #region 员工业绩
+            DataSet userAchievementData = bll.getOrderUserRatio(_oid);
+            if (userAchievementData != null && userAchievementData.Tables[0].Rows.Count > 0)
+            {
+                DataRow userdr = userAchievementData.Tables[0].NewRow();
+                foreach (DataRow udr in userAchievementData.Tables[0].Rows)
+                {
+                    yingshou += Utils.ObjToDecimal(udr["yingshou"],0);
+                    feikaoheshouru += Utils.ObjToDecimal(udr["feikaoheshouru"], 0);
+                    yingfu += Utils.ObjToDecimal(udr["yingfu"], 0);
+                    feikaohezhichu += Utils.ObjToDecimal(udr["feikaohezhichu"], 0);
+                    ticheng += Utils.ObjToDecimal(udr["ticheng"], 0);
+                    shuifei += Utils.ObjToDecimal(udr["shuifei"], 0);
+                    profit1 += Utils.ObjToDecimal(udr["profit1"], 0);
+                    profit2 += Utils.ObjToDecimal(udr["profit2"], 0);
+                }
+                userdr["name"] = "合计";
+                userdr["yingshou"] = yingshou;
+                userdr["feikaoheshouru"] = feikaoheshouru;
+                userdr["yingfu"] = yingfu;
+                userdr["feikaohezhichu"] = feikaohezhichu;
+                userdr["ticheng"] = ticheng;
+                userdr["shuifei"] = shuifei;
+                userdr["profit1"] = profit1;
+                if ((yingshou - feikaoheshouru) != 0)
+                {
+                    userdr["profitRatio1"] = Math.Round(profit1 / (yingshou - feikaoheshouru) * 100, 2);
+                }
+                else
+                {
+                    userdr["profitRatio1"] = "0";
+                }
+                userdr["profit2"] = profit2;
+                if ((yingshou - feikaoheshouru) != 0)
+                {
+                    userdr["profitRatio2"] = Math.Round(profit2 / (yingshou - feikaoheshouru) * 100, 2);
+                }
+                else
+                {
+                    userdr["profitRatio2"] = "0";
+                }
+                userAchievementData.Tables[0].Rows.Add(userdr);
+                userAchievement.DataSource = userAchievementData;
+                userAchievement.DataBind();
+            }
+
+            #endregion
+
+            #region 区域业绩
+            DataSet areaAchievementData = bll.getOrderAreaRatio(_oid);
+            if (areaAchievementData != null && areaAchievementData.Tables[0].Rows.Count > 0)
+            {
+                yingshou = 0; feikaoheshouru = 0; yingfu = 0; feikaohezhichu = 0; shuifei = 0; ticheng = 0; profit1 = 0; profit2 = 0;
+                DataRow userdr = areaAchievementData.Tables[0].NewRow();
+                foreach (DataRow udr in areaAchievementData.Tables[0].Rows)
+                {
+                    yingshou += Utils.ObjToDecimal(udr["yingshou"], 0);
+                    feikaoheshouru += Utils.ObjToDecimal(udr["feikaoheshouru"], 0);
+                    yingfu += Utils.ObjToDecimal(udr["yingfu"], 0);
+                    feikaohezhichu += Utils.ObjToDecimal(udr["feikaohezhichu"], 0);
+                    ticheng += Utils.ObjToDecimal(udr["ticheng"], 0);
+                    shuifei += Utils.ObjToDecimal(udr["shuifei"], 0);
+                    profit1 += Utils.ObjToDecimal(udr["profit1"], 0);
+                    profit2 += Utils.ObjToDecimal(udr["profit2"], 0);
+                }
+                userdr["name"] = "合计";
+                userdr["yingshou"] = yingshou;
+                userdr["feikaoheshouru"] = feikaoheshouru;
+                userdr["yingfu"] = yingfu;
+                userdr["feikaohezhichu"] = feikaohezhichu;
+                userdr["ticheng"] = ticheng;
+                userdr["shuifei"] = shuifei;
+                userdr["profit1"] = profit1;
+                if ((yingshou - feikaoheshouru) != 0)
+                {
+                    userdr["profitRatio1"] = Math.Round(profit1 / (yingshou - feikaoheshouru) * 100, 2);
+                }
+                else
+                {
+                    userdr["profitRatio1"] = "0";
+                }
+                userdr["profit2"] = profit2;
+                if ((yingshou - feikaoheshouru) != 0)
+                {
+                    userdr["profitRatio2"] = Math.Round(profit2 / (yingshou - feikaoheshouru) * 100, 2);
+                }
+                else
+                {
+                    userdr["profitRatio2"] = "0";
+                }
+                areaAchievementData.Tables[0].Rows.Add(userdr);
+                areaAchievement.DataSource = areaAchievementData;
+                areaAchievement.DataBind();
+            }
+            #endregion
+
             #region 执行备用金借款明细
             if (isExecutiver)
             {

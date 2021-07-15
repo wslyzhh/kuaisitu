@@ -407,7 +407,7 @@ namespace MettingSys.Web.admin.statistic
             }
             if (!string.IsNullOrEmpty(_person1))
             {
-                strTemp.Append(" and (op_number='" + _person1 + "' or op_name='" + _person1 + "')");
+                strTemp.Append(" and (op_number='" + _person1 + "' or op_name='" + _person1 + "' or exists(select * from MS_OrderPerson where op_oid=o_id and op_type =6 and (op_number ='" + _person1 + "' or op_name ='" + _person1 + "')))");
             }
             if (!string.IsNullOrEmpty(_person3))
             {
@@ -669,7 +669,7 @@ namespace MettingSys.Web.admin.statistic
                     row.CreateCell(2).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["o_address"]));
                     row.CreateCell(3).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_name"]));
                     row.CreateCell(4).SetCellValue(ConvertHelper.toDate(dt.Rows[i]["o_sdate"]).Value.ToString("yyyy-MM-dd")+"/"+ ConvertHelper.toDate(dt.Rows[i]["o_edate"]).Value.ToString("yyyy-MM-dd"));
-                    row.CreateCell(5).SetCellValue(new MettingSys.BLL.department().getAreaText(dt.Rows[i]["o_place"].ToString()));
+                    row.CreateCell(5).SetCellValue(new MettingSys.BLL.department().getAreaText(dt.Rows[i]["place"].ToString()));
                     row.CreateCell(6).SetCellValue(BusinessDict.fStatus()[Utils.ObjToByte(dt.Rows[i]["o_status"])]);
                     row.CreateCell(7).SetCellValue(BusinessDict.lockStatus()[Utils.ObjToByte(dt.Rows[i]["o_lockStatus"])]);
                     row.CreateCell(8).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["op_name"]));

@@ -83,6 +83,7 @@
     <Compile Include="department.cs" />
     <Compile Include="Files.cs" />
     <Compile Include="finance_chk.cs" />
+    <Compile Include="OrderPlace.cs" />
     <Compile Include="payPic.cs" />
     <Compile Include="permission.cs" />
     <Compile Include="unBusinessMoneyLog.cs" />

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using MettingSys.Common;
 using MettingSys.Model;
 
@@ -81,13 +82,43 @@ namespace MettingSys.BLL
             {
                 return "请选择活动归属地";
             }
+            else
+            {
+                string[] placelist = model.o_place.Split(',');
+                int totalRatio = 0;
+                foreach (string item in placelist)
+                {
+                    string[] arealist = item.Split('-');
+                    if (arealist[3] == "0")
+                    {
+                        Regex reg1 = new Regex(@"^([1-9][0-9]{0,1}|100)$");
+                        if (!reg1.IsMatch(arealist[2]))
+                        {
+                            return "活动归属地("+ arealist[1] + ")的业绩比例须为大于0，小于100的正整数";
+                        }
+                    }
+                    else
+                    {
+                        Regex reg1 = new Regex(@"^([0-9][0-9]{0,1}|100)$");
+                        if (!reg1.IsMatch(arealist[2]))
+                        {
+                            return "活动归属地(" + arealist[1] + ")的业绩比例须为大于等于0，小于100的正整数";
+                        }
+                    }
+                    totalRatio += Utils.ObjToInt(arealist[2]);
+                }
+                if (totalRatio <= 0 || totalRatio > 100)
+                {
+                    return "活动归属地的业绩比例之和须大于0，小于100";
+                }
+            }
             
             if (Exists(model.o_cid.Value, model.o_content, model.o_sdate))
             {
                 return "存在相同的客户、活动名称、活动开始日期的订单，请确认是否重复下单";
             }
 
-            string person1 = string.Empty, person2 = string.Empty, person3 = string.Empty, person4 = string.Empty, person5 = string.Empty;
+            string person1 = string.Empty, person2 = string.Empty, person3 = string.Empty, person4 = string.Empty, person5 = string.Empty, person6 = string.Empty;
             //添加下单人
             IEnumerable<OrderPerson> list = model.personlist.Where(p => p.op_type == 1);
             if (list.ToArray().Length != 1)
@@ -96,7 +127,7 @@ namespace MettingSys.BLL
             }
             foreach (var item in list)
             {
-                person1 += "[" + item.op_name + "," + item.op_number + "," + item.op_area + "],";
+                person1 += "[" + item.op_name + "," + item.op_number + "," + item.op_area + "," + item.op_ratio + "%],";
                 if (item.op_number != manager.user_name)//帮别人下单
                 {
 
@@ -154,6 +185,27 @@ namespace MettingSys.BLL
                     person5 += "[" + item.op_name + "," + item.op_number + "," + item.op_area + "," + item.op_dstatus + "],";
                 }
                 person5 = person5.TrimEnd(',');
+            }
+            //公共业务员
+            list = model.personlist.Where(p => p.op_type == 6);
+            if (list.ToArray().Length > 0)
+            {
+                int? totalRatio = 0;
+                foreach (var item in list)
+                {                    
+                    person6 += "[" + item.op_name + "," + item.op_number + "," + item.op_area + "," + item.op_ratio + "%],";
+                    Regex reg1 = new Regex(@"^([1-9][0-9]{0,1}|99)$");
+                    if (!reg1.IsMatch(item.op_ratio.ToString()))
+                    {
+                        return "公共业务员的业绩比例须为大于0，小于100的正整数";
+                    }
+                    totalRatio += item.op_ratio;
+                }
+                person6 = person6.TrimEnd(',');
+                if (totalRatio<=0 || totalRatio >=100)
+                {
+                    return "公共业务员的业绩比例之和须大于0，小于100";
+                }
             }
 
             //当订单状态为确认时，添加订单确认时间
@@ -294,7 +346,7 @@ namespace MettingSys.BLL
             if (oldModel.o_lockStatus==1) return "已锁单，不能再编辑订单信息";
 
             newModel.o_lastUpdateDate = DateTime.Now;
-            IEnumerable<OrderPerson> list = oldModel.personlist.Where(p => (p.op_type == 1 && p.op_number== manager.user_name) || (p.op_type == 2 && p.op_number == manager.user_name));
+            IEnumerable<OrderPerson> list = oldModel.personlist.Where(p => (p.op_type == 1 || p.op_type == 2 || p.op_type == 6) && p.op_number== manager.user_name);
             if (list.ToArray().Length == 0)
             {
                 return "非下单人员和业务报账人员不能编辑订单信息";
@@ -382,12 +434,45 @@ namespace MettingSys.BLL
                     content += "活动结束日期：" + oldModel.o_edate.Value.ToString("yyyy-MM-dd") + "→<font color='red'>" + newModel.o_edate.Value.ToString("yyyy-MM-dd") + "</font><br/>";
                 }
             }
-            if (oldModel.o_place != newModel.o_place)
+            if (string.IsNullOrEmpty(newModel.o_place))
             {
-                content += "活动归属地：" + oldModel.o_place + "→<font color='red'>" + newModel.o_place + "</font><br/>";
+                return "请选择活动归属地";
+            }
+            else
+            {
+                string[] placelist = newModel.o_place.Split(',');
+                int totalareaRatio = 0;
+                foreach (string item in placelist)
+                {
+                    string[] arealist = item.Split('-');
+                    if (arealist[3] == "0")
+                    {
+                        Regex reg1 = new Regex(@"^([1-9][0-9]{0,1}|100)$");
+                        if (!reg1.IsMatch(arealist[2]))
+                        {
+                            return "活动归属地(" + arealist[1] + ")的业绩比例须为大于0，小于100的正整数";
+                        }
+                    }
+                    else
+                    {
+                        Regex reg1 = new Regex(@"^([0-9][0-9]{0,1}|100)$");
+                        if (!reg1.IsMatch(arealist[2]))
+                        {
+                            return "活动归属地(" + arealist[1] + ")的业绩比例须为大于等于0，小于100的正整数";
+                        }
+                    }
+                    totalareaRatio += Utils.ObjToInt(arealist[2]);
+                }
+                if (totalareaRatio <= 0 || totalareaRatio > 100)
+                {
+                    return "活动归属地的业绩比例之和须大于0，小于100";
+                }
+                if (oldModel.o_place != newModel.o_place)
+                {
+                    content += "活动归属地：" + oldModel.o_place + "→<font color='red'>" + newModel.o_place + "</font><br/>";
+                }
             }
             bool isChangeStatus = false;
-
             if (oldModel.o_status != newModel.o_status)
             {
                 isChangeStatus = true;
@@ -422,20 +507,12 @@ namespace MettingSys.BLL
                 content += "备注：" + oldModel.o_remarks + "→<font color='red'>" + newModel.o_remarks + "</font><br/>";
             }
 
-            if (newModel.o_place.IndexOf(manager.area) < 0)
-            {
-                return "活动归属地须包含下单人所在区域";
-            }
             if (Exists(newModel.o_cid.Value, newModel.o_content, newModel.o_sdate, newModel.o_id))
             {
                 return "存在相同的客户、活动名称、活动开始日期的订单，请确认是否重复下单";
             }
-            //添加下单人
-            IEnumerable<OrderPerson> list0 = oldModel.personlist.Where(p => p.op_type == 1);
-            newModel.personlist.Add(new OrderPerson() { op_oid = newModel.o_id, op_type = 1, op_number = list0.ToArray()[0].op_number, op_name = list0.ToArray()[0].op_name, op_area = list0.ToArray()[0].op_area,op_addTime = list0.ToArray()[0].op_addTime });
-
-            string oStr2 = string.Empty, oStr3 = string.Empty, oStr4 = string.Empty, oStr5 = string.Empty;//旧人员
-            string nStr2 = string.Empty, nStr3 = string.Empty, nStr4 = string.Empty, nStr5 = string.Empty;//新人员
+            string oStr2 = string.Empty, oStr3 = string.Empty, oStr4 = string.Empty, oStr5 = string.Empty, oStr6 = string.Empty;//旧人员
+            string nStr2 = string.Empty, nStr3 = string.Empty, nStr4 = string.Empty, nStr5 = string.Empty, nStr6 = string.Empty;//新人员
             IEnumerable<OrderPerson> oli = null, nli = null;
             #region 业务报账人员
             oli = oldModel.personlist.Where(p => p.op_type == 2);
@@ -520,8 +597,47 @@ namespace MettingSys.BLL
                 }
                 nStr5 = nStr5.TrimEnd(',');
             }
-            else
             #endregion
+            #region 公共业务员
+            oli = oldModel.personlist.Where(p => p.op_type == 6);
+            nli = newModel.personlist.Where(p => p.op_type == 6);
+            List<OrderPerson> addlist6 = null, cutlist6 = null;
+            dealPerson(nli, oli, out addlist6, out cutlist6);
+            foreach (var item in oli)
+            {
+                oStr6 += "[" + item.op_name + "," + item.op_number + "," + item.op_area + "," + item.op_ratio + "],";
+            }
+            oStr6 = oStr6.TrimEnd(',');
+            int? totalRatio = 0;
+            if (nli.ToArray().Length > 0)
+            {
+                foreach (var item in nli)
+                {
+                    nStr6 += "[" + item.op_name + "," + item.op_number + "," + item.op_area + "," + item.op_ratio + "%],";
+                    Regex reg1 = new Regex(@"^([1-9][0-9]{0,1}|99)$");
+                    if (!reg1.IsMatch(item.op_ratio.ToString()))
+                    {
+                        return "公共业务员的业绩比例须为大于0，小于100的正整数";
+                    }
+                    totalRatio += item.op_ratio;
+                }
+                nStr6 = nStr6.TrimEnd(',');
+                if (totalRatio <= 0 || totalRatio >= 100)
+                {
+                    return "公共业务员的业绩比例之和须大于0，小于100";
+                }
+            }
+            #endregion
+
+            //添加下单人
+            IEnumerable<OrderPerson> list0 = oldModel.personlist.Where(p => p.op_type == 1);
+            newModel.personlist.Add(new OrderPerson() { op_oid = newModel.o_id, op_type = 1, op_number = list0.ToArray()[0].op_number, op_name = list0.ToArray()[0].op_name, op_area = list0.ToArray()[0].op_area,op_ratio = 100-totalRatio, op_addTime = list0.ToArray()[0].op_addTime });
+
+            if (newModel.o_place.IndexOf(list0.ToArray()[0].op_area)<0)
+            {
+                return "活动归属地须包含下单人所在区域";
+            }
+                        
             if (oStr2 != nStr2)
             {
                 content += "业务报账人员：" + oStr2 + "→<font color='red'>" + nStr2 + "</font><br/>";
@@ -537,6 +653,10 @@ namespace MettingSys.BLL
             if (oStr5 != nStr5)
             {
                 content += "业务设计人员：" + oStr5 + "→<font color='red'>" + nStr5 + "</font><br/>";
+            }
+            if (oStr6 != nStr6)
+            {
+                content += "公共业务员：" + oStr6 + "→<font color='red'>" + nStr6 + "</font><br/>";
             }
             if (dal.UpdateOrder(newModel))
             {
@@ -1052,21 +1172,38 @@ namespace MettingSys.BLL
             }
             return "更新失败";
         }
-
+        public void dealOldData()
+        {
+            dal.dealOldData();
+        }
+        /// <summary>
+        /// 订单页面员工业绩
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <returns></returns>
+        public DataSet getOrderUserRatio(string oid)
+        {
+            if (string.IsNullOrEmpty(oid))
+                return null;
+            return dal.getOrderUserRatio(oid);
+        }
+        /// <summary>
+        /// 订单页面区域业绩
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <returns></returns>
+        public DataSet getOrderAreaRatio(string oid)
+        {
+            if (string.IsNullOrEmpty(oid))
+                return null;
+            return dal.getOrderAreaRatio(oid);
+        }
         /// <summary>
         /// 更新一条数据
         /// </summary>
         public bool Update(Model.Order model)
         {
             return dal.Update(model);
-        }
-
-        /// <summary>
-        /// 删除一条数据
-        /// </summary>
-        public bool Delete(string id)
-        {
-            return dal.Delete(id);
         }
 
         /// <summary>
@@ -1126,7 +1263,19 @@ namespace MettingSys.BLL
         {
             return dal.getUnAduitExpectPay(type);
         }
-
+        /// <summary>
+        /// 获取订单的归属区域
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <returns></returns>
+        public DataTable getOrderPlace(string oid)
+        {
+            if (string.IsNullOrEmpty(oid))
+            {
+                return null;
+            }
+            return dal.getOrderPlace(oid);
+        }
         /// <summary>
         /// 获得前几行数据
         /// </summary>

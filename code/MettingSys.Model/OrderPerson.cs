@@ -20,7 +20,7 @@ namespace MettingSys.Model
         /// <param name="op_number">op_number</param>
         /// <param name="op_name">op_name</param>
         /// <param name="op_area">op_area</param>
-        public OrderPerson(int? op_id, string op_oid, byte? op_type, string op_number, string op_name, string op_area,byte? op_dstatus,DateTime? op_addTime)
+        public OrderPerson(int? op_id, string op_oid, byte? op_type, string op_number, string op_name, string op_area,byte? op_dstatus,int? op_ratio, DateTime? op_addTime)
         {
             this.op_id = op_id;
             this.op_oid = op_oid;
@@ -29,6 +29,7 @@ namespace MettingSys.Model
             this.op_name = op_name;
             this.op_area = op_area;
             this.op_dstatus = op_dstatus;
+            this.op_ratio = op_ratio;
             this.op_addTime = op_addTime;
         }
 
@@ -68,6 +69,8 @@ namespace MettingSys.Model
         /// o_dstatus
         /// </summary>
         public byte? op_dstatus { get; set; }
+
+        public int? op_ratio { get; set; }
 
         /// <summary>
         /// 添加时间

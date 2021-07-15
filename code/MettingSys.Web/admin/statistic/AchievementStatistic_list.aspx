@@ -209,10 +209,6 @@
                             </li>
                         </ul>
                     </div>
-                    排除员工提成：
-                    <div class="rule-single-checkbox">
-                        <asp:CheckBox ID="cbIsRemove" runat="server" />
-                    </div>
                     包含税费成本：
                     <div class="rule-single-checkbox">
                         <asp:CheckBox ID="cbIsCust" runat="server" Checked="true" />
@@ -223,6 +219,22 @@
                                 <asp:ListItem Value="0">下单</asp:ListItem>
                                 <asp:ListItem Value="1">接单(业务策划)</asp:ListItem>
                                 <asp:ListItem Value="2">接单(业务设计)</asp:ListItem>
+                            </asp:DropDownList>
+                        </div>
+                    排序：
+                        <div class="rule-single-select">
+                            <asp:DropDownList ID="ddlorderType" runat="server">
+                                <asp:ListItem Value="(shou-fu-oCust+ticheng)">提成前业绩</asp:ListItem>
+                                <asp:ListItem Value=" case when (shou-unIncome)<>0 then (shou-fu-oCust+ticheng)*100/(shou-unIncome) else 0 end ">提成前业绩率</asp:ListItem>
+                                <asp:ListItem Value="(shou-fu-oCust)">提成后业绩</asp:ListItem>
+                                <asp:ListItem Value=" case when (shou-unIncome)<>0 then (shou-fu-oCust)*100/(shou-unIncome) else 0 end ">提成后业绩率</asp:ListItem>
+                                <asp:ListItem Value="shou-unIncome">应收-非考核收入</asp:ListItem>
+                            </asp:DropDownList>
+                        </div>
+                        <div class="rule-single-select">
+                            <asp:DropDownList ID="ddlorder" runat="server">
+                                <asp:ListItem Value="Asc">升序</asp:ListItem>
+                                <asp:ListItem Value="Desc">降序</asp:ListItem>
                             </asp:DropDownList>
                         </div>
                     <%--排序：
@@ -245,7 +257,7 @@
                     <input type="hidden" name="action" value="Search" />
                     <input type="hidden" name="self" value="<%=_self %>" />
                     <input <%--id="btnSave"--%> type="submit" class="btn" value="查询" />
-                    <a href="<%=Utils.CombUrlTxt("AchievementStatistic_list.aspx", "Excel={0}&txtsDate={1}&txteDate={2}&ddllock={3}&ddlstatus={4}&hide_place={5}&hide_employee3={6}&cbIsRemove={7}&cbIsCust={8}&ddltype={9}", "on", _sMonth, _eMonth, _lockstatus, _status, _area,_person, _isRemove, _isCust,_type) %>"><i class="iconfont icon-exl"></i><span>导出Excel</span></a>
+                    <a href="<%=Utils.CombUrlTxt("AchievementStatistic_list.aspx", "Excel={0}&txtsDate={1}&txteDate={2}&ddllock={3}&ddlstatus={4}&hide_place={5}&hide_employee3={6}&cbIsCust={7}&ddltype={8}&ddlorderType={9}&ddlorder={10}", "on", _sMonth, _eMonth, _lockstatus, _status, _area,_person, _isCust,_type,_ordertype,_order) %>"><i class="iconfont icon-exl"></i><span>导出Excel</span></a>
                 </div>
             </div>
 
@@ -255,16 +267,19 @@
                     <HeaderTemplate>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
                             <tr style="text-align: left;">
-                                <th width="10%">员工</th>
-                                <th width="10%">区域</th>
-                                <th width="10%">订单数量</th>
-                                <th width="10%">应收</th>
-                                <th width="10%">非考核收入</th>
-                                <th width="10%">应付</th>
-                                <th width="10%">非考核成本</th>
-                                <th width="10%">订单利润</th>
-                                <th width="10%">订单税费</th>
-                                <th>业绩利润</th>
+                                <th>员工</th>
+                                <th width="6%">区域</th>
+                                <th width="6%">订单数量</th>
+                                <th width="8%">应收</th>
+                                <th width="8%">非考核收入</th>
+                                <th width="8%">应付</th>
+                                <th width="8%">非考核成本</th>
+                                <th width="8%">提成</th>
+                                <th width="8%">税费</th>
+                                <th width="8%">提成前业绩</th>
+                                <th width="8%">提成前业绩率</th>
+                                <th width="8%">提成后业绩</th>
+                                <th width="8%">提成后业绩率</th>
                             </tr>
                     </HeaderTemplate>
                     <ItemTemplate>
@@ -276,21 +291,24 @@
                             <td><a onclick="toFinanceList(true,'<%#Eval("op_area")%>','<%# Eval("op_number") %>','代收代付')" href="javascript:void(0);"><%# Eval("unIncome") %></a></td>
                             <td><a onclick="toFinanceList(false,'<%#Eval("op_area")%>','<%# Eval("op_number") %>','')" href="javascript:void(0);"><%# Eval("fu") %></a></td>
                             <td><a onclick="toFinanceList(false,'<%#Eval("op_area")%>','<%# Eval("op_number") %>','代收代付')" href="javascript:void(0);"><%# Eval("unCost") %></a></td>
-                            <td><%# Eval("oProfit") %></td>
+                            <td><%# Eval("ticheng") %></td>
                             <td><%# Eval("oCust")%></td>
-                            <td><%# Eval("bProfit") %></td>
+                            <td><%# Eval("profit1")%></td>
+                            <td><%# Eval("profitRatio1")%>%</td>
+                            <td><%# Eval("profit2")%></td>
+                            <td><%# Eval("profitRatio2")%>%</td>
                         </tr>
                     </ItemTemplate>
                     <FooterTemplate>
-                        <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"10\">暂无记录</td></tr>" : ""%>
+                        <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"13\">暂无记录</td></tr>" : ""%>
   </table>
                     </FooterTemplate>
                 </asp:Repeater>
             </div>
             <!--/列表-->
             <div style="font-size: 12px; line-height: 1.6em;">
-                <span style="display: block;">本页：<asp:Label ID="pCount" runat="server">0</asp:Label>条记录，合计订单数量：<asp:Label ID="pOrderCount" runat="server">0</asp:Label>，订单应收：<asp:Label ID="pOrderShou" runat="server">0</asp:Label>，非考核收入：<asp:Label ID="pUnIncome" runat="server">0</asp:Label>，订单应付：<asp:Label ID="pOrderFu" runat="server">0</asp:Label>，非考核成本：<asp:Label ID="pUnCost" runat="server">0</asp:Label>，订单利润：<asp:Label ID="pOrderProfit" runat="server">0</asp:Label>，订单税费：<asp:Label ID="pCust" runat="server">0</asp:Label>，业绩利润：<asp:Label ID="pProfit" runat="server">0</asp:Label></span>
-                <span style="display: block; float: left;">总计：<asp:Label ID="tCount" runat="server">0</asp:Label>条记录，合计订单数量：<asp:Label ID="tOrderCount" runat="server">0</asp:Label>，订单应收：<asp:Label ID="tOrderShou" runat="server">0</asp:Label>，非考核收入：<asp:Label ID="tUnIncome" runat="server">0</asp:Label>，订单应付：<asp:Label ID="tOrderFu" runat="server">0</asp:Label>，非考核成本：<asp:Label ID="tUnCost" runat="server">0</asp:Label>，订单利润：<asp:Label ID="tOrderProfit" runat="server">0</asp:Label>，订单税费：<asp:Label ID="tCust" runat="server">0</asp:Label>，业绩利润：<asp:Label ID="tProfit" runat="server">0</asp:Label></span>
+                <span style="display: block;">本页：<asp:Label ID="pCount" runat="server">0</asp:Label>条记录，合计订单数量：<asp:Label ID="pOrderCount" runat="server">0</asp:Label>，订单应收：<asp:Label ID="pOrderShou" runat="server">0</asp:Label>，非考核收入：<asp:Label ID="pUnIncome" runat="server">0</asp:Label>，订单应付：<asp:Label ID="pOrderFu" runat="server">0</asp:Label>，非考核成本：<asp:Label ID="pUnCost" runat="server">0</asp:Label>，提成：<asp:Label ID="pOrderTicheng" runat="server">0</asp:Label>，订单税费：<asp:Label ID="pCust" runat="server">0</asp:Label>，提成前业绩：<asp:Label ID="pProfit1" runat="server">0</asp:Label>，提成后业绩：<asp:Label ID="pProfit2" runat="server">0</asp:Label></span>
+                <span style="display: block; float: left;">总计：<asp:Label ID="tCount" runat="server">0</asp:Label>条记录，合计订单数量：<asp:Label ID="tOrderCount" runat="server">0</asp:Label>，订单应收：<asp:Label ID="tOrderShou" runat="server">0</asp:Label>，非考核收入：<asp:Label ID="tUnIncome" runat="server">0</asp:Label>，订单应付：<asp:Label ID="tOrderFu" runat="server">0</asp:Label>，非考核成本：<asp:Label ID="tUnCost" runat="server">0</asp:Label>，提成：<asp:Label ID="tOrderTicheng" runat="server">0</asp:Label>，订单税费：<asp:Label ID="tCust" runat="server">0</asp:Label>，提成前业绩：<asp:Label ID="tProfit1" runat="server">0</asp:Label>，提成后业绩：<asp:Label ID="tProfit2" runat="server">0</asp:Label></span>
             </div>
             <div class="dRemark">
                 <p></p>

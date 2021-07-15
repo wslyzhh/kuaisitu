@@ -21,9 +21,12 @@
                         <span>数量：{{item.oCount}}</span>
                     </div>
                     <div class="bottom flex flex_s_a">
-                        <span>订单利润：{{item.oProfit}}</span>
-                        <span>订单税费：{{item.oCust}}</span>
-                        <span>业绩利润：{{item.bProfit}}</span>
+                        <span>提成前业绩：{{item.profit1}}</span>
+                        <span>提成前业绩率：{{item.profitRatio1}}%</span>
+                    </div>
+                    <div class="bottom flex flex_s_a">
+                        <span>提成后业绩：{{item.profit2}}</span>
+                        <span>提成后业绩率：{{item.profitRatio2}}%</span>
                     </div>
                 </li>
             </ul>
@@ -58,23 +61,6 @@ export default {
                     list:[]
                 },
                 {
-                    title:'是否排除员工提成',
-                    class:'',
-                    s_key:'isRemove',
-                    list:[
-                        {
-                            isChecked:false,
-                            text:'是',
-                            value:true
-                        },
-                        {
-                            isChecked:true,
-                            text:'否',
-                            value:false
-                        },
-                    ]
-                },
-                {
                     title:'是否包含税费成本',
                     class:'',
                     s_key:'isCust',
@@ -96,9 +82,9 @@ export default {
             showSearchBox:false,
             startTime:null,
             endTime:null,
-            isRemove:false,
             isCust:true,
-            status:null
+            status:null,
+            lockStatus:null
         };
     },
     components: {
@@ -188,12 +174,14 @@ export default {
         changeActive(actives){
             this.showLabel = false
             actives.map((item,index) => {
-                if(item.key == 'isRemove'){
-                    this.isRemove = item.value
-                }else if(item.key == 'isCust'){
+                if(item.key == 'isCust'){
                     this.isCust = item.value
                 }else if(item.key == 'status'){
                     this.status = item.value
+                }
+                else if(item.key == 'o_lockstatus') 
+                {
+                    this.lockStatus = item.value
                 }
             })
             this.achievementStatisticList()
@@ -206,14 +194,14 @@ export default {
                 this.endTime = this.getNowFormatDate()
                 this.startTime = this.getNowFormatDate(0)
             }
-            let managerid =this.userId
+            let managerid =14//this.userId
             let params = {
                 type:this.tabIndex,
                 sMonth:this.startTime,
                 eMonth:this.endTime,
                 status:this.status,
-                isRemove:this.isRemove,
                 isCust:this.isCust,
+                lockStatus:this.lockStatus,
                 pageIndex:1,
                 pageSize:10, 
                 managerid

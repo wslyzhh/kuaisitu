@@ -78,6 +78,19 @@
             $(".upload-album2").InitUploader({ btntext: "批量上传", ftype: 2, multiple: true, oID: "<%=oID %>", filetypes: "<%=sysConfig.fileextension %>", filesize: "<%=sysConfig.attachsize %>", sendurl: "../../tools/upload_ajax.ashx", swf: "../../scripts/webuploader/uploader.swf" });
             $("#uploadDiv2").children(".upload-btn").append("<div class='webuploader-pick1'>部分人员可查看，文件类型：<%=sysConfig.fileextension %>，文件大小限制：<%=sysConfig.attachsize %>KB</div>");
 
+
+            //共同业务员            
+            $("#personAddButton").click(function () {
+                var liObj = $(this).parent();
+                var d = top.dialog({
+                    id: 'personDialogId',
+                    padding: 0,
+                    title: "共同业务员",
+                    url: 'admin/order/selectEmployee.aspx'
+                }).showModal();
+                //将容器对象传进去
+                d.data = liObj;
+            });
             //绑定活动归属地
             $("#specAddButton").click(function () {
                 var liObj = $(this).parent();
@@ -85,7 +98,8 @@
                     id: 'specDialogId',
                     padding: 0,
                     title: "活动归属地",
-                    url: 'admin/order/order_place.aspx'
+                    height:"180px",
+                    url: 'admin/order/order_place1.aspx'
                 }).showModal();
                 //将容器对象传进去
                 d.data = liObj;
@@ -249,7 +263,7 @@
                 });
             });
             //合作分成
-            $("#btnSharing").click(function () {
+            <%--$("#btnSharing").click(function () {
                 layer.open({
                     type: 2,
                     title: '添加合作分成',
@@ -259,7 +273,7 @@
                             location.reload();
                         }
                 });
-            });
+            });--%>
 
             $("input[name=cbAllCheck]").click(function () {
                 if ($(this).prop("checked") == true) {
@@ -283,7 +297,7 @@
                     content: 'chkDetails.aspx?finid=' + finid
                 });
             });     
-            
+
         });
         //获取联系人的联系号码
         function getContactPhone(obj) {
@@ -293,10 +307,20 @@
                 });
         }
         //删除附件节点
-        function delNode(obj) {
+        function delNode(obj,ratio) {
+            if (ratio != null) {
+                $(obj).parent().siblings().each(function () {
+                    if ($(this).attr("data-type") == "1") {
+                        //更新隐藏域的值
+                        var vlist = $(this).children("input[name=hide_place]").val().split('-');
+                        console.log(vlist);
+                        $(this).children("input[name=hide_place]").val(vlist[0] + '-' + vlist[1] + '-' + (parseInt(vlist[2]) + parseInt(ratio)) + '-' + vlist[3]);
+                        $(this).children(".ratioText").text(parseInt($(this).children(".ratioText").text()) + parseInt(ratio));
+                    }
+                });
+            }
             $(obj).parent().remove();
         }
-
         //人员选择
         function chooseEmployee(obj, n, flag,isShow,IsshowNum,hasOrder) {
             //业务报账员和业务执行人员必须在选择活动归属地后才能选择
@@ -310,7 +334,7 @@
                     return;
                 }
                 $("input[name='hide_place']").each(function (index, item) {
-                    area += ',' + $(this).val();
+                    area += ',' + $(this).val().split('-')[0];
                 });
                 area = area + ',';
             }
@@ -824,7 +848,7 @@
                     <tr>
                         <th>订单号</th>
                         <td><%=oID %></td>
-                        <th>下单人</th>
+                        <th>业务员</th>
                         <td>
                             <div class="txt-item">
                                 <ul>
@@ -844,9 +868,24 @@
                             </div>
                             <asp:Label ID="labOwner" runat="server"></asp:Label>
                         </td>
-                        <th>税费成本</th>
+                        <th>共同业务员</th>
                         <td>
-                            <asp:Label ID="labfinanceCost" runat="server"></asp:Label>
+                            <div class="txt-item">
+                                <ul>
+                                    <asp:Repeater ID="rptEmployee6" runat="server">
+                                        <ItemTemplate>
+                                            <li title="<%#Eval("[\"op_number\"]")%>">
+                                                <input name="hide_employee6" type="hidden" value="<%#Eval("[\"op_name\"]")%>-<%#Eval("[\"op_number\"]")%>-<%#Eval("[\"op_area\"]")%>-<%#Eval("[\"op_ratio\"]") %>" />
+                                                <a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>
+                                                <span><%#Eval("[\"op_number\"]")%><%#Eval("[\"op_name\"]")%>(<%#Eval("[\"op_ratio\"]")%>%)</span>
+                                            </li>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                    <li class="icon-btn" id="li1" runat="server">
+                                        <a id="personAddButton"><i class="iconfont icon-close"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -909,10 +948,10 @@
                                 <ul>
                                     <asp:Repeater ID="rptAreaList" runat="server">
                                         <ItemTemplate>
-                                            <li>
-                                                <input name="hide_place" type="hidden" value="<%#Eval("Key")%>" />
-                                                <a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>
-                                                <span><%#Eval("Value")%></span>
+                                            <li data-type="<%#Eval("type") %>">
+                                                <input name="hide_place" type="hidden" value="<%#Eval("area")%>-<%#Eval("areaText")%>-<%#Eval("ratio") %>-<%#Eval("type") %>" />
+                                                <%#Eval("type").ToString()=="1"?"":"<a href='javascript:' class='del' title='删除' onclick='delNode(this,"+Eval("ratio")+");'><i class='iconfont icon-remove'></i></a>" %>
+                                                <span><%#Eval("areaText")%></span>(<span class="ratioText"><%#Eval("ratio") %></span>%)
                                             </li>
                                         </ItemTemplate>
                                     </asp:Repeater>
@@ -1060,7 +1099,7 @@
                     </tr>
                     <tr id="trFile" runat="server">
                         <th>二类活动文件</th>
-                        <td colspan="5" style="padding-top: 13px;">
+                        <td colspan="3" style="padding-top: 13px;">
                             <div class="upload-box upload-album2" id="uploadDiv2" runat="server"></div>
                             <input type="hidden" name="hidFocusPhoto2" id="hidFocusPhoto2" runat="server" class="focus-photo" />
                             <%--<span style="color: red;">需生成订单号后才能上传文件，文件类型：<%=sysConfig.fileextension %>，文件大小限制：<%=sysConfig.attachsize %>KB</span>--%>
@@ -1085,6 +1124,10 @@
                                 </ul>
                             </div>
                         </td>
+                        <th>税费成本</th>
+                        <td>
+                            <asp:Label ID="labfinanceCost" runat="server"></asp:Label>
+                        </td>
                     </tr>
                 </table>
                 <div class="btn-wrap" style="padding: 10px 0;">
@@ -1101,7 +1144,7 @@
                 <!--执行备用金借款明细-->
                 <asp:Repeater ID="rptunBusinessList" runat="server">
                     <HeaderTemplate>
-                        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                        <fieldset class="layui-elem-field layui-field-title" style="margin: 10px;">
                             <legend>执行备用金借款明细</legend>
                         </fieldset>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
@@ -1149,7 +1192,7 @@
                 <!--应收付-->
                 <asp:Repeater ID="rptNature" runat="server" OnItemDataBound="rptNature_ItemDataBound">
                     <ItemTemplate>
-                        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                        <fieldset class="layui-elem-field layui-field-title" style="margin: 10px;">
                             <legend><%#Eval("na_name")%></legend>
                         </fieldset>
                         <div style="text-align:right; font-weight:bolder;">毛利：<%#Eval("profit") %></div>
@@ -1242,7 +1285,7 @@
                 <!--发票申请汇总-->
                 <asp:Repeater ID="rptInvoiceList" runat="server" OnItemDataBound="rptInvoiceList_ItemDataBound">
                     <HeaderTemplate>
-                        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                        <fieldset class="layui-elem-field layui-field-title" style="margin: 10px;">
                             <legend>发票申请汇总</legend>
                         </fieldset>
                         <div class="invCollect">
@@ -1300,7 +1343,7 @@
                 <!--已收付款汇总-->
                 <asp:Repeater ID="rptList" runat="server">
                     <HeaderTemplate>
-                        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                        <fieldset class="layui-elem-field layui-field-title" style="margin: 10px;">
                             <legend>已收付款汇总</legend>
                         </fieldset>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
@@ -1356,7 +1399,7 @@
                 <!--结算汇总-->
                 <asp:Repeater ID="rptCollect" runat="server" OnItemDataBound="rptCollect_ItemDataBound">
                     <HeaderTemplate>
-                        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                        <fieldset class="layui-elem-field layui-field-title" style="margin: 10px;">
                             <legend>结算汇总</legend>
                         </fieldset>
                         <div class="invCollect">
@@ -1386,6 +1429,86 @@
                             <td><%# Eval("finMoney") %></td>
                             <td><%# Eval("rpdMoney") %></td>
                             <td><%# Eval("unReceiptPay") %></td>
+                        </tr>
+                    </ItemTemplate>
+                    <FooterTemplate>
+                        </table>
+                    </FooterTemplate>
+                </asp:Repeater>
+                <!--员工业绩-->
+                <asp:Repeater ID="userAchievement" runat="server">
+                    <HeaderTemplate>
+                        <fieldset class="layui-elem-field layui-field-title" style="margin: 10px;">
+                            <legend>员工业绩</legend>
+                        </fieldset>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
+                            <tr style="text-align: center;">
+                                <th>业务员</th>
+                                <th width="9%">应收</th>
+                                <th width="9%">非考核收入</th>
+                                <th width="9%">应付</th>
+                                <th width="9%">非考核成本</th>
+                                <th width="9%">提成</th>
+                                <th width="9%">税费</th>
+                                <th width="9%">提成前业绩</th>
+                                <th width="9%">提成前业绩率</th>
+                                <th width="9%">提成后业绩</th>
+                                <th width="9%">提成后业绩率</th>
+                            </tr>
+                    </HeaderTemplate>
+                    <ItemTemplate>
+                        <tr style="<%#Eval("name")=="合计"?"text-align: center;font-weight:bolder;":"text-align: center;" %>" class="userRow">
+                            <td><%#Eval("name") %></td>
+                            <td><%#Eval("yingshou") %></td>
+                            <td><%#Eval("feikaoheshouru")%></td>
+                            <td><%#Eval("yingfu") %></td>
+                            <td><%#Eval("feikaohezhichu") %></td>
+                            <td><%#Eval("ticheng") %></td>
+                            <td><%#Eval("shuifei") %></td>
+                            <td><%#Eval("profit1") %></td>
+                            <td><%#Eval("profitRatio1") %>%</td>
+                            <td><%#Eval("profit2") %></td>
+                            <td><%#Eval("profitRatio2") %>%</td>
+                        </tr>
+                    </ItemTemplate>
+                    <FooterTemplate>                       
+                        </table>
+                    </FooterTemplate>
+                </asp:Repeater>
+                <!--区域业绩-->
+                <asp:Repeater ID="areaAchievement" runat="server">
+                    <HeaderTemplate>
+                        <fieldset class="layui-elem-field layui-field-title" style="margin: 10px;">
+                            <legend>区域业绩</legend>
+                        </fieldset>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
+                            <tr style="text-align: center;">
+                                <th>区域</th>
+                                <th width="9%">应收</th>
+                                <th width="9%">非考核收入</th>
+                                <th width="9%">应付</th>
+                                <th width="9%">非考核成本</th>
+                                <th width="9%">提成</th>
+                                <th width="9%">税费</th>
+                                <th width="9%">提成前业绩</th>
+                                <th width="9%">提成前业绩率</th>
+                                <th width="9%">提成后业绩</th>
+                                <th width="9%">提成后业绩率</th>
+                            </tr>
+                    </HeaderTemplate>
+                    <ItemTemplate>
+                        <tr style="<%#Eval("name")=="合计"?"text-align: center;font-weight:bolder;":"text-align: center;" %>" class="areaRow">
+                            <td><%#Eval("name") %></td>
+                            <td><%#Eval("yingshou") %></td>
+                            <td><%#Eval("feikaoheshouru")%></td>
+                            <td><%#Eval("yingfu") %></td>
+                            <td><%#Eval("feikaohezhichu") %></td>
+                            <td><%#Eval("ticheng") %></td>
+                            <td><%#Eval("shuifei") %></td>
+                            <td><%#Eval("profit1") %></td>
+                            <td><%#Eval("profitRatio1") %>%</td>
+                            <td><%#Eval("profit2") %></td>
+                            <td><%#Eval("profitRatio2") %>%</td>
                         </tr>
                     </ItemTemplate>
                     <FooterTemplate>
@@ -1513,7 +1636,7 @@
                 <input id="btnReceiptPay" runat="server" type="button" value="添加应收付" class="btn" />
                 <%--<input id="btnPay" runat="server" type="button" value="添加应付" class="btn" />--%>
                 <input id="btnInvoince" runat="server" type="button" value="发票申请" class="btn" />
-                <input id="btnSharing" runat="server" type="button" value="合作分成" class="btn" />
+                <%--<input id="btnSharing" runat="server" type="button" value="合作分成" class="btn" />--%>
                 <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript: history.back(-1);" />
             </div>
         </div>

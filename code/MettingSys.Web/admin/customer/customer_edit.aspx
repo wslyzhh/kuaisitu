@@ -317,7 +317,7 @@
                                             <td><%#Eval("cb_bankAddress")%></td>
                                             <td><%#MettingSys.Common.BusinessDict.isUseStatus()[Convert.ToBoolean(Eval("cb_flag"))]%></td>
                                             <td align="center">
-                                                <%#Eval("c_flag").ToString()=="2" || Eval("c_type").ToString()=="3"?"":"<a href=\"javascript:;\" onclick=\"editBank('"+DTEnums.ActionEnum.Edit+"','"+Eval("cb_id")+"')\">修改</a>"%>
+                                                <%#Eval("c_flag").ToString()=="2"?"":"<a href=\"javascript:;\" onclick=\"editBank('"+DTEnums.ActionEnum.Edit+"','"+Eval("cb_id")+"')\">修改</a>"%>
                                             </td>
                                         </tr>
                                     </ItemTemplate>
