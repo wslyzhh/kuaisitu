@@ -85,14 +85,14 @@
             $(obj).parent().remove();
         }
         function toOrderAnalyze(area) {
-            location.href = "OrderAnalyze_list.aspx?statistic=0&txtsDate1=" + $('#txtsDate').val() + "&txteDate1=" + $('#txteDate').val() + "&ddlstatus=" + $('#ddlstatus').val() + "&ddllock=" + $('#ddllock').val() + "&ddlorderarea=" + area + "";
+            location.href = "OrderAnalyze_list.aspx?statistic=0&txtsDate1=" + $('#txtsDate').val() + "&txteDate1=" + $('#txteDate').val() + "&ddlstatus=" + $('#ddlstatus').val() + "&ddllock=" + $('#ddllock').val() + "&ddlarea=" + area + "";
         }
         function toFinanceList(ftype, area, detail) {
             var str = "";
             if ($("#cbIsRemove").attr("checked") == "checked") {
                 str += "&isRemove=1";
             }
-            location.href = "../finance/finance_list.aspx?type=" + ftype + "&txtOsdate=" + $('#txtsDate').val() + "&txtOedate=" + $('#txteDate').val() + "&ddlstatus=" + $('#ddlstatus').val() + "&ddllock=" + $('#ddllock').val() + "&ddlfinarea=" + area + "&txtDetails=" + escape(detail) + "" + str;
+            location.href = "../finance/finance_list.aspx?type=" + ftype + "&txtOsdate=" + $('#txtsDate').val() + "&txtOedate=" + $('#txteDate').val() + "&ddlstatus=" + $('#ddlstatus').val() + "&ddllock=" + $('#ddllock').val() + "&ddlarea=" + area + "&txtDetails=" + escape(detail) + "" + str;
         }
     </script>
     <style type="text/css">
@@ -169,17 +169,29 @@
                             </li>
                         </ul>
                     </div>
-                排除员工提成：
-                    <div class="rule-single-checkbox">
-                        <asp:CheckBox ID="cbIsRemove" runat="server" />
-                    </div>
                 包含税费成本：
                     <div class="rule-single-checkbox">
                         <asp:CheckBox ID="cbIsCust" runat="server" Checked="true" />
+                    </div>                
+                排序：
+                    <div class="rule-single-select">
+                        <asp:DropDownList ID="ddlorderType" runat="server">
+                            <asp:ListItem Value="(shou-fu-oCust+ticheng)">提成前业绩</asp:ListItem>
+                            <asp:ListItem Value=" case when (shou-unIncome)<>0 then (shou-fu-oCust+ticheng)*100/(shou-unIncome) else 0 end ">提成前业绩率</asp:ListItem>
+                            <asp:ListItem Value="(shou-fu-oCust)">提成后业绩</asp:ListItem>
+                            <asp:ListItem Value=" case when (shou-unIncome)<>0 then (shou-fu-oCust)*100/(shou-unIncome) else 0 end ">提成后业绩率</asp:ListItem>
+                            <asp:ListItem Value="shou-unIncome">应收-非考核收入</asp:ListItem>
+                        </asp:DropDownList>
+                    </div>
+                    <div class="rule-single-select">
+                        <asp:DropDownList ID="ddlorder" runat="server">
+                            <asp:ListItem Value="Asc">升序</asp:ListItem>
+                            <asp:ListItem Value="Desc">降序</asp:ListItem>
+                        </asp:DropDownList>
                     </div>
                 <input type="hidden" name="action" value="Search" />
                 <input <%--id="btnSave"--%> type="submit" class="btn" value="查询" />
-                <a href="<%=Utils.CombUrlTxt("AreaAchievementStatistic_list.aspx", "Excel={0}&txtsDate={1}&txteDate={2}&ddllock={3}&ddlstatus={4}&hide_place={5}&cbIsRemove={6}&cbIsCust={7}", "on", _sMonth, _eMonth, _lockstatus, _status, _area, _isRemove, _isCust) %>"><i class="iconfont icon-exl"></i><span>导出Excel</span></a>
+                <a href="<%=Utils.CombUrlTxt("AreaAchievementStatistic_list.aspx", "Excel={0}&txtsDate={1}&txteDate={2}&ddllock={3}&ddlstatus={4}&hide_place={5}&cbIsCust={6}&action={7}&ddlorderType={8}&ddlorder={9}", "on", _sMonth, _eMonth, _lockstatus, _status, _area, _isCust,action,_ordertype,_order) %>"><i class="iconfont icon-exl"></i><span>导出Excel</span></a>
             </div>
         </div>
 
@@ -189,38 +201,46 @@
                 <HeaderTemplate>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr style="text-align: left;">
-                            <th width="10%">区域</th>
-                            <th width="10%">订单数量</th>
-                            <th width="10%">应收总额</th>
-                            <th width="10%">非考核收入</th>
-                            <th width="10%">应付总额</th>
-                            <th width="10%">非考核成本</th>
-                            <th width="10%">订单税费</th>
-                            <th>业绩利润</th>
+                                <th>区域</th>
+                                <th width="6%">订单数量</th>
+                                <th width="8%">应收</th>
+                                <th width="8%">非考核收入</th>
+                                <th width="8%">应付</th>
+                                <th width="8%">非考核成本</th>
+                                <th width="8%">提成</th>
+                                <th width="8%">税费</th>
+                                <th width="8%">提成前业绩</th>
+                                <th width="8%">提成前业绩率</th>
+                                <th width="8%">提成后业绩</th>
+                                <th width="8%">提成后业绩率</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
-                        <td><%#Eval("de_area")%>-<%# Eval("de_subname")%></td>
-                        <td><a onclick="toOrderAnalyze('<%#Eval("de_area")%>')" href="javascript:void(0);"><%# Eval("oCount") %></a></td>
-                        <td><a onclick="toFinanceList(true,'<%#Eval("de_area")%>','')" href="javascript:void(0);"><%# Eval("shou") %></a></td>
-                        <td><a onclick="toFinanceList(true,'<%#Eval("de_area")%>','代收代付')" href="javascript:void(0);"><%# Eval("unIncome") %></a></td>
-                        <td><a onclick="toFinanceList(false,'<%#Eval("de_area")%>','')" href="javascript:void(0);"><%# Eval("fu")%></a></td>
-                        <td><a onclick="toFinanceList(false,'<%#Eval("de_area")%>','代收代付')" href="javascript:void(0);"><%# Eval("unCost") %></a></td>
-                        <td><%# Eval("o_financeCust")%></td>
-                        <td><%# Eval("profit") %></td>
+                        <td><%#Eval("p_name")%>-<%# Eval("p_chnName")%></td>
+                        <td><a onclick="toOrderAnalyze('<%#Eval("p_name")%>')" href="javascript:void(0);"><%# Eval("oCount") %></a></td>
+                        <td><a onclick="toFinanceList(true,'<%#Eval("p_name")%>','')" href="javascript:void(0);"><%# Eval("shou") %></a></td>
+                        <td><a onclick="toFinanceList(true,'<%#Eval("p_name")%>','代收代付')" href="javascript:void(0);"><%# Eval("unIncome") %></a></td>
+                        <td><a onclick="toFinanceList(false,'<%#Eval("p_name")%>','')" href="javascript:void(0);"><%# Eval("fu")%></a></td>
+                        <td><a onclick="toFinanceList(false,'<%#Eval("p_name")%>','代收代付')" href="javascript:void(0);"><%# Eval("unCost") %></a></td>
+                        <td><%# Eval("ticheng") %></td>
+                        <td><%# Eval("oCust") %></td>
+                        <td><%# Eval("profit1") %></td>
+                        <td><%# Eval("profitRatio1") %>%</td>
+                        <td><%# Eval("profit2") %></td>
+                        <td><%# Eval("profitRatio2") %>%</td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"8\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"12\">暂无记录</td></tr>" : ""%>
   </table>
                 </FooterTemplate>
             </asp:Repeater>
         </div>
         <!--/列表-->
         <div style="font-size: 12px; line-height: 1.6em;">
-            <span style="display:block;">本页：<asp:Label ID="pCount" runat="server">0</asp:Label>条记录，合计订单数量：<asp:Label ID="pOrderCount" runat="server">0</asp:Label>，应收总额：<asp:Label ID="pShou" runat="server">0</asp:Label>，非考核收入：<asp:Label ID="pUnIncome" runat="server">0</asp:Label>，应付总额：<asp:Label ID="pFu" runat="server">0</asp:Label>，非考核成本：<asp:Label ID="pUnCost" runat="server">0</asp:Label>，订单税费：<asp:Label ID="pCust" runat="server">0</asp:Label>，业绩利润：<asp:Label ID="pProfit" runat="server">0</asp:Label></span>
-            <span style="display:block;float: left;">总计：<asp:Label ID="tCount" runat="server">0</asp:Label>条记录，合计订单数量：<asp:Label ID="tOrderCount" runat="server">0</asp:Label>，应收总额：<asp:Label ID="tShou" runat="server">0</asp:Label>，非考核收入：<asp:Label ID="tUnIncome" runat="server">0</asp:Label>，应付总额：<asp:Label ID="tFu" runat="server">0</asp:Label>，非考核成本：<asp:Label ID="tUnCost" runat="server">0</asp:Label>，订单税费：<asp:Label ID="tCust" runat="server">0</asp:Label>，业绩利润：<asp:Label ID="tProfit" runat="server">0</asp:Label></span>
+            <span style="display:block;">本页：<asp:Label ID="pCount" runat="server">0</asp:Label>条记录，合计订单数量：<asp:Label ID="pOrderCount" runat="server">0</asp:Label>，应收总额：<asp:Label ID="pShou" runat="server">0</asp:Label>，非考核收入：<asp:Label ID="pUnIncome" runat="server">0</asp:Label>，应付总额：<asp:Label ID="pFu" runat="server">0</asp:Label>，非考核成本：<asp:Label ID="pUnCost" runat="server">0</asp:Label>，订单税费：<asp:Label ID="pCust" runat="server">0</asp:Label>，提成：<asp:Label ID="pTicheng" runat="server">0</asp:Label>，提成前业绩：<asp:Label ID="pProfit1" runat="server">0</asp:Label>，提成后业绩：<asp:Label ID="pProfit2" runat="server">0</asp:Label></span>
+            <span style="display:block;float: left;">总计：<asp:Label ID="tCount" runat="server">0</asp:Label>条记录，合计订单数量：<asp:Label ID="tOrderCount" runat="server">0</asp:Label>，应收总额：<asp:Label ID="tShou" runat="server">0</asp:Label>，非考核收入：<asp:Label ID="tUnIncome" runat="server">0</asp:Label>，应付总额：<asp:Label ID="tFu" runat="server">0</asp:Label>，非考核成本：<asp:Label ID="tUnCost" runat="server">0</asp:Label>，订单税费：<asp:Label ID="tCust" runat="server">0</asp:Label>，提成：<asp:Label ID="tTicheng" runat="server">0</asp:Label>，提成前业绩：<asp:Label ID="tProfit1" runat="server">0</asp:Label>，提成后业绩：<asp:Label ID="tProfit2" runat="server">0</asp:Label></span>
         </div>
         <div class="dRemark">
             <p></p>

@@ -230,7 +230,10 @@
     <Content Include="admin\order\mutliSharing.aspx" />
     <Content Include="admin\order\order_edit.aspx" />
     <Content Include="admin\order\order_list.aspx" />
+    <Content Include="admin\order\order_person.aspx" />
     <Content Include="admin\order\order_place.aspx" />
+    <Content Include="admin\order\order_place1.aspx" />
+    <Content Include="admin\order\selectEmployee.aspx" />
     <Content Include="admin\selectEmployee.aspx" />
     <Content Include="admin\self\selfFinance_list.aspx" />
     <Content Include="admin\self\selfMessage.aspx" />
@@ -942,6 +945,7 @@
     <Content Include="scripts\uploader.js" />
     <Content Include="scripts\webuploader\uploader.swf" />
     <Content Include="scripts\webuploader\webuploader.min.js" />
+    <Content Include="test.aspx" />
     <Content Include="tools\dingtalk_ajax.ashx" />
     <Content Include="tools\dingtalk_login.ashx" />
     <Content Include="watermark.png" />
@@ -1635,12 +1639,32 @@
     <Compile Include="admin\order\order_list.aspx.designer.cs">
       <DependentUpon>order_list.aspx</DependentUpon>
     </Compile>
+    <Compile Include="admin\order\order_person.aspx.cs">
+      <DependentUpon>order_person.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\order\order_person.aspx.designer.cs">
+      <DependentUpon>order_person.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\order\order_place.aspx.cs">
       <DependentUpon>order_place.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="admin\order\order_place.aspx.designer.cs">
       <DependentUpon>order_place.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\order\order_place1.aspx.cs">
+      <DependentUpon>order_place1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\order\order_place1.aspx.designer.cs">
+      <DependentUpon>order_place1.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\order\selectEmployee.aspx.cs">
+      <DependentUpon>selectEmployee.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\order\selectEmployee.aspx.designer.cs">
+      <DependentUpon>selectEmployee.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\selectEmployee.aspx.cs">
       <DependentUpon>selectEmployee.aspx</DependentUpon>
@@ -2121,6 +2145,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalR\messageEntity.cs" />
     <Compile Include="SignalR\MessageHub.cs" />
+    <Compile Include="test.aspx.cs">
+      <DependentUpon>test.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="test.aspx.designer.cs">
+      <DependentUpon>test.aspx</DependentUpon>
+    </Compile>
     <Compile Include="tools\admin_ajax.ashx.cs">
       <DependentUpon>admin_ajax.ashx</DependentUpon>
     </Compile>

@@ -88,8 +88,8 @@ export default {
 			   },
 		   ],
 		   showOrderList:[],
-		   pageTotal:9,
-		   recordTotal:9,
+		   pageTotal:0,
+		   recordTotal:0,
 		   searchData:{
 			   pageIndex:0,
 			   pageSize:10,
@@ -199,7 +199,6 @@ export default {
 				_this.getLockStatus({ddkey:'dingzreafyvgzklylomj'}),// 锁单状态
 				_this.getFstatus({ddkey:'dingzreafyvgzklylomj'})// 订单状态
 			]).then(function(res){
-				console.log(res)
 				let source = []
 				res.map(function(item,index){
 					if(200 == item.status){

@@ -67,13 +67,14 @@ namespace MettingSys.Web.admin.order
                 li3.Visible = false;
                 li4.Visible = false;
                 li5.Visible = false;
+                li6.Visible = false;
                 _pushstatus = "True";
                 _flag = "0";
             }
 
             manager = GetAdminInfo();
             this.pageSize = GetPageSize(10); //每页数量
-            if (flag=="1")
+            if (flag=="1" || flag == "6")
             {
                 _person1 = manager.user_name;
                 txtPerson1.Enabled = false;
@@ -104,10 +105,14 @@ namespace MettingSys.Web.admin.order
                 currentUser = manager.user_name;
                 whereOrderBy = " op_addTime1 desc,o_addDate desc,o_id desc";
             }
+            else if (flag == "6")
+            {
+
+            }
             if (!Page.IsPostBack)
             {
                 ChkAdminLevel("sys_order_list", DTEnums.ActionEnum.View.ToString()); //检查权限
-                if (flag != "0" && flag != "1" && flag != "2" && flag != "4" && string.IsNullOrEmpty(DTRequest.GetString("page")))
+                if (flag != "0" && flag != "1" && flag != "2" && flag != "4" && flag != "6" && string.IsNullOrEmpty(DTRequest.GetString("page")))
                 {
                     _lockstatus = "3";
                     _dstatus = "5";
@@ -386,7 +391,7 @@ namespace MettingSys.Web.admin.order
             }
             if (!string.IsNullOrEmpty(_person1))
             {
-                strTemp.Append(" and (op_number='" + _person1 + "' or op_name='" + _person1 + "')");
+                strTemp.Append(" and (op_number='" + _person1 + "' or op_name='" + _person1 + "' or exists(select * from MS_OrderPerson where op_oid=o_id and op_type =6 and (op_number ='" + _person1 + "' or op_name ='" + _person1 + "')))");
             }
             if (!string.IsNullOrEmpty(_person2))
             {
@@ -479,8 +484,11 @@ namespace MettingSys.Web.admin.order
             {
                 strTemp.Append(" and exists (select * from ms_orderperson where o_id=op_oid and op_type=4 and op_number='" + manager.user_name + "')");
             }
-            else {
+            else if (flag == "5") {
                 strTemp.Append(" and exists (select * from ms_orderperson where o_id=op_oid and op_type=5 and op_number='" + manager.user_name + "')");
+            }
+            else if (flag == "6") {
+                strTemp.Append(" and exists (select * from ms_orderperson where o_id=op_oid and op_type=6 and op_number='" + manager.user_name + "')");
             }
             return strTemp.ToString();
         }
@@ -534,7 +542,7 @@ namespace MettingSys.Web.admin.order
             _edate2 = DTRequest.GetFormString("txteDate2");
             _area = DTRequest.GetFormString("ddlarea");
             _orderarea = DTRequest.GetFormString("ddlorderarea");
-            if (flag == "1")
+            if (flag == "1" || flag == "6")
             {
                 _person1 = manager.user_name;
                 txtPerson1.Enabled = false;
@@ -761,7 +769,7 @@ namespace MettingSys.Web.admin.order
                     row.CreateCell(3).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["c_name"]));
                     row.CreateCell(4).SetCellValue(Utils.ObjectToStr(dt.Rows[i]["o_contractPrice"]));
                     row.CreateCell(5).SetCellValue(ConvertHelper.toDate(dt.Rows[i]["o_sdate"]).Value.ToString("yyyy-MM-dd") + "/" + ConvertHelper.toDate(dt.Rows[i]["o_sdate"]).Value.ToString("yyyy-MM-dd"));
-                    row.CreateCell(6).SetCellValue(new BLL.department().getAreaText(Utils.ObjectToStr(dt.Rows[i]["o_place"])) );
+                    row.CreateCell(6).SetCellValue(new BLL.department().getAreaText(Utils.ObjectToStr(dt.Rows[i]["place"])) );
                     row.CreateCell(7).SetCellValue(BusinessDict.fStatus()[Utils.ObjToByte(dt.Rows[i]["o_status"])]);
                     row.CreateCell(8).SetCellValue(BusinessDict.pushStatus()[Utils.StrToBool(Utils.ObjectToStr(dt.Rows[i]["o_isPush"]),false)]);
                     row.CreateCell(9).SetCellValue(BusinessDict.checkStatus()[Utils.ObjToByte(dt.Rows[i]["o_flag"])]);

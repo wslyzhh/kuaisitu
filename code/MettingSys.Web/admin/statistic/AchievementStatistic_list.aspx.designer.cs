@@ -96,15 +96,6 @@ namespace MettingSys.Web.admin.statistic
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl liemployee3;
 
         /// <summary>
-        /// cbIsRemove 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox cbIsRemove;
-
-        /// <summary>
         /// cbIsCust 控件。
         /// </summary>
         /// <remarks>
@@ -121,6 +112,24 @@ namespace MettingSys.Web.admin.statistic
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddltype;
+
+        /// <summary>
+        /// ddlorderType 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlorderType;
+
+        /// <summary>
+        /// ddlorder 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlorder;
 
         /// <summary>
         /// rptList 控件。
@@ -186,13 +195,13 @@ namespace MettingSys.Web.admin.statistic
         protected global::System.Web.UI.WebControls.Label pUnCost;
 
         /// <summary>
-        /// pOrderProfit 控件。
+        /// pOrderTicheng 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label pOrderProfit;
+        protected global::System.Web.UI.WebControls.Label pOrderTicheng;
 
         /// <summary>
         /// pCust 控件。
@@ -204,13 +213,22 @@ namespace MettingSys.Web.admin.statistic
         protected global::System.Web.UI.WebControls.Label pCust;
 
         /// <summary>
-        /// pProfit 控件。
+        /// pProfit1 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label pProfit;
+        protected global::System.Web.UI.WebControls.Label pProfit1;
+
+        /// <summary>
+        /// pProfit2 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label pProfit2;
 
         /// <summary>
         /// tCount 控件。
@@ -267,13 +285,13 @@ namespace MettingSys.Web.admin.statistic
         protected global::System.Web.UI.WebControls.Label tUnCost;
 
         /// <summary>
-        /// tOrderProfit 控件。
+        /// tOrderTicheng 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label tOrderProfit;
+        protected global::System.Web.UI.WebControls.Label tOrderTicheng;
 
         /// <summary>
         /// tCust 控件。
@@ -285,13 +303,22 @@ namespace MettingSys.Web.admin.statistic
         protected global::System.Web.UI.WebControls.Label tCust;
 
         /// <summary>
-        /// tProfit 控件。
+        /// tProfit1 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label tProfit;
+        protected global::System.Web.UI.WebControls.Label tProfit1;
+
+        /// <summary>
+        /// tProfit2 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label tProfit2;
 
         /// <summary>
         /// txtPageNum 控件。

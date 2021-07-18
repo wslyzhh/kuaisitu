@@ -13,7 +13,7 @@
     <script src="../scripts/layer/layer.js"></script>
     <script type="text/javascript" src="../scripts/artdialog/dialog-plus-min.js"></script>
     <script type="text/javascript" charset="utf-8" src="js/laymain.js"></script>
-    <script type="text/javascript" charset="utf-8" src="js/common.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/common.js?v=<%=DateTime.Now.ToString("yyyyMMddHHssmm") %>"></script>
     <style type="text/css">
         .tree-list .col-1 {
             text-align: center;
@@ -114,10 +114,10 @@
             //选择下单人时变更活动归属地
             if (api.n == 0) {
                 $(api.data1).siblings("li").remove(); //先删除所有同辈节点
-                var liHtml1 = '<li>'
-                    + '<input name="hide_place" type="hidden" value="' + area + '" />'
-                    + '<a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>'
-                    + '<span>' + getareaText(area) + '</span>'
+                var areaText = getareaText(area);
+                var liHtml1 = '<li  data-type=1>'
+                    + '<input name="hide_place" type="hidden" value="' + area + '-' + areaText+'-100-1" />'
+                    + '<span>' + areaText + '</span>(<span class="ratioText">100</span>%)'
                     + '</li>';
                 $(api.data1).before(liHtml1);
             }

@@ -23,16 +23,11 @@ namespace MettingSys.DAL
         /// <param name="filedOrder"></param>
         /// <param name="recordCount"></param>
         /// <returns></returns>
-        public DataSet getAchievementStatisticData(Dictionary<string, string> dict, int pageSize, int pageIndex, string filedOrder, out int recordCount,out int tCount,out decimal tOrderShou,out decimal tUnIncome, out decimal tOrderFu,out decimal tUnCost, out decimal tOrderProfit,out decimal tCust,out decimal tProfit, bool isPage = true)
+        public DataSet getAchievementStatisticData(Dictionary<string, string> dict, int pageSize, int pageIndex, string filedOrder, out int recordCount,out int tCount,out decimal tOrderShou,out decimal tUnIncome, out decimal tOrderFu,out decimal tUnCost, out decimal tOrderTicheng, out decimal tCust,out decimal tProfit1, out decimal tProfit2, bool isPage = true)
         {
             StringBuilder strWhere1 = new StringBuilder();
             StringBuilder strWhere2 = new StringBuilder();
-            string selectFiled = "p1.op_name,p1.op_number,p1.op_area,count(*) oCount,sum(isnull(shou,0)) shou,sum(isnull(fu,0)) fu,sum(isnull(profit,0)) oProfit,sum(isnull(o_financeCust,0)) oCust,sum(isnull(profit,0)-isnull(o_financeCust,0)) bProfit,sum(isnull(unIncome,0)) unIncome,sum(isnull(unCost,0)) unCost";
-            if (dict["type"]!="0")
-            {
-                selectFiled = "p3.op_name,p3.op_number,p3.op_area,count(*) oCount,sum(isnull(shou,0)) shou,sum(isnull(fu,0)) fu,sum(isnull(profit,0)) oProfit,sum(isnull(o_financeCust,0)) oCust,sum(isnull(profit,0)-isnull(o_financeCust,0)) bProfit,sum(isnull(unIncome,0)) unIncome,sum(isnull(unCost,0)) unCost";
-                strWhere1.Append(" and isnull(p3.op_id,0)>0");
-            }
+            string custFiled = "";
             if (dict != null)
             {
                 if (dict.ContainsKey("smonth"))
@@ -43,7 +38,7 @@ namespace MettingSys.DAL
                     }
                     else
                     {
-                        strWhere1.Append(" and datediff(MONTH,o_edate," + dict["smonth"] + ")<=0 ");
+                        strWhere1.Append(" and datediff(DAY,o_edate,'" + dict["smonth"] + "')<=0 ");
                     }
                 }
                 if (dict.ContainsKey("emonth"))
@@ -54,7 +49,7 @@ namespace MettingSys.DAL
                     }
                     else
                     {
-                        strWhere1.Append(" and datediff(MONTH,o_edate," + dict["emonth"] + ")<=0 ");
+                        strWhere1.Append(" and datediff(DAY,o_edate,'" + dict["emonth"] + "')>=0 ");
                     }
                 }
                 if (dict.ContainsKey("status"))
@@ -94,58 +89,63 @@ namespace MettingSys.DAL
                         strWhere1.Append(" and p3.op_number in ('" + dict["person"].Replace(",", "','") + "')");
                     }
                 }
-                if (dict["isRemove"] == "on")
-                {
-                    strWhere2.Append(" and (na_name<>'业务提成' and na_name<>'执行提成')  ");
-                }
                 if (dict.ContainsKey("isCust") && dict["isCust"] != "on")
                 {
-                    if (dict["type"] == "0")
+                    custFiled = "0 oCust";
+                }
+                else
+                {
+                    if (dict["type"] != "0")
                     {
-                        selectFiled = "p1.op_name, p1.op_number, p1.op_area,count(*) oCount,sum(isnull(shou,0)) shou,sum(isnull(fu,0)) fu,sum(isnull(profit,0)) oProfit,0 oCust,sum(isnull(profit,0)-0) bProfit,sum(isnull(unIncome,0)) unIncome,sum(isnull(unCost,0)) unCost";
+                        custFiled = "sum(isnull(o_financeCust,0)) oCust";
                     }
                     else
                     {
-                        selectFiled = "p3.op_name, p3.op_number, p3.op_area,count(*) oCount,sum(isnull(shou,0)) shou,sum(isnull(fu,0)) fu,sum(isnull(profit,0)) oProfit,0 oCust,sum(isnull(profit,0)-0) bProfit,sum(isnull(unIncome,0)) unIncome,sum(isnull(unCost,0)) unCost";
+                        custFiled = "Convert(decimal(10,2),sum(isnull(o_financeCust,0)*p1.op_ratio/100)) oCust";
                     }
                 }
             }
+
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select "+ selectFiled + " from MS_Order left join MS_OrderPerson p1 on o_id=p1.op_oid and p1.op_type=1");
-            strSql.Append(" left join(select fin_oid,sum(case when fin_type = 1 then isnull(fin_money, 0) else 0 end) shou,sum(case when fin_type = 0 then isnull(fin_money, 0) else 0 end) fu, sum(case when fin_type = 1 then isnull(fin_money, 0) else 0 - isnull(fin_money, 0) end) profit,sum(case when fin_type = 1 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unIncome,sum(case when fin_type = 0 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unCost from MS_finance left join MS_Nature on fin_nature=na_id where fin_flag <> 1 " + strWhere2 + " group by fin_oid) t on o_id = t.fin_oid");
-            if (dict["type"] == "1")
+            if (dict["type"] != "0")//接单
             {
-                strSql.Append(" left join MS_OrderPerson p3 on o_id=p3.op_oid and p3.op_type=3");
+                strSql.Append("select *,Convert(decimal(10,2),(shou-fu-oCust+ticheng)) profit1,Convert(decimal(10,2),case when shou-unIncome<>0 then (shou-fu-oCust+ticheng)*100/(shou-unIncome) else 0 end) profitRatio1");
+                strSql.Append(" ,Convert(decimal(10,2),(shou-fu-oCust)) profit2,Convert(decimal(10,2),case when shou-unIncome<>0 then (shou-fu-oCust)*100/(shou-unIncome) else 0 end) profitRatio2");
+                strSql.Append(" from (");
+                strSql.Append(" select p3.op_name,p3.op_number,p3.op_area,count(*) oCount,sum(isnull(shou,0)) shou,sum(isnull(fu,0)) fu,sum(isnull(ticheng,0)) ticheng,"+ custFiled + ",sum(isnull(unIncome,0)) unIncome,sum(isnull(unCost,0)) unCost");
+                strSql.Append(" from MS_Order left join MS_OrderPerson p1 on o_id=p1.op_oid and p1.op_type=1 ");
+                strSql.Append(" left join(select fin_oid,sum(case when fin_type = 1 then isnull(fin_money, 0) else 0 end) shou,sum(case when fin_type = 0 then isnull(fin_money, 0) else 0 end) fu, sum(case when na_name like '%提成%' then fin_money else 0 end) ticheng,sum(case when fin_type = 1 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unIncome,sum(case when fin_type = 0 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unCost from MS_finance left join MS_Nature on fin_nature=na_id where fin_flag <> 1  group by fin_oid) t on o_id = t.fin_oid ");
+                if (dict["type"] == "1")
+                {
+                    strSql.Append(" left join MS_OrderPerson p3 on o_id=p3.op_oid and p3.op_type=3");
+                }
+                else if (dict["type"] == "2")
+                {
+                    strSql.Append(" left join MS_OrderPerson p3 on o_id=p3.op_oid and p3.op_type=5");
+                }
+                strSql.Append(" where 1=1 " + strWhere1 + "");
+                strSql.Append(" group by p3.op_name, p3.op_number, p3.op_area) v");
             }
-            else if (dict["type"] == "2")
+            else //下单
             {
-                strSql.Append(" left join MS_OrderPerson p3 on o_id=p3.op_oid and p3.op_type=5");
+                strSql.Append("select *,Convert(decimal(10,2),(shou-fu-oCust+ticheng)) profit1,Convert(decimal(10,2),case when shou-unIncome<>0 then (shou-fu-oCust+ticheng)*100/(shou-unIncome) else 0 end) profitRatio1");
+                strSql.Append(",Convert(decimal(10,2),(shou-fu-oCust)) profit2,Convert(decimal(10,2),case when shou-unIncome<>0 then (shou-fu-oCust)*100/(shou-unIncome) else 0 end) profitRatio2");
+                strSql.Append(" from(");
+                strSql.Append(" select p1.op_name, p1.op_number, p1.op_area,count(*) oCount,Convert(decimal(10,2),sum(isnull(shou,0)*p1.op_ratio/100)) shou,Convert(decimal(10,2),sum(isnull(fu,0)*p1.op_ratio/100)) fu,Convert(decimal(10,2),sum(isnull(ticheng,0)*p1.op_ratio/100)) ticheng,"+custFiled+",Convert(decimal(10,2),sum(isnull(unIncome,0)*p1.op_ratio/100)) unIncome,Convert(decimal(10,2),sum(isnull(unCost,0)*p1.op_ratio/100)) unCost");
+                strSql.Append(" from MS_OrderPerson p1 left join MS_Order  on o_id=p1.op_oid and (p1.op_type=1 or p1.op_type=6)");
+                strSql.Append(" left join (select fin_oid,sum(case when fin_type = 1 then isnull(fin_money, 0) else 0 end) shou,sum(case when fin_type = 0 then isnull(fin_money, 0) else 0 end) fu, sum(case when na_name like '%提成%' then fin_money else 0 end) ticheng,sum(case when fin_type = 1 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unIncome,sum(case when fin_type = 0 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unCost from MS_finance left join MS_Nature on fin_nature=na_id where fin_flag <> 1  group by fin_oid) t on o_id = t.fin_oid ");
+                strSql.Append(" where 1=1  "+ strWhere1 + "");
+                strSql.Append(" group by p1.op_name, p1.op_number, p1.op_area) v");
             }
-            strSql.Append(" where 1=1 "+ strWhere1 + "");
-            if (dict["type"] == "0")
-            {
-                strSql.Append(" group by p1.op_name, p1.op_number, p1.op_area");
-            }
-            else
-            {
-                strSql.Append(" group by p3.op_name, p3.op_number, p3.op_area");
-            }
+            
             SqlParameter[] param = { };
-            recordCount = 0;
-            tCount = 0;
-            tOrderShou = 0;
-            tUnIncome = 0;
-            tOrderFu = 0;
-            tUnCost = 0;
-            tOrderProfit = 0;
-            tCust = 0;
-            tProfit = 0;
+            recordCount = 0;tCount = 0;tOrderShou = 0;tUnIncome = 0;tOrderFu = 0;tUnCost = 0;tOrderTicheng = 0;tCust = 0;tProfit1 = 0; tProfit2 = 0;
             if (!isPage)
             {
                 return DbHelperSQL.Query("select * from ("+ strSql.ToString() + ") u order by "+ filedOrder + "");
             }
             //recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
-            DataTable dt = DbHelperSQL.Query("select count(*) c,sum(oCount) tCount,sum(shou) tOrderShou,sum(unIncome) tUnIncome,sum(fu) tOrderFu,sum(unCost) tUncost,sum(oProfit) tOrderProfit,sum(oCust) tCust,sum(bProfit) tProfit from(" + strSql.ToString() + ") t").Tables[0];
+            DataTable dt = DbHelperSQL.Query("select count(*) c,sum(oCount) tCount,sum(shou) tOrderShou,sum(unIncome) tUnIncome,sum(fu) tOrderFu,sum(unCost) tUncost,sum(Ticheng) tOrderTicheng,sum(oCust) tCust,sum(profit1) tProfit1,sum(profit2) tProfit2 from(" + strSql.ToString() + ") t").Tables[0];
             if (dt != null && dt.Rows.Count > 0)
             {
                 recordCount = Utils.ObjToInt(dt.Rows[0]["c"], 0);
@@ -154,9 +154,10 @@ namespace MettingSys.DAL
                 tUnIncome = Utils.ObjToDecimal(dt.Rows[0]["tUnIncome"], 0);
                 tOrderFu = Utils.ObjToDecimal(dt.Rows[0]["tOrderFu"], 0);
                 tUnCost = Utils.ObjToDecimal(dt.Rows[0]["tUncost"], 0);
-                tOrderProfit = Utils.ObjToDecimal(dt.Rows[0]["tOrderProfit"], 0);
+                tOrderTicheng = Utils.ObjToDecimal(dt.Rows[0]["tOrderTicheng"], 0);
                 tCust = Utils.ObjToDecimal(dt.Rows[0]["tCust"], 0);
-                tProfit = Utils.ObjToDecimal(dt.Rows[0]["tProfit"], 0);
+                tProfit1 = Utils.ObjToDecimal(dt.Rows[0]["tProfit1"], 0);
+                tProfit2 = Utils.ObjToDecimal(dt.Rows[0]["tProfit2"], 0);
             }
             return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
         }
@@ -170,34 +171,30 @@ namespace MettingSys.DAL
         /// <param name="filedOrder"></param>
         /// <param name="recordCount"></param>
         /// <returns></returns>
-        public DataSet getAreaAchievementStatisticData(Dictionary<string, string> dict, int pageSize, int pageIndex, string filedOrder, out int recordCount, out int tCount,out decimal tShou, out decimal tUnIncome, out decimal tFu, out decimal tUnCost, out decimal tCust, out decimal tProfit, bool isPage = true)
+        public DataSet getAreaAchievementStatisticData(Dictionary<string, string> dict, int pageSize, int pageIndex, string filedOrder, out int recordCount, out int tCount,out decimal tShou, out decimal tUnIncome, out decimal tFu, out decimal tUnCost, out decimal tCust, out decimal tTicheng, out decimal tProfit1, out decimal tProfit2, bool isPage = true)
         {
             StringBuilder strWhere1 = new StringBuilder();
             StringBuilder strWhere2 = new StringBuilder();
-            string selectFiled = "de_area,de_subname,oCount,isnull(shou,0) shou,isnull(fu,0) fu,isnull(unIncome,0) unIncome,isnull(unCost,0) unCost,isnull(o_financeCust,0) o_financeCust,isnull(shou,0)-isnull(fu,0)-isnull(o_financeCust,0) profit";
+            string costFiled = "Convert(decimal(10,2),sum(isnull(o_financeCust,0)*p_ratio/100)) oCust";
             if (dict != null)
             {
                 if (dict.ContainsKey("smonth"))
                 {
                     strWhere1.Append(" and datediff(MONTH,o_edate,'" + dict["smonth"] + "-01')<=0 ");
-                    strWhere2.Append(" and datediff(MONTH,o_edate,'" + dict["smonth"] + "-01')<=0 ");
                 }
                 if (dict.ContainsKey("emonth"))
                 {
                     strWhere1.Append(" and datediff(MONTH,o_edate,'" + dict["emonth"] + "-01')>=0 ");
-                    strWhere2.Append(" and datediff(MONTH,o_edate,'" + dict["emonth"] + "-01')>=0 ");
                 }
                 if (dict.ContainsKey("status"))
                 {
                     if (dict["status"] == "3")
                     {
                         strWhere1.Append(" and (o_status=1 or o_status=2)");
-                        strWhere2.Append(" and (o_status=1 or o_status=2)");
                     }
                     else
                     {
                         strWhere1.Append(" and o_status=" + dict["status"] + "");
-                        strWhere2.Append(" and o_status=" + dict["status"] + "");
                     }
                 }
                 if (dict.ContainsKey("lockstatus"))
@@ -205,55 +202,47 @@ namespace MettingSys.DAL
                     if (dict["lockstatus"] == "3")
                     {
                         strWhere1.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
-                        strWhere2.Append(" and (o_lockStatus=0 or o_lockStatus=2)");
                     }
                     else
                     {
                         strWhere1.Append(" and o_lockStatus=" + dict["lockstatus"] + "");
-                        strWhere2.Append(" and o_lockStatus=" + dict["lockstatus"] + "");
                     }
                 }
                 if (dict.ContainsKey("area"))
                 {
-                    strWhere1.Append(" and fin_area in ('" + dict["area"].Replace(",", "','") + "')");
-                }
-                if (dict.ContainsKey("isRemove") && dict["isRemove"] == "on")
-                {
-                    strWhere1.Append(" and (na_name<>'业务提成' and na_name<>'执行提成')  ");
+                    strWhere1.Append(" and p_name in ('" + dict["area"].Replace(",", "','") + "')");
                 }
                 if (dict.ContainsKey("isCust") && dict["isCust"] != "on")
                 {
-                    selectFiled = "de_area,de_subname,oCount,isnull(shou,0) shou,isnull(fu,0) fu,isnull(unIncome,0) unIncome,isnull(unCost,0) unCost,isnull(o_financeCust,0) o_financeCust,isnull(shou,0)-isnull(fu,0)-0 profit";
+                    costFiled = "0 oCust";
                 }
             }
             StringBuilder strSql = new StringBuilder();
-            //strSql.Append("select "+ selectFiled + " from ( ");
-            //strSql.Append(" select fin_area, fin_oid, o_financeCust, sum(case when fin_type = 1 then fin_money else 0 end) shou, sum(case when fin_type = 0 then fin_money else 0 end) fu,sum(case when fin_type = 1 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unIncome,sum(case when fin_type = 0 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unCost");
-            //strSql.Append(" from MS_finance left join MS_Order on fin_oid = o_id left join MS_Nature on fin_nature=na_id where 1=1 " + strWhere1 + " group by fin_area, fin_oid, o_financeCust) t group by fin_area");
+            //strSql.Append("select " + selectFiled + " ");
+            //strSql.Append(" from(select a.*,isnull(b.c,0) oCount,isnull(b.o_financeCust,0) o_financeCust from (select de_area,de_subname from MS_department where de_type=1) a left join ");
+            //strSql.Append(" (select op_area,count(*) c,sum(o_financeCust) o_financeCust from MS_Order left join MS_OrderPerson on o_id=op_oid and op_type=1");
+            //strSql.Append(" where 1=1 "+ strWhere2 + " group by op_area) b on a.de_area=b.op_area) c ");
+            //strSql.Append(" left join (select fin_area,sum(case when fin_type = 1 then fin_money else 0 end) shou, ");
+            //strSql.Append(" sum(case when fin_type = 0 then fin_money else 0 end) fu,sum(case when fin_type = 1 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unIncome,sum(case when fin_type = 0 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unCost ");
+            //strSql.Append(" from MS_finance left join MS_Order on fin_oid=o_id left join MS_Nature on fin_nature=na_id where 1=1  " + strWhere1 + " group by fin_area) d on c.de_area = d.fin_area");
 
-            strSql.Append("select " + selectFiled + " ");
-            strSql.Append(" from(select a.*,isnull(b.c,0) oCount,isnull(b.o_financeCust,0) o_financeCust from (select de_area,de_subname from MS_department where de_type=1) a left join ");
-            strSql.Append(" (select op_area,count(*) c,sum(o_financeCust) o_financeCust from MS_Order left join MS_OrderPerson on o_id=op_oid and op_type=1");
-            strSql.Append(" where 1=1 "+ strWhere2 + " group by op_area) b on a.de_area=b.op_area) c ");
-            strSql.Append(" left join (select fin_area,sum(case when fin_type = 1 then fin_money else 0 end) shou, ");
-            strSql.Append(" sum(case when fin_type = 0 then fin_money else 0 end) fu,sum(case when fin_type = 1 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unIncome,sum(case when fin_type = 0 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unCost ");
-            strSql.Append(" from MS_finance left join MS_Order on fin_oid=o_id left join MS_Nature on fin_nature=na_id where 1=1  " + strWhere1 + " group by fin_area) d on c.de_area = d.fin_area");
+            strSql.Append("select *,Convert(decimal(10,2),(shou-fu-oCust+ticheng)) profit1,Convert(decimal(10,2),case when shou-unIncome<>0 then (shou-fu-oCust+ticheng)*100/(shou-unIncome) else 0 end) profitRatio1");
+            strSql.Append(",Convert(decimal(10,2),(shou-fu-oCust)) profit2,Convert(decimal(10,2),case when shou-unIncome<>0 then (shou-fu-oCust)*100/(shou-unIncome) else 0 end) profitRatio2");
+            strSql.Append(" from (");
+            strSql.Append("select p_name,p_chnName,count(*) oCount,Convert(decimal(10,2),sum(isnull(shou,0)*p_ratio/100)) shou,Convert(decimal(10,2),sum(isnull(fu,0)*p_ratio/100)) fu");
+            strSql.Append(",Convert(decimal(10,2),sum(isnull(ticheng,0)*p_ratio/100)) ticheng,"+ costFiled + ",Convert(decimal(10,2),sum(isnull(unIncome,0)*p_ratio/100)) unIncome,Convert(decimal(10,2),sum(isnull(unCost,0)*p_ratio/100)) unCost");
+            strSql.Append(" from MS_OrderPlace left join MS_Order on o_id=p_oid");
+            strSql.Append(" left join (select fin_oid,sum(case when fin_type = 1 then isnull(fin_money, 0) else 0 end) shou,sum(case when fin_type = 0 then isnull(fin_money, 0) else 0 end) fu, sum(case when na_name like '%提成%' then fin_money else 0 end) ticheng,sum(case when fin_type = 1 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unIncome,sum(case when fin_type = 0 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unCost from MS_finance left join MS_Nature on fin_nature=na_id where fin_flag <> 1  group by fin_oid) t on o_id = t.fin_oid ");
+            strSql.Append(" where 1=1 "+ strWhere1 + " group by p_name,p_chnName) v"); 
 
             SqlParameter[] param = { };
-            recordCount = 0;
-            tCount = 0;
-            tUnIncome = 0;
-            tUnCost = 0;
-            tCust = 0;
-            tProfit = 0;
-            tShou = 0;
-            tFu = 0;
+            recordCount = 0;tCount = 0;tUnIncome = 0;tUnCost = 0;tCust = 0;tShou = 0;tFu = 0;tTicheng = 0;tProfit1 = 0;tProfit2 = 0;
             if (!isPage)
             {
                 return DbHelperSQL.Query("select * from (" + strSql.ToString() + ") u order by " + filedOrder + "");
             }
             //recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
-            DataTable dt = DbHelperSQL.Query("select count(*) c,sum(oCount) tCount,sum(shou) tshou,sum(unIncome) tUnIncome,sum(fu) tfu,sum(unCost) tUncost,sum(o_financeCust) tCust,sum(profit) tprofit from(" + strSql.ToString() + ") t").Tables[0];
+            DataTable dt = DbHelperSQL.Query("select count(*) c,sum(oCount) tCount,sum(shou) tshou,sum(unIncome) tUnIncome,sum(fu) tfu,sum(unCost) tUncost,sum(oCust) tCust,sum(ticheng) tTicheng,sum(profit1) tProfit1,sum(profit2) tProfit2 from(" + strSql.ToString() + ") t").Tables[0];
             if (dt != null && dt.Rows.Count > 0)
             {
                 recordCount = Utils.ObjToInt(dt.Rows[0]["c"], 0);
@@ -263,7 +252,9 @@ namespace MettingSys.DAL
                 tFu = Utils.ObjToDecimal(dt.Rows[0]["tfu"], 0);
                 tUnCost = Utils.ObjToDecimal(dt.Rows[0]["tUncost"], 0);
                 tCust = Utils.ObjToDecimal(dt.Rows[0]["tCust"], 0);
-                tProfit = Utils.ObjToDecimal(dt.Rows[0]["tprofit"], 0);
+                tTicheng = Utils.ObjToDecimal(dt.Rows[0]["tTicheng"], 0);
+                tProfit1 = Utils.ObjToDecimal(dt.Rows[0]["tProfit1"], 0);
+                tProfit2 = Utils.ObjToDecimal(dt.Rows[0]["tProfit2"], 0);
             }
             return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
         }
@@ -1080,8 +1071,9 @@ namespace MettingSys.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("select * from (");
-            strSql.Append("select *, person3 = isnull(STUFF((SELECT ',' + op_name + '(' + (case when op_dstatus = 0 then '待定' else case when op_dstatus = 1 then '处理中' else '已完成' end end) + ')' FROM MS_OrderPerson WHERE  op_oid = o_id and op_type = 3 FOR XML PATH('')), 1, 1, ''),'无')");
+            strSql.Append("select *, person3 = isnull(STUFF((SELECT ',' + op_name + '(' + (case when op_dstatus = 0 then '待定' else case when op_dstatus = 1 then '处理中' else '已完成' end end) + ')' FROM MS_OrderPerson WHERE  op_oid = o_id and op_type = 3 FOR XML PATH('')), 1, 1, ''),'无'),place=stuff((select ','+p_name from MS_OrderPlace where p_oid = o_id for xml path('')),1,1,'')");
             strSql.Append(", person4 = isnull(STUFF((SELECT ',' + op_name + '(' + (case when op_dstatus = 0 then '待定' else case when op_dstatus = 1 then '处理中' else '已完成' end end) + ')' FROM MS_OrderPerson WHERE  op_oid = o_id and op_type = 5 FOR XML PATH('')), 1, 1, ''),'无')  ");
+            strSql.Append(",person6 = isnull(STUFF((SELECT ',' +op_name FROM MS_OrderPerson WHERE  op_oid=o_id and op_type=6 FOR XML PATH('')), 1, 1, ''),'无')");
             strSql.Append(",(isnull(shou,0) - isnull(fu,0) - isnull(o_financeCust,0)) profit ");
             strSql.Append(" FROM MS_Order");
             strSql.Append(" left join");

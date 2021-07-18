@@ -123,6 +123,18 @@ namespace MettingSys.DAL
             return DbHelperSQL.ExecuteSql(strSql.ToString(), parameters) > 0;
         }
 
+        public bool DeleteByManagerID(int id)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from  " + databaseprefix + "manager_oauth ");
+            strSql.Append(" where manager_id=@id");
+            SqlParameter[] parameters = {
+                    new SqlParameter("@id", SqlDbType.Int,4)};
+            parameters[0].Value = id;
+
+            return DbHelperSQL.ExecuteSql(strSql.ToString(), parameters) > 0;
+        }
+
         /// <summary>
         /// 删除一条数据
         /// </summary>

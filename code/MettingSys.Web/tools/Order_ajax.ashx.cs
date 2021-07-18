@@ -1,7 +1,9 @@
-﻿using MettingSys.Common;
+﻿using MettingSys.BLL;
+using MettingSys.Common;
 using MettingSys.Web.UI;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.SessionState;
@@ -31,6 +33,9 @@ namespace MettingSys.Web.tools
                 case "changeOrderStatus":
                     change_OrderStatus(context);
                     break;
+                case "searchPerson":
+                    searchPerson(context);
+                    break;
                 default:
                     break;
             }
@@ -55,6 +60,7 @@ namespace MettingSys.Web.tools
             string employee2 = DTRequest.GetFormString("hide_employee2");
             string employee3 = DTRequest.GetFormString("hide_employee3");
             string employee4 = DTRequest.GetFormString("hide_employee4");
+            string employee6 = DTRequest.GetFormString("hide_employee6");
             string pushStatus = DTRequest.GetFormString("ddlpushStatus");
             Model.Order order = new Model.Order();
             order.o_id = oID;
@@ -71,13 +77,6 @@ namespace MettingSys.Web.tools
             order.o_isPush = pushStatus == "True" ? true : false;
             order.o_remarks = remark;
             string[] list = new string[] { }, pli = new string[] { };
-            #region 下单人
-            if (!string.IsNullOrEmpty(employee0))
-            {
-                pli = employee0.Split('|');
-                order.personlist.Add(new Model.OrderPerson() { op_type = 1, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_addTime = DateTime.Now });
-            }
-            #endregion
             #region 业务报账员
             if (!string.IsNullOrEmpty(employee1))
             {
@@ -121,6 +120,27 @@ namespace MettingSys.Web.tools
                     pli = item.Split('|');
                     order.personlist.Add(new Model.OrderPerson() { op_type = 5, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_dstatus = Utils.ObjToByte(pli[3]), op_addTime = DateTime.Now });
                 }
+            }
+            #endregion
+            #region 公共业务人员
+            int totalRatio = 0;
+            if (!string.IsNullOrEmpty(employee6))
+            {
+                pli = new string[] { };
+                list = employee6.Split(',');
+                foreach (string item in list)
+                {
+                    pli = item.Split('-');
+                    order.personlist.Add(new Model.OrderPerson() { op_type = 6, op_name = pli[0], op_number = pli[1], op_area = pli[2],op_ratio=Utils.ObjToInt(pli[3]), op_addTime = DateTime.Now });
+                    totalRatio += Utils.ObjToInt(pli[3]);
+                }
+            }
+            #endregion
+            #region 下单人
+            if (!string.IsNullOrEmpty(employee0))
+            {
+                pli = employee0.Split('|');
+                order.personlist.Add(new Model.OrderPerson() { op_type = 1, op_name = pli[0], op_number = pli[1], op_area = pli[2],op_ratio = 100-totalRatio, op_addTime = DateTime.Now });
             }
             #endregion
             string oid = string.Empty;
@@ -201,6 +221,27 @@ namespace MettingSys.Web.tools
             return;
         }
         #endregion
+        #region 查找用户
+        private void searchPerson(HttpContext context)
+        {
+            string word = DTRequest.GetFormString("wrod").Trim().ToUpper();
+            if (string.IsNullOrEmpty(word))
+            {
+                context.Response.Write("{ \"msg\":\"请输入员工工号或者姓名\", \"status\":\"1\" }");
+                return;
+            }
+            DataSet ds = new manager().GetList(1, "is_lock=0 and (user_name = '" + word + "' or real_name= '" + word + "')", "user_name");
+            if (ds == null || ds.Tables[0].Rows.Count == 0)
+            {
+                context.Response.Write("{ \"msg\":\"无此员工信息\", \"status\":\"1\" }");
+                return;
+            }
+            DataRow dr = ds.Tables[0].Rows[0];
+            context.Response.Write("{ \"msg\":\"成功\", \"username\":\""+dr["user_name"] + "\",\"realname\":\"" + dr["real_name"] + "\",\"area\":\"" + dr["area"] + "\",\"status\":\"1\" }");
+            return;
+        }
+        #endregion
+
 
         public bool IsReusable
         {

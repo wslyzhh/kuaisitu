@@ -219,9 +219,10 @@ namespace MettingSys.DAL
                         }
 
                         #region 更新用户钉钉授权绑定状态
-                        if (model.is_lock == 0)
+                        if (model.is_lock == 1)
                         {
-                            new DAL.manager_oauth(databaseprefix).UpdateField(conn, trans, model.id, "is_lock=0");
+                            //new DAL.manager_oauth(databaseprefix).UpdateField(conn, trans, model.id, "is_lock=0");
+                            new DAL.manager_oauth(databaseprefix).DeleteByManagerID(model.id);
                         }
                         #endregion
 

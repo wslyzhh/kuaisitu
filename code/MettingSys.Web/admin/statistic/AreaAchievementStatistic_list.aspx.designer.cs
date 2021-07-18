@@ -7,11 +7,13 @@
 // </自动生成>
 //------------------------------------------------------------------------------
 
-namespace MettingSys.Web.admin.statistic {
-    
-    
-    public partial class AreaAchievementStatistic_list {
-        
+namespace MettingSys.Web.admin.statistic
+{
+
+
+    public partial class AreaAchievementStatistic_list
+    {
+
         /// <summary>
         /// ajaxForm 控件。
         /// </summary>
@@ -20,7 +22,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm ajaxForm;
-        
+
         /// <summary>
         /// txtsDate 控件。
         /// </summary>
@@ -29,7 +31,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtsDate;
-        
+
         /// <summary>
         /// txteDate 控件。
         /// </summary>
@@ -38,7 +40,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txteDate;
-        
+
         /// <summary>
         /// ddlstatus 控件。
         /// </summary>
@@ -47,7 +49,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlstatus;
-        
+
         /// <summary>
         /// ddllock 控件。
         /// </summary>
@@ -56,7 +58,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddllock;
-        
+
         /// <summary>
         /// rptAreaList 控件。
         /// </summary>
@@ -65,7 +67,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater rptAreaList;
-        
+
         /// <summary>
         /// liplace 控件。
         /// </summary>
@@ -74,16 +76,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl liplace;
-        
-        /// <summary>
-        /// cbIsRemove 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox cbIsRemove;
-        
+
         /// <summary>
         /// cbIsCust 控件。
         /// </summary>
@@ -92,7 +85,25 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox cbIsCust;
-        
+
+        /// <summary>
+        /// ddlorderType 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlorderType;
+
+        /// <summary>
+        /// ddlorder 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlorder;
+
         /// <summary>
         /// rptList 控件。
         /// </summary>
@@ -101,7 +112,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater rptList;
-        
+
         /// <summary>
         /// pCount 控件。
         /// </summary>
@@ -110,7 +121,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label pCount;
-        
+
         /// <summary>
         /// pOrderCount 控件。
         /// </summary>
@@ -119,7 +130,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label pOrderCount;
-        
+
         /// <summary>
         /// pShou 控件。
         /// </summary>
@@ -128,7 +139,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label pShou;
-        
+
         /// <summary>
         /// pUnIncome 控件。
         /// </summary>
@@ -137,7 +148,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label pUnIncome;
-        
+
         /// <summary>
         /// pFu 控件。
         /// </summary>
@@ -146,7 +157,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label pFu;
-        
+
         /// <summary>
         /// pUnCost 控件。
         /// </summary>
@@ -155,7 +166,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label pUnCost;
-        
+
         /// <summary>
         /// pCust 控件。
         /// </summary>
@@ -164,16 +175,34 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label pCust;
-        
+
         /// <summary>
-        /// pProfit 控件。
+        /// pTicheng 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label pProfit;
-        
+        protected global::System.Web.UI.WebControls.Label pTicheng;
+
+        /// <summary>
+        /// pProfit1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label pProfit1;
+
+        /// <summary>
+        /// pProfit2 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label pProfit2;
+
         /// <summary>
         /// tCount 控件。
         /// </summary>
@@ -182,7 +211,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label tCount;
-        
+
         /// <summary>
         /// tOrderCount 控件。
         /// </summary>
@@ -191,7 +220,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label tOrderCount;
-        
+
         /// <summary>
         /// tShou 控件。
         /// </summary>
@@ -200,7 +229,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label tShou;
-        
+
         /// <summary>
         /// tUnIncome 控件。
         /// </summary>
@@ -209,7 +238,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label tUnIncome;
-        
+
         /// <summary>
         /// tFu 控件。
         /// </summary>
@@ -218,7 +247,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label tFu;
-        
+
         /// <summary>
         /// tUnCost 控件。
         /// </summary>
@@ -227,7 +256,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label tUnCost;
-        
+
         /// <summary>
         /// tCust 控件。
         /// </summary>
@@ -236,16 +265,34 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label tCust;
-        
+
         /// <summary>
-        /// tProfit 控件。
+        /// tTicheng 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label tProfit;
-        
+        protected global::System.Web.UI.WebControls.Label tTicheng;
+
+        /// <summary>
+        /// tProfit1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label tProfit1;
+
+        /// <summary>
+        /// tProfit2 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label tProfit2;
+
         /// <summary>
         /// txtPageNum 控件。
         /// </summary>
@@ -254,7 +301,7 @@ namespace MettingSys.Web.admin.statistic {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPageNum;
-        
+
         /// <summary>
         /// PageContent 控件。
         /// </summary>

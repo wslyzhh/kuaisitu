@@ -167,7 +167,7 @@
                             <td><%#Eval("o_content")%></td>
                             <td><%#Eval("o_contractPrice")%></td>
                             <td><%#ConvertHelper.toDate(Eval("o_sdate")).Value.ToString("yyyy-MM-dd")%>/<%#ConvertHelper.toDate(Eval("o_edate")).Value.ToString("yyyy-MM-dd")%></td>
-                            <td><%# new MettingSys.BLL.department().getAreaText(Eval("o_place").ToString())%></td>
+                            <td><%# new MettingSys.BLL.department().getAreaText(Eval("place").ToString())%></td>
                             <td><%#MettingSys.Common.BusinessDict.fStatus()[Utils.ObjToByte(Eval("o_status"))]%></td>
                             <td><%#MettingSys.Common.BusinessDict.pushStatus()[Utils.StrToBool(Utils.ObjectToStr(Eval("o_isPush")),false)]%></td>
                             <td><%#MettingSys.Common.BusinessDict.checkStatus()[Utils.ObjToByte(Eval("o_flag"))]%></td>

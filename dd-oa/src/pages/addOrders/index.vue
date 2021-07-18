@@ -44,8 +44,13 @@
                 <div class="icon_right arrows_right"></div>
             </li>
             <li class="flex flex_a_c flex_s_b" @click="staff(1,'employee0')">
-                <label class="title"><span class="must">下单人</span></label>
+                <label class="title"><span class="must">业务员</span></label>
                 <input type="text" :value="employee0Text" readonly>
+                <div class="icon_right add"></div>
+            </li>
+            <li class="flex flex_a_c flex_s_b" @click="staffCommon()">
+                <label class="title" style="width: 1.7rem;"><span>共同业务员</span></label>
+                <input type="text" :value="employee6Text" readonly>
                 <div class="icon_right add"></div>
             </li>
             <li class="flex flex_a_c flex_s_b" @click="staff(1,'employee1')">
@@ -84,6 +89,8 @@
             </li>
         </ul>
         <choose :show.sync="showChoose" :showNum="showNum" :type="chooseType" :list="chooseList" @on-affirm="activeChoose"></choose>
+        <chooseCommon :show.sync="showChoose1" :list="chooseList" @on-affirm="activeChoose1"></chooseCommon>
+        <areachoose :show.sync="showChoose2" :list="chooseList" @on-affirm="activeChoose2"></areachoose>
         <top-nav title="新增订单" text="保存" @rightClick="submit"></top-nav>
     </div>
 </template>
@@ -94,7 +101,10 @@ import {
 	mapState
 } from 'vuex'
 import choose from '../../components/choose.vue'
+import areachoose from '../../components/areachoose.vue'
+import chooseCommon from '../../components/chooseCommon.vue'
 import dayjs from 'dayjs'
+import Areachoose from '../../components/areachoose.vue'
 
 export default {
     name:"",
@@ -116,6 +126,7 @@ export default {
 				employee2:'',
 				employee3:'',
 				employee4:'',
+				employee6:'',
 				managerid:0   // TODO:测试当前登录人ID
 			},
             fstatus:0,
@@ -128,6 +139,8 @@ export default {
             loginName:'登录人姓名',
             placeText:'',
             showChoose:false,
+            showChoose1:false,
+            showChoose2:false,
             date_range:'',
             chooseType:1,
             showNum:false,
@@ -137,17 +150,20 @@ export default {
             employee2Text:'',
             employee3Text:'',
             employee4Text:'',
+            employee6Text:'',
 			employeeChoose:{
 				'employee0':[],
 				'employee1':[],
 				'employee2':[],
 				'employee3':[],
 				'employee4':[],
+				'employee6':[]
 			},
-            chooseList:[]
+            chooseList:[],
+            arealist:[]
         };
     },
-    components: {choose},
+    components: {choose,chooseCommon, areachoose},
     computed: {
         ...mapState(            
             {
@@ -161,14 +177,21 @@ export default {
        //默认下单人
        _this.employee0Text= _this.userInfo.real_name
        _this.formData.employee0=_this.userInfo.real_name+'|'+_this.userInfo.user_name+'|'+_this.userInfo.area
-       //默认活动归属地
-       _this.formData.o_place = _this.userInfo.area
+       //默认活动归属地       
         _this.getArea().then(res => {            
             res.data.map((item,index) => {
                 if(_this.userInfo.area == item.key)
+                //if('HQ' == item.key)
                 {
-                    _this.placeText=item.value
+                    _this.formData.o_place = item.key+'-'+item.value+'-100-1'
+                    _this.placeText=item.value+'100%'
+                    _this.$set(item,'type','1')
+                    _this.$set(item,'ratio',100)
                 }
+                else{
+                    _this.$set(item,'type','0')
+                }
+                _this.arealist.push(item)
             })
         })
     },
@@ -249,18 +272,6 @@ export default {
                 _this.ddSet.setToast({text:'请正确选择'})
 				return;
 			}
-            if('place' == _this.chooseEl){
-				let tmpTexts = [];
-				let tmpPlaces = [];
-				items.map(function(item,index){
-					tmpTexts.push(item.name)
-					tmpPlaces.push(item.key)
-				})
-				_this.placeText = tmpTexts.join(',');
-				_this.$set(_this.formData,'o_place',tmpPlaces.join(','))
-				// 区域改变，清空人员
-				_this.claerEmployee();
-			}
 			if('link_man' == _this.chooseEl){
 				if(items.length){
 					_this.$set(_this.formData,'co_name',items[0].co_name)
@@ -296,14 +307,21 @@ export default {
 
                 //选择下单人时，变更活动归属地
                 if('employee0' == _this.chooseEl){
-                    items.map(function(item,index){
-                        _this.formData.o_place = item['de_area']
+                    _this.arealist=[]
+                    items.map(function(e,i){
                         _this.getArea().then(res => {            
                             res.data.map((item,index) => {
-                                if(_this.formData.o_place == item.key)
+                                if(e['de_area'] == item.key)
                                 {
-                                    _this.placeText=item.value
+                                    _this.formData.o_place = item.key+'-'+item.value+'-100-1'
+                                    _this.placeText=item.value+'100%'
+                                    _this.$set(item,'type','1')
+                                    _this.$set(item,'ratio',100)
                                 }
+                                else{
+                                    _this.$set(item,'type','0')
+                                }
+                                _this.arealist.push(item)
                             })
                         })
                     })                    
@@ -326,7 +344,12 @@ export default {
                     _this.ddSet.setToast({text:'请先选择活动归属地'})
                     return
                 }
-                _arealist = _this.formData.o_place
+                let placelist = _this.formData.o_place.split(',')
+                let tmpplace=[]
+                placelist.map((e,i)=>{
+                    tmpplace.push(e.split('-')[0])
+                })
+                _arealist = tmpplace.join(',')
             }
             _this.getEmployeebyarea({arealist:_arealist,isShowNum:_isShowNum,hasOrder:''}).then(res => {
                 _this.chooseType = _type;
@@ -352,27 +375,66 @@ export default {
                 _this.showChoose = true
             })
         },
+        activeChoose1(items){
+			let _this = this
+			let tmpTexts = [];
+            let tmpEmployees = [];
+            items.map(function(item,index){
+                tmpTexts.push(item.de_name+item.ratio+'%')
+                tmpEmployees.push(item['de_name'] + '-'+item['de_subname']+'-'+item['de_area']+'-'+item['ratio'])
+            })            
+            _this.$set(_this,'employee6Text',tmpTexts.join(','))
+            _this.$set(_this.formData,'employee6',tmpEmployees.join(','))
+        },
+        staffCommon(){
+            let _this = this
+            _this.getEmployeebyarea({}).then(res => {
+				let source = []
+                res.data.map((item,index) => {
+					if(4 == item.de_type){		
+                        let _chooselist = _this.formData.employee6.split(',')
+                        _chooselist.map((l,i)=>{
+                            let u = l.split('-')
+                            if(u[1]==item.de_subname){
+                                item['ratio'] = u[3]
+                            }
+                        })				
+                        source.push(item)
+					}
+                })
+				_this.chooseList = source;
+                _this.showChoose1 = true
+            })
+        },
         changeArea(){    //归属地
             let _this = this
-            _this.getArea().then(res => {
-				_this.chooseType = 2;
-				_this.chooseEl = 'place';
-                let source = []
-				let tmpPlaces = []
-				if(_this.formData.o_place){
-					tmpPlaces = _this.formData.o_place.split(',')
-				}
-                res.data.map((item,index) => {
+            let source = []
+            _this.arealist.map((item,index) => {
                     source.push({
-						isChecked:tmpPlaces.includes(item.key),
 						key:item.key,
 						value:item.value,
 						name:item.value,
+                        ratio:item.ratio,
+                        type:item.type
 					})
                 })
-				_this.chooseList = source;
-				_this.showChoose = true
-            })
+            _this.chooseList = source
+            _this.showChoose2 = true
+        },
+        activeChoose2(items){
+            let _this = this
+            _this.arealist = items  
+            let tmpTexts = [];
+            let tmpEmployees = [];
+            _this.arealist.map(function(item,index){
+                if(item.ratio && item.ratio >=0){
+                    tmpTexts.push(item.value+item.ratio+'%')
+                    tmpEmployees.push(item.key + '-'+item.value+'-'+item.ratio+'-'+item.type)
+                }                
+            })          
+            _this.$set(_this,'placeText',tmpTexts.join(','))
+            _this.$set(_this.formData,'o_place',tmpEmployees.join(','))
+
         },
         changeClient(){ //选择客户
 			let _this = this;

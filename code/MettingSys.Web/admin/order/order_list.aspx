@@ -80,6 +80,7 @@
                         <li id="li3" runat="server"><a <%=flag=="3"?"class=\"selected\"":"" %> href="order_list.aspx?flag=3">我的策划订单<sup class="sup"><asp:Label ID="labPerson3Count" runat="server">0</asp:Label></sup></a></li>
                         <li id="li5" runat="server"><a <%=flag=="5"?"class=\"selected\"":"" %> href="order_list.aspx?flag=5">我的设计订单<sup class="sup"><asp:Label ID="labPerson5Count" runat="server">0</asp:Label></sup></a></li>
                         <li id="li4" runat="server"><a <%=flag=="4"?"class=\"selected\"":"" %> href="order_list.aspx?flag=4">我的执行订单</a></li>
+                        <li id="li6" runat="server"><a <%=flag=="6"?"class=\"selected\"":"" %> href="order_list.aspx?flag=6">我的共同订单</a></li>
                     </ul>
                 </div>
             </div>
@@ -164,7 +165,7 @@
                 设计人员：
                     <asp:TextBox ID="txtPerson5" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>
                 执行人员：
-                    <asp:TextBox ID="txtPerson4" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>
+                    <asp:TextBox ID="txtPerson4" runat="server" CssClass="input small" onkeyup="cToUpper(this)"></asp:TextBox>                
             </div>
             <div class="searchbar">
                 归属地：
@@ -229,10 +230,10 @@
                             <td><%#Eval("c_name")%></td>
                             <td><%#Eval("o_contractPrice")%></td>
                             <td><%#ConvertHelper.toDate(Eval("o_sdate")).Value.ToString("yyyy-MM-dd")%><br /><%#ConvertHelper.toDate(Eval("o_edate")).Value.ToString("yyyy-MM-dd")%></td>
-                            <td><%# new MettingSys.BLL.department().getAreaText(Eval("o_place").ToString())%></td>
+                            <td><%# new MettingSys.BLL.department().getAreaText(Eval("place").ToString())%></td>
                             <td><span onmouseover="tip_index=layer.tips('推送状态：<%#MettingSys.Common.BusinessDict.pushStatus()[Convert.ToBoolean(Eval("o_isPush"))]%><br/>上级审批：<%#MettingSys.Common.BusinessDict.checkStatus()[Utils.ObjToByte(Eval("o_flag"))]%>', this, { time: 0 });" onmouseout="layer.close(tip_index);"><%#MettingSys.Common.BusinessDict.fStatus(2)[Utils.ObjToByte(Eval("o_status"))]%></span></td>
                             <td><%#MettingSys.Common.BusinessDict.lockStatus()[Utils.ObjToByte(Eval("o_lockStatus"))]%></td>
-                            <td><span title="工号：<%#Eval("op_number")%>，下单时间:<%#Eval("o_addDate")%>"><%#Eval("op_name")%></span></td>
+                            <td><span onmouseover="tip_index=layer.tips('工号：<%#Eval("op_number")%><br/>下单时间：<%#Eval("o_addDate")%><br/>共同业务员：<%#Eval("person6")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);"><%#Eval("op_name")%></span></td>
                             <td><%# Utils.ObjectToStr(Eval("person2"))%></td>
                             <td><%# showColor(Utils.ObjectToStr(Eval("person3")))%></td>
                             <td><%# showColor(Utils.ObjectToStr(Eval("person4")))%></td>
