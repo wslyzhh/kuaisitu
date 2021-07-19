@@ -1648,6 +1648,7 @@
     </Compile>
     <Compile Include="admin\order\order_place.aspx.cs">
       <DependentUpon>order_place.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="admin\order\order_place.aspx.designer.cs">
       <DependentUpon>order_place.aspx</DependentUpon>
