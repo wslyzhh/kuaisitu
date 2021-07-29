@@ -465,6 +465,16 @@ namespace MettingSys.Web.admin.finance
             if (!string.IsNullOrEmpty(ddl.SelectedValue))
             {
                 BindUnit(ddl.SelectedValue);
+                if (ddlserviceType.SelectedValue == "4")
+                {
+                    ddlserviceName.Visible = false;
+                    txtserviceName.Visible = true;
+                }
+                else
+                {
+                    ddlserviceName.Visible = true;
+                    txtserviceName.Visible = false;
+                }
             }
         }
 

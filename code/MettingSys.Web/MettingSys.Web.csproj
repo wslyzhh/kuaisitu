@@ -264,7 +264,9 @@
     <Content Include="admin\skin\icon\iconfont.js" />
     <Content Include="admin\skin\icon\iconfont.svg" />
     <Content Include="admin\skin\layout.css" />
+    <Content Include="admin\statistic\AchievementStatistic_Detail.aspx" />
     <Content Include="admin\statistic\AchievementStatistic_list.aspx" />
+    <Content Include="admin\statistic\AreaAchievementStatistic_Detail.aspx" />
     <Content Include="admin\statistic\AreaAchievementStatistic_list.aspx" />
     <Content Include="admin\statistic\ExpendAnalyze_list.aspx" />
     <Content Include="admin\statistic\OrderAnalyze_list.aspx" />
@@ -1779,12 +1781,26 @@
     <Compile Include="admin\showTip.aspx.designer.cs">
       <DependentUpon>showTip.aspx</DependentUpon>
     </Compile>
+    <Compile Include="admin\statistic\AchievementStatistic_Detail.aspx.cs">
+      <DependentUpon>AchievementStatistic_Detail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\statistic\AchievementStatistic_Detail.aspx.designer.cs">
+      <DependentUpon>AchievementStatistic_Detail.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\statistic\AchievementStatistic_list.aspx.cs">
       <DependentUpon>AchievementStatistic_list.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="admin\statistic\AchievementStatistic_list.aspx.designer.cs">
       <DependentUpon>AchievementStatistic_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\statistic\AreaAchievementStatistic_Detail.aspx.cs">
+      <DependentUpon>AreaAchievementStatistic_Detail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\statistic\AreaAchievementStatistic_Detail.aspx.designer.cs">
+      <DependentUpon>AreaAchievementStatistic_Detail.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\statistic\AreaAchievementStatistic_list.aspx.cs">
       <DependentUpon>AreaAchievementStatistic_list.aspx</DependentUpon>

@@ -233,7 +233,7 @@
                             <td><%# new MettingSys.BLL.department().getAreaText(Eval("place").ToString())%></td>
                             <td><span onmouseover="tip_index=layer.tips('推送状态：<%#MettingSys.Common.BusinessDict.pushStatus()[Convert.ToBoolean(Eval("o_isPush"))]%><br/>上级审批：<%#MettingSys.Common.BusinessDict.checkStatus()[Utils.ObjToByte(Eval("o_flag"))]%>', this, { time: 0 });" onmouseout="layer.close(tip_index);"><%#MettingSys.Common.BusinessDict.fStatus(2)[Utils.ObjToByte(Eval("o_status"))]%></span></td>
                             <td><%#MettingSys.Common.BusinessDict.lockStatus()[Utils.ObjToByte(Eval("o_lockStatus"))]%></td>
-                            <td><span onmouseover="tip_index=layer.tips('工号：<%#Eval("op_number")%><br/>下单时间：<%#Eval("o_addDate")%><br/>共同业务员：<%#Eval("person6")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);"><%#Eval("op_name")%></span></td>
+                            <td><span onmouseover="tip_index=layer.tips('工号：<%#Eval("op_number")%><br/>下单时间：<%#Eval("o_addDate")%><br/>共同业务员：<%#Eval("person6")%>', this, { time: 0 });" onmouseout="layer.close(tip_index);"><%#Eval("op_name")%>(<%#Eval("op_ratio")%>%)</span></td>
                             <td><%# Utils.ObjectToStr(Eval("person2"))%></td>
                             <td><%# showColor(Utils.ObjectToStr(Eval("person3")))%></td>
                             <td><%# showColor(Utils.ObjectToStr(Eval("person4")))%></td>

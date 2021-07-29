@@ -172,7 +172,7 @@
                             <td><%#MettingSys.Common.BusinessDict.pushStatus()[Utils.StrToBool(Utils.ObjectToStr(Eval("o_isPush")),false)]%></td>
                             <td><%#MettingSys.Common.BusinessDict.checkStatus()[Utils.ObjToByte(Eval("o_flag"))]%></td>
                             <td><%#MettingSys.Common.BusinessDict.lockStatus()[Utils.ObjToByte(Eval("o_lockStatus"))]%></td>
-                            <td><span title="<%#Eval("o_addDate")%>"><%#Eval("op_name")%>-<%#Eval("op_number")%></span></td>
+                            <td><span title="<%#Eval("o_addDate")%>"><%#Eval("op_name")%>-<%#Eval("op_number")%>(<%#Eval("op_ratio")%>%)</span></td>
                             <td><%#Eval("count0")%></td>
                             <td><%#Eval("count1")%></td>
                         </tr>

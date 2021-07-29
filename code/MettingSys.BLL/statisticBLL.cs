@@ -29,6 +29,19 @@ namespace MettingSys.BLL
             return dal.getAchievementStatisticData(dict, pageSize, pageIndex, filedOrder, out recordCount, out tCount,out tOrderShou,out tUnIncome, out tOrderFu,out tUnCost, out tOrderTicheng, out tCust, out tProfit1, out tProfit2, isPage);
         }
         /// <summary>
+        /// 员工业绩明细
+        /// </summary>
+        /// <param name="dict"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="filedOrder"></param>
+        /// <param name="recordCount"></param>
+        /// <returns></returns>
+        public DataSet getAchievementStatisticDetail(Dictionary<string, string> dict, int pageSize, int pageIndex, string filedOrder, out int recordCount, out decimal tOrderShou, out decimal tUnIncome, out decimal tOrderFu, out decimal tUnCost, out decimal tOrderTicheng, out decimal tCust, out decimal tProfit1, out decimal tProfit2, bool isPage = true)
+        {
+            return dal.getAchievementStatisticDetail(dict, pageSize, pageIndex, filedOrder, out recordCount, out tOrderShou, out tUnIncome, out tOrderFu, out tUnCost, out tOrderTicheng, out tCust, out tProfit1, out tProfit2, isPage);
+        }
+        /// <summary>
         /// 区域业绩统计
         /// </summary>
         /// <param name="dict"></param>
@@ -40,6 +53,19 @@ namespace MettingSys.BLL
         public DataSet getAreaAchievementStatisticData(Dictionary<string, string> dict, int pageSize, int pageIndex, string filedOrder, out int recordCount, out int tCount, out decimal tShou, out decimal tUnIncome, out decimal tFu, out decimal tUnCost, out decimal tCust, out decimal tTicheng, out decimal tProfit1, out decimal tProfit2, bool isPage = true)
         {
             return dal.getAreaAchievementStatisticData(dict, pageSize, pageIndex, filedOrder, out recordCount, out tCount, out tShou,out tUnIncome, out tFu,out tUnCost, out tCust, out tTicheng,out tProfit1,out tProfit2,isPage);
+        }
+        /// <summary>
+        /// 区域业绩明细
+        /// </summary>
+        /// <param name="dict"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="filedOrder"></param>
+        /// <param name="recordCount"></param>
+        /// <returns></returns>
+        public DataSet getAreaAchievementStatisticDeatil(Dictionary<string, string> dict, int pageSize, int pageIndex, string filedOrder, out int recordCount,out decimal tShou, out decimal tUnIncome, out decimal tFu, out decimal tUnCost, out decimal tCust, out decimal tTicheng, out decimal tProfit1, out decimal tProfit2, bool isPage = true)
+        {
+            return dal.getAreaAchievementStatisticDeatil(dict, pageSize, pageIndex, filedOrder, out recordCount, out tShou, out tUnIncome, out tFu, out tUnCost, out tCust, out tTicheng, out tProfit1, out tProfit2, isPage);
         }
         /// <summary>
         /// 客源收益分析明细列表

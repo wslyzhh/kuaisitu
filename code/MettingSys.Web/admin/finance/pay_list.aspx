@@ -100,7 +100,7 @@
                 $.getJSON("../../tools/business_ajax.ashx?action=getDetails&rpid=" + rpid, function (json) {
                     $("#tr" + rpid).siblings(".Detail" + rpid + "").hide();
                     if (json.length > 0) {
-                        var _trhtml = "<tr class='Detail" + rpid + "' style='background-color: gainsboro;'><td></td><td>订单号</td><td>付款对象</td><td>付款金额</td><td>预付日期</td><td>申请人</td><td>区域</td><td>状态</td><td colspan=\"5\">付款内容</td></tr>";
+                        var _trhtml = "<tr class='Detail" + rpid + "' style='background-color: gainsboro;'><td></td><td>订单号</td><td>付款对象</td><td>付款金额</td><td>预付日期</td><td>申请人</td><td>区域</td><td>状态</td><td>对账标识</td><td colspan=\"5\">付款内容</td></tr>";
                         $.each(json, function (index, item) {
                             _trhtml += "<tr class='Detail" + rpid + "'><td></td><td><a href=\"../order/order_edit.aspx?action=Edit&oID=" + item.rpd_oid + "\"><span class='orderstatus_"+item.o_status+"'>" + item.rpd_oid + "</span></a></td>"
                                 + "<td>" + item.c_name + "</td>"
@@ -109,6 +109,7 @@
                                 + "<td title=\"" + item.rpd_personNum + "\">" + item.rpd_personName + "</td>"
                                 + "<td>" + item.rpd_area + "</td>"
                                 + "<td><span class=\"check_" + item.rpd_flag1 + "\"></span><span class=\"check_" + item.rpd_flag2 + "\"></span><span class=\"check_" + item.rpd_flag3 + "\"></span></td>"
+                                + "<td>" + (item.rpd_num==null ? "" : item.rpd_num) + "</td>"
                                 + "<td colspan=\"5\">" + item.rpd_content + "</td></tr > ";
                         });
                         $("#tr" + rpid).after(_trhtml);

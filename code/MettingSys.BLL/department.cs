@@ -229,7 +229,14 @@ namespace MettingSys.BLL
             string[] list = area.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string item in list)
             {
-                result += dic[item] + ",";
+                foreach (var key in dic.Keys)
+                {
+                    if (item.IndexOf(key) > -1)
+                    {
+                        result += item.Replace(key,dic[key]) + ",";
+                    }
+                }
+                
             }
             return result.TrimEnd(',');
         }

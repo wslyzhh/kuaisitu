@@ -278,7 +278,7 @@ namespace MettingSys.DAL
         public DataSet GetApprovalList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount,bool isPage=true)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select *,(select count(*) from MS_finance where fin_oid=o_id and fin_flag=0) count0,(select count(*) from MS_finance where fin_oid=o_id and fin_flag=1) count1,place=stuff((select ','+p_name from MS_OrderPlace where p_oid = o_id for xml path('')),1,1,'') FROM MS_Order left join ms_customer on o_cid=c_id left join ms_contacts on o_coid=co_id left join ms_orderperson on o_id=op_oid and op_type=1");
+            strSql.Append("select *,(select count(*) from MS_finance where fin_oid=o_id and fin_flag=0) count0,(select count(*) from MS_finance where fin_oid=o_id and fin_flag=1) count1,place=stuff((select ','+p_name+'('+cast(p_ratio as varchar)+'%)' from MS_OrderPlace where p_oid = o_id for xml path('')),1,1,'') FROM MS_Order left join ms_customer on o_cid=c_id left join ms_contacts on o_coid=co_id left join ms_orderperson on o_id=op_oid and op_type=1");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
