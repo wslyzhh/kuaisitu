@@ -89,16 +89,18 @@
             var type = $("#ddltype").val();
             var str = "";
             if (type == "0") {
-                str = "&txtPerson1=" + num + "";
-            }
-            else if (type == "1") {
-                str = "&txtPerson3=" + num + "";
+                location.href = "AchievementStatistic_Detail.aspx?txtsDate=<%=_sMonth%>&txteDate=<%=_eMonth%>&ddlstatus=<%=_status%>&ddllock=<%=_lockstatus%>&cbIsCust=<%=_isCust%>&ddlorderType=<%=_ordertype%>&ddlorder=<%=_order%>&ddlarea=" + area + "&txtUser=" + num;
             }
             else {
-                str = "&txtPerson5=" + num + "";
-            }
+                if (type == "1") {
+                    str = "&txtPerson3=" + num + "";
+                }
+                else {
+                    str = "&txtPerson5=" + num + "";
+                }
 
-            location.href = "OrderAnalyze_list.aspx?statistic=0&txtsDate1=" + $('#txtsDate').val() + "&txteDate1=" + $('#txteDate').val() + "&ddlstatus=" + $('#ddlstatus').val() + "&ddllock=" + $('#ddllock').val() + "" + str + "";
+                location.href = "OrderAnalyze_list.aspx?statistic=0&txtsDate1=" + $('#txtsDate').val() + "&txteDate1=" + $('#txteDate').val() + "&ddlstatus=" + $('#ddlstatus').val() + "&ddllock=" + $('#ddllock').val() + "" + str + "";
+            }
         }
         function toFinanceList(ftype, area, num, detail) {
             var type = $("#ddltype").val();
@@ -287,10 +289,10 @@
                             <td><%# Eval("op_number") %>-<%# Eval("op_name") %></td>
                             <td><%#Eval("op_area")%>-<%# new department().getAreaText(Eval("op_area").ToString())%></td>
                             <td><a onclick="toOrderAnalyze('<%#Eval("op_area")%>','<%# Eval("op_number") %>')" href="javascript:void(0);"><%# Eval("oCount") %></a></td>
-                            <td><a onclick="toFinanceList(true,'<%#Eval("op_area")%>','<%# Eval("op_number") %>','')" href="javascript:void(0);"><%# Eval("shou") %></a></td>
-                            <td><a onclick="toFinanceList(true,'<%#Eval("op_area")%>','<%# Eval("op_number") %>','代收代付')" href="javascript:void(0);"><%# Eval("unIncome") %></a></td>
-                            <td><a onclick="toFinanceList(false,'<%#Eval("op_area")%>','<%# Eval("op_number") %>','')" href="javascript:void(0);"><%# Eval("fu") %></a></td>
-                            <td><a onclick="toFinanceList(false,'<%#Eval("op_area")%>','<%# Eval("op_number") %>','代收代付')" href="javascript:void(0);"><%# Eval("unCost") %></a></td>
+                            <td><%#_type=="0"?Eval("shou"):"<a onclick=\"toFinanceList(true,'"+Eval("op_area")+"','"+Eval("op_number")+"','')\" href=\"javascript:void(0);\">"+Eval("shou")+"</a>" %></td>
+                            <td><%#_type=="0"?Eval("unIncome"):"<a onclick=\"toFinanceList(true,'"+Eval("op_area")+"','"+Eval("op_number")+"','代收代付')\" href=\"javascript:void(0);\">"+Eval("unIncome")+"</a>" %></td>
+                            <td><%#_type=="0"?Eval("fu"):"<a onclick=\"toFinanceList(false,'"+Eval("op_area")+"','"+Eval("op_number")+"','')\" href=\"javascript:void(0);\">"+Eval("fu")+"</a>" %></td>
+                            <td><%#_type=="0"?Eval("unCost"):"<a onclick=\"toFinanceList(false,'"+Eval("op_area")+"','"+Eval("op_number")+"','代收代付')\" href=\"javascript:void(0);\">"+Eval("unCost")+"</a>" %></td>
                             <td><%# Eval("ticheng") %></td>
                             <td><%# Eval("oCust")%></td>
                             <td><%# Eval("profit1")%></td>

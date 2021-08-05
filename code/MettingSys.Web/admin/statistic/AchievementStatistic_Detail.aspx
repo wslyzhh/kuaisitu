@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AreaAchievementStatistic_list.aspx.cs" Inherits="MettingSys.Web.admin.statistic.AreaAchievementStatistic_list" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AchievementStatistic_Detail.aspx.cs" Inherits="MettingSys.Web.admin.statistic.AchievementStatistic_Detail" %>
 
 <%@ Import Namespace="MettingSys.Common" %>
 <%@ Import Namespace="MettingSys.BLL" %>
@@ -9,7 +9,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>区域业绩统计</title>
+    <title>区域业绩明细</title>
     <link rel="stylesheet" type="text/css" href="../../scripts/artdialog/ui-dialog.css" />
     <link rel="stylesheet" type="text/css" href="../../css/pagination.css" />
     <link rel="stylesheet" type="text/css" href="../skin/icon/iconfont.css" />
@@ -84,9 +84,6 @@
         function delNode(obj) {
             $(obj).parent().remove();
         }
-        function toOrderAnalyze(area) {
-            location.href = "AreaAchievementStatistic_Detail.aspx?txtsDate=<%=_sMonth%>&txteDate=<%=_eMonth%>&ddlstatus=<%=_status%>&ddllock=<%=_lockstatus%>&cbIsCust=<%=_isCust%>&ddlorderType=<%=_ordertype%>&ddlorder=<%=_order%>&ddlarea=" + area + "";
-        }
     </script>
     <style type="text/css">
         .date-input {
@@ -120,23 +117,35 @@
 </head>
 
 <body class="mainbody">
-    <form id="ajaxForm" runat="server" action="AreaAchievementStatistic_list.aspx" method="post" enctype="multipart/form-data">
+    <form id="ajaxForm" runat="server" action="AchievementStatistic_Detail.aspx" method="post" enctype="multipart/form-data">
         <!--导航栏-->
         <div class="location" style="margin-bottom:10px;">
             <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
             <a href="../center.aspx" class="home"><i class="iconfont icon-home"></i><span>首页</span></a>
             <i class="arrow iconfont icon-arrow-right"></i>
-            <span>区域业绩统计</span>
+            <span>员工业绩明细</span>
         </div>
         <!--/导航栏-->
 
         <div class="tab-content" style="padding-top: 0;">
         <div class="searchbar">
             <div class="menu-list" style="margin-bottom: 10px;">
+                订 单 号 ：
+                        <asp:TextBox ID="txtOrderID" runat="server" CssClass="input"></asp:TextBox>
+                客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户：
+                        <asp:TextBox ID="txtCusName" runat="server" CssClass="input"></asp:TextBox>
+                活动名称：
+                        <asp:TextBox ID="txtContent" runat="server" CssClass="input"></asp:TextBox>
+                活动地点：
+                        <asp:TextBox ID="txtAddress" runat="server" CssClass="input"></asp:TextBox>
                 订单结束日期月份：
                         <asp:TextBox ID="txtsDate" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({dateFmt:'yyyy-MM',maxDate:'#F{$dp.$D(\'txteDate\')}'})"></asp:TextBox>
                 -
                         <asp:TextBox ID="txteDate" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({dateFmt:'yyyy-MM',minDate:'#F{$dp.$D(\'txtsDate\')}'})"></asp:TextBox>
+            </div>
+        </div>
+        <div class="searchbar">
+            <div class="menu-list" style="margin-bottom: 10px;">
                 订单状态：
                                 <div class="rule-single-select">
                                     <asp:DropDownList ID="ddlstatus" runat="server"></asp:DropDownList>
@@ -146,22 +155,11 @@
                                     <asp:DropDownList ID="ddllock" runat="server"></asp:DropDownList>
                                 </div>
                 区域：
-                    <div class="txt-item">
-                        <ul>
-                            <asp:Repeater ID="rptAreaList" runat="server">
-                                <ItemTemplate>
-                                    <li>
-                                        <input name="hide_place" type="hidden" value="<%#Eval("Key")%>" />
-                                        <a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>
-                                        <span><%#Eval("Value")%></span>
-                                    </li>
-                                </ItemTemplate>
-                            </asp:Repeater>
-                            <li class="icon-btn" id="liplace" runat="server">
-                                <a id="specAddButton"><i class="iconfont icon-close"></i></a>
-                            </li>
-                        </ul>
+                    <div class="rule-single-select">
+                        <asp:DropDownList ID="ddlarea" runat="server"></asp:DropDownList>
                     </div>
+                业务员：
+                    <asp:TextBox ID="txtUser" runat="server" CssClass="input" ></asp:TextBox>
                 包含税费成本：
                     <div class="rule-single-checkbox">
                         <asp:CheckBox ID="cbIsCust" runat="server" Checked="true" />
@@ -184,7 +182,7 @@
                     </div>
                 <input type="hidden" name="action" value="Search" />
                 <input <%--id="btnSave"--%> type="submit" class="btn" value="查询" />
-                <a href="<%=Utils.CombUrlTxt("AreaAchievementStatistic_list.aspx", "Excel={0}&txtsDate={1}&txteDate={2}&ddllock={3}&ddlstatus={4}&hide_place={5}&cbIsCust={6}&action={7}&ddlorderType={8}&ddlorder={9}", "on", _sMonth, _eMonth, _lockstatus, _status, _area, _isCust,action,_ordertype,_order) %>"><i class="iconfont icon-exl"></i><span>导出Excel</span></a>
+                <a href="<%=Utils.CombUrlTxt("AchievementStatistic_Detail.aspx", "Excel={0}&txtsDate={1}&txteDate={2}&ddllock={3}&ddlstatus={4}&ddlarea={5}&cbIsCust={6}&action={7}&ddlorderType={8}&ddlorder={9}&txtOrderID={10}&txtCusName={11}&txtContent={12}&txtAddress={13}&txtUser={14}", "on", _sMonth, _eMonth, _lockstatus, _status, _area, _isCust,action,_ordertype,_order,_orderNum,_cusName,_content,_address,_user) %>"><i class="iconfont icon-exl"></i><span>导出Excel</span></a>
             </div>
         </div>
 
@@ -194,24 +192,30 @@
                 <HeaderTemplate>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr style="text-align: left;">
-                                <th>区域</th>
-                                <th width="6%">订单数量</th>
-                                <th width="8%">应收</th>
-                                <th width="8%">非考核收入</th>
-                                <th width="8%">应付</th>
-                                <th width="8%">非考核成本</th>
-                                <th width="8%">提成</th>
-                                <th width="8%">税费</th>
-                                <th width="8%">提成前业绩</th>
-                                <th width="8%">提成前业绩率</th>
-                                <th width="8%">提成后业绩</th>
-                                <th width="8%">提成后业绩率</th>
+                                <th width="6%">订单号</th>
+                                <th>活动名称/地点</th>
+                                <th width="8%">客户</th>
+                                <th width="6%">活动日期</th>
+                                <th width="4%">业务员</th>
+                                <th width="6%">应收</th>
+                                <th width="6%">非考核收入</th>
+                                <th width="6%">应付</th>
+                                <th width="6%">非考核成本</th>
+                                <th width="6%">提成</th>
+                                <th width="6%">税费</th>
+                                <th width="6%">提成前业绩</th>
+                                <th width="6%">提成前业绩率</th>
+                                <th width="6%">提成后业绩</th>
+                                <th width="6%">提成后业绩率</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
-                        <td><%#Eval("p_name")%>-<%# Eval("p_chnName")%></td>
-                        <td><a onclick="toOrderAnalyze('<%#Eval("p_name")%>')" href="javascript:void(0);"><%# Eval("oCount") %></a></td>
+                        <td><a href="../order/order_edit.aspx?action=<%# DTEnums.ActionEnum.Edit.ToString() %>&oID=<%#Eval("o_id")%>"><%# Eval("o_id") %></a></td>
+                        <td><%# Eval("o_content") %><br /><%# Eval("o_address") %></td>
+                        <td><%# Eval("c_name") %></td>
+                        <td><%#ConvertHelper.toDate(Eval("o_sdate")).Value.ToString("yyyy-MM-dd")%><br /><%#ConvertHelper.toDate(Eval("o_edate")).Value.ToString("yyyy-MM-dd")%></td>
+                        <td><%# Eval("op_name") %>(<%# Eval("op_ratio") %>%)</td>
                         <td><%# Eval("shou") %></td>
                         <td><%# Eval("unIncome") %></td>
                         <td><%# Eval("fu")%></td>
@@ -225,15 +229,15 @@
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"12\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"15\">暂无记录</td></tr>" : ""%>
   </table>
                 </FooterTemplate>
             </asp:Repeater>
         </div>
         <!--/列表-->
         <div style="font-size: 12px; line-height: 1.6em;">
-            <span style="display:block;">本页：<asp:Label ID="pCount" runat="server">0</asp:Label>条记录，合计订单数量：<asp:Label ID="pOrderCount" runat="server">0</asp:Label>，应收总额：<asp:Label ID="pShou" runat="server">0</asp:Label>，非考核收入：<asp:Label ID="pUnIncome" runat="server">0</asp:Label>，应付总额：<asp:Label ID="pFu" runat="server">0</asp:Label>，非考核成本：<asp:Label ID="pUnCost" runat="server">0</asp:Label>，订单税费：<asp:Label ID="pCust" runat="server">0</asp:Label>，提成：<asp:Label ID="pTicheng" runat="server">0</asp:Label>，提成前业绩：<asp:Label ID="pProfit1" runat="server">0</asp:Label>，提成后业绩：<asp:Label ID="pProfit2" runat="server">0</asp:Label></span>
-            <span style="display:block;float: left;">总计：<asp:Label ID="tCount" runat="server">0</asp:Label>条记录，合计订单数量：<asp:Label ID="tOrderCount" runat="server">0</asp:Label>，应收总额：<asp:Label ID="tShou" runat="server">0</asp:Label>，非考核收入：<asp:Label ID="tUnIncome" runat="server">0</asp:Label>，应付总额：<asp:Label ID="tFu" runat="server">0</asp:Label>，非考核成本：<asp:Label ID="tUnCost" runat="server">0</asp:Label>，订单税费：<asp:Label ID="tCust" runat="server">0</asp:Label>，提成：<asp:Label ID="tTicheng" runat="server">0</asp:Label>，提成前业绩：<asp:Label ID="tProfit1" runat="server">0</asp:Label>，提成后业绩：<asp:Label ID="tProfit2" runat="server">0</asp:Label></span>
+            <span style="display:block;">本页：<asp:Label ID="pCount" runat="server">0</asp:Label>条记录，应收总额：<asp:Label ID="pShou" runat="server">0</asp:Label>，非考核收入：<asp:Label ID="pUnIncome" runat="server">0</asp:Label>，应付总额：<asp:Label ID="pFu" runat="server">0</asp:Label>，非考核成本：<asp:Label ID="pUnCost" runat="server">0</asp:Label>，订单税费：<asp:Label ID="pCust" runat="server">0</asp:Label>，提成：<asp:Label ID="pTicheng" runat="server">0</asp:Label>，提成前业绩：<asp:Label ID="pProfit1" runat="server">0</asp:Label>，提成后业绩：<asp:Label ID="pProfit2" runat="server">0</asp:Label></span>
+            <span style="display:block;float: left;">总计：<asp:Label ID="tCount" runat="server">0</asp:Label>条记录，应收总额：<asp:Label ID="tShou" runat="server">0</asp:Label>，非考核收入：<asp:Label ID="tUnIncome" runat="server">0</asp:Label>，应付总额：<asp:Label ID="tFu" runat="server">0</asp:Label>，非考核成本：<asp:Label ID="tUnCost" runat="server">0</asp:Label>，订单税费：<asp:Label ID="tCust" runat="server">0</asp:Label>，提成：<asp:Label ID="tTicheng" runat="server">0</asp:Label>，提成前业绩：<asp:Label ID="tProfit1" runat="server">0</asp:Label>，提成后业绩：<asp:Label ID="tProfit2" runat="server">0</asp:Label></span>
         </div>
         <div class="dRemark">
             <p></p>
