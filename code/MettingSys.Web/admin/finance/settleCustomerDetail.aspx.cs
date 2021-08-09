@@ -265,7 +265,10 @@ namespace MettingSys.Web.admin.finance
         {
             _cusName = DTRequest.GetFormString("txtCusName");
             _cid = DTRequest.GetFormString("hCusId");
-            _type = DTRequest.GetFormString("ddltype");
+            if (string.IsNullOrEmpty(_tag))
+            {
+                _type = DTRequest.GetFormString("ddltype");
+            }
             _sdate = DTRequest.GetFormString("txtsDate");
             _edate = DTRequest.GetFormString("txteDate");
             _sdate1 = DTRequest.GetFormString("txtsDate1");
