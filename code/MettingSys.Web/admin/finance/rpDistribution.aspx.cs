@@ -16,7 +16,7 @@ namespace MettingSys.Web.admin.finance
         protected int pageSize; //每页大小
         protected Model.manager manager = null;
         protected int rpID = 0, _tag = 0;
-        protected string _orderId = "", _sign = "", _money = "", _chk = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _person = "",_moneyType="";
+        protected string _orderId = "", _sign = "", _money = "", _chk = "", _sdate = "", _edate = "", _sdate1 = "", _edate1 = "", _person = "",_moneyType="", _page="";
 
         
         protected Model.ReceiptPay model = null;
@@ -46,12 +46,13 @@ namespace MettingSys.Web.admin.finance
             _sdate1 = DTRequest.GetString("txtsDate1");
             _edate1 = DTRequest.GetString("txteDate1");
             _person = DTRequest.GetString("txtPerson");
+            _page = DTRequest.GetString("page");
             if (!IsPostBack)
             {
                 ddlMoneyType.Items.Insert(0, new ListItem(model.rp_type.Value ? "应收金额" : "应付金额", "0"));
                 ddlMoneyType.Items.Insert(1, new ListItem(model.rp_type.Value ? "已收金额" : "已付金额", "1"));
                 ddlMoneyType.Items.Insert(2, new ListItem(model.rp_type.Value ? "未收金额" : "未付金额", "2"));
-                if (_tag == 0)
+                if (_tag == 0 && string.IsNullOrEmpty(_page))
                 {
                     _moneyType = "2";
                     _money = "0";
