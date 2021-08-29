@@ -64,7 +64,7 @@ export default {
     name:"",
     data() {
        return {
-           topTablist:['待审批','已审批'],
+           topTablist:['待审批','审批不通过','已审批'],
            showLabel:false,
            showSearchBox:false,
 		   labelData:[
@@ -145,21 +145,46 @@ export default {
 			}
 		},
         changeTab(index){
+			let _this = this
 			if(0 == index){
-				this.searchData.o_flag = 0
+				_this.searchData.o_flag = 0
+				_this.searchData.o_lockstatus='3'
+				_this.labelData[1]['list'].map((item)=>{
+					item.isChecked = false
+					if(item.value=='3'){
+						item.isChecked = true
+					}
+				})
 			}
 			if(1 == index){
-				this.searchData.o_flag = 3
+				_this.searchData.o_flag = 1
+				_this.searchData.o_lockstatus=''
+				_this.labelData[1]['list'].map((item)=>{
+					item.isChecked = false
+					if(item.value==''){
+						item.isChecked = true
+					}
+				})
 			}
-			this.newOrderList()
+			if(2 == index){
+				_this.searchData.o_flag = 2
+				_this.searchData.o_lockstatus=''
+				_this.labelData[1]['list'].map((item)=>{
+					item.isChecked = false
+					if(item.value==''){
+						item.isChecked = true
+					}
+				})
+			}
+			_this.newOrderList()
         },
         changeActive(actives){
 			let _this = this
-            this.showLabel = false
+            _this.showLabel = false
 			actives.map((item) => {
 				_this.searchData[item.key] = item.value;
 			})
-			this.newOrderList()
+			_this.newOrderList()
         },
 		loadNextPage(){
 			this.orderList()
@@ -171,7 +196,7 @@ export default {
 			let _this = this
 			_this.searchData.pageIndex++
 			_this.searchData.managerid = _this.userInfo.id
-			this.getOrderList(this.searchData).then(function(res){
+			_this.getOrderList(_this.searchData).then(function(res){
 				if(res.data.msg){
 					_this.recordTotal = 0
 					_this.ddSet.setToast({text:res.data.msg})
@@ -202,22 +227,22 @@ export default {
 				let source = []
 				res.map(function(item,index){
 					if(200 == item.status){
-						source = [{
-							isChecked:true,
-							text:'不限',
-							value:''
-						}]
-						item.data.map(function(lll){
-							source.push({
-								isChecked:false,
-								text:lll.value,
-								value:lll.key
+							source = [{
+								isChecked:true,
+								text:'不限',
+								value:''
+							}]
+							item.data.map(function(lll){
+								source.push({
+									isChecked:false,
+									text:lll.value,
+									value:lll.key
+								})
 							})
-						})
-						_this.labelData[index]['list'] = source.concat()
-					}
+						}
+					_this.labelData[index]['list'] = source.concat()					
 				})
-			})
+			})		
 		},
         edit(_id){
             this.$router.push({path:'/businessOrder',query: {id:_id}})

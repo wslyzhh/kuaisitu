@@ -194,7 +194,6 @@ export default {
 				if(!res.data){
 					return;
 				}
-				console.log(res.data)
 				let tmpData = res.data;
 				for (var key in tmpData) { 
 					if('string' == typeof tmpData[key]){
@@ -211,7 +210,6 @@ export default {
 				_this.clientId = tmpData.c_id
 				_this.employee0Text = tmpData.owner
 				
-				
 				// 处理归属地显示
 				let source = [];
 				_this.activeChoose2(tmpData.arealist)
@@ -220,9 +218,9 @@ export default {
 				_this.chooseEl = 'employee1';
 				tmpData.Employee1.map(function(item,index){
 					source.push({
-						de_subname:item.op_number,
-						de_area:item.op_area,
-						de_name:item.op_name,
+						de_subname:item.de_subname,
+						de_area:item.de_area,
+						de_name:item.de_name,
 					})
     			})
 				_this.activeChoose(source)
@@ -231,9 +229,9 @@ export default {
 				_this.chooseEl = 'employee3';
 				tmpData.Employee3.map(function(item,index){
 					source.push({
-						de_subname:item.op_number,
-						de_area:item.op_area,
-						de_name:item.op_name,
+						de_subname:item.de_subname,
+						de_area:item.de_area,
+						de_name:item.de_name,
 					})
 				})
 				_this.activeChoose(source)
@@ -242,9 +240,9 @@ export default {
 				_this.chooseEl = 'employee2';
 				tmpData.Employee2.map(function(item,index){
 					source.push({
-						de_subname:item.op_number,
-						de_area:item.op_area,
-						de_name:item.op_name,
+						de_subname:item.de_subname,
+						de_area:item.de_area,
+						de_name:item.de_name,
 						dstatus:item.op_dstatus,
 					})
 				})
@@ -254,12 +252,13 @@ export default {
 				_this.chooseEl = 'employee4';
 				tmpData.Employee4.map(function(item,index){
 					source.push({
-						de_subname:item.op_number,
-						de_area:item.op_area,
-						de_name:item.op_name,
+						de_subname:item.de_subname,
+						de_area:item.de_area,
+						de_name:item.de_name,
 						dstatus:item.op_dstatus,
 					})
 				})
+				console.log('4')
 				_this.activeChoose(source)
 				// 处理共同业务员
 				_this.activeChoose1(tmpData.Employee6)
@@ -285,16 +284,16 @@ export default {
     	},
         activeChoose(items){
     		let _this = this
-    		if(items.length < 1){
-    			dd.device.notification.toast({
-    				text: '请正确选择', //提示信息
-    				onSuccess : function(result) {
-    					/*{}*/
-    				},
-    				onFail : function(err) {}
-    			})
-    			return;
-    		}
+    		// if(items.length < 1){
+    		// 	dd.device.notification.toast({
+    		// 		text: '请正确选择', //提示信息
+    		// 		onSuccess : function(result) {
+    		// 			/*{}*/
+    		// 		},
+    		// 		onFail : function(err) {}
+    		// 	})
+    		// 	return;
+    		// }
     		if('link_man' == _this.chooseEl){
     			if(items.length){
     				_this.$set(_this.formData,'co_name',items[0].co_name)
@@ -309,8 +308,7 @@ export default {
     		}
     		if('employee1' == _this.chooseEl || 
     		'employee2' == _this.chooseEl || 'employee3' == _this.chooseEl || 'employee4' == _this.chooseEl){
-    			let tmpStatusText = '';
-    			
+    			let tmpStatusText = '';    			
     			let tmpTexts = [];
     			let tmpEmployees = [];
     			let tmpGonghaos = [];

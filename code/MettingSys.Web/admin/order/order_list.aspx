@@ -74,13 +74,17 @@
             <div class="content-tab">
                 <div class="content-tab-ul-wrap">
                     <ul>
-                        <li><a <%=flag=="0"?"class=\"selected\"":"" %> href="order_list.aspx?flag=0">全部订单</a></li>
+                        <li><a <%=flag=="0"?"class=\"selected\"":"" %> href="order_list.aspx?flag=0&type=<%=_type %>">全部订单</a></li>
                         <li id="li1" runat="server"><a <%=flag=="1"?"class=\"selected\"":"" %> href="order_list.aspx?flag=1">我的订单</a></li>
                         <li id="li2" runat="server"><a <%=flag=="2"?"class=\"selected\"":"" %> href="order_list.aspx?flag=2">我的报账订单</a></li>
                         <li id="li3" runat="server"><a <%=flag=="3"?"class=\"selected\"":"" %> href="order_list.aspx?flag=3">我的策划订单<sup class="sup"><asp:Label ID="labPerson3Count" runat="server">0</asp:Label></sup></a></li>
                         <li id="li5" runat="server"><a <%=flag=="5"?"class=\"selected\"":"" %> href="order_list.aspx?flag=5">我的设计订单<sup class="sup"><asp:Label ID="labPerson5Count" runat="server">0</asp:Label></sup></a></li>
                         <li id="li4" runat="server"><a <%=flag=="4"?"class=\"selected\"":"" %> href="order_list.aspx?flag=4">我的执行订单</a></li>
                         <li id="li6" runat="server"><a <%=flag=="6"?"class=\"selected\"":"" %> href="order_list.aspx?flag=6">我的共同订单</a></li>
+
+                        
+                        <li id="li7" runat="server"><a <%=flag=="7"?"class=\"selected\"":"" %> href="order_list.aspx?flag=7&type=<%=_type %>">待审批<sup class="sup"><asp:Label ID="labCheck7Count" runat="server">0</asp:Label></sup></a></li>                        
+                        <li id="li8" runat="server"><a <%=flag=="8"?"class=\"selected\"":"" %> href="order_list.aspx?flag=8&type=<%=_type %>">审批不通过<sup class="sup"><asp:Label ID="labCheck8Count" runat="server">0</asp:Label></sup></a></li>
                     </ul>
                 </div>
             </div>

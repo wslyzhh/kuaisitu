@@ -505,6 +505,22 @@ namespace MettingSys.DAL
         }
 
         /// <summary>
+        /// 获取订单业务审批列表中待审批和审批不通过的订单数量
+        /// </summary>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        public DataTable getCheckOrderCount(string area)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select sum(case when isnull(o_flag,0)=0 then 1 else 0 end) count7,sum(case when isnull(o_flag,0)=1 then 1 else 0 end) count8 from MS_Order left join MS_OrderPerson on o_id=op_oid and op_type=1 ");
+            strSql.Append(" where op_area=@area and o_isPush='True' and (o_lockStatus=0 or o_lockStatus=2)");
+            SqlParameter[] parameters = {
+                    new SqlParameter("@area", SqlDbType.VarChar,11)};
+            parameters[0].Value = area;
+            return DbHelperSQL.Query(strSql.ToString(), parameters).Tables[0];
+        }
+
+        /// <summary>
         /// 获取某个区域已推送未审批的订单数量
         /// </summary>
         /// <param name="area"></param>

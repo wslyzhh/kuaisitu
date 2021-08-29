@@ -906,6 +906,22 @@ namespace MettingSys.BLL
         }
 
         /// <summary>
+        /// 获取订单业务审批列表中待审批和审批不通过的订单数量
+        /// </summary>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        public void getCheckOrderCount(string area, out string count7, out string count8)
+        {
+            count7 = "0"; count8 = "0";
+            DataTable dt = dal.getCheckOrderCount(area);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                count7 = Utils.ObjectToStr(dt.Rows[0]["count7"]);
+                count8 = Utils.ObjectToStr(dt.Rows[0]["count8"]);
+            }
+        }
+
+        /// <summary>
         /// 检查订单中是否存在对应的应收或应付客户
         /// </summary>
         /// <param name="orderID"></param>
