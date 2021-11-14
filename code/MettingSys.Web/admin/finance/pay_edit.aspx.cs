@@ -23,6 +23,13 @@ namespace MettingSys.Web.admin.finance
         {
             action = DTRequest.GetQueryString("action");
             manager = GetAdminInfo();
+            dlEditUpload.Visible = false;
+            dlAddUpload.Visible = false;
+            uploadDiv.Visible = false;
+            if (action == DTEnums.ActionEnum.Add.ToString())
+            {
+                dlAddUpload.Visible = true;
+            }
             if (!string.IsNullOrEmpty(action) && action == DTEnums.ActionEnum.Edit.ToString())
             {
                 this.action = DTEnums.ActionEnum.Edit.ToString();//修改类型
@@ -37,10 +44,13 @@ namespace MettingSys.Web.admin.finance
                     JscriptMsg("记录不存在或已被删除！", "back");
                     return;
                 }
+                uploadDiv.Visible = true;
+                dlEditUpload.Visible = true;
             }
             //查看
             if (action == DTEnums.ActionEnum.View.ToString())
             {
+                dlEditUpload.Visible = true;
                 this.id = DTRequest.GetQueryInt("id");
                 btnSubmitToDistribute.Visible = false;
             }
@@ -127,6 +137,9 @@ namespace MettingSys.Web.admin.finance
                         txtCheckRemark.Text = dr["rp_checkRemark1"].ToString();
                     }
                 }
+
+                rptAlbumList.DataSource = new BLL.payPic().GetList(3, "pp_type=3 and pp_rid=" + _id + "", "pp_addDate desc");
+                rptAlbumList.DataBind();
             }
         }
         #endregion

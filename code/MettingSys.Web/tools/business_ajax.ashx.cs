@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using System.Collections;
 
 namespace MettingSys.Web.tools
 {
@@ -218,7 +219,61 @@ namespace MettingSys.Web.tools
                 model.rp_method = Utils.StrToInt(DTRequest.GetFormString("ddlmethod"), 0);
                 model.rp_content = DTRequest.GetFormString("txtContent");
                 model.rp_cbid = Utils.StrToInt(DTRequest.GetFormString("hBankId"), 0);
+                if (context.Request.Files.Count >0)
+                {
+                    string fileext = "";
+                    for (int i = 0; i < context.Request.Files.Count; i++)
+                    {
+                        //fileext = System.IO.Path.GetExtension(context.Request.Files[i].FileName).TrimStart('.');//jpg,jpge,png,gif
+                        //                                                                                     //检查文件扩展名是否合法
+                        //if (!CheckFileExt(fileext))
+                        //{
+                        //    return "不允许上传" + fileext + "类型的文件";
+                        //}
+                        //byte[] byteData = FileHelper.ConvertStreamToByteBuffer(fileUp.PostedFiles[i].InputStream); //获取文件流
+                        //                                                                                           //检查文件大小是否合法
+                        //if (!CheckFileSize(fileext, byteData.Length))
+                        //{
+                        //    return "文件超过限制的大小";
+                        //}
+                    }
+                }
                 result = bll.Add(model, adminModel, DTRequest.GetFormString("txtCenum"), DTRequest.GetFormString("txtCedate"), out rpid);
+                if (string.IsNullOrEmpty(result))
+                {
+                    if (context.Request.Files.Count>0)
+                    {
+                        for (int i = 0; i < context.Request.Files.Count; i++)
+                        {
+                            string savePath = context.Server.MapPath("~/uploadPay/");
+                            if (!Directory.Exists(savePath))
+                            {
+                                //需要注意的是，需要对这个物理路径有足够的权限，否则会报错
+                                //另外，这个路径应该是在网站之下，而将网站部署在C盘却把文件保存在D盘
+                                Directory.CreateDirectory(savePath);
+                            }
+                            if (!Directory.Exists(savePath + "3/" + rpid + "/"))
+                            {
+                                Directory.CreateDirectory(savePath + "3/" + rpid + "/");
+                            }
+                            Model.payPic file = new Model.payPic();
+                            file.pp_rid = rpid;
+                            file.pp_type = 3;
+                            file.pp_fileName = context.Request.Files[i].FileName;
+                            file.pp_filePath = "uploadPay/3/" + rpid + "/" + context.Request.Files[i].FileName;
+                            //file.pp_thumbFilePath = jo["thumb"].ToString();
+                            file.pp_size = Math.Round((decimal)context.Request.Files[i].ContentLength / 1024, 2, MidpointRounding.AwayFromZero);
+                            file.pp_addDate = DateTime.Now;
+                            file.pp_addName = adminModel.real_name;
+                            file.pp_addPerson = adminModel.user_name;
+
+                            context.Request.Files[i].SaveAs(savePath + "3/" + rpid + "/" + context.Request.Files[i].FileName);//保存文件
+
+                            new BLL.payPic().insertPayFile(file, adminModel);
+                        }
+                    }
+                }
+
             }
             else
             {
@@ -278,6 +333,7 @@ namespace MettingSys.Web.tools
                 context.Response.End();
             }
         }
+
         #endregion
         #region 添加编辑收款通知
         private void addOreditReceipt(HttpContext context)
