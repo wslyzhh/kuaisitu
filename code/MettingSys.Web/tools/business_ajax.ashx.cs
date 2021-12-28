@@ -224,18 +224,20 @@ namespace MettingSys.Web.tools
                     string fileext = "";
                     for (int i = 0; i < context.Request.Files.Count; i++)
                     {
-                        //fileext = System.IO.Path.GetExtension(context.Request.Files[i].FileName).TrimStart('.');//jpg,jpge,png,gif
-                        //                                                                                     //检查文件扩展名是否合法
-                        //if (!CheckFileExt(fileext))
-                        //{
-                        //    return "不允许上传" + fileext + "类型的文件";
-                        //}
-                        //byte[] byteData = FileHelper.ConvertStreamToByteBuffer(fileUp.PostedFiles[i].InputStream); //获取文件流
-                        //                                                                                           //检查文件大小是否合法
-                        //if (!CheckFileSize(fileext, byteData.Length))
-                        //{
-                        //    return "文件超过限制的大小";
-                        //}
+                        fileext = System.IO.Path.GetExtension(context.Request.Files[i].FileName).TrimStart('.');//jpg,jpge,png,gif
+                                                                                                                //检查文件扩展名是否合法
+                        if (!CheckFileExt(fileext))
+                        {
+                            context.Response.Write("{ \"msg\":\"不允许上传" + fileext + "类型的文件\", \"status\":1, \"id\":" + rpid + " }");
+                            context.Response.End();
+                        }
+                        byte[] byteData = FileHelper.ConvertStreamToByteBuffer(context.Request.Files[i].InputStream); //获取文件流
+                                                                                                                   //检查文件大小是否合法
+                        if (!CheckFileSize(fileext, byteData.Length))
+                        {
+                            context.Response.Write("{ \"msg\":\"文件超过限制的大小\", \"status\":1, \"id\":" + rpid + " }");
+                            context.Response.End();
+                        }
                     }
                 }
                 result = bll.Add(model, adminModel, DTRequest.GetFormString("txtCenum"), DTRequest.GetFormString("txtCedate"), out rpid);
@@ -2040,6 +2042,83 @@ namespace MettingSys.Web.tools
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// 检查是否为合法的上传文件
+        /// </summary>
+        private bool CheckFileExt(string _fileExt)
+        {
+            //检查危险文件
+            string[] excExt = { "asp", "aspx", "ashx", "asa", "asmx", "asax", "php", "jsp", "htm", "html" };
+            for (int i = 0; i < excExt.Length; i++)
+            {
+                if (excExt[i].ToLower() == _fileExt.ToLower())
+                {
+                    return false;
+                }
+            }
+            //检查合法文件
+            string[] allowExt = ("gif,jpg,jpeg,png,bmp, rar, zip, doc, xls, txt, docx, xlsx, pdf, flv,mp3,mp4,avi").Split(',');
+            for (int i = 0; i < allowExt.Length; i++)
+            {
+                if (allowExt[i].Trim().ToLower() == _fileExt.ToLower())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        /// <summary>
+        /// 检查文件大小是否合法
+        /// </summary>
+        /// <param name="_fileExt">文件扩展名，不含“.”</param>
+        /// <param name="_fileSize">文件大小(B)</param>
+        private bool CheckFileSize(string _fileExt, int _fileSize)
+        {
+            //将视频扩展名转换成ArrayList
+            ArrayList lsVideoExt = new ArrayList("flv,mp3,mp4,avi".ToLower().Split(','));
+            //判断是否为图片文件
+            if (IsImage(_fileExt))
+            {
+                if (10240 > 0 && _fileSize > 10240 * 1024)
+                {
+                    return false;
+                }
+            }
+            else if (lsVideoExt.Contains(_fileExt.ToLower()))
+            {
+                if (102400 > 0 && _fileSize > 102400 * 1024)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (51200 > 0 && _fileSize > 51200 * 1024)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        /// <summary>
+        /// 是否为图片文件
+        /// </summary>
+        /// <param name="_fileExt">文件扩展名，不含“.”</param>
+        private bool IsImage(string _fileExt)
+        {
+            ArrayList al = new ArrayList();
+            al.Add("bmp");
+            al.Add("jpeg");
+            al.Add("jpg");
+            al.Add("gif");
+            al.Add("png");
+            if (al.Contains(_fileExt.ToLower()))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

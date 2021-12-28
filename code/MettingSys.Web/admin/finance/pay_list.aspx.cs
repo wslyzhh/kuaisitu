@@ -536,6 +536,11 @@ namespace MettingSys.Web.admin.finance
                     if (result == "")
                     {
                         success++;
+                        //删除文件
+                        if (Directory.Exists(Server.MapPath("~/uploadPay/3/" + id + "/")))
+                        {
+                            Directory.Delete(Server.MapPath("~/uploadPay/3/" + id + "/"), true);
+                        }
                     }
                     else
                     {
