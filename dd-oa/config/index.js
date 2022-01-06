@@ -13,8 +13,8 @@ module.exports = {
     proxyTable: {
       '/api': {
           //target: 'http://www.crystalmice.com.cn',//后端正式接口地址
-          //target: 'http://crystalmice.cn',//后端测试接口地址
-          target: 'http://192.168.6.3:8080/',//后端本地接口地址
+          //target: 'http://218.77.209.7:8082/',//后端测试接口地址
+          target: 'http://192.168.1.2/',//后端本地接口地址
           changeOrigin: true,//是否允许跨越
           pathRewrite: {
               '^/api': '',//重写,
@@ -23,7 +23,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: '192.168.6.3',//'192.168.1.2''192.168.6.3', // can be overwritten by process.env.HOST
+    host: '192.168.1.2',//'192.168.1.2''192.168.6.3', // can be overwritten by process.env.HOST
     //host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,

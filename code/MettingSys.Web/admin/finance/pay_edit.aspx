@@ -20,12 +20,18 @@
     <script type="text/javascript" charset="utf-8" src="../../scripts/jquery/Validform_v5.3.2_min.js"></script>
     <script type="text/javascript" src="../../scripts/datepicker/WdatePicker.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../scripts/artdialog/dialog-plus-min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../scripts/webuploader/webuploader.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../js/payUploader.js?v=<%=DateTime.Now.ToString("yyyyMMddHHssmm") %>"></script>
     <script type="text/javascript" charset="utf-8" src="../js/common.js"></script>
     <script type="text/javascript" charset="utf-8" src="../js/laymain.js"></script>,
     <script type="text/javascript">
         $(function () {
             //初始化表单验证
             $("#form1").initValidform();
+            //初始化上传控件
+            $(".upload-album").InitUploader({ btntext: "批量上传", multiple: true, ftype: 3, pid:<%=id%>, thumbnail: false, filetypes: "<%=sysConfig.fileextension %>", filesize: <%=sysConfig.attachsize %>, sendurl: "../../tools/upload_ajax.ashx", swf: "../../scripts/webuploader/uploader.swf" });
+            $(".upload-album").children(".upload-btn").append("<div class='webuploader-pick1'>文件类型：<%=sysConfig.fileextension %>，文件大小限制：<%=sysConfig.attachsize %>KB</div>");
+
             $.getJSON("../../tools/business_ajax.ashx?action=getAllCustomer", function (json) {
                 $('#txtCusName').devbridgeAutocomplete({
                     lookup: json,
@@ -94,6 +100,8 @@
 
             var ajaxFormOption = {
                 dataType: "json", //数据类型  
+                contentType: false,
+                processData: false,
                 success: function (data) { //提交成功的回调函数  
                     if (data.status == 0) {
                         var d = top.dialog({ content: data.msg }).show();
@@ -314,6 +322,38 @@
                 <dt>凭证日期</dt>
                 <dd>
                     <asp:TextBox ID="txtCedate" runat="server" CssClass="input rule-date-input" Width="120" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+                </dd>
+            </dl>
+            <dl id="dlAddUpload" runat="server">
+                <dt>上传文件</dt>
+                <dd>
+                    <input type="file" name="file" multiple="multiple" />                    
+                    <div style="color: red;">文件类型：<%=sysConfig.fileextension %>，文件大小限制：<%=sysConfig.attachsize %>KB</div>
+                </dd>
+            </dl>
+            <dl id="dlEditUpload" runat="server">
+                <dt>上传文件</dt>
+                <dd>
+                    <div class="upload-box upload-album" id="uploadDiv" runat="server"></div>
+                    <input type="hidden" name="hidFocusPhoto" id="hidFocusPhoto" runat="server" class="focus-photo" />
+                    <div class="photo-list" style="margin-top: 26px;">
+                        <ul>
+                            <asp:Repeater ID="rptAlbumList" runat="server">
+                                <ItemTemplate>
+                                    <li>
+                                        <input type="hidden" name="hid_photo_name" value="" />
+                                        <input type="hidden" name="hid_photo_remark" value="" />
+                                        <div>
+                                            <i class="iconfont icon-attachment"></i>
+                                            <span class="remark"><i><a target="_blank" href="<%#"../../"+Eval("[\"pp_filePath\"]") %>"><%#Eval("[\"pp_fileName\"]") %></a></i></span>
+                                            <span style="font-weight: bolder;"><%#Eval("[\"pp_size\"]") %>KB</span>
+                                            <%#Eval("[\"uba_flag1\"]").ToString()=="2" && Eval("[\"uba_flag2\"]").ToString()!="1" && Eval("[\"uba_flag3\"]").ToString()!="1" ?"":"<a href=\"javascript:;\" onclick=\"delImg(this,"+Eval("[\"pp_id\"]")+");\">删除</a>" %>
+                                        </div>
+                                    </li>
+                                </ItemTemplate>
+                            </asp:Repeater>
+                        </ul>
+                    </div>
                 </dd>
             </dl>
         </div>

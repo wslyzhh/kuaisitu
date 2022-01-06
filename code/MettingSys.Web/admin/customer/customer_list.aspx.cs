@@ -21,7 +21,7 @@ namespace MettingSys.Web.admin.customer
         protected int page; //当前页码
         protected int pageSize; //每页大小
 
-        protected string _cusName = "", _cid = "", _check1 = string.Empty, _type = string.Empty, _isUse = string.Empty,_owner1,_business;
+        protected string _cusName = "", _cid = "", _check1 = string.Empty, _type = string.Empty, _isUse = string.Empty, _owner1, _business, _contact = "";
         protected Model.business_log logmodel = null;
         protected Model.manager manager = null;
         protected void Page_Load(object sender, EventArgs e)
@@ -33,6 +33,7 @@ namespace MettingSys.Web.admin.customer
             _isUse = DTRequest.GetString("ddlisUse");
             _owner1 = DTRequest.GetString("txtOwner1");
             _business = DTRequest.GetString("txtBusiness");
+            _contact = DTRequest.GetString("txtContact");
 
             this.pageSize = GetPageSize(10); //每页数量
             manager = GetAdminInfo();
@@ -134,6 +135,10 @@ namespace MettingSys.Web.admin.customer
             {
                 strTemp.Append(" and c_business like '%" + _business + "%'");
             }
+            if (!string.IsNullOrEmpty(_contact))
+            {
+                strTemp.Append(" and co_name like '%" + _contact + "%'");
+            }
             return strTemp.ToString();
         }
         #endregion
@@ -163,6 +168,7 @@ namespace MettingSys.Web.admin.customer
             _isUse = DTRequest.GetFormString("ddlisUse");
             _owner1 = DTRequest.GetFormString("txtOwner1");
             _business = DTRequest.GetFormString("txtBusiness");
+            _contact = DTRequest.GetFormString("txtContact");
             RptBind("c_id>0" + CombSqlTxt(), "c_isUse desc,c_addDate desc,c_id desc");
         }
 
@@ -181,7 +187,7 @@ namespace MettingSys.Web.admin.customer
         }
         private string backUrl()
         {
-            return Utils.CombUrlTxt("customer_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlcheck1={3}&ddltype={4}&ddlisUse={5}&txtOwner1={6}&txtBusiness={7}", "__id__", _cusName, _cid, _check1, _type, _isUse, _owner1, _business);
+            return Utils.CombUrlTxt("customer_list.aspx", "page={0}&txtCusName={1}&hCusId={2}&ddlcheck1={3}&ddltype={4}&ddlisUse={5}&txtOwner1={6}&txtBusiness={7}&txtContact={8}", "__id__", _cusName, _cid, _check1, _type, _isUse, _owner1, _business, _contact);
         }
         protected void btnExcel_Click(object sender, EventArgs e)
         {
@@ -190,6 +196,9 @@ namespace MettingSys.Web.admin.customer
             _check1 = DTRequest.GetFormString("ddlcheck1");
             _type = DTRequest.GetFormString("ddltype");
             _isUse = DTRequest.GetFormString("ddlisUse");
+            _owner1 = DTRequest.GetFormString("txtOwner1");
+            _business = DTRequest.GetFormString("txtBusiness");
+            _contact = DTRequest.GetFormString("txtContact");
             BLL.Customer bll = new BLL.Customer();
             DataTable dt = bll.GetList(this.pageSize, this.page, "c_id>0" + CombSqlTxt(), "c_isUse desc,c_addDate desc,c_id desc", manager, out this.totalCount,false).Tables[0];
 

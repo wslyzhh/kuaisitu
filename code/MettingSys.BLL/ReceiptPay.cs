@@ -483,6 +483,10 @@ namespace MettingSys.BLL
                     return "最终审批通过不能删除";
                 }
                 flag = dal.deletePay(model);
+                if (flag) {
+                    //删除图片附件
+                    new BLL.payPic().deleteFileByid(id, 3);
+                }
             }
             if (flag)
             {

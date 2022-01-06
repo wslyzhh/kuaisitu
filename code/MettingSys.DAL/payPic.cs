@@ -149,9 +149,13 @@ namespace MettingSys.DAL
             {
                 strSql.Append(" left join MS_ReceiptPayDetail on pp_type=1 and pp_rid=rpd_id");
             }
-            else
+            else if (type == 2)
             {
                 strSql.Append(" left join MS_unBusinessApply on pp_type=2 and pp_rid=uba_id");
+            }
+            else
+            {
+                strSql.Append(" left join MS_unBusinessApply on pp_type=3 and pp_rid=uba_id");
             }
             if (strWhere.Trim() != "")
             {

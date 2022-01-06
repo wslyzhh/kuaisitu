@@ -56,6 +56,9 @@ namespace MettingSys.Web.admin.order
             _sdate2 = DTRequest.GetString("txtsDate2");
             _edate2 = DTRequest.GetString("txteDate2");
             _orderarea = DTRequest.GetString("ddlorderarea");
+
+            manager = GetAdminInfo();
+            this.pageSize = GetPageSize(10); //每页数量
             if (string.IsNullOrEmpty(flag))
             {
                 flag = "0";
@@ -69,59 +72,78 @@ namespace MettingSys.Web.admin.order
                 li5.Visible = false;
                 li6.Visible = false;
                 _pushstatus = "True";
-                _flag = "0";
+                _lockstatus = "3";
+                if (flag == "7")
+                {
+                    _flag = "0";
+                }
+                else if (flag == "8")
+                {
+                    _flag = "1";
+                }
             }
+            else
+            {
+                li7.Visible = false;
+                li8.Visible = false;
+                if (flag == "1" || flag == "6")
+                {
+                    _person1 = manager.user_name;
+                    txtPerson1.Enabled = false;
+                }
+                else if (flag == "2")
+                {
+                    _person2 = manager.user_name;
+                    txtPerson2.Enabled = false;
+                }
+                else if (flag == "3")
+                {
+                    _person3 = manager.user_name;
+                    txtPerson3.Enabled = false;
+                    orderType = "3";
+                    currentUser = manager.user_name;
+                    whereOrderBy = " op_addTime1 desc,o_addDate desc,o_id desc";
+                }
+                else if (flag == "4")
+                {
+                    _person4 = manager.user_name;
+                    txtPerson4.Enabled = false;
+                }
+                else if (flag == "5")
+                {
+                    _person5 = manager.user_name;
+                    txtPerson5.Enabled = false;
+                    orderType = "5";
+                    currentUser = manager.user_name;
+                    whereOrderBy = " op_addTime1 desc,o_addDate desc,o_id desc";
+                }
+                else if (flag == "6")
+                {
 
-            manager = GetAdminInfo();
-            this.pageSize = GetPageSize(10); //每页数量
-            if (flag=="1" || flag == "6")
-            {
-                _person1 = manager.user_name;
-                txtPerson1.Enabled = false;
-            }
-            else if (flag == "2")
-            {
-                _person2 = manager.user_name;
-                txtPerson2.Enabled = false;
-            }
-            else if (flag == "3")
-            {
-                _person3 = manager.user_name;
-                txtPerson3.Enabled = false;
-                orderType = "3";
-                currentUser = manager.user_name;
-                whereOrderBy = " op_addTime1 desc,o_addDate desc,o_id desc";
-            }
-            else if (flag == "4")
-            {
-                _person4 = manager.user_name;
-                txtPerson4.Enabled = false;
-            }
-            else if (flag == "5")
-            {
-                _person5 = manager.user_name;
-                txtPerson5.Enabled = false;
-                orderType = "5";
-                currentUser = manager.user_name;
-                whereOrderBy = " op_addTime1 desc,o_addDate desc,o_id desc";
-            }
-            else if (flag == "6")
-            {
-
+                }
             }
             if (!Page.IsPostBack)
             {
                 ChkAdminLevel("sys_order_list", DTEnums.ActionEnum.View.ToString()); //检查权限
-                if (flag != "0" && flag != "1" && flag != "2" && flag != "4" && flag != "6" && string.IsNullOrEmpty(DTRequest.GetString("page")))
+                if (flag != "0" && flag != "1" && flag != "2" && flag != "4" && flag != "6" && flag != "7" && flag != "8" && string.IsNullOrEmpty(DTRequest.GetString("page")))
                 {
                     _lockstatus = "3";
                     _dstatus = "5";
                 }
                 InitData();
-                string _count3 = "0", _count5 = "0";
-                new BLL.Order().getPersonOrderCount(manager.user_name, out _count3, out _count5);
-                labPerson3Count.Text = _count3;
-                labPerson5Count.Text = _count5;
+                string _count3 = "0", _count5 = "0", _count7 = "0", _count8 = "0";
+                if (_type == "check")
+                {
+                    new BLL.Order().getCheckOrderCount(manager.area, out _count7, out _count8);
+                    labCheck7Count.Text = _count7;
+                    labCheck8Count.Text = _count8;
+                }
+                else
+                {
+                    new BLL.Order().getPersonOrderCount(manager.user_name, out _count3, out _count5);
+                    labPerson3Count.Text = _count3;
+                    labPerson5Count.Text = _count5;
+                }
                 RptBind("1=1" + CombSqlTxt(), whereOrderBy);
             }            
         }
@@ -434,23 +456,23 @@ namespace MettingSys.Web.admin.order
                 strTemp.Append(" and datediff(day,o_statusTime,'" + _edate2 + "')>=0");
             }
 
-            if (flag == "0")
+            if (_type == "check")
             {
-                if (_type == "check")
+                if (!new BLL.permission().checkHasPermission(manager, "0603"))
                 {
-                    if (!new BLL.permission().checkHasPermission(manager, "0603"))
-                    {
-                        string msgbox = "parent.jsdialog(\"错误提示\", \"您没有管理该页面的权限，请勿非法进入！\", \"back\")";
-                        Response.Write("<script type=\"text/javascript\">" + msgbox + "</script>");
-                        Response.End();
-                    }
-                    strTemp.Append(" and op_area='" + manager.area + "'");
-                    //if (manager.area != new BLL.department().getGroupArea())
-                    //{
-                    //    strTemp.Append(" and op_area='" + manager.area + "'");
-                    //}
+                    string msgbox = "parent.jsdialog(\"错误提示\", \"您没有管理该页面的权限，请勿非法进入！\", \"back\")";
+                    Response.Write("<script type=\"text/javascript\">" + msgbox + "</script>");
+                    Response.End();
                 }
-                else
+                strTemp.Append(" and op_area='" + manager.area + "'");
+                //if (manager.area != new BLL.department().getGroupArea())
+                //{
+                //    strTemp.Append(" and op_area='" + manager.area + "'");
+                //}
+            }
+            else
+            {
+                if (flag == "0")
                 {
                     //列表权限控制
                     if (manager.area != new BLL.department().getGroupArea())//如果不是总部的工号
@@ -467,28 +489,30 @@ namespace MettingSys.Web.admin.order
                         }
                     }
                 }
-            }
-            else if (flag == "1")
-            {
-                strTemp.Append(" and op_number='" + manager.user_name + "'");
-            }
-            else if (flag == "2")
-            {
-                strTemp.Append(" and exists (select * from ms_orderperson where o_id=op_oid and op_type=2 and op_number='" + manager.user_name + "')");
-            }
-            else if (flag == "3")
-            {
-                strTemp.Append(" and exists (select * from ms_orderperson where o_id=op_oid and op_type=3 and op_number='" + manager.user_name + "')");
-            }
-            else if (flag == "4")
-            {
-                strTemp.Append(" and exists (select * from ms_orderperson where o_id=op_oid and op_type=4 and op_number='" + manager.user_name + "')");
-            }
-            else if (flag == "5") {
-                strTemp.Append(" and exists (select * from ms_orderperson where o_id=op_oid and op_type=5 and op_number='" + manager.user_name + "')");
-            }
-            else if (flag == "6") {
-                strTemp.Append(" and exists (select * from ms_orderperson where o_id=op_oid and op_type=6 and op_number='" + manager.user_name + "')");
+                else if (flag == "1")
+                {
+                    strTemp.Append(" and op_number='" + manager.user_name + "'");
+                }
+                else if (flag == "2")
+                {
+                    strTemp.Append(" and exists (select * from ms_orderperson where o_id=op_oid and op_type=2 and op_number='" + manager.user_name + "')");
+                }
+                else if (flag == "3")
+                {
+                    strTemp.Append(" and exists (select * from ms_orderperson where o_id=op_oid and op_type=3 and op_number='" + manager.user_name + "')");
+                }
+                else if (flag == "4")
+                {
+                    strTemp.Append(" and exists (select * from ms_orderperson where o_id=op_oid and op_type=4 and op_number='" + manager.user_name + "')");
+                }
+                else if (flag == "5")
+                {
+                    strTemp.Append(" and exists (select * from ms_orderperson where o_id=op_oid and op_type=5 and op_number='" + manager.user_name + "')");
+                }
+                else if (flag == "6")
+                {
+                    strTemp.Append(" and exists (select * from ms_orderperson where o_id=op_oid and op_type=6 and op_number='" + manager.user_name + "')");
+                }
             }
             return strTemp.ToString();
         }

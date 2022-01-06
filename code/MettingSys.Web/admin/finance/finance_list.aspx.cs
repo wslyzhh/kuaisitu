@@ -323,6 +323,13 @@ namespace MettingSys.Web.admin.finance
             _person5 = DTRequest.GetFormString("txtPerson5");
             _orderarea = DTRequest.GetFormString("ddlorderarea");
             _finarea = DTRequest.GetFormString("ddlfinarea");
+            if (_type == "true")
+            {
+            }
+            else
+            {
+                typeText = "应付";
+            }
             RptBind("fin_type='" + (_type == "true" ? "True" : "False") + "'" + CombSqlTxt(), "fin_adddate desc,fin_id desc");
         }
 

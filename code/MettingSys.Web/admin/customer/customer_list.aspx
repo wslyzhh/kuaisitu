@@ -238,6 +238,8 @@
                             </div>
             所属人：
                             <asp:TextBox ID="txtOwner1" runat="server" CssClass="input small"></asp:TextBox>
+            联系人：
+                            <asp:TextBox ID="txtContact" runat="server" CssClass="input small"></asp:TextBox>
             <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="查询" OnClick="btnSearch_Click" />
                 <asp:LinkButton ID="btnExcel" runat="server" OnClick="btnExcel_Click"><i class="iconfont icon-exl"></i><span>导出Excel</span></asp:LinkButton>
         </div>
