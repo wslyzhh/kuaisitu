@@ -13,7 +13,7 @@
     "axios": "^0.18.0",
     "dayjs": "^1.8.14",
     "dingtalk-jsapi": "^2.6.44",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "vconsole": "^3.3.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
