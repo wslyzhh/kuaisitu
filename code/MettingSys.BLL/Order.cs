@@ -162,15 +162,28 @@ namespace MettingSys.BLL
                 }
                 person3 = person3.TrimEnd(',');
             }
+            //判断订单是否使用执行人员业绩总比例规则
+            bool isUseRatio = false;
+            Model.publicSetting ps = new BLL.publicSetting().GetModel(1);
+            if (ps!=null && ps.ps_isuse && model.o_edate>=ps.ps_sdate && model.o_edate<=ps.ps_edate)
+            {
+                isUseRatio = true;
+            }
             //业务执行人员
             list = model.personlist.Where(p => p.op_type == 4);
+            decimal? ratio4 = 0;
             if (list.ToArray().Length > 0)
             {
                 foreach (var item in list)
                 {
-                    person4 += "[" + item.op_name + "," + item.op_number + "," + item.op_area + "],";
+                    person4 += "[" + item.op_name + "," + item.op_number + "," + item.op_area + "," + item.op_ratio + "],";
+                    ratio4 += Utils.ObjToInt(item.op_ratio,0);
                 }
                 person4 = person4.TrimEnd(',');
+                if (isUseRatio && ps.ps_ratio!= ratio4)
+                {
+                    return "执行人员业绩比例之和须等于业绩总比例";
+                }
             }
             //业务设计人员
             list = model.personlist.Where(p => p.op_type == 5);
@@ -202,9 +215,9 @@ namespace MettingSys.BLL
                     totalRatio += item.op_ratio;
                 }
                 person6 = person6.TrimEnd(',');
-                if (totalRatio<=0 || totalRatio >=100)
+                if (totalRatio<=0 || totalRatio >=100- ratio4)
                 {
-                    return "公共业务员的业绩比例之和须大于0，小于100";
+                    return "公共业务员的业绩比例之和须大于0，小于"+(100 - ratio4);
                 }
             }
 
@@ -556,23 +569,38 @@ namespace MettingSys.BLL
                 nStr3 = nStr3.TrimEnd(',');
             }
             #endregion
+
+            //判断订单是否使用执行人员业绩总比例规则
+            bool isUseRatio = false;
+            Model.publicSetting ps = new BLL.publicSetting().GetModel(1);
+            if (ps != null && ps.ps_isuse && newModel.o_edate >= ps.ps_sdate && newModel.o_edate <= ps.ps_edate)
+            {
+                isUseRatio = true;
+            }
+
             #region 执行人员
             oli = oldModel.personlist.Where(p => p.op_type == 4);
             nli = newModel.personlist.Where(p => p.op_type == 4);
             List<OrderPerson> addlist4 = null, cutlist4 = null;
             dealPerson(nli, oli, out addlist4, out cutlist4);
+            int? ratio4 = 0;
             foreach (var item in oli)
             {
-                oStr4 += "[" + item.op_name + "," + item.op_number + "," + item.op_area + "],";
+                oStr4 += "[" + item.op_name + "," + item.op_number + "," + item.op_area + "," + item.op_ratio + "],";
             }
             oStr4 = oStr4.TrimEnd(',');
             if (nli.ToArray().Length > 0)
             {
                 foreach (OrderPerson item in nli)
                 {
-                    nStr4 += "[" + item.op_name + "," + item.op_number + "," + item.op_area + "],";
+                    nStr4 += "[" + item.op_name + "," + item.op_number + "," + item.op_area + "," + item.op_ratio + "],";
+                    ratio4 += Utils.ObjToInt(item.op_ratio, 0);
                 }
                 nStr4 = nStr4.TrimEnd(',');
+                if (isUseRatio && ratio4 != ps.ps_ratio)
+                {
+                    return "执行人员业绩比例之和须等于业绩总比例";
+                }
             }
             #endregion
             #region 设计人员
@@ -622,16 +650,16 @@ namespace MettingSys.BLL
                     totalRatio += item.op_ratio;
                 }
                 nStr6 = nStr6.TrimEnd(',');
-                if (totalRatio <= 0 || totalRatio >= 100)
+                if (totalRatio <= 0 || totalRatio >= 100-ratio4)
                 {
-                    return "公共业务员的业绩比例之和须大于0，小于100";
+                    return "公共业务员的业绩比例之和须大于0，小于"+(100 - ratio4);
                 }
             }
             #endregion
 
             //添加下单人
             IEnumerable<OrderPerson> list0 = oldModel.personlist.Where(p => p.op_type == 1);
-            newModel.personlist.Add(new OrderPerson() { op_oid = newModel.o_id, op_type = 1, op_number = list0.ToArray()[0].op_number, op_name = list0.ToArray()[0].op_name, op_area = list0.ToArray()[0].op_area,op_ratio = 100-totalRatio, op_addTime = list0.ToArray()[0].op_addTime });
+            newModel.personlist.Add(new OrderPerson() { op_oid = newModel.o_id, op_type = 1, op_number = list0.ToArray()[0].op_number, op_name = list0.ToArray()[0].op_name, op_area = list0.ToArray()[0].op_area,op_ratio = 100-totalRatio- ratio4, op_addTime = list0.ToArray()[0].op_addTime });
 
             if (newModel.o_place.IndexOf(list0.ToArray()[0].op_area)<0)
             {

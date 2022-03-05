@@ -25,7 +25,14 @@
             <li class="li_auto flex">
                 <label class="title"><span>付款内容</span></label>
                 <textarea v-model="addData.rpcontent" readonly></textarea>
-            </li>            
+            </li>     
+            <li class="flex flex_a_c flex_s_b">
+                <label class="title"><span>附件</span></label>
+            </li>
+    		<li class="flex flex_a_c flex_s_b" v-for="(f,index) in files" :key="index">
+    			<a :href="'/' + f.pp_filePath">{{f.pp_fileName}}</a>
+    			<span>{{f.pp_size}}K</span>
+    		</li>       
             <li class="flex flex_a_c flex_s_b">
 			    <label class="title newTitle"><span>审批类型</span></label>
 			    <input type="text" readonly :value="addData.type_text">
@@ -55,6 +62,7 @@ export default {
             type:'',
             rpid:0,           
             status:0,
+            files:[],
             status_text:'待审批', 
             flagList:[  //审批状态
                 {
@@ -89,7 +97,6 @@ export default {
                 managerid:this.userInfo.id
             }
             this.getReceiptDetails(params).then(res => {
-                console.log(res.data)
                 this.addData = res.data
                 this.clientName=this.addData.c_name
                 this.clientId=this.addData.c_id
@@ -103,6 +110,7 @@ export default {
                 this.addData.rpremark = this.addData.remark
                 this.status_text = this.flagList[this.addData.flag].key
                 this.status = this.addData.flag
+                this.files = this.addData.picList
             })
         }
     },

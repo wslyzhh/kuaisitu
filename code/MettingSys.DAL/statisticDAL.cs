@@ -132,7 +132,7 @@ namespace MettingSys.DAL
                 strSql.Append(",Convert(decimal(10,2),(shou-fu-oCust)) profit2,Convert(decimal(10,2),case when shou-unIncome<>0 then (shou-fu-oCust)*100/(shou-unIncome) else 0 end) profitRatio2");
                 strSql.Append(" from(");
                 strSql.Append(" select p1.op_name, p1.op_number, p1.op_area,count(*) oCount,Convert(decimal(10,2),sum(isnull(shou,0)*p1.op_ratio/100)) shou,Convert(decimal(10,2),sum(isnull(fu,0)*p1.op_ratio/100)) fu,Convert(decimal(10,2),sum(isnull(ticheng,0)*p1.op_ratio/100)) ticheng,"+custFiled+",Convert(decimal(10,2),sum(isnull(unIncome,0)*p1.op_ratio/100)) unIncome,Convert(decimal(10,2),sum(isnull(unCost,0)*p1.op_ratio/100)) unCost");
-                strSql.Append(" from MS_OrderPerson p1 left join MS_Order  on o_id=p1.op_oid and (p1.op_type=1 or p1.op_type=6)");
+                strSql.Append(" from MS_OrderPerson p1 left join MS_Order  on o_id=p1.op_oid and isnull(p1.op_ratio,0)>0");//(p1.op_type=1 or p1.op_type=4 or p1.op_type=6)
                 strSql.Append(" left join (select fin_oid,sum(case when fin_type = 1 then isnull(fin_money, 0) else 0 end) shou,sum(case when fin_type = 0 then isnull(fin_money, 0) else 0 end) fu, sum(case when na_name like '%提成%' then fin_money else 0 end) ticheng,sum(case when fin_type = 1 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unIncome,sum(case when fin_type = 0 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unCost from MS_finance left join MS_Nature on fin_nature=na_id where fin_flag <> 1  group by fin_oid) t on o_id = t.fin_oid ");
                 strSql.Append(" where 1=1  "+ strWhere1 + "");
                 strSql.Append(" group by p1.op_name, p1.op_number, p1.op_area) v");
@@ -260,7 +260,7 @@ namespace MettingSys.DAL
             strSql.Append(" ,Convert(decimal(10,2),(shou-fu-oCust)) profit2,Convert(decimal(10,2),case when shou-unIncome<>0 then (shou-fu-oCust)*100/(shou-unIncome) else 0 end) profitRatio2");
             strSql.Append(" from(");
             strSql.Append(" select o_id,o_content,o_address,c_name,o_sdate,o_edate,op_name,op_number,op_ratio,Convert(decimal(10,2),(isnull(shou,0)*p1.op_ratio/100)) shou,Convert(decimal(10,2),(isnull(fu,0)*p1.op_ratio/100)) fu,Convert(decimal(10,2),(isnull(ticheng,0)*p1.op_ratio/100)) ticheng,"+ custFiled + ",Convert(decimal(10,2),(isnull(unIncome,0)*p1.op_ratio/100)) unIncome,Convert(decimal(10,2),(isnull(unCost,0)*p1.op_ratio/100)) unCost");
-            strSql.Append(" from MS_OrderPerson p1 inner join MS_Order  on o_id=p1.op_oid and (p1.op_type=1 or p1.op_type=6) left join MS_Customer on o_cid = c_id");
+            strSql.Append(" from MS_OrderPerson p1 inner join MS_Order  on o_id=p1.op_oid and isnull(p1.op_ratio,0)>0  left join MS_Customer on o_cid = c_id");//(p1.op_type=1 or p1.op_type=6)
             strSql.Append(" left join (select fin_oid,sum(case when fin_type = 1 then isnull(fin_money, 0) else 0 end) shou,sum(case when fin_type = 0 then isnull(fin_money, 0) else 0 end) fu, sum(case when na_name like '%提成%' then fin_money else 0 end) ticheng,sum(case when fin_type = 1 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unIncome,sum(case when fin_type = 0 and fin_detail='代收代付' then isnull(fin_money, 0) else 0 end) unCost from MS_finance left join MS_Nature on fin_nature=na_id where fin_flag <> 1  group by fin_oid) t on o_id = t.fin_oid");
             strSql.Append(" where 1=1 "+ strWhere1 + ") v");
 

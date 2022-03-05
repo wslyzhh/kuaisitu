@@ -148,6 +148,7 @@
                 }
             };
             $("#btnSubmitToDistribute").click(function () {
+                $("#btnSubmitToDistribute").attr("disabled", true);
                 $("#form1").ajaxSubmit(ajaxFormOption1);
             });
 

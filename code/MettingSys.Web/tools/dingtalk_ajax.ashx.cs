@@ -1555,7 +1555,7 @@ namespace MettingSys.Web.tools
                 StringBuilder strTemp = new StringBuilder();
                 if (!string.IsNullOrEmpty(keywords))
                 {
-                    strTemp.Append(" and uba_oid like '%" + keywords + "%' or uba_function  like '%" + keywords + "%'");
+                    strTemp.Append(" and (uba_oid like '%" + keywords + "%' or uba_function  like '%" + keywords + "%' or uba_money='"+ keywords + "')");
                 }
                 #endregion
 
@@ -2882,6 +2882,18 @@ namespace MettingSys.Web.tools
                     _object.Add("flag", flag);
                     _object.Add("flagText", BusinessDict.checkStatus()[Utils.ObjToByte(flag)]);
                     _object.Add("remark", remark);
+
+                    JArray picJa = new JArray();
+                    DataSet dp = new BLL.payPic().GetList(3, "pp_type=3 and pp_rid=" + id + "", "pp_addDate desc");
+                    if (dp != null && dp.Tables[0].Rows.Count > 0)
+                    {
+                        picJa = JArray.FromObject(dp.Tables[0]);
+                        _object.Add("picList", picJa);
+                    }
+                    else
+                    {
+                        _object.Add("picList", picJa);
+                    }
                 }
                 context.Response.Write(_object);
                 return;
@@ -3353,7 +3365,7 @@ namespace MettingSys.Web.tools
                 keywords = keywords.Replace("'", "");
                 if (!string.IsNullOrEmpty(keywords))
                 {
-                    strTemp.Append(" and (rpd_num like '%" + keywords + "%' or c_name like '%" + keywords + "%')");
+                    strTemp.Append(" and (rpd_num like '%" + keywords + "%' or c_name like '%" + keywords + "%' or rpd_money = '"+ keywords + "')");
 
                 }
                 #endregion
@@ -3666,7 +3678,7 @@ namespace MettingSys.Web.tools
                 keywords = keywords.Replace("'", "");
                 if (!string.IsNullOrEmpty(keywords))
                 {
-                    strTemp.Append(" and (ce_num like '%" + keywords + "%' or c_name like '%" + keywords + "%')");
+                    strTemp.Append(" and (ce_num like '%" + keywords + "%' or c_name like '%" + keywords + "%' or rp_money='"+ keywords + "')");
 
                 }
                 if (!string.IsNullOrEmpty(isExpect))

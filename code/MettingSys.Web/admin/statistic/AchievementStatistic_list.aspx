@@ -89,7 +89,7 @@
             var type = $("#ddltype").val();
             var str = "";
             if (type == "0") {
-                location.href = "AchievementStatistic_Detail.aspx?txtsDate=<%=_sMonth%>&txteDate=<%=_eMonth%>&ddlstatus=<%=_status%>&ddllock=<%=_lockstatus%>&cbIsCust=<%=_isCust%>&ddlorderType=<%=_ordertype%>&ddlorder=<%=_order%>&ddlarea=" + area + "&txtUser=" + num;
+                location.href = "AchievementStatistic_Detail.aspx?txtsDate=<%=_sMonth%>&txteDate=<%=_eMonth%>&ddlstatus=<%=_status%>&ddllock=<%=_lockstatus%>&cbIsCust=<%=_isCust%>&ddlorderType=<%=_ordertype%>&ddlorder=<%=_order%>&ddlarea=" + area + "&txtUser=" + num + "&self=<%=_self%>";
             }
             else {
                 if (type == "1") {

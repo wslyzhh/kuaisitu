@@ -62,7 +62,7 @@ namespace MettingSys.Web.admin.statistic
             {
                 ChkAdminLevel("sys_AchievementStatistics", DTEnums.ActionEnum.View.ToString()); //检查权限
             }
-            if (!IsPostBack && _excel != "on" && string.IsNullOrEmpty(_page))
+            if (!IsPostBack && _excel != "on")
             {
                 _sMonth = DateTime.Now.ToString("yyyy-MM");
                 _eMonth = DateTime.Now.ToString("yyyy-MM");
@@ -274,7 +274,7 @@ namespace MettingSys.Web.admin.statistic
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("AchievementStatistic_list.aspx", "page={0}&txtsDate={1}&txteDate={2}&ddlstatus={3}&ddllock={4}&hide_place={5}&hide_employee2={6}&cbIsCust={7}&action={8}&ddltype={9}&ddlorderType={10}&ddlorder={11}", "__id__", _sMonth, _eMonth, _status, _lockstatus, _area, _person, _isCust, action, _type,_ordertype,_order);
+            return Utils.CombUrlTxt("AchievementStatistic_list.aspx", "page={0}&txtsDate={1}&txteDate={2}&ddlstatus={3}&ddllock={4}&hide_place={5}&hide_employee2={6}&cbIsCust={7}&action={8}&ddltype={9}&ddlorderType={10}&ddlorder={11}&self={12}", "__id__", _sMonth, _eMonth, _status, _lockstatus, _area, _person, _isCust, action, _type,_ordertype,_order,_self);
         }
 
         //设置分页数量

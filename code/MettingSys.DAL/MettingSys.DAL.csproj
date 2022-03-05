@@ -83,6 +83,7 @@
     <Compile Include="payPic.cs" />
     <Compile Include="permission.cs" />
     <Compile Include="plugin.cs" />
+    <Compile Include="publicSetting.cs" />
     <Compile Include="ReceiptPay.cs" />
     <Compile Include="ReceiptPayDetail.cs" />
     <Compile Include="selfMessage.cs" />

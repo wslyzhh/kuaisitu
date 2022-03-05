@@ -853,9 +853,10 @@ namespace MettingSys.DAL
             strSql.Append(" sum(case when na_name like '%提成%' then fin_money else 0 end) ticheng");
             strSql.Append(" from MS_finance left join MS_Nature on fin_nature = na_id");
             strSql.Append(" where fin_oid = @oid group by fin_oid ) t");
-            strSql.Append(" left join MS_Order o on o_id = t.fin_oid left join MS_OrderPerson op on o_id = op_oid");
-            strSql.Append(" where o_id = @oid and(op_type = 1 or op_type = 6)) v");
-            
+            strSql.Append(" left join MS_Order o on o_id = t.fin_oid left join MS_OrderPerson op on o_id = op_oid and ISNULL(op_ratio,0)>0");
+            strSql.Append(" where o_id = @oid ) v"); //and(op_type = 1 or op_type = 4 or op_type = 6)
+
+
             SqlParameter[] parameters = {
                     new SqlParameter("@oid", SqlDbType.VarChar,11)};
             parameters[0].Value = oid;

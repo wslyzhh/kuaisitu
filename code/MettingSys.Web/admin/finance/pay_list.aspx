@@ -617,7 +617,7 @@
             <span style="float: right;">总计：<asp:Label ID="tCount" runat="server">0</asp:Label>条记录，总计付款金额：<asp:Label ID="tMoney" runat="server">0</asp:Label>，总计未分配金额：<asp:Label ID="tUnMoney" runat="server">0</asp:Label></span>
         </div>
         <!--/列表-->
-        <div class="dRemark" style="margin-top: 47px;">
+        <div class="dRemark" style="margin-top: 50px;">
             <p>1.付款：<span class="check_0"></span>待付款，<span class="check_2"></span>已付款</p>
             <p>2.删除付款通知不会删除付款明细</p>
             <p>3.付款对象后面带“<font color='green'>[预]</font>”，表示预付款</p>

@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="selectEmployee.aspx.cs" Inherits="MettingSys.Web.admin.order.selectEmployee" %>
-
+<%@ Import Namespace="MettingSys.Common" %>
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -60,6 +60,7 @@
         }
     </style>
     <script type="text/javascript">
+        var totalRatio = 100;
         var api = top.dialog.get(window);; //获取父窗体对象
         $(function () {
             //初始化分类的结构
@@ -72,8 +73,22 @@
                 value: '确定',
                 callback: function () {
                     if (!checkNum()) {
-                        layer.msg("业绩比例须为大于0,小于等于100的正整数,且业绩比例之和必须小于100");
+                        if ($("#hemployeeType").val() == "6") {
+                            layer.msg("业绩比例须为大于0,小于等于" + totalRatio + "的正整数,且业绩比例之和必须小于" + totalRatio + "");
+                        }
+                        else {
+                            if ($("#hratio3").val() != "undefined") {
+                                layer.msg("业绩比例之和必须等于" + totalRatio + "");                           
+                            }
+                        }
                         return false;
+                    }
+                    if ($("#hemployeeType").val() == "3") {
+                        //检查共同业务员和执行人员的比例之和必须小于100
+                        if (parseInt($("#hratio6").val()) + parseInt(totalRatio) >= 100) {
+                            layer.msg("共同业务员和执行人员的比例之和必须小于100");
+                            return false;
+                        }
                     }
                     appendSpecHtml();
                 },
@@ -85,13 +100,21 @@
             ]);
 
             //初始化已选择人员
-            $(api.data).parent().find("input[name='hide_employee6']").each(function () {
+            $(api.data).parent().find("input[name='hide_employee" + $("#hemployeeType").val()+"']").each(function () {
                 var hideId = $(this).val();
                 var list = hideId.split("-");
-                var li = $("<li title='" + list[1] + "' tip='" + list[2] + "'><span onclick='delLi(this)' class='spanUser'>" + list[0] + "</span><input type='text' style='width: 40px; text - align: right;' class='input small ratioInput' value='" + list[3]+"'/><span class='spanSign'>%</span></li>");
+                var li = $("<li title='" + list[1] + "' tip='" + list[2] + "'><span onclick='delLi(this)' class='spanUser'>" + list[0] + "</span><input type='text' style='width: 40px; text - align: right;' class='input small ratioInput' value='" + (!list[3]? '' : list[3]) + "'/><span class='spanSign'>%</span></li>");
+                //执行人员界面，且没有符合条件
+                if (list.length<4 && $("#hemployeeType").val() == "3" && $("#hratio3").val() == "undefined") {
+                    li = $("<li title='" + list[1] + "' tip='" + list[2] + "'><span onclick='delLi(this)' class='spanUser'>" + list[0] + "</span></li>");
+                }
                 $("#employeelist").append(li);
                 checkInputValue();
             });
+
+            if ($("#hemployeeType").val() == 3) {
+                totalRatio = $("#hratio3").val() == "undefined" ? 0 : $("#hratio3").val();
+            }
         });
 
         //插入人员
@@ -105,10 +128,17 @@
         //创建人员的HTML
         function execSpecHtml(name, num, ratio, area) {
             var liHtml = '<li title="' + num + '">'
-                + '<input name="hide_employee6" type="hidden" value="' + name + '-' + num + '-' + area + '-' + ratio + '" />'
+                + '<input name="hide_employee' + $("#hemployeeType").val() + '" type="hidden" value="' + name + '-' + num + '-' + area + '-' + ratio + '" />'
                 + '<a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>'
                 + '<span>' + num + name + '</span>(<span class="ratioText">' + ratio + '</span>%)'
                 + '</li>';
+            if ($("#hemployeeType").val() == "3" && $("#hratio3").val() == "undefined") {
+                liHtml = '<li title="' + num + '">'
+                    + '<input name="hide_employee' + $("#hemployeeType").val() + '" type="hidden" value="' + name + '-' + num + '-' + area + '" />'
+                    + '<a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>'
+                    + '<span>' + num + name + '</span>'
+                    + '</li>';
+            }
             $(api.data).before(liHtml);
         }
         //点击选择人员
@@ -123,6 +153,10 @@
                 });
                 if (!tag) {
                     var li = $("<li title='" + username + "' tip='" + area + "'><span onclick='delLi(this)' class='spanUser'>" + realname + "</span><input type='text' style='width: 40px; text - align: right;' class='input small ratioInput'/><span class='spanSign'>%</span></li>");
+                    //执行人员界面，且没有符合条件
+                    if ($("#hemployeeType").val() == "3" && $("#hratio3").val() == "undefined") {
+                        li = $("<li title='" + username + "' tip='" + area + "'><span onclick='delLi(this)' class='spanUser'>" + realname + "</span></li>");
+                    }
                     $("#employeelist").append(li);
                     checkInputValue();
                 }
@@ -143,7 +177,7 @@
             $(".ratioInput").blur(function () {
                 var thisRatio = $(this).val();
                 if (!(/(^[1-9]\d*$)/.test(thisRatio)) || thisRatio <= 0 || thisRatio >= 100) {
-                    layer.msg("业绩比例须为正整数，且大于0小于100");
+                    layer.msg("业绩比例须为正整数，且大于0小于" + totalRatio);
                     $(this).val("");
                     return;
                 }
@@ -152,19 +186,54 @@
         //验证业绩比例
         function checkNum() {
             var tRatio = 0;
+            var t = false;
             $("#employeelist li").each(function () {
                 var v = parseInt($(this).children(".ratioInput").val());
-                if (!(/(^[1-9]\d*$)/.test(v)) || v <= 0 || v >= 100) {
-                    return false;
+                if ($("#hemployeeType").val() == "6") {
+                    if (!(/(^[1-9]\d*$)/.test(v)) || v <= 0 || v >= totalRatio) {
+                        //return false;
+                        t = false;
+                    }
+                    else {
+                        tRatio += v;
+                        t = true;
+                    }
                 }
                 else {
-                    tRatio += v;
+                    if ($("#hratio3").val() == "undefined") {
+                        t = true;
+                    }
+                    else {
+                        if (!(/(^[1-9]\d*$)/.test(v)) || v <= 0 || v > totalRatio) {
+                            //return false;
+                            t = false;
+                        }
+                        else {
+                            tRatio += v;
+                            t = true;
+                        }
+                    }
                 }
             });
-            if (tRatio >= 100 || tRatio<=0) {
-                return false;
+            if (t) {
+                if ($("#hemployeeType").val() == "6") {
+                    if (tRatio >= totalRatio || tRatio <= 0) {
+                        return false;
+                    }
+                    return true;
+                }
+                else {
+                    if ($("#hratio3").val() == "undefined") {
+                        return true;
+                    }
+                    if (tRatio != totalRatio) {
+                        return false;
+                    }
+                    
+                    return true;
+                }
             }
-            return true;
+            return false;
         }
     </script>
 </head>
@@ -209,6 +278,9 @@
                 <ul id="employeelist">
                 </ul>
             </div>
+            <input type="hidden" id="hemployeeType" value ="<%=DTRequest.GetQueryString("type") %>" />
+            <input type="hidden" id="hratio3" value ="<%=DTRequest.GetQueryString("ratio3") %>" />
+            <input type="hidden" id="hratio6" value ="<%=DTRequest.GetQueryString("ratio6") %>" />
         </div>
     </form>
 </body>
