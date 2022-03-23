@@ -34,10 +34,10 @@ namespace MettingSys.BLL
             {
                 return "请填写开始执行日期起始日期";
             }
-            if (model.ps_edate == null)
-            {
-                return "请填写开始执行日期截止日期";
-            }
+            //if (model.ps_edate == null)
+            //{
+            //    return "请填写开始执行日期截止日期";
+            //}
             if (model.ps_ratio<=0 || model.ps_ratio >=100)
             {
                 return "业绩比例需大于0，小于100";
@@ -62,10 +62,10 @@ namespace MettingSys.BLL
             {
                 return "请填写开始执行日期起始日期";
             }
-            if (model.ps_edate == null)
-            {
-                return "请填写开始执行日期截止日期";
-            }
+            //if (model.ps_edate == null)
+            //{
+            //    return "请填写开始执行日期截止日期";
+            //}
             if (model.ps_ratio <= 0 || model.ps_ratio >= 100)
             {
                 return "业绩比例需大于0，小于100";

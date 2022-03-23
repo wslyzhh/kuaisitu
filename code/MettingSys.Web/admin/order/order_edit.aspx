@@ -400,7 +400,7 @@
                             var date = new Date(Date.parse($("#txteDate").val()));
                             var sdate = new Date(Date.parse(data.sdate));
                             var edate = new Date(Date.parse(data.edate));
-                            if (date >= sdate && date <= edate) {
+                            if ((data.edate != "" && date >= sdate && date <= edate) || (data.edate == "" && date >= sdate)) {
                                 //先计算共同业务员设置了多少比例
                                 var ratio6 = 0;
                                 $("input[name='hide_employee6']").each(function () {
@@ -422,7 +422,7 @@
                             var date = new Date(Date.parse($("#txteDate").val()));
                             var sdate = new Date(Date.parse(data.sdate));
                             var edate = new Date(Date.parse(data.edate));
-                            if (date >= sdate && date <= edate) {
+                            if ((data.edate != "" && date >= sdate && date <= edate) || (data.edate == "" && date >= sdate)) {
                                 //先计算执行人员设置了多少比例
                                 var ratio3 = 0;
                                 $("input[name='hide_employee3']").each(function () {

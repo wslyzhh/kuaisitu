@@ -181,8 +181,9 @@
                         </asp:DropDownList>
                     </div>
                 <input type="hidden" name="action" value="Search" />
+                <input type="hidden" name="self" value="<%=_self %>"" />
                 <input <%--id="btnSave"--%> type="submit" class="btn" value="查询" />
-                <a href="<%=Utils.CombUrlTxt("AchievementStatistic_Detail.aspx", "Excel={0}&txtsDate={1}&txteDate={2}&ddllock={3}&ddlstatus={4}&ddlarea={5}&cbIsCust={6}&action={7}&ddlorderType={8}&ddlorder={9}&txtOrderID={10}&txtCusName={11}&txtContent={12}&txtAddress={13}&txtUser={14}", "on", _sMonth, _eMonth, _lockstatus, _status, _area, _isCust,action,_ordertype,_order,_orderNum,_cusName,_content,_address,_user) %>"><i class="iconfont icon-exl"></i><span>导出Excel</span></a>
+                <a href="<%=Utils.CombUrlTxt("AchievementStatistic_Detail.aspx", "Excel={0}&txtsDate={1}&txteDate={2}&ddllock={3}&ddlstatus={4}&ddlarea={5}&cbIsCust={6}&action={7}&ddlorderType={8}&ddlorder={9}&txtOrderID={10}&txtCusName={11}&txtContent={12}&txtAddress={13}&txtUser={14}&self={15}", "on", _sMonth, _eMonth, _lockstatus, _status, _area, _isCust,action,_ordertype,_order,_orderNum,_cusName,_content,_address,_user,_self) %>"><i class="iconfont icon-exl"></i><span>导出Excel</span></a>
             </div>
         </div>
 

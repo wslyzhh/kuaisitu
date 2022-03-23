@@ -1555,7 +1555,7 @@ namespace MettingSys.Web.tools
                 StringBuilder strTemp = new StringBuilder();
                 if (!string.IsNullOrEmpty(keywords))
                 {
-                    strTemp.Append(" and (uba_oid like '%" + keywords + "%' or uba_function  like '%" + keywords + "%' or uba_money='"+ keywords + "')");
+                    strTemp.Append(" and (uba_oid like '%" + keywords + "%' or uba_function  like '%" + keywords + "%' or uba_money like '%"+ keywords + "%')");
                 }
                 #endregion
 
@@ -3365,7 +3365,7 @@ namespace MettingSys.Web.tools
                 keywords = keywords.Replace("'", "");
                 if (!string.IsNullOrEmpty(keywords))
                 {
-                    strTemp.Append(" and (rpd_num like '%" + keywords + "%' or c_name like '%" + keywords + "%' or rpd_money = '"+ keywords + "')");
+                    strTemp.Append(" and (rpd_num like '%" + keywords + "%' or c_name like '%" + keywords + "%' or rpd_money like '%" + keywords + "%')");
 
                 }
                 #endregion
@@ -3678,7 +3678,7 @@ namespace MettingSys.Web.tools
                 keywords = keywords.Replace("'", "");
                 if (!string.IsNullOrEmpty(keywords))
                 {
-                    strTemp.Append(" and (ce_num like '%" + keywords + "%' or c_name like '%" + keywords + "%' or rp_money='"+ keywords + "')");
+                    strTemp.Append(" and (ce_num like '%" + keywords + "%' or c_name like '%" + keywords + "%' or rp_money like '%"+ keywords + "%')");
 
                 }
                 if (!string.IsNullOrEmpty(isExpect))

@@ -105,6 +105,7 @@ export default {
             _this.searchData.managerid=_this.userInfo.id
             this.getPayDetailList(_this.searchData).then(res => {
                 if(res.data.msg){
+                    console.log(res.data.msg)
                     _this.recordTotal=0
 					_this.ddSet.setToast({text:res.data.msg})
 					return

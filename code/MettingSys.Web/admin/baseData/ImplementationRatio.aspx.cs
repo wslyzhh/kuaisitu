@@ -34,7 +34,7 @@ namespace MettingSys.Web.admin.baseData
                     cbIsUse.Checked = false;
                 }
                 txtsDate.Text = model.ps_sdate.Value.ToString("yyyy-MM-dd");
-                txteDate.Text = model.ps_edate.Value.ToString("yyyy-MM-dd");
+                txteDate.Text = model.ps_edate==null?"": model.ps_edate.Value.ToString("yyyy-MM-dd");
                 txtRatio.Text = model.ps_ratio.ToString();
             }
         }
@@ -68,7 +68,7 @@ namespace MettingSys.Web.admin.baseData
                 }
                 if (model.ps_edate != ConvertHelper.toDate(txteDate.Text))
                 {
-                    content += "开始执行日期截止日期:" + model.ps_edate.Value.ToString("yyyy-MM-dd") + "→<font color='red'>" + txteDate.Text + "<font><br/>";
+                    content += "开始执行日期截止日期:" + (model.ps_edate == null ? "" : model.ps_edate.Value.ToString("yyyy-MM-dd")) + "→<font color='red'>" + txteDate.Text + "<font><br/>";
                 }
                 if (model.ps_ratio.ToString() != txtRatio.Text)
                 {

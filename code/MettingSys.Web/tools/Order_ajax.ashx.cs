@@ -263,7 +263,7 @@ namespace MettingSys.Web.tools
                 context.Response.Write("{\"status\":\"0\" }");
                 return;
             }
-            context.Response.Write("{\"status\":\"1\",\"sdate\":\""+ model.ps_sdate.Value.ToString("yyyy-MM-dd") + "\",\"edate\":\"" + model.ps_edate.Value.ToString("yyyy-MM-dd") + "\",\"ratio\":\""+ model.ps_ratio + "\" }");
+            context.Response.Write("{\"status\":\"1\",\"sdate\":\""+ model.ps_sdate.Value.ToString("yyyy-MM-dd") + "\",\"edate\":\"" + (model.ps_edate == null ? "" : model.ps_edate.Value.ToString("yyyy-MM-dd")) + "\",\"ratio\":\""+ model.ps_ratio + "\" }");
             return;
         }
         #endregion

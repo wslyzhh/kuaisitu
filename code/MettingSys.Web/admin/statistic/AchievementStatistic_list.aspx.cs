@@ -62,7 +62,7 @@ namespace MettingSys.Web.admin.statistic
             {
                 ChkAdminLevel("sys_AchievementStatistics", DTEnums.ActionEnum.View.ToString()); //检查权限
             }
-            if (!IsPostBack && _excel != "on")
+            if (!IsPostBack && _excel != "on" && string.IsNullOrEmpty(_page))
             {
                 _sMonth = DateTime.Now.ToString("yyyy-MM");
                 _eMonth = DateTime.Now.ToString("yyyy-MM");
