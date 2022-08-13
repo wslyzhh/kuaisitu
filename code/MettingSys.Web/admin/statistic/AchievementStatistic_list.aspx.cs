@@ -24,7 +24,7 @@ namespace MettingSys.Web.admin.statistic
         decimal _pOrderShou = 0, _pUnIncome = 0, _pOrderFu = 0, _pUnCost = 0, _pOrderTicheng = 0, _pCust = 0, _pProfit1 = 0, _pProfit2 = 0;
         decimal _tOrderShou = 0, _tUnIncome = 0, _tOrderFu = 0, _tUnCost = 0, _tOrderTicheng = 0, _tCust = 0, _tProfit1 = 0, _tProfit2 = 0;
         Model.manager manager = null;
-        protected string action = "", _page = "", _sMonth = "", _eMonth = "", _status = "", _lockstatus = "", _area = "", _person = "", _isCust = "", _self = "", _type = "0", _excel = "", _ordertype = "", _order = "";
+        protected string action = "", _page = "", _sMonth = "", _eMonth = "", _status = "", _lockstatus = "", _area = "", _person = "", _isCust = "", _self = "", _type = "0", _excel = "", _ordertype = "", _order = "", _sign = "", _money = "", _sdate1 = "", _edate1 = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             this.pageSize = GetPageSize(10); //每页数量            
@@ -39,6 +39,10 @@ namespace MettingSys.Web.admin.statistic
             action = DTRequest.GetString("action");
             _type = DTRequest.GetString("ddltype");
             _ordertype = DTRequest.GetString("ddlorderType");
+            _sign = DTRequest.GetString("ddlsign");
+            _money = DTRequest.GetString("txtMoney");
+            _sdate1 = DTRequest.GetString("txtsDate1");
+            _edate1 = DTRequest.GetString("txteDate1");
             if (string.IsNullOrEmpty(_ordertype))
             {
                 _ordertype = "(shou-fu-oCust)";
@@ -134,6 +138,11 @@ namespace MettingSys.Web.admin.statistic
                 rptEmployee2.DataSource = null;
                 rptEmployee2.DataBind();
             }
+
+            ddlsign.SelectedValue = _sign;
+            txtMoney.Text = _money;
+            txtsDate1.Text = _sdate1;
+            txteDate1.Text = _edate1;
             #endregion
         }
         #region 初始化数据=================================
@@ -190,6 +199,19 @@ namespace MettingSys.Web.admin.statistic
             }
             dict.Add("isCust", _isCust.ToString());
             dict.Add("type", _type.ToString());
+            if (!string.IsNullOrEmpty(_money))
+            {
+                dict.Add("sign", _sign);
+                dict.Add("money", _money);
+            }
+            if (!string.IsNullOrEmpty(_sdate1))
+            {
+                dict.Add("sdate1", _sdate1);
+            }
+            if (!string.IsNullOrEmpty(_edate1))
+            {
+                dict.Add("edate1", _edate1);
+            }
             return dict;
         }
 
@@ -274,7 +296,7 @@ namespace MettingSys.Web.admin.statistic
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("AchievementStatistic_list.aspx", "page={0}&txtsDate={1}&txteDate={2}&ddlstatus={3}&ddllock={4}&hide_place={5}&hide_employee2={6}&cbIsCust={7}&action={8}&ddltype={9}&ddlorderType={10}&ddlorder={11}&self={12}", "__id__", _sMonth, _eMonth, _status, _lockstatus, _area, _person, _isCust, action, _type,_ordertype,_order,_self);
+            return Utils.CombUrlTxt("AchievementStatistic_list.aspx", "page={0}&txtsDate={1}&txteDate={2}&ddlstatus={3}&ddllock={4}&hide_place={5}&hide_employee2={6}&cbIsCust={7}&action={8}&ddltype={9}&ddlorderType={10}&ddlorder={11}&self={12}&ddlsign={13}&txtMoney={14}&txtsDate1={15}&txteDate1={16}", "__id__", _sMonth, _eMonth, _status, _lockstatus, _area, _person, _isCust, action, _type,_ordertype,_order,_self,_sign,_money,_sdate1,_edate1);
         }
 
         //设置分页数量
