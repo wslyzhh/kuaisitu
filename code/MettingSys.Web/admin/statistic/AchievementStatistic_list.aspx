@@ -259,7 +259,27 @@
                     <input type="hidden" name="action" value="Search" />
                     <input type="hidden" name="self" value="<%=_self %>" />
                     <input <%--id="btnSave"--%> type="submit" class="btn" value="查询" />
-                    <a href="<%=Utils.CombUrlTxt("AchievementStatistic_list.aspx", "Excel={0}&txtsDate={1}&txteDate={2}&ddllock={3}&ddlstatus={4}&hide_place={5}&hide_employee3={6}&cbIsCust={7}&ddltype={8}&ddlorderType={9}&ddlorder={10}&self={11}", "on", _sMonth, _eMonth, _lockstatus, _status, _area,_person, _isCust,_type,_ordertype,_order,_self) %>"><i class="iconfont icon-exl"></i><span>导出Excel</span></a>
+                    <a href="<%=Utils.CombUrlTxt("AchievementStatistic_list.aspx", "Excel={0}&txtsDate={1}&txteDate={2}&ddllock={3}&ddlstatus={4}&hide_place={5}&hide_employee3={6}&cbIsCust={7}&ddltype={8}&ddlorderType={9}&ddlorder={10}&self={11}&ddlsign={12}&txtMoney={13}&txtsDate1={14}&txteDate1={15}", "on", _sMonth, _eMonth, _lockstatus, _status, _area,_person, _isCust,_type,_ordertype,_order,_self,_sign,_money,_sdate1,_edate1) %>"><i class="iconfont icon-exl"></i><span>导出Excel</span></a>
+                </div>
+            </div>
+            <div class="searchbar">
+                <div class="menu-list" style="margin-bottom: 10px;">
+                    未收款：
+                        <div class="rule-single-select myRuleSelect">
+                            <asp:DropDownList ID="ddlsign" runat="server" Width="50">
+                                <asp:ListItem Value=">">></asp:ListItem>
+                                <asp:ListItem Value=">=">>=</asp:ListItem>
+                                <asp:ListItem Value="=">=</asp:ListItem>
+                                <asp:ListItem Value="<>" Selected="True"><></asp:ListItem>
+                                <asp:ListItem Value="<"><</asp:ListItem>
+                                <asp:ListItem Value="<="><=</asp:ListItem>
+                            </asp:DropDownList>
+                        </div>
+                        <asp:TextBox ID="txtMoney" runat="server" CssClass="input small"></asp:TextBox>
+                    收款日期：
+                        <asp:TextBox ID="txtsDate1" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'txteDate\')}'})"></asp:TextBox>
+                    -
+                        <asp:TextBox ID="txteDate1" runat="server" CssClass="input rule-date-input" Width="100px" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'txtsDate\')}'})"></asp:TextBox>
                 </div>
             </div>
 
