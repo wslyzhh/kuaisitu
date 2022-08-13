@@ -3,7 +3,7 @@
     <div>
 		<tab-list :tabList="topTabList" @on-tab="changeTab"></tab-list>
 		<div class="search_box flex flex_a_c flex_j_c">
-		   <input type="text" v-model="searchData.keywords" @input="changeSearch" placeholder="模糊搜索订单号或支付用途">
+		   <input type="text" v-model="searchData.keywords" @input="changeSearch" placeholder="模糊搜索订单号或支付用途或金额">
 		</div>
         <div class="customer_list">
             <h2 class="amount">共{{recordTotal}}条</h2>

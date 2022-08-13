@@ -256,7 +256,7 @@ namespace MettingSys.Web.admin.order
                 return;
             }
             DataRow dr = ds.Tables[0].Rows[0];
-            labOwner.Text = new MettingSys.BLL.department().getAreaText(dr["op_area"].ToString()) + "," + dr["op_number"] + "," + dr["op_name"]+"("+dr["op_ratio"]+"%)";
+            labOwner.Text = new MettingSys.BLL.department().getAreaText(dr["op_area"].ToString()) + "," + dr["op_number"] + "," + dr["op_name"]+"("+Utils.ObjToInt(dr["op_ratio"]) +"%)";
             txtCusName.Text = dr["c_name"].ToString();
             hCusId.Value = dr["c_id"].ToString();
             List<Model.Contacts> contactlist = new BLL.Contacts().getList("co_cid="+ hCusId.Value + "", " co_flag desc,co_id asc");
@@ -324,6 +324,7 @@ namespace MettingSys.Web.admin.order
                 liemployee2.Visible = false;
                 liemployee3.Visible = false;
                 liemployee4.Visible = false;
+                liemployee6.Visible = false;
                 uploadDiv.Visible = false;
                 uploadDiv2.Visible = false;
                 btnSave.Visible = false;
@@ -351,8 +352,10 @@ namespace MettingSys.Web.admin.order
                     isExecutiver = true;
                     showDetail = true;
                     uploadDiv.Visible = true;
+                    uploadDiv2.Visible = true;
                     btnUnBusinessPay.Visible = true;
                     btnReceiptPay.Visible = true;
+                    trFile.Visible = true;
                     //btnPay.Visible = true;
                     btnInvoince.Visible = true;
                     //btnExcelIn.Visible = true;
@@ -381,6 +384,7 @@ namespace MettingSys.Web.admin.order
                     liemployee2.Visible = true;
                     liemployee3.Visible = true;
                     liemployee4.Visible = true;
+                    liemployee6.Visible = true;
                     uploadDiv.Visible = true;
                     uploadDiv2.Visible = true;
                     btnUnBusinessPay.Visible = true;
@@ -400,6 +404,7 @@ namespace MettingSys.Web.admin.order
                     liemployee2.Visible = true;
                     liemployee3.Visible = true;
                     liemployee4.Visible = true;
+                    liemployee6.Visible = true;
                     uploadDiv.Visible = true;
                     uploadDiv2.Visible = true;
                     btnSave.Visible = true;
@@ -601,10 +606,10 @@ namespace MettingSys.Web.admin.order
             #endregion
 
             #region 执行备用金借款明细
-            if (isExecutiver)
-            {
-                sqlwhere = " and uba_PersonNum='" + manager.user_name + "'";
-            }
+            //if (isExecutiver)
+            //{
+            //    sqlwhere = " and uba_PersonNum='" + manager.user_name + "'";
+            //}
             DataSet unBusinessData = new BLL.unBusinessApply().GetList(0, "uba_oid='" + _oid + "' " + sqlwhere + "", "uba_addDate desc,uba_id desc");
             if (unBusinessData != null && unBusinessData.Tables[0].Rows.Count > 0)
             {
@@ -614,7 +619,7 @@ namespace MettingSys.Web.admin.order
             #endregion
 
             #region 应收付
-            DataTable natureData = new BLL.finance().getNature(_oid, isExecutiver ? manager.user_name : "");
+            DataTable natureData = new BLL.finance().getNature(_oid, ""); //isExecutiver? manager.user_name: ""
             if (natureData!= null && natureData.Rows.Count > 0)
             {
                 rptNature.DataSource = natureData;
@@ -624,10 +629,10 @@ namespace MettingSys.Web.admin.order
             #endregion
 
             #region 发票
-            if (isExecutiver)
-            {
-                sqlwhere = " and inv_personNum='" + manager.user_name + "'";
-            }
+            //if (isExecutiver)
+            //{
+            //    sqlwhere = " and inv_personNum='" + manager.user_name + "'";
+            //}
             DataTable invoiceData = new BLL.invoices().GetList(0, "inv_oid='" + _oid + "' "+ sqlwhere + "", "inv_addDate desc,inv_id desc").Tables[0];
             if (invoiceData != null && invoiceData.Rows.Count > 0)
             {
@@ -648,10 +653,10 @@ namespace MettingSys.Web.admin.order
             #endregion
 
             #region 已收付款
-            if (isExecutiver)
-            {
-                sqlwhere = " and rpd_personNum='" + manager.user_name + "'";
-            }
+            //if (isExecutiver)
+            //{
+            //    sqlwhere = " and rpd_personNum='" + manager.user_name + "'";
+            //}
             DataTable rpData = new BLL.ReceiptPayDetail().GetList(0, "rpd_oid='" + _oid + "'", "rpd_type desc,rpd_adddate desc,rpd_id desc").Tables[0];
             if (rpData != null && rpData.Rows.Count > 0)
             {
@@ -661,8 +666,8 @@ namespace MettingSys.Web.admin.order
             #endregion
 
             #region 结算汇总
-            if (!isExecutiver)//执行人员不可查看
-            {
+            //if (!isExecutiver)
+            //{
                 DataTable collectData= bll.getOrderCollect(_oid);
                 if (collectData != null && collectData.Rows.Count > 0)
                 {
@@ -682,7 +687,7 @@ namespace MettingSys.Web.admin.order
                     rptCollect.DataSource = collectData;
                     rptCollect.DataBind();
                 }
-            }
+            //}
             #endregion
         }
         #endregion
@@ -693,10 +698,10 @@ namespace MettingSys.Web.admin.order
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
                 string sqlwhere = "";
-                if (isExecutiver)
-                {
-                    sqlwhere = " and fin_personNum='" + manager.user_name + "'";
-                }                
+                //if (isExecutiver)
+                //{
+                //    sqlwhere = " and fin_personNum='" + manager.user_name + "'";
+                //}                
                 Repeater rep = e.Item.FindControl("rptFinanceList") as Repeater;
                 DataRowView rowv = (DataRowView)e.Item.DataItem;
                 rep.DataSource = new BLL.finance().GetList(0, "fin_oid='" + rowv["fin_oid"] + "' and fin_nature=" + rowv["fin_nature"] + " " + sqlwhere + "", "fin_type desc,fin_adddate desc,fin_id desc");

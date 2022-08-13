@@ -23,7 +23,7 @@ namespace MettingSys.Web.admin.statistic
         decimal _pShou = 0, _pUnIncome = 0, _pFu = 0, _pUnCost = 0, _pCust = 0, _pTicheng = 0, _pProfit1 = 0, _pProfit2 = 0;
         decimal _tShou = 0, _tUnIncome = 0, _tFu = 0, _tUnCost = 0, _tCust = 0, _tTicheng = 0, _tProfit1 = 0, _tProfit2 = 0;
         Model.manager manager = null;
-        protected string action = "", _page = "", _orderNum = "", _cusName = "", _content = "", _address = "", _sMonth = "", _eMonth = "", _status = "", _lockstatus = "",_area="", _user = "", _isCust = "", _excel = "", _ordertype = "", _order = "";
+        protected string action = "", _page = "", _orderNum = "", _cusName = "", _content = "", _address = "", _sMonth = "", _eMonth = "", _status = "", _lockstatus = "",_area="", _user = "", _isCust = "", _excel = "", _ordertype = "", _order = "", _self = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             this.pageSize = GetPageSize(10); //每页数量            
@@ -51,7 +51,17 @@ namespace MettingSys.Web.admin.statistic
             {
                 _order = "Desc";
             }
-            ChkAdminLevel("sys_AchievementStatistics", DTEnums.ActionEnum.View.ToString()); //检查权限
+            _self = DTRequest.GetString("self");
+            if (_self == "1")//个人业绩
+            {
+                manager = GetAdminInfo();
+                _user = manager.user_name;
+                txtUser.Enabled = false;
+            }
+            else
+            {
+                ChkAdminLevel("sys_AchievementStatistics", DTEnums.ActionEnum.View.ToString()); //检查权限
+            }
             if (!IsPostBack && _excel != "on" && string.IsNullOrEmpty(_page))
             {
                 //_sMonth = DateTime.Now.ToString("yyyy-MM");
@@ -251,7 +261,7 @@ namespace MettingSys.Web.admin.statistic
 
         private string backUrl()
         {
-            return Utils.CombUrlTxt("AchievementStatistic_Detail.aspx", "page={0}&txtsDate={1}&txteDate={2}&ddlstatus={3}&ddllock={4}&txtUser={5}&cbIsCust={6}&action={7}&ddlorderType={8}&ddlorder={9}&txtOrderID={10}&txtCusName={11}&txtContent={12}&txtAddress={13}&ddlarea={14}", "__id__", _sMonth, _eMonth, _status, _lockstatus, _user, _isCust, action, _ordertype, _order, _orderNum, _cusName, _content, _address, _area);
+            return Utils.CombUrlTxt("AchievementStatistic_Detail.aspx", "page={0}&txtsDate={1}&txteDate={2}&ddlstatus={3}&ddllock={4}&txtUser={5}&cbIsCust={6}&action={7}&ddlorderType={8}&ddlorder={9}&txtOrderID={10}&txtCusName={11}&txtContent={12}&txtAddress={13}&ddlarea={14}&self={15}", "__id__", _sMonth, _eMonth, _status, _lockstatus, _user, _isCust, action, _ordertype, _order, _orderNum, _cusName, _content, _address, _area,_self);
         }
 
         protected void Excel()

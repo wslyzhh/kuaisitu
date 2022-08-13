@@ -194,7 +194,7 @@ export default {
                 this.endTime = this.getNowFormatDate()
                 this.startTime = this.getNowFormatDate(0)
             }
-            let managerid =14//this.userId
+            let managerid =this.userId
             let params = {
                 type:this.tabIndex,
                 sMonth:this.startTime,

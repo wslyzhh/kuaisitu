@@ -133,6 +133,7 @@
     <Content Include="admin\baseData\businessNature_list.aspx" />
     <Content Include="admin\baseData\business_log.aspx" />
     <Content Include="admin\baseData\editinfo.aspx" />
+    <Content Include="admin\baseData\ImplementationRatio.aspx" />
     <Content Include="admin\baseData\invUnit_edit.aspx" />
     <Content Include="admin\baseData\invUnit_list.aspx" />
     <Content Include="admin\baseData\payMethod_edit.aspx" />
@@ -1060,6 +1061,13 @@
     </Compile>
     <Compile Include="admin\baseData\editinfo.aspx.designer.cs">
       <DependentUpon>editinfo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\baseData\ImplementationRatio.aspx.cs">
+      <DependentUpon>ImplementationRatio.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\baseData\ImplementationRatio.aspx.designer.cs">
+      <DependentUpon>ImplementationRatio.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\baseData\invUnit_edit.aspx.cs">
       <DependentUpon>invUnit_edit.aspx</DependentUpon>

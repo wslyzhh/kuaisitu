@@ -36,6 +36,9 @@ namespace MettingSys.Web.tools
                 case "searchPerson":
                     searchPerson(context);
                     break;
+                case "checkRatio":
+                    checkRatio(context);
+                    break;
                 default:
                     break;
             }
@@ -77,6 +80,7 @@ namespace MettingSys.Web.tools
             order.o_isPush = pushStatus == "True" ? true : false;
             order.o_remarks = remark;
             string[] list = new string[] { }, pli = new string[] { };
+            int ratio3=0, ratio6 = 0;
             #region 业务报账员
             if (!string.IsNullOrEmpty(employee1))
             {
@@ -105,10 +109,19 @@ namespace MettingSys.Web.tools
                 list = employee3.Split(',');
                 foreach (string item in list)
                 {
-                    pli = item.Split('|');
-                    order.personlist.Add(new Model.OrderPerson() { op_type = 4, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_addTime = DateTime.Now });
+                    pli = item.Split('-');
+                    if (pli.Length == 4)
+                    {
+                        order.personlist.Add(new Model.OrderPerson() { op_type = 4, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_ratio = Utils.ObjToInt(pli[3]), op_addTime = DateTime.Now });
+                        ratio3 += Utils.ObjToInt(pli[3]);
+                    }
+                    else
+                    {
+                        order.personlist.Add(new Model.OrderPerson() { op_type = 4, op_name = pli[0], op_number = pli[1], op_area = pli[2], op_ratio = 0, op_addTime = DateTime.Now });
+                    }
                 }
             }
+
             #endregion
             #region 业务设计人员
             if (!string.IsNullOrEmpty(employee4))
@@ -123,7 +136,6 @@ namespace MettingSys.Web.tools
             }
             #endregion
             #region 公共业务人员
-            int totalRatio = 0;
             if (!string.IsNullOrEmpty(employee6))
             {
                 pli = new string[] { };
@@ -131,8 +143,8 @@ namespace MettingSys.Web.tools
                 foreach (string item in list)
                 {
                     pli = item.Split('-');
-                    order.personlist.Add(new Model.OrderPerson() { op_type = 6, op_name = pli[0], op_number = pli[1], op_area = pli[2],op_ratio=Utils.ObjToInt(pli[3]), op_addTime = DateTime.Now });
-                    totalRatio += Utils.ObjToInt(pli[3]);
+                    order.personlist.Add(new Model.OrderPerson() { op_type = 6, op_name = pli[0], op_number = pli[1], op_area = pli[2],op_ratio=Utils.ObjToInt(pli[3],0), op_addTime = DateTime.Now });
+                    ratio6 += Utils.ObjToInt(pli[3],0);
                 }
             }
             #endregion
@@ -140,7 +152,7 @@ namespace MettingSys.Web.tools
             if (!string.IsNullOrEmpty(employee0))
             {
                 pli = employee0.Split('|');
-                order.personlist.Add(new Model.OrderPerson() { op_type = 1, op_name = pli[0], op_number = pli[1], op_area = pli[2],op_ratio = 100-totalRatio, op_addTime = DateTime.Now });
+                order.personlist.Add(new Model.OrderPerson() { op_type = 1, op_name = pli[0], op_number = pli[1], op_area = pli[2],op_ratio = 100-ratio3-ratio6, op_addTime = DateTime.Now });
             }
             #endregion
             string oid = string.Empty;
@@ -241,7 +253,20 @@ namespace MettingSys.Web.tools
             return;
         }
         #endregion
-
+        #region 执行人员业绩比例
+        private void checkRatio(HttpContext context)
+        {
+            BLL.publicSetting bll = new BLL.publicSetting();
+            Model.publicSetting model = bll.GetModel(1);
+            if (model == null || model.ps_isuse==false)
+            {
+                context.Response.Write("{\"status\":\"0\" }");
+                return;
+            }
+            context.Response.Write("{\"status\":\"1\",\"sdate\":\""+ model.ps_sdate.Value.ToString("yyyy-MM-dd") + "\",\"edate\":\"" + (model.ps_edate == null ? "" : model.ps_edate.Value.ToString("yyyy-MM-dd")) + "\",\"ratio\":\""+ model.ps_ratio + "\" }");
+            return;
+        }
+        #endregion
 
         public bool IsReusable
         {

@@ -89,7 +89,7 @@
             var type = $("#ddltype").val();
             var str = "";
             if (type == "0") {
-                location.href = "AchievementStatistic_Detail.aspx?txtsDate=<%=_sMonth%>&txteDate=<%=_eMonth%>&ddlstatus=<%=_status%>&ddllock=<%=_lockstatus%>&cbIsCust=<%=_isCust%>&ddlorderType=<%=_ordertype%>&ddlorder=<%=_order%>&ddlarea=" + area + "&txtUser=" + num;
+                location.href = "AchievementStatistic_Detail.aspx?txtsDate=<%=_sMonth%>&txteDate=<%=_eMonth%>&ddlstatus=<%=_status%>&ddllock=<%=_lockstatus%>&cbIsCust=<%=_isCust%>&ddlorderType=<%=_ordertype%>&ddlorder=<%=_order%>&ddlarea=" + area + "&txtUser=" + num + "&self=<%=_self%>";
             }
             else {
                 if (type == "1") {
@@ -259,7 +259,7 @@
                     <input type="hidden" name="action" value="Search" />
                     <input type="hidden" name="self" value="<%=_self %>" />
                     <input <%--id="btnSave"--%> type="submit" class="btn" value="查询" />
-                    <a href="<%=Utils.CombUrlTxt("AchievementStatistic_list.aspx", "Excel={0}&txtsDate={1}&txteDate={2}&ddllock={3}&ddlstatus={4}&hide_place={5}&hide_employee3={6}&cbIsCust={7}&ddltype={8}&ddlorderType={9}&ddlorder={10}", "on", _sMonth, _eMonth, _lockstatus, _status, _area,_person, _isCust,_type,_ordertype,_order) %>"><i class="iconfont icon-exl"></i><span>导出Excel</span></a>
+                    <a href="<%=Utils.CombUrlTxt("AchievementStatistic_list.aspx", "Excel={0}&txtsDate={1}&txteDate={2}&ddllock={3}&ddlstatus={4}&hide_place={5}&hide_employee3={6}&cbIsCust={7}&ddltype={8}&ddlorderType={9}&ddlorder={10}&self={11}", "on", _sMonth, _eMonth, _lockstatus, _status, _area,_person, _isCust,_type,_ordertype,_order,_self) %>"><i class="iconfont icon-exl"></i><span>导出Excel</span></a>
                 </div>
             </div>
 

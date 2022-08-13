@@ -77,20 +77,19 @@
             //二类上传控件
             $(".upload-album2").InitUploader({ btntext: "批量上传", ftype: 2, multiple: true, oID: "<%=oID %>", filetypes: "<%=sysConfig.fileextension %>", filesize: "<%=sysConfig.attachsize %>", sendurl: "../../tools/upload_ajax.ashx", swf: "../../scripts/webuploader/uploader.swf" });
             $("#uploadDiv2").children(".upload-btn").append("<div class='webuploader-pick1'>部分人员可查看，文件类型：<%=sysConfig.fileextension %>，文件大小限制：<%=sysConfig.attachsize %>KB</div>");
-
-
+                        
             //共同业务员            
-            $("#personAddButton").click(function () {
-                var liObj = $(this).parent();
-                var d = top.dialog({
-                    id: 'personDialogId',
-                    padding: 0,
-                    title: "共同业务员",
-                    url: 'admin/order/selectEmployee.aspx'
-                }).showModal();
-                //将容器对象传进去
-                d.data = liObj;
-            });
+            //$("#personAddButton").click(function () {
+            //    var liObj = $(this).parent();
+            //    var d = top.dialog({
+            //        id: 'personDialogId',
+            //        padding: 0,
+            //        title: "共同业务员",
+            //        url: 'admin/order/selectEmployee.aspx?type=6'
+            //    }).showModal();
+            //    //将容器对象传进去
+            //    d.data = liObj;
+            //});
             //绑定活动归属地
             $("#specAddButton").click(function () {
                 var liObj = $(this).parent();
@@ -299,6 +298,11 @@
             });     
 
         });
+        //变更活动结束日期时清空共同业务员和执行人员        
+        function removeEmployee() {
+            $("#liemployee6").siblings().remove(); 
+            $("#liemployee3").siblings().remove();
+        }
         //获取联系人的联系号码
         function getContactPhone(obj) {
             $.get("../../tools/business_ajax.ashx?action=getPhone", { contactID: $(obj).val() },
@@ -322,7 +326,17 @@
             $(obj).parent().remove();
         }
         //人员选择
-        function chooseEmployee(obj, n, flag,isShow,IsshowNum,hasOrder) {
+        function chooseEmployee(obj, n, flag, isShow, IsshowNum, hasOrder) {
+            var _title = "报账人员";
+            if (n == 2) {
+                _title = "策划人员";
+            }
+            else if (n == 3) {
+                _title = "执行人员";
+            }
+            else if (n == 4) {
+                _title = "设计人员";
+            }
             //业务报账员和业务执行人员必须在选择活动归属地后才能选择
             var area = "";
             if (n == 1 || n == 3) {
@@ -338,11 +352,21 @@
                 });
                 area = area + ',';
             }
+            //选择执行人员前必须选择活动结束日期
+            if (n == 3) {
+                if ($("#txteDate").val() == "") {
+                    var d = dialog({ content: "请先选择活动结束日期" }).show();
+                    setTimeout(function () {
+                        d.close().remove();
+                    }, 1000);
+                    return;
+                }
+            }
             var liObj = $(obj).parent();
             var d = top.dialog({
                 id: 'specDialogId',
                 padding: 0,
-                title: "选择员工",
+                title: _title,
                 url: 'admin/selectEmployee.aspx?area=' + area + '&showNum='+IsshowNum+'&hasOrder='+hasOrder+''
             }).showModal();
             //将容器对象传进去
@@ -354,7 +378,80 @@
                 d.data1 = $("#specAddButton").parent();
             }
         }
-
+        //添加执行人员、共同业务员
+        function addEmployee(obj,n) {
+            if ($("#txteDate").val() == "") {
+                var d = dialog({ content: "请先选择活动结束日期" }).show();
+                setTimeout(function () {
+                    d.close().remove();
+                }, 1000);
+                return;
+            }
+            var postData = { };
+            //发送AJAX请求
+            $.ajax({
+                type: "post",
+                url: "../../tools/Order_ajax.ashx?action=checkRatio",
+                data: postData,
+                dataType: "json",
+                success: function (data) {
+                    if (n == 3) {//执行人员
+                        if (data.status == 1) {
+                            var date = new Date(Date.parse($("#txteDate").val()));
+                            var sdate = new Date(Date.parse(data.sdate));
+                            var edate = new Date(Date.parse(data.edate));
+                            if ((data.edate != "" && date >= sdate && date <= edate) || (data.edate == "" && date >= sdate)) {
+                                //先计算共同业务员设置了多少比例
+                                var ratio6 = 0;
+                                $("input[name='hide_employee6']").each(function () {
+                                    ratio6 += parseInt($(this).val().split("-")[3]);
+                                });
+                                chooseEmployee1(obj, 3, "执行人员 业绩总比例" + data.ratio + "%", data.ratio, ratio6);
+                            }
+                            else {
+                                //chooseEmployee(obj, 3, true, true, false);
+                                chooseEmployee1(obj, 3, "执行人员");
+                            }
+                        }
+                        else {
+                            //chooseEmployee(obj, 3, true, true, false);
+                            chooseEmployee1(obj, 3, "执行人员");
+                        }
+                    } else {//共同业务员
+                        if (data.status == 1) {
+                            var date = new Date(Date.parse($("#txteDate").val()));
+                            var sdate = new Date(Date.parse(data.sdate));
+                            var edate = new Date(Date.parse(data.edate));
+                            if ((data.edate != "" && date >= sdate && date <= edate) || (data.edate == "" && date >= sdate)) {
+                                //先计算执行人员设置了多少比例
+                                var ratio3 = 0;
+                                $("input[name='hide_employee3']").each(function () {
+                                    ratio3 += parseInt($(this).val().split("-")[3]);
+                                });
+                                chooseEmployee1(obj, 6, "共同业务员", data.ratio, ratio3);
+                            }
+                            else {
+                                chooseEmployee1(obj, 6, "共同业务员");
+                            }
+                        }
+                        else {
+                            chooseEmployee1(obj, 6, "共同业务员");
+                        }
+                    }
+                }
+            });
+        }
+        function chooseEmployee1(obj,n,title,ratio3,ratio6) {
+            var liObj = $(obj).parent();
+            var d = top.dialog({
+                id: 'personDialogId',
+                padding: 0,
+                title: title,
+                url: 'admin/order/selectEmployee.aspx?type=' + n + '&ratio3=' + ratio3 + '&ratio6=' + ratio6
+            }).showModal();
+            //将容器对象传进去
+            d.data = liObj;
+        }
         function addFinance(action, title, oID, type, id) {
             layer.open({
                 type: 2,
@@ -868,25 +965,12 @@
                             </div>
                             <asp:Label ID="labOwner" runat="server"></asp:Label>
                         </td>
-                        <th>共同业务员</th>
+                        <th>活动日期</th>
                         <td>
-                            <div class="txt-item">
-                                <ul>
-                                    <asp:Repeater ID="rptEmployee6" runat="server">
-                                        <ItemTemplate>
-                                            <li title="<%#Eval("[\"op_number\"]")%>">
-                                                <input name="hide_employee6" type="hidden" value="<%#Eval("[\"op_name\"]")%>-<%#Eval("[\"op_number\"]")%>-<%#Eval("[\"op_area\"]")%>-<%#Eval("[\"op_ratio\"]") %>" />
-                                                <a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>
-                                                <span><%#Eval("[\"op_number\"]")%><%#Eval("[\"op_name\"]")%>(<%#Eval("[\"op_ratio\"]")%>%)</span>
-                                            </li>
-                                        </ItemTemplate>
-                                    </asp:Repeater>
-                                    <li class="icon-btn" id="li1" runat="server">
-                                        <a id="personAddButton"><i class="iconfont icon-close"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
+                            <asp:TextBox ID="txtsDate" runat="server" CssClass="input rule-date-input" Width="120px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate\')}'})"></asp:TextBox>
+                            -
+          <asp:TextBox ID="txteDate" runat="server" CssClass="input rule-date-input" Width="120px" onclick="WdatePicker({minDate:'#F{$dp.$D(\'txtsDate\')}',onpicked:removeEmployee})"></asp:TextBox>
+                        </td>                       
                     </tr>
                     <tr>
                         <th>客户</th>
@@ -916,15 +1000,28 @@
                                 </asp:DropDownList>
                             </div>
                         </td>
-                        <th>活动日期</th>
-                        <td>
-                            <asp:TextBox ID="txtsDate" runat="server" CssClass="input rule-date-input" Width="120px" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'txteDate\')}'})"></asp:TextBox>
-                            -
-          <asp:TextBox ID="txteDate" runat="server" CssClass="input rule-date-input" Width="120px" onclick="WdatePicker({minDate:'#F{$dp.$D(\'txtsDate\')}'})"></asp:TextBox>
-                        </td>
                         <th>活动地点</th>
                         <td>
                             <asp:TextBox ID="txtAddress" runat="server" CssClass="input normal" />
+                        </td>
+                        <th>共同业务员</th>
+                        <td>
+                            <div class="txt-item">
+                                <ul>
+                                    <asp:Repeater ID="rptEmployee6" runat="server">
+                                        <ItemTemplate>
+                                            <li title="<%#Eval("[\"op_number\"]")%>">
+                                                <input name="hide_employee6" type="hidden" value="<%#Eval("[\"op_name\"]")%>-<%#Eval("[\"op_number\"]")%>-<%#Eval("[\"op_area\"]")%>-<%#Eval("[\"op_ratio\"]") %>" />
+                                                <a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>
+                                                <span><%#Eval("[\"op_number\"]")%><%#Eval("[\"op_name\"]")%>(<%#Eval("[\"op_ratio\"]")%>%)</span>
+                                            </li>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                    <li class="icon-btn" id="liemployee6" runat="server">
+                                        <a href="javascript:" onclick="addEmployee(this,6)"><i class="iconfont icon-close"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -1035,14 +1132,15 @@
                                     <asp:Repeater ID="rptEmployee3" runat="server">
                                         <ItemTemplate>
                                             <li title="<%#Eval("[\"op_number\"]")%>">
-                                                <input name="hide_employee3" type="hidden" value="<%#Eval("[\"op_name\"]")%>|<%#Eval("[\"op_number\"]")%>|<%#Eval("[\"op_area\"]")%>" />
+                                                <input name="hide_employee3" type="hidden" value="<%#Eval("[\"op_name\"]")%>-<%#Eval("[\"op_number\"]")%>-<%#Eval("[\"op_area\"]")%><%#Utils.ObjToInt(Eval("[\"op_ratio\"]"))>0?"-"+Eval("[\"op_ratio\"]")+"":"" %>" />
                                                 <a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>
-                                                <span><%#Eval("[\"op_name\"]")%></span>
+                                                <span><%#Eval("[\"op_number\"]")%><%#Eval("[\"op_name\"]")%><%#Utils.ObjToInt(Eval("[\"op_ratio\"]"))>0?"("+Eval("[\"op_ratio\"]")+"%)":""%></span>
                                             </li>
                                         </ItemTemplate>
                                     </asp:Repeater>
                                     <li class="icon-btn" id="liemployee3" runat="server">
-                                        <a href="javascript:" onclick="chooseEmployee(this,3,true,true,false)"><i class="iconfont icon-close"></i></a>
+                                        <%--<a href="javascript:" onclick="chooseEmployee(this,3,true,true,false)"><i class="iconfont icon-close"></i></a>--%>
+                                        <a href="javascript:" onclick="addEmployee(this,3)"><i class="iconfont icon-close"></i></a>
                                     </li>
                                 </ul>
                             </div>

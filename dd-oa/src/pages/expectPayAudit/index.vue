@@ -3,7 +3,7 @@
     <div>
        <tab-list :tabList="topTabList" @on-tab="changeTab"></tab-list>
         <div class="search_box flex flex_a_c flex_j_c">
-           <input type="text" v-model="searchData.keywords" @input="changeSearch" placeholder="搜索客户名称">
+           <input type="text" v-model="searchData.keywords" @input="changeSearch" placeholder="搜索客户名称或金额">
         </div>
         <div class="customer_list">
             <h2 class="amount">共{{recordTotal}}条</h2>
@@ -103,7 +103,7 @@ export default {
         payList(){
             let _this = this
             _this.searchData.pageIndex++
-            _this.searchData.managerid = 14//_this.userInfo.id
+            _this.searchData.managerid = _this.userInfo.id
             this.getPaytList(_this.searchData).then(res => {
                 _this.recordTotal=0
                 if(res.data.msg){

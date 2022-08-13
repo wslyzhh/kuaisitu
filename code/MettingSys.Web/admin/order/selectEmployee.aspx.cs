@@ -11,13 +11,16 @@ namespace MettingSys.Web.admin
 {
     public partial class selectEmployee : Web.UI.ManagePage
     {
-        private string area = string.Empty, hasOrder = string.Empty;
+        public string area = string.Empty, hasOrder = string.Empty, employeeType = string.Empty, ratio3 = string.Empty, ratio6 = string.Empty;
         protected bool IsshowNum = false;
         protected void Page_Load(object sender, EventArgs e)
         {
             area = DTRequest.GetQueryString("area");
             IsshowNum = Utils.StrToBool(DTRequest.GetQueryString("showNum"), false);
             hasOrder = DTRequest.GetQueryString("hasOrder");
+            employeeType = DTRequest.GetQueryString("type");
+            ratio3 = DTRequest.GetQueryString("ratio3");
+            ratio6 = DTRequest.GetQueryString("ratio6");
             if (!Page.IsPostBack)
             {
                 RptBind();

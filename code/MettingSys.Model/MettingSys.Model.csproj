@@ -86,6 +86,7 @@
     <Compile Include="OrderPlace.cs" />
     <Compile Include="payPic.cs" />
     <Compile Include="permission.cs" />
+    <Compile Include="publicSetting.cs" />
     <Compile Include="unBusinessMoneyLog.cs" />
     <Compile Include="userRolePemission.cs" />
     <Compile Include="OrderPerson.cs" />
